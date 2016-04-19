@@ -1,14 +1,13 @@
 Return-Path: linux-trace-users-owner@vger.kernel.org
-Received: from mail.kernel.org ([198.145.29.136]:37345 "EHLO mail.kernel.org"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1754750AbcDSOh2 (ORCPT
+Received: from smtprelay0020.hostedemail.com ([216.40.44.20]:54982 "EHLO
+	smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+	by vger.kernel.org with ESMTP id S1752725AbcDSRTu (ORCPT
 	<rfc822;linux-trace-users@vger.kernel.org>);
-	Tue, 19 Apr 2016 10:37:28 -0400
-Message-Id: <20160419143725.104178074@goodmis.org>
-Date: Tue, 19 Apr 2016 10:34:22 -0400
+	Tue, 19 Apr 2016 13:19:50 -0400
+Date: Tue, 19 Apr 2016 13:19:47 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
-To: linux-kernel@vger.kernel.org
-Cc: Ingo Molnar <mingo@kernel.org>,
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	"H. Peter Anvin" <hpa@zytor.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
@@ -16,87 +15,74 @@ Cc: Ingo Molnar <mingo@kernel.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
 	Namhyung Kim <namhyung@kernel.org>,
 	linux-trace-users@vger.kernel.org
-Subject: [RFC][PATCH 1/4] tracing: Rename check_ignore_pid() to ignore_this_task()
+Subject: Re: [RFC][PATCH 2/4] tracing: Use pid bitmap instead of a pid array
+ for set_event_pid
+Message-ID: <20160419131947.3c5208b4@gandalf.local.home>
+In-Reply-To: <1694657549.62933.1461084928341.JavaMail.zimbra@efficios.com>
 References: <20160419143421.829909157@goodmis.org>
+	<20160419143725.295928551@goodmis.org>
+	<1694657549.62933.1461084928341.JavaMail.zimbra@efficios.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Disposition: inline; filename=0001-tracing-Rename-check_ignore_pid-to-ignore_this_task.patch
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-trace-users-owner@vger.kernel.org
 List-ID: <linux-trace-users.vger.kernel.org>
 
-From: Steven Rostedt <rostedt@goodmis.org>
+On Tue, 19 Apr 2016 16:55:28 +0000 (UTC)
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
 
-The name "check_ignore_pid" is confusing in trying to figure out if the pid
-should be ignored or not. Rename it to "ignore_this_task" which is pretty
-straight forward, as a task (not a pid) is passed in, and should if true
-should be ignored.
+> ----- On Apr 19, 2016, at 10:34 AM, rostedt rostedt@goodmis.org wrote:
+> 
+> > From: Steven Rostedt <rostedt@goodmis.org>
+> > 
+> > In order to add the ability to let tasks that are filtered by the events
+> > have their children also be traced on fork (and then not traced on exit),
+> > convert the array into a pid bitmask. Most of the time the number of pids is
+> > only 32768 pids or a 4k bitmask, which is the same size as the default list
+> > currently is, and that list could grow if more pids are listed.
+> > 
+> > This also greatly simplifies the code.  
+> 
+> The maximum PID number can be increased with sysctl.
+> 
+> See "pid_max" in Documentation/sysctl/kernel.txt
+> 
+> What happens when you have a very large pid_max set ?
 
-Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
----
- kernel/trace/trace_events.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+I discussed this with HPA, and it appears that the pid_max max would
+require a bitmap of about 1/2 meg (the current default is 8k). This is
+also why I chose to keep the bitmap as vmalloc and not a continuous
+page allocation.
 
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 05ddc0820771..598a18675a6b 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -484,7 +484,7 @@ static int cmp_pid(const void *key, const void *elt)
- }
- 
- static bool
--check_ignore_pid(struct trace_pid_list *filtered_pids, struct task_struct *task)
-+ignore_this_task(struct trace_pid_list *filtered_pids, struct task_struct *task)
- {
- 	pid_t search_pid;
- 	pid_t *pid;
-@@ -517,8 +517,8 @@ event_filter_pid_sched_switch_probe_pre(void *data, bool preempt,
- 	pid_list = rcu_dereference_sched(tr->filtered_pids);
- 
- 	this_cpu_write(tr->trace_buffer.data->ignore_pid,
--		       check_ignore_pid(pid_list, prev) &&
--		       check_ignore_pid(pid_list, next));
-+		       ignore_this_task(pid_list, prev) &&
-+		       ignore_this_task(pid_list, next));
- }
- 
- static void
-@@ -531,7 +531,7 @@ event_filter_pid_sched_switch_probe_post(void *data, bool preempt,
- 	pid_list = rcu_dereference_sched(tr->filtered_pids);
- 
- 	this_cpu_write(tr->trace_buffer.data->ignore_pid,
--		       check_ignore_pid(pid_list, next));
-+		       ignore_this_task(pid_list, next));
- }
- 
- static void
-@@ -547,7 +547,7 @@ event_filter_pid_sched_wakeup_probe_pre(void *data, struct task_struct *task)
- 	pid_list = rcu_dereference_sched(tr->filtered_pids);
- 
- 	this_cpu_write(tr->trace_buffer.data->ignore_pid,
--		       check_ignore_pid(pid_list, task));
-+		       ignore_this_task(pid_list, task));
- }
- 
- static void
-@@ -564,7 +564,7 @@ event_filter_pid_sched_wakeup_probe_post(void *data, struct task_struct *task)
- 
- 	/* Set tracing if current is enabled */
- 	this_cpu_write(tr->trace_buffer.data->ignore_pid,
--		       check_ignore_pid(pid_list, current));
-+		       ignore_this_task(pid_list, current));
- }
- 
- static void __ftrace_clear_event_pids(struct trace_array *tr)
-@@ -1561,7 +1561,7 @@ static void ignore_task_cpu(void *data)
- 					     mutex_is_locked(&event_mutex));
- 
- 	this_cpu_write(tr->trace_buffer.data->ignore_pid,
--		       check_ignore_pid(pid_list, current));
-+		       ignore_this_task(pid_list, current));
- }
- 
- static ssize_t
--- 
-2.8.0.rc3
+> 
+> You say "most of the time" as if this was a fast-path vs a slow-path,
+> but it is not the case here.
 
+I meant "most of the time" as "default". Yes, you can make the pid_max
+really big, but in that case you better have enough memory in your
+system to handle that many threads. Thus a 1/2 meg used for tracking
+pids shouldn't be an issue.
 
+> 
+> This is a configuration option that can significantly hurt memory usage
+> in configurations using a large pid_max.
+
+No, it is created dynamically. If you never write anything into the
+set_event_pid file, then you have nothing to worry about, as nothing
+is allocated. It creates the array when a pid is added to the file, and
+only then. If it fails to allocate, the write will return -ENOMEM as the
+errno.
+
+Again, if you have a large pid_max your box had better have a lot of
+memory to begin with, because this array will be negligible compared to
+the memory required to handle large number of tasks.
+
+> 
+> FWIW, I implement a similar feature with a hash table in lttng-modules.
+> I don't have the child process tracking though, which is a neat improvement.
+
+I originally had a complex hash algorithm because I too was worried
+about the size of pid_max and using a bitmap, but HPA convinced me it
+was the way to go.
+
+-- Steve
