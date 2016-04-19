@@ -1,66 +1,129 @@
 Return-Path: linux-trace-users-owner@vger.kernel.org
-Received: from smtprelay0077.hostedemail.com ([216.40.44.77]:33478 "EHLO
-	smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-	by vger.kernel.org with ESMTP id S1752697AbcCGQ0b (ORCPT
+Received: from mail.kernel.org ([198.145.29.136]:37384 "EHLO mail.kernel.org"
+	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+	id S932172AbcDSOhe (ORCPT
 	<rfc822;linux-trace-users@vger.kernel.org>);
-	Mon, 7 Mar 2016 11:26:31 -0500
-Date: Mon, 7 Mar 2016 11:26:27 -0500
+	Tue, 19 Apr 2016 10:37:34 -0400
+Message-Id: <20160419143725.637076387@goodmis.org>
+Date: Tue, 19 Apr 2016 10:34:25 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
-To: Eric Blake <eblake@redhat.com>
-Cc: Stefan Hajnoczi <stefanha@redhat.com>, kvm@vger.kernel.org,
-	Stefan Hajnoczi <stefanha@gmail.com>,
-	yoshihiro.yunomae.ez@hitachi.com, mtosatti@redhat.com,
-	qemu-devel@nongnu.org, peterx@redhat.com,
-	Luiz Capitulino <lcapitulino@redhat.com>,
-	linux-trace-users@vger.kernel.org, pbonzini@redhat.com
-Subject: Re: [Qemu-devel] [RFC] host and guest kernel trace merging
-Message-ID: <20160307112627.3b94c671@gandalf.local.home>
-In-Reply-To: <56DDA7E2.3050506@redhat.com>
-References: <20160303143501.0edf21a2@redhat.com>
-	<20160304111933.GB626@stefanha-x1.localdomain>
-	<20160304082311.5ccd1a33@gandalf.local.home>
-	<20160307151705.GD20937@stefanha-x1.localdomain>
-	<20160307104924.1871dbdb@gandalf.local.home>
-	<56DDA7E2.3050506@redhat.com>
+To: linux-kernel@vger.kernel.org
+Cc: Ingo Molnar <mingo@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	linux-trace-users@vger.kernel.org
+Subject: [RFC][PATCH 4/4] tracing: Update the documentation to describe "event-fork" option
+References: <20160419143421.829909157@goodmis.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Disposition: inline; filename=0004-tracing-Update-the-documentation-to-describe-event-f.patch
 Sender: linux-trace-users-owner@vger.kernel.org
 List-ID: <linux-trace-users.vger.kernel.org>
 
-On Mon, 7 Mar 2016 09:10:10 -0700
-Eric Blake <eblake@redhat.com> wrote:
+From: "Steven Rostedt (Red Hat)" <rostedt@goodmis.org>
 
-> On 03/07/2016 08:49 AM, Steven Rostedt wrote:
-> > On Mon, 7 Mar 2016 15:17:05 +0000
-> > Stefan Hajnoczi <stefanha@redhat.com> wrote:
-> > 
-> >   
-> >> qemu-guest-agent runs inside the guest and replies to RPC commands from
-> >> the host.  It is used for backups, shutdown, network configuration, etc.
-> >> From time to time people have wanted the ability to execute an arbitrary
-> >> command inside the guest and return the output.  This functionality has
-> >> never been merged, probably for the security reason.  
-> > 
-> > How's the connection set up. That is, how does it know the commands are
-> > coming from the host? And how does it know that the commands from the
-> > host is from a trusted source? If the host is compromised, is there
-> > anything keeping an intruder from controlling the guest?  
-> 
-> qemu-guest-agent uses a virtio channel, so only the host can be driving
-> that channel.  But how can a guest know that it trusts the host? It
-> can't.  A compromised host implicitly compromises all guests, and that's
-> always been the case.  At least qemu-guest-agent doesn't make the window
-> any larger.
-> 
+Add documentation to the ftrace.txt file in Documentation to describe the
+event-fork option. Also add the missing "display-graph" option now that it
+shows up in the trace_options file (from a previous commit).
 
-I should have been a bit more clear about what I meant by "host is
-compromised". I should have asked, what about untrusted tasks on the
-host. Is the channel protected where only admin users can access it?
+Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+---
+ Documentation/trace/ftrace.txt | 34 ++++++++++++++++++++++++----------
+ 1 file changed, 24 insertions(+), 10 deletions(-)
 
-Of course, one of my concerns with the trace-cmd server is that it may
-require a network connection, because doesn't a virtio channel require
-to be initialized at boot up? Where the host must have an active
-listener when the guest starts? Or am I thinking about something else.
+diff --git a/Documentation/trace/ftrace.txt b/Documentation/trace/ftrace.txt
+index f52f297cb406..fdf18485db2b 100644
+--- a/Documentation/trace/ftrace.txt
++++ b/Documentation/trace/ftrace.txt
+@@ -210,6 +210,11 @@ of ftrace. Here is a list of some of the key files:
+ 	Note, sched_switch and sched_wake_up will also trace events
+ 	listed in this file.
+ 
++	To have the PIDs of children of tasks with their PID in this file
++	added on fork, enable the "event-fork" option. That option will also
++	cause the PIDs of tasks to be removed from this file when the task
++	exits.
++
+   set_graph_function:
+ 
+ 	Set a "trigger" function where tracing should start
+@@ -725,16 +730,14 @@ noraw
+ nohex
+ nobin
+ noblock
+-nostacktrace
+ trace_printk
+-noftrace_preempt
+ nobranch
+ annotate
+ nouserstacktrace
+ nosym-userobj
+ noprintk-msg-only
+ context-info
+-latency-format
++nolatency-format
+ sleep-time
+ graph-time
+ record-cmd
+@@ -742,7 +745,10 @@ overwrite
+ nodisable_on_free
+ irq-info
+ markers
++noevent-fork
+ function-trace
++nodisplay-graph
++nostacktrace
+ 
+ To disable one of the options, echo in the option prepended with
+ "no".
+@@ -796,11 +802,6 @@ Here are the available options:
+ 
+   block - When set, reading trace_pipe will not block when polled.
+ 
+-  stacktrace - This is one of the options that changes the trace
+-	       itself. When a trace is recorded, so is the stack
+-	       of functions. This allows for back traces of
+-	       trace sites.
+-
+   trace_printk - Can disable trace_printk() from writing into the buffer.
+ 
+   branch - Enable branch tracing with the tracer.
+@@ -897,6 +898,10 @@ x494] <- /root/a.out[+0x4a8] <- /lib/libc-2.7.so[+0x1e1a6]
+   	    When disabled, the trace_marker will error with EINVAL
+ 	    on write.
+ 
++  event-fork - When set, tasks with PIDs listed in set_event_pid will have
++	       the PIDs of their children added to set_event_pid when those
++	       tasks fork. Also, when tasks with PIDs in set_event_pid exit,
++	       their PIDs will be removed from the file.
+ 
+   function-trace - The latency tracers will enable function tracing
+   	    if this option is enabled (default it is). When
+@@ -904,8 +909,17 @@ x494] <- /root/a.out[+0x4a8] <- /lib/libc-2.7.so[+0x1e1a6]
+ 	    functions. This keeps the overhead of the tracer down
+ 	    when performing latency tests.
+ 
+- Note: Some tracers have their own options. They only appear
+-       when the tracer is active.
++  display-graph - When set, the latency tracers (irqsoff, wakeup, etc) will
++	          use function graph tracing instead of function tracing.
++
++  stacktrace - This is one of the options that changes the trace
++	       itself. When a trace is recorded, so is the stack
++	       of functions. This allows for back traces of
++	       trace sites.
++
++ Note: Some tracers have their own options. They only appear in this
++       file when the tracer is active. They always appear in the
++       options directory.
+ 
+ 
+ 
+-- 
+2.8.0.rc3
 
--- Steve
+
