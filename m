@@ -1,81 +1,159 @@
 Return-Path: linux-trace-users-owner@vger.kernel.org
-Received: from mail.kernel.org ([198.145.29.136]:35426 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.136]:47640 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1753690AbdCIPrM (ORCPT
+        id S1755010AbdCIRBL (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Thu, 9 Mar 2017 10:47:12 -0500
-Date: Thu, 9 Mar 2017 10:38:14 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
+        Thu, 9 Mar 2017 12:01:11 -0500
+Date: Thu, 9 Mar 2017 18:00:54 +0100
+From: Masami Hiramatsu <mhiramat@kernel.org>
 To: "Dorau, Lukasz" <lukasz.dorau@intel.com>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Ananth N Mavinakayanahalli <ananth@linux.vnet.ibm.com>,
+Cc: Ananth N Mavinakayanahalli <ananth@linux.vnet.ibm.com>,
         "Keshavamurthy, Anil S" <anil.s.keshavamurthy@intel.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-users <linux-trace-users@vger.kernel.org>,
+        "linux-trace-users@vger.kernel.org"
+        <linux-trace-users@vger.kernel.org>,
         "Slusarz, Marcin" <marcin.slusarz@intel.com>,
         "Jelinek, Sarah" <sarah.jelinek@intel.com>,
         "Chernookyi, Vitalii" <vitalii.chernookyi@intel.com>,
         "Buella, Gabor" <gabor.buella@intel.com>
 Subject: Re: Why return probes of some syscalls sometimes are not called?
-Message-ID: <20170309103814.015d3662@gandalf.local.home>
-In-Reply-To: <D9FFE20C522965449E182ACE73889AEB486818F2@irsmsx105.ger.corp.intel.com>
+Message-Id: <20170309180054.7a4ad1194807ddb3d422e3ff@kernel.org>
+In-Reply-To: <D9FFE20C522965449E182ACE73889AEB4868177B@irsmsx105.ger.corp.intel.com>
 References: <D9FFE20C522965449E182ACE73889AEB4868177B@irsmsx105.ger.corp.intel.com>
-        <253263641.1274.1489067909121.JavaMail.zimbra@efficios.com>
-        <20170309094455.53c8026c@gandalf.local.home>
-        <1231722663.1343.1489071698914.JavaMail.zimbra@efficios.com>
-        <20170309102057.4183c684@gandalf.local.home>
-        <D9FFE20C522965449E182ACE73889AEB486818F2@irsmsx105.ger.corp.intel.com>
-MIME-Version: 1.0
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: linux-trace-users-owner@vger.kernel.org
 List-ID: <linux-trace-users.vger.kernel.org>
 
-On Thu, 9 Mar 2017 15:30:42 +0000
+On Thu, 9 Mar 2017 13:44:38 +0000
 "Dorau, Lukasz" <lukasz.dorau@intel.com> wrote:
 
-> On Thursday, March 9, 2017 4:21 PM Steven Rostedt wrote:
-> > On Thu, 9 Mar 2017 15:01:38 +0000 (UTC)
-> > Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> > 
-> >   
-> > > Another more likely scenario is if a multithreaded process
-> > > has many threads blocked (e.g. on a futex), and one of the threads
-> > > exits cleanly or forks. I suspect the kernel will just tear down the
-> > > other threads without hitting syscall exit.  
-> > 
-> > Maybe, if this happens multiple times, it could cause those kinds of
-> > numbers. A fork was done zero times according to the numbers. Maybe
-> > exit should be measured too.
-> >   
+> Hi,
 > 
-> I have run the test again with exit:
+> Could someone explain me why return probes of some syscalls (for example: futex, poll, epoll_wait) sometimes are not called?
 > 
-> Results (60 sec):
-> futex:       p 2968     r 401      (86% did not return (2567))
-> poll:        p 13251    r 3957     (70% did not return (9294))
-> epoll_wait:  p 1485     r 556      (62% did not return (929))
-> select:      p 8063     r 8066     (OK)
-> fork:        p 0        r 0        (OK)
-> vfork:       p 4        r 4        (OK)
-> clone:       p 6962     r 6962     (OK)
-> exit:        p 3        r 0        (100% did not return (3))
-
-I expected exit not to have a return, that's the property of exit. But
-it shows that the above poll and friends is not because of exit and
-fork.
-
-Can you change your script to use syscall tracepoints instead of
-retprobes?
-
--- Steve
-
-> mmap:        p 71740    r 71740    (OK)
-> open:        p 43822    r 43825    (OK)
-> close:       p 79805    r 79806    (OK)
-> write:       p 31080    r 31078    (0% did not return (2))
-> read:        p 108456   r 108449   (0% did not return (7))
+> It can be reproduced using the following bash script:
+> https://gist.github.com/ldorau/c439d9ec7635409a5016c42e3a9121ec
+> 
+> Here are results gathered from 60 seconds test run on kernel 4.9.12 (Fedora 24):
+> 
+> futex:       p 56904    r 5489     (90% did not return (51415))
+> poll:        p 43466    r 7703     (82% did not return (35763))
+> epoll_wait:  p 73366    r 23551    (67% did not return (49815))
+> 
+> The whole log is attached below.
 > 
 > Lukasz
+> 
+> ---
+> # ./test_kprobes.sh 60
+> 
+> Will trace using following kprobe_events:
+> r:kprobes/r_futex sys_futex
+> p:kprobes/p_futex sys_futex
+> r:kprobes/r_poll sys_poll
+> p:kprobes/p_poll sys_poll
+> r:kprobes/r_epoll_wait sys_epoll_wait
+> p:kprobes/p_epoll_wait sys_epoll_wait
+> r:kprobes/r_select sys_select
+> p:kprobes/p_select sys_select
+> r:kprobes/r_fork sys_fork
+> p:kprobes/p_fork sys_fork
+> r:kprobes/r_vfork sys_vfork
+> p:kprobes/p_vfork sys_vfork
+> r:kprobes/r_mmap sys_mmap
+> p:kprobes/p_mmap sys_mmap
+> r:kprobes/r_open sys_open
+> p:kprobes/p_open sys_open
+> r:kprobes/r_close sys_close
+> p:kprobes/p_close sys_close
+> r:kprobes/r_write sys_write
+> p:kprobes/p_write sys_write
+> r:kprobes/r_read sys_read
+> p:kprobes/p_read sys_read
+> 
+> Results (60 sec):
+> futex:       p 56904    r 5489     (90% did not return (51415))
+> poll:        p 43466    r 7703     (82% did not return (35763))
+> epoll_wait:  p 73366    r 23551    (67% did not return (49815))
+> select:      p 13355    r 13351    (0% did not return (4))
+> fork:        p 0        r 0        (OK)
+> vfork:       p 0        r 0        (OK)
+> mmap:        p 4328     r 4328     (OK)
+> open:        p 4579     r 4579     (OK)
+> close:       p 7163     r 7163     (OK)
+> write:       p 22769    r 22769    (OK)
+> read:        p 40014    r 40014    (OK)
+> 
 
+OK, I just dumped kprobe_profile after the test,
+
+futex:       p 7775     r 698      (91% did not return (7077))
+poll:        p 18409    r 3523     (80% did not return (14886))
+epoll_wait:  p 5122     r 2389     (53% did not return (2733))
+select:      p 5411     r 5286     (2% did not return (125))
+fork:        p 0        r 0        (OK)
+vfork:       p 0        r 0        (OK)
+mmap:        p 179      r 179      (OK)
+open:        p 921      r 921      (OK)
+close:       p 1005     r 1005     (OK)
+write:       p 5632     r 5631     (0% did not return (1))
+read:        p 10879    r 10878    (0% did not return (1))
+  r_futex                                                 1091               0
+  p_futex                                                 8986               0
+  r_poll                                                  4276               0
+  p_poll                                                 20610               0
+  r_epoll_wait                                            2849               0
+  p_epoll_wait                                            5905               0
+  r_select                                               10172               0
+  p_select                                               10312               0
+  r_fork                                                     0               0
+  p_fork                                                     0               0
+  r_vfork                                                    0               0
+  p_vfork                                                    0               0
+  r_mmap                                                  2987               0
+  p_mmap                                                  2884               0
+  r_open                                                  4002               0
+  p_open                                                  3855               0
+  r_close                                                 4262               0
+  p_close                                                 4122               0
+  r_write                                                14281               0
+  p_write                                                14276               0
+  r_read                                                 41494               0
+  p_read                                                 41363               0
+
+OK, there are no miss-counted event. So at least kprobe and kretprobe working correctly.
+I also tried to use static tracepoints for that.
+https://gist.github.com/mhiramat/04d782deaf110a6b3391e2ecb923325e
+
+----
+$ sudo bash test_kprobes.sh 10
+Disabling all current probes ...
+Removing old probe points ...
+Adding new probe points ...
+Enabling new probe points ...
+Clearing old trace log ...
+
+Tracing for 10 seconds ... done
+Saving trace log ... done
+
+Results (10 sec):
+futex:       p 9856     r 1258     (87% did not return (8598))
+poll:        p 7531     r 4031     (46% did not return (3500))
+epoll_wait:  p 1996     r 1617     (18% did not return (379))
+select:      p 273      r 257      (5% did not return (16))
+Results (10 sec):
+futex:       p 9851     r 9851     (OK)
+poll:        p 7531     r 7531     (OK)
+epoll_wait:  p 1996     r 1996     (OK)
+select:      p 273      r 273      (OK)
+----
+Of course these events are collected in "different places" so
+it could be different. But yeah, it seems sys_* function itself
+dosen't return but jumps into ret_from_syscall etc.
+
+Thank you,
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
