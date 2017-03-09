@@ -1,30 +1,61 @@
 Return-Path: linux-trace-users-owner@vger.kernel.org
-Received: from mail.kernel.org ([198.145.29.136]:47640 "EHLO mail.kernel.org"
+Received: from mga05.intel.com ([192.55.52.43]:52638 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1755010AbdCIRBL (ORCPT
+        id S1753499AbdCISUw (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Thu, 9 Mar 2017 12:01:11 -0500
-Date: Thu, 9 Mar 2017 18:00:54 +0100
-From: Masami Hiramatsu <mhiramat@kernel.org>
-To: "Dorau, Lukasz" <lukasz.dorau@intel.com>
-Cc: Ananth N Mavinakayanahalli <ananth@linux.vnet.ibm.com>,
+        Thu, 9 Mar 2017 13:20:52 -0500
+From: "Chernookyi, Vitalii" <vitalii.chernookyi@intel.com>
+To: Masami Hiramatsu <mhiramat@kernel.org>,
+        "Dorau, Lukasz" <lukasz.dorau@intel.com>
+CC: Ananth N Mavinakayanahalli <ananth@linux.vnet.ibm.com>,
         "Keshavamurthy, Anil S" <anil.s.keshavamurthy@intel.com>,
         "David S. Miller" <davem@davemloft.net>,
         "linux-trace-users@vger.kernel.org"
         <linux-trace-users@vger.kernel.org>,
         "Slusarz, Marcin" <marcin.slusarz@intel.com>,
         "Jelinek, Sarah" <sarah.jelinek@intel.com>,
-        "Chernookyi, Vitalii" <vitalii.chernookyi@intel.com>,
         "Buella, Gabor" <gabor.buella@intel.com>
-Subject: Re: Why return probes of some syscalls sometimes are not called?
-Message-Id: <20170309180054.7a4ad1194807ddb3d422e3ff@kernel.org>
-In-Reply-To: <D9FFE20C522965449E182ACE73889AEB4868177B@irsmsx105.ger.corp.intel.com>
+Subject: RE: Why return probes of some syscalls sometimes are not called?
+Date: Thu, 9 Mar 2017 18:19:26 +0000
+Message-ID: <E9E28102842A9C40869B8872F2AE82539C9035@IRSMSX101.ger.corp.intel.com>
 References: <D9FFE20C522965449E182ACE73889AEB4868177B@irsmsx105.ger.corp.intel.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+ <20170309180054.7a4ad1194807ddb3d422e3ff@kernel.org>
+In-Reply-To: <20170309180054.7a4ad1194807ddb3d422e3ff@kernel.org>
+Content-Language: en-US
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
 Sender: linux-trace-users-owner@vger.kernel.org
 List-ID: <linux-trace-users.vger.kernel.org>
+
+Dear,
+
+> Of course these events are collected in "different places" so
+> it could be different. But yeah, it seems sys_* function itself
+> dosen't return but jumps into ret_from_syscall etc.
+
+In case of sys_futex and sys_poll there should be different reason of this issue, because most likely next calls could not have different return path:
+
+/* test-futex.c */
+Int main() {
+    Return syscall(SYS_futex, 1, 2, 3, 4, 5, 6);
+}
+
+/* test-poll.c */
+Int main() {
+    Return syscall(SYS_poll, 0x102, 0x103, 0x104, 0x105, 0x106, 0x107);
+}
+
+With best regards,
+
+Vitaly
+
+-----Original Message-----
+From: Masami Hiramatsu [mailto:mhiramat@kernel.org] 
+Sent: Thursday, March 9, 2017 6:01 PM
+To: Dorau, Lukasz <lukasz.dorau@intel.com>
+Cc: Ananth N Mavinakayanahalli <ananth@linux.vnet.ibm.com>; Keshavamurthy, Anil S <anil.s.keshavamurthy@intel.com>; David S. Miller <davem@davemloft.net>; linux-trace-users@vger.kernel.org; Slusarz, Marcin <marcin.slusarz@intel.com>; Jelinek, Sarah <sarah.jelinek@intel.com>; Chernookyi, Vitalii <vitalii.chernookyi@intel.com>; Buella, Gabor <gabor.buella@intel.com>
+Subject: Re: Why return probes of some syscalls sometimes are not called?
 
 On Thu, 9 Mar 2017 13:44:38 +0000
 "Dorau, Lukasz" <lukasz.dorau@intel.com> wrote:
@@ -157,3 +188,13 @@ Thank you,
 
 -- 
 Masami Hiramatsu <mhiramat@kernel.org>
+--------------------------------------------------------------------
+
+Intel Technology Poland sp. z o.o.
+ul. Slowackiego 173 | 80-298 Gdansk | Sad Rejonowy Gdansk Polnoc | VII Wydzial Gospodarczy Krajowego Rejestru Sadowego - KRS 101882 | NIP 957-07-52-316 | Kapital zakladowy 200.000 PLN.
+
+Ta wiadomosc wraz z zalacznikami jest przeznaczona dla okreslonego adresata i moze zawierac informacje poufne. W razie przypadkowego otrzymania tej wiadomosci, prosimy o powiadomienie nadawcy oraz trwale jej usuniecie; jakiekolwiek
+przegladanie lub rozpowszechnianie jest zabronione.
+This e-mail and any attachments may contain confidential material for the sole use of the intended recipient(s). If you are not the intended recipient, please contact the sender and delete all copies; any review or distribution by
+others is strictly prohibited.
+
