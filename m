@@ -1,47 +1,39 @@
-Return-Path: <SRS0=/pEy=S2=vger.kernel.org=linux-trace-users-owner@kernel.org>
+Return-Path: <SRS0=hQ/r=UD=vger.kernel.org=linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE512C282CE
-	for <linux-trace-users@archiver.kernel.org>; Wed, 24 Apr 2019 13:50:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD740C28CC6
+	for <linux-trace-users@archiver.kernel.org>; Tue,  4 Jun 2019 11:36:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CA918218DA
-	for <linux-trace-users@archiver.kernel.org>; Wed, 24 Apr 2019 13:50:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9164224BF6
+	for <linux-trace-users@archiver.kernel.org>; Tue,  4 Jun 2019 11:36:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730733AbfDXNui (ORCPT
+        id S1727296AbfFDLgK (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Wed, 24 Apr 2019 09:50:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47684 "EHLO mail.kernel.org"
+        Tue, 4 Jun 2019 07:36:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33192 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726382AbfDXNui (ORCPT
+        id S1727170AbfFDLgK (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Wed, 24 Apr 2019 09:50:38 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        Tue, 4 Jun 2019 07:36:10 -0400
+Received: from oasis.local.home (unknown [146.247.46.6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B054B218D2;
-        Wed, 24 Apr 2019 13:50:36 +0000 (UTC)
-Date:   Wed, 24 Apr 2019 09:50:35 -0400
+        by mail.kernel.org (Postfix) with ESMTPSA id C119924BF6;
+        Tue,  4 Jun 2019 11:36:08 +0000 (UTC)
+Date:   Tue, 4 Jun 2019 07:36:04 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     LKML <linux-kernel@vger.kernel.org>,
-        "linux-trace-users@vger.kernel.org" 
-        <linux-trace-users@vger.kernel.org>,
-        Linux Trace Devel <linux-trace-devel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org
-Cc:     Yordan Karadzhov <ykaradzhov@vmware.com>,
-        Slavomir Kaslev <kaslevs@vmware.com>,
-        Tzvetomir Stoyanov <tstoyanov@vmware.com>,
-        Stela Stamenkova <sstamenkova@vmware.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Namhyung Kim <namhyung@kernel.org>
-Subject: [ANNOUNCE] Call for KernelShark logos!
-Message-ID: <20190424095035.10e55f66@gandalf.local.home>
+        "linux-trace-devel@vger.kernel.org" 
+        <linux-trace-devel@vger.kernel.org>,
+        linux-trace-users@vger.kernel.org,
+        linux-rt-users <linux-rt-users@vger.kernel.org>
+Subject: [ANNOUNCE] Last chance to vote for a logo for KernelShark
+Message-ID: <20190604073604.0cda21e2@oasis.local.home>
 X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -51,20 +43,11 @@ Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi Folks,
+ 
+Voting closes Wednesday night.
 
-KernelShark 1.0 is soon to be released, and we want an official logo
-for it. We currently have a few out there, which you can find here:
+Vote for your favorite Logo to be the Logo for KernelShark!
 
-  http://kernelshark.org/logos/
+    http://kernelshark.org/logovote/
 
-If you know of a designer, and want them to submit another candidate,
-please email me and let me know. All submissions should be mailed to
-linux-trace-devel@vger.kernel.org (as an attachment, and of limited
-size. Preferably one image per email). I'll wait approximately a month
-and then will open up voting for the new logo on May 22. And will let
-that run for 2 weeks and will have an official logo by June 7th.
 
-Enjoy,
-
--- Steve
