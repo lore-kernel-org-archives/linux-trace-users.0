@@ -2,133 +2,147 @@ Return-Path: <SRS0=XDsJ=UM=vger.kernel.org=linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-1.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,URIBL_RHS_DOB,USER_AGENT_MUTT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16D85C31E45
-	for <linux-trace-users@archiver.kernel.org>; Thu, 13 Jun 2019 18:33:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35AF8C31E45
+	for <linux-trace-users@archiver.kernel.org>; Thu, 13 Jun 2019 23:01:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E0BF220896
-	for <linux-trace-users@archiver.kernel.org>; Thu, 13 Jun 2019 18:33:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 03CDF21537
+	for <linux-trace-users@archiver.kernel.org>; Thu, 13 Jun 2019 23:01:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yf13PQ4R"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uzbPfvsk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726838AbfFMSdu (ORCPT
+        id S1727119AbfFMXBV (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Thu, 13 Jun 2019 14:33:50 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:36904 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725851AbfFMSdu (ORCPT
+        Thu, 13 Jun 2019 19:01:21 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:44559 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726296AbfFMXBV (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Thu, 13 Jun 2019 14:33:50 -0400
-Received: by mail-pg1-f196.google.com with SMTP id 20so10374pgr.4
-        for <linux-trace-users@vger.kernel.org>; Thu, 13 Jun 2019 11:33:50 -0700 (PDT)
+        Thu, 13 Jun 2019 19:01:21 -0400
+Received: by mail-pg1-f195.google.com with SMTP id n2so335482pgp.11;
+        Thu, 13 Jun 2019 16:01:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XmUngWrX+qn33RMaE8uJCHOsDExQjQIcN6FpfTUz0t8=;
-        b=Yf13PQ4R0ZDHgS2Wy8PwCjVhXsUAo8LeqxQmmLDmmyCEszLXLsLrBruWZMu8MpBCZ8
-         UfRdjtMgqVRRnzssSVM9gaYtz6gT1R0X0uP8sp2eWILb7aBmyOttMnRzijeproH5qiBj
-         1mKmisHr3sabYBBZvqHZ7rj0sIoZy/gDpXaNf3Nmb2EH3rKy95Yx+oB19iVkZCG3URSG
-         eh4q2B9euqzNVjQlNvxrQ5RBsWePwnDAZbWvEAgKlaRMR/XWaFa1ktWbyN1Gcy9/f+Lg
-         uIdKr/hOsNJeBARLfNZVRFOMRmS6K7hVS1X/368g4bbRRwddqZ3BNB2YnchaPNlDizas
-         zRxg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=PVIgDtF1wvLIcWb+5+2PM7U0AThtnIetXRWXknWoqCY=;
+        b=uzbPfvskQFWXlSFaigtDdFJyRIiOYER+l7iTsR+mXNMKU+G+5qDvrK+4wu+afDTpuZ
+         flPC2SRB7RjzQdMGkOWjEf0anIxw/PqBa3RZjsxhKlfQL2sGM8nazY9yoScJH51IzpRQ
+         2CA/lRIrvIP4LF67pvZB7ANDDUpXOwMLl1lho/pnmFheuojK+jHUdlNSWMhmZVXmCPQH
+         biL3epAhc83l7mCEIkuF/YcE+gaklc8Pl+7L90fyR2vpQa/eGH3e3qY/13akUGJYmSK3
+         jipmDUnT6hP6QWQxHHPEWaBoys7/aG4fCP7zX5xYG4S78DaCVNorf2yhgE8tgrKnqJIJ
+         JvpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XmUngWrX+qn33RMaE8uJCHOsDExQjQIcN6FpfTUz0t8=;
-        b=UIcWoPlwcw4R/SagzUqGTxyx3e92QwOSuqYvYb61RiLeGj7oTDr32/tW1NkEoy5a56
-         NcVMMq7EcD6DzCfx0puxP7xYLJNvalVHbl25ecpWo5BI0rA1S3Wh1QZOtFqXYV6b9YXs
-         FxedZpITo0tes2Irv9gknxokj4j3hoNNgZXLseuKbNtCHts4s9WXDhgvs9qsdtvl1n4R
-         479MJ4Y+Zr87EHyflChPYj7Efc/zlWy9mJ6zFW5zbycHkvaLOfXUgGsqw3ZkFEm74scT
-         2aDPB8+jhOPihGesRxJTp/lF7yTvmFBrUD/vJ6bFsawx7aB4dMVjtaLYVBrIhCWiqLti
-         KjOA==
-X-Gm-Message-State: APjAAAUrzmFwG1zoXmfYof78aM5CJ7Yc11Us/DSX7w3oAOkms7XIzNyA
-        xap5mgUOGSi9L2vSKY8SmVK9ooTEH/OltWG6aOHSIA==
-X-Google-Smtp-Source: APXvYqyVem0vVxrQIjr+yIOGE/E3qIe1d5TXQDfQorIp8dAhF8zSdi71cknmZJXkJS2ASaIO1QZwxjiSCCS8Hu/YLN4=
-X-Received: by 2002:a62:3543:: with SMTP id c64mr12088884pfa.242.1560450829778;
- Thu, 13 Jun 2019 11:33:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAM_iQpU9SQPoZnwfdmOECftDPt99HLe4NX-b_JaCk1oRLYZB_g@mail.gmail.com>
- <20190613140220.2316ff77@gandalf.local.home>
-In-Reply-To: <20190613140220.2316ff77@gandalf.local.home>
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-Date:   Thu, 13 Jun 2019 11:33:38 -0700
-Message-ID: <CAM_iQpWCtP5PYjCJhZb4xC6Bt4R=3BAW8btGCPKeFMxeESc29A@mail.gmail.com>
-Subject: Re: Trace event filtering
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=PVIgDtF1wvLIcWb+5+2PM7U0AThtnIetXRWXknWoqCY=;
+        b=arNgSBVx2CkRBKAFwQZPz6sw26NDR4/jOisa9OcvznPj9QWWMU5Z8JQmeQNkHMWv5y
+         MPOoCmXsYime4HjWisS4SB2M8+xHwkJJirZVjnu/OBdTIoYL362L4t6hCA/mNNOYhjZz
+         i3FxQ5wr2IW7CfNWBL1imzP9FlcCJ7GnDtFdBEOTSguT4qhw6mEpzA9kugEqndqdzVxp
+         oGA3kp52cXOqf8nzhn+VCIjzAVYtxk8+a3jektRdM0EcBxKu4gYhiqauIXHfQ0jdBL6v
+         9FHQFedP0cf1wG+sgkgzVKm6JPDf9LeqIOsomq8QOqj8rJwCDnYNT57p2DodxcGiK6Lj
+         dPAw==
+X-Gm-Message-State: APjAAAWfYhZMzkqFT+GBdoj0yadF/qG73sIWCTzSL7bgdIIqR+ElgKlu
+        +8s9IPSWtDmrAJX3tRODlBw=
+X-Google-Smtp-Source: APXvYqwpk5gSoHRDG25kKn5kAXkxGlfn8nDbBtAFV4Tei4/TOeto72I42ANQCjuef8powiqCmrfmKA==
+X-Received: by 2002:a62:5c84:: with SMTP id q126mr69038980pfb.247.1560466880167;
+        Thu, 13 Jun 2019 16:01:20 -0700 (PDT)
+Received: from UbuntuLinux ([103.231.91.35])
+        by smtp.gmail.com with ESMTPSA id y22sm695832pfm.70.2019.06.13.16.01.13
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 13 Jun 2019 16:01:19 -0700 (PDT)
+Date:   Fri, 14 Jun 2019 04:31:06 +0530
+From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
 To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-trace-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Cc:     "linux-trace-users@vger.kernel.org" 
+        <linux-trace-users@vger.kernel.org>,
+        Linux Trace Devel <linux-trace-devel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Yordan Karadzhov <ykaradzhov@vmware.com>,
+        Slavomir Kaslev <kaslevs@vmware.com>,
+        Tzvetomir Stoyanov <tstoyanov@vmware.com>
+Subject: Re: [ANNOUNCE] trace-cmd v2.8
+Message-ID: <20190613230106.GA11097@UbuntuLinux>
+References: <20190613122035.7d19f318@gandalf.local.home>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="X1bOJ3K7DJ5YkBrT"
+Content-Disposition: inline
+In-Reply-To: <20190613122035.7d19f318@gandalf.local.home>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-trace-users-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 11:02 AM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Thu, 13 Jun 2019 10:43:22 -0700
-> Cong Wang <xiyou.wangcong@gmail.com> wrote:
->
-> > Hi, all
->
-> Hi Cong,
->
-> >
-> > I have a simple question about filters in libtraceevent. It looks like
-> > libtraceevent parses and matches filters in user-space, but kernel
-> > already implements filtering in kernel-space which is better because
-> > it should prevent events from generating, if not matched. So why
-> > doesn't libtraceevent use kernel filters?
->
-> The libtraceevent library is made to process the data after it has been
-> recorded. It is not the library for use of starting the recording,
-> hence there's no reason to make it use kernel filtering.
 
-I see, I thought there is a libtraceevent API to use kernel filters too, so
-it is actually designed not to use kernel filters, from what you said.
+--X1bOJ3K7DJ5YkBrT
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
 
+Cool ! Steven :)
+On 12:20 Thu 13 Jun , Steven Rostedt wrote:
 >
-> >
-> > I am trying to filter out non-error block_rq_complete events, clearly
-> > I don't want to see rasdaemon woken up every time for error==0 case,
-> > which is literally all the time.
+>Finally, after a long time, trace-cmd version 2.8 is released!
 >
-> You can do that by this:
+>This will give us a path to release KernelShark 1.0 (after we fix a few
+>more bugs).
 >
->   echo 'error != 0' > /sys/kernel/tracing/events/block/block_rq_complete/filter
+> http://trace-cmd.org
 >
-> Note, trace-cmd does this, and we are working on making a libftrace.so
-> (hopefully it will be out this year) that will allow you to do this
-> easily from any application.
+>Enjoy!
+>
+>-- Steve
+>
+>Features since 2.7:
+>
+> o Restructure of the source directory layout
+>
+> o Loading of plugins from build directory (over other locations)
+>
+> o trace-cmd reset updates (restores more, and keeps tracing_on enabled)
+>
+> o trace-cmd stat shows more information about the state of ftrace
+>
+> o Better accuracy with trace-cmd record --date
+>
+> o Version of executable now saved in trace.dat file
+>    trace-cmd report --version, will show that version
+>
+> o trace-cmd listen has a V3 protocal (V2 is no longer used)
+>    This is a big step toward a virt-server implementation
+>
+> o trace-cmd record --no-filter option added to not filter out
+>    the trace-cmd tasks while tracing.
+>
+> o Better bash completion for trace-cmd commands
+>
+> o The "mono" clock is shown now in seconds
+>
+> o --max-graph-depth can be used by instances
+>
+> And of course a ton of fixes and clean ups.
 
-Yeah, before sending out the question I actually verified that rasdaemon
-won't be woken up with that kernel fitler set.
+--X1bOJ3K7DJ5YkBrT
+Content-Type: application/pgp-signature; name="signature.asc"
 
-So, I will have to implement this by myself, fortunately it is not hard.
+-----BEGIN PGP SIGNATURE-----
 
->
-> >
-> > BTW, the user-space filters have slightly different syntax with
-> > kernel-space filters, at least the regex matching looks slightly
-> > different to me.
->
-> Yes, the parsing in the kernel is very limited, but for userspace, we
-> have the regex (man regex) at our disposal, that the kernel does not
-> have. Thus, we use that powerful engine. Unfortunately, that means that
-> the kernel and the userspace filtering will be different.
+iQEzBAABCgAdFiEEnwF+nWawchZUPOuwsjqdtxFLKRUFAl0C1a4ACgkQsjqdtxFL
+KRXR2wgAxiCv+t41nkzBpXWshoOvmJse582RwQcoz+WJJlG8zEXAomJnUq4qNhd9
+SErkP2Ql3kPvBuoXhIFMyHf1dkl/0McAmQKI3iHhLc2411Tq3u/8Gm9Fi3qFzQ+g
+LMrDOG5IkLJfeI8kgrIx7Xr0BGGAqwnrYDKpyZIG/mLddaepAfNjMOZPSzD6V3mB
+9IDihfmj0YiUcB3BkFFGwL6LcAkZ5GajJ+QGOeKYPNRaZpCFueG62Xp1nOZOYja4
+oIR12fja0HK1B0aJoqSfDSuFXVPE/brJEKnWlkeFtpIGeCGizIVN2kpvIY95n5dN
+emN9rVoDNwthCphA+Z7hqYkETNUjBQ==
+=8f84
+-----END PGP SIGNATURE-----
 
-Right.
-
->
-> >
-> > Am I miss anything here?
->
-> Did that answer all your questions?
-
-Yes.
-
-Thanks!
+--X1bOJ3K7DJ5YkBrT--
