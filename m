@@ -2,84 +2,84 @@ Return-Path: <SRS0=oy1S=UR=vger.kernel.org=linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC99AC31E51
-	for <linux-trace-users@archiver.kernel.org>; Tue, 18 Jun 2019 11:40:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 635DDC31E51
+	for <linux-trace-users@archiver.kernel.org>; Tue, 18 Jun 2019 13:02:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A66762082C
-	for <linux-trace-users@archiver.kernel.org>; Tue, 18 Jun 2019 11:40:27 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tGUAHGBN"
+	by mail.kernel.org (Postfix) with ESMTP id 38FBB20665
+	for <linux-trace-users@archiver.kernel.org>; Tue, 18 Jun 2019 13:02:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729608AbfFRLk1 (ORCPT
+        id S1725955AbfFRNCi (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Tue, 18 Jun 2019 07:40:27 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:53202 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729110AbfFRLk1 (ORCPT
+        Tue, 18 Jun 2019 09:02:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59898 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725913AbfFRNCh (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Tue, 18 Jun 2019 07:40:27 -0400
-Received: by mail-wm1-f67.google.com with SMTP id s3so2880689wms.2
-        for <linux-trace-users@vger.kernel.org>; Tue, 18 Jun 2019 04:40:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=pTxs+LOmLgB7Id7bP6QG9mAXbOPh8bsbv1HGtX6c9yM=;
-        b=tGUAHGBNHCD6usxNbDbnOgxfuWZPesvw8yfh0SHiiBYcpQxHISW92rJi2Ee/6CAnWJ
-         XEqKkM0TKfIl1fezgmT//vZ7tpxbTs856+0thyt1CE6+UWaLPJm0SCTQi7nqg6FtZeeu
-         ZOi2GY2yB/dIls7OXN4LEf/U09pGff6z5CUK5XXbNBnvu7z3YC5spLxl8spM+nAyvD/6
-         krU8GoP3bvZyXx0ZHN86ERvaKBvu/3v0+DaCchAYagovZG7BzFk0NU6D16vQQNkOXp0Z
-         utEJXSoeQ4jXPDdf+44YKU7D9vDfUb+PetjE35iVw6/tyni75tH+pVP5rEilq5JLhAA2
-         NGBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=pTxs+LOmLgB7Id7bP6QG9mAXbOPh8bsbv1HGtX6c9yM=;
-        b=agKUDn+Cl6cL3aRqdSj6vS0pOFEXUOaIiIBYVj/a5t8ZqG05zCVuxS/wFTc0VPE3ff
-         xZ24HTXpcLNgkm81wehX7LmNxG6/f/m0RXNh8Am1n2oy/6VwNzRI3O3uke18LS+qNGYx
-         HVlOSDTK4sASBQ7lCX3/f646nJ2INBdxc5IdRaDKC3cKTD7DXIujOCUBEsIrV4/P5yrA
-         LLo/Rq7kxjLqAXjze6XRZuYe4+nc0unsRkuc59xJpYBqMERMXbbfLyOYz1ZkpCPT0kvn
-         d/rSVI6Q2kfW5KxbdTC05ZQY56FLr8O3v4BHO+uQN0AdsU7c5o2HMiDAxuGwNQnFKrcZ
-         eBow==
-X-Gm-Message-State: APjAAAVgXeTVjaUVFsGYqZt4QxMtyO1S8NxD+IHC34oe+TaViQdeR8c0
-        gKjs6jQTWTRtfpZhxAVLbbleECkAmHfpln5FHDOy5w==
-X-Google-Smtp-Source: APXvYqxxS9H/pvwfByWsnzIsr+y/hciOn32y57FrOr4702/tBe6vwgKTZaGtP7qj32/44H2t83I2bfbER/XPUU8qOwU=
-X-Received: by 2002:a05:600c:c4:: with SMTP id u4mr3281329wmm.96.1560858025086;
- Tue, 18 Jun 2019 04:40:25 -0700 (PDT)
+        Tue, 18 Jun 2019 09:02:37 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D52CB20665;
+        Tue, 18 Jun 2019 13:02:36 +0000 (UTC)
+Date:   Tue, 18 Jun 2019 09:02:35 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Naruto Nguyen <narutonguyen2018@gmail.com>
+Cc:     linux-trace-users@vger.kernel.org
+Subject: Re: How to find out which process cause a strange increasing cpu
+ load on a certain core?
+Message-ID: <20190618090235.6a7b5a60@gandalf.local.home>
+In-Reply-To: <CANpxKHEMjWRSbV8fq_iSR5XAzy7oMuht0xfRTeLtBxajxtW2eg@mail.gmail.com>
+References: <CANpxKHEMjWRSbV8fq_iSR5XAzy7oMuht0xfRTeLtBxajxtW2eg@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-From:   Naruto Nguyen <narutonguyen2018@gmail.com>
-Date:   Tue, 18 Jun 2019 18:40:13 +0700
-Message-ID: <CANpxKHEMjWRSbV8fq_iSR5XAzy7oMuht0xfRTeLtBxajxtW2eg@mail.gmail.com>
-Subject: How to find out which process cause a strange increasing cpu load on
- a certain core?
-To:     linux-trace-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-trace-users-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hello everyone,
+On Tue, 18 Jun 2019 18:40:13 +0700
+Naruto Nguyen <narutonguyen2018@gmail.com> wrote:
 
-I have a kvm hypervisor and setup some VMs running OpenSUSE kernel
-4.0. After some reboot, I saw that sometime there is a VM that a
-certain core has higher %usr and %sys than other cores. The system is
-in ide state. I have some applications running on this VM, but there
-is no issue in other VMs.
+> Hello everyone,
+> 
+> I have a kvm hypervisor and setup some VMs running OpenSUSE kernel
+> 4.0. After some reboot, I saw that sometime there is a VM that a
+> certain core has higher %usr and %sys than other cores. The system is
+> in ide state. I have some applications running on this VM, but there
+> is no issue in other VMs.
 
-If I enable ftrace in kernel or load any debug jprobe, the load is
-back to normal. The pidstat command output does not show the high load
-on one core like the "top" command. Could you please let me know if it
-is the problem of "top' report higher usage? Any commands that can
-help to troubleshoot this issue? I tried "perf" but most of the time
-the perf output does not show any function that cause the increase as
-well? Not sure, if the malfunction of top or anything else can add
-more work load?
+How much higher? And is it always an issue with the same core on the
+same VM?
 
-Thanks,
-Brs,
-Naruto
+> 
+> If I enable ftrace in kernel or load any debug jprobe, the load is
+
+I'm assuming by "ftrace" you mean the full function tracer?
+
+ # echo function > /sys/kernel/tracing/current_tracer
+
+> back to normal. The pidstat command output does not show the high load
+> on one core like the "top" command. Could you please let me know if it
+> is the problem of "top' report higher usage? Any commands that can
+> help to troubleshoot this issue? I tried "perf" but most of the time
+> the perf output does not show any function that cause the increase as
+> well? Not sure, if the malfunction of top or anything else can add
+> more work load?
+
+I would suggest just tracing sched switches and interrupts. That
+shouldn't affect the load, as it is very low weight.
+
+ # cd /sys/kernel/tracing
+ # echo 1 > events/sched/sched_waking/enable
+ # echo 1 > events/sched/sched_switch/enable
+ # echo 1 > events/irq/enable
+
+And then monitor that.
+
+-- Steve
