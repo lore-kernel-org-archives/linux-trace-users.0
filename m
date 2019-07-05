@@ -1,4 +1,4 @@
-Return-Path: <SRS0=UFjE=VB=vger.kernel.org=linux-trace-users-owner@kernel.org>
+Return-Path: <SRS0=ivZw=VC=vger.kernel.org=linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
@@ -6,34 +6,33 @@ X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 922FCC46478
-	for <linux-trace-users@archiver.kernel.org>; Thu,  4 Jul 2019 12:55:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCC25C468A1
+	for <linux-trace-users@archiver.kernel.org>; Fri,  5 Jul 2019 16:34:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7302F218A0
-	for <linux-trace-users@archiver.kernel.org>; Thu,  4 Jul 2019 12:55:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D54E21721
+	for <linux-trace-users@archiver.kernel.org>; Fri,  5 Jul 2019 16:34:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726791AbfGDMzh (ORCPT
+        id S1726977AbfGEQeO (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Thu, 4 Jul 2019 08:55:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58178 "EHLO mail.kernel.org"
+        Fri, 5 Jul 2019 12:34:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54054 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726614AbfGDMzh (ORCPT
+        id S1726851AbfGEQeO (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Thu, 4 Jul 2019 08:55:37 -0400
+        Fri, 5 Jul 2019 12:34:14 -0400
 Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C8ED02189E;
-        Thu,  4 Jul 2019 12:55:35 +0000 (UTC)
-Date:   Thu, 4 Jul 2019 08:55:34 -0400
+        by mail.kernel.org (Postfix) with ESMTPSA id 3B0BF2184C;
+        Fri,  5 Jul 2019 16:34:13 +0000 (UTC)
+Date:   Fri, 5 Jul 2019 12:34:11 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Naruto Nguyen <narutonguyen2018@gmail.com>
-Cc:     linux-trace-devel@vger.kernel.org,
-        linux-trace-users@vger.kernel.org
-Subject: Re: register_jprobe always fails with -22
-Message-ID: <20190704085534.1c9c8a29@gandalf.local.home>
-In-Reply-To: <CANpxKHEVmPzxU5SwQV9Ka9z5f-8EYqS=eoD0XEqMkUVQ9tiTbw@mail.gmail.com>
-References: <CANpxKHEVmPzxU5SwQV9Ka9z5f-8EYqS=eoD0XEqMkUVQ9tiTbw@mail.gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        "linux-trace-users@vger.kernel.org" 
+        <linux-trace-users@vger.kernel.org>,
+        Linux Trace Devel <linux-trace-devel@vger.kernel.org>
+Subject: [ANNOUNCE] trace-cmd v2.8.1
+Message-ID: <20190705123411.4285e625@gandalf.local.home>
 X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -43,21 +42,22 @@ Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-On Thu, 4 Jul 2019 16:03:42 +0700
-Naruto Nguyen <narutonguyen2018@gmail.com> wrote:
 
-> Hi everyone,
-> 
-> I tried to write a sample jprobe as the link
-> https://bugzilla.redhat.com/show_bug.cgi?id=1275809 (the sample is
-> attached in the link). However the function register_jprobes always
-> return -22 or -2. Could you please let me know what these errors means
-> and how to fix it?
-> 
+Just after releasing 2.8, some bugs were found (isn't that always the
+case?). Now we have 2.8.1 stable release:
 
-Note, jprobes have been removed from the kernel. They have been
-obsoleted by registering with the function tracer.
-
-See Documentation/trace/ftrace-uses.rst in the kernel source code.
+  http://trace-cmd.org
 
 -- Steve
+
+Short log here:
+
+Greg Thelen (2):
+      trace-cmd: Always initialize write_record() len
+      trace-cmd: Avoid using uninitialized handle
+
+Steven Rostedt (VMware) (1):
+      trace-cmd: Version 2.8.1
+
+Tzvetomir Stoyanov (VMware) (1):
+      trace-cmd: Do not free pages from the lookup table in struct cpu_data in case trace file is loaded.
