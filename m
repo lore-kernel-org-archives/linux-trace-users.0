@@ -1,68 +1,69 @@
-Return-Path: <SRS0=lo4N=VX=vger.kernel.org=linux-trace-users-owner@kernel.org>
+Return-Path: <SRS0=Uyyn=V3=vger.kernel.org=linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=no
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6015DC7618B
-	for <linux-trace-users@archiver.kernel.org>; Fri, 26 Jul 2019 14:52:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3CFEC433FF
+	for <linux-trace-users@archiver.kernel.org>; Tue, 30 Jul 2019 14:24:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 41D72218D3
-	for <linux-trace-users@archiver.kernel.org>; Fri, 26 Jul 2019 14:52:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 871B8205C9
+	for <linux-trace-users@archiver.kernel.org>; Tue, 30 Jul 2019 14:24:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387587AbfGZOwG (ORCPT
+        id S1729160AbfG3OYR (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Fri, 26 Jul 2019 10:52:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55854 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387407AbfGZOwG (ORCPT
+        Tue, 30 Jul 2019 10:24:17 -0400
+Received: from mail-io1-f45.google.com ([209.85.166.45]:38486 "EHLO
+        mail-io1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727425AbfG3OYR (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Fri, 26 Jul 2019 10:52:06 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8CC082082E;
-        Fri, 26 Jul 2019 14:52:04 +0000 (UTC)
-Date:   Fri, 26 Jul 2019 10:52:03 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        "linux-trace-users@vger.kernel.org" 
-        <linux-trace-users@vger.kernel.org>,
-        Linux Trace Devel <linux-trace-devel@vger.kernel.org>,
-        troyengel@gmail.com, amikhak@wirelessfabric.com,
-        valentin.schneider@arm.com, Patrick McLean <chutzpah@gentoo.org>,
-        John Kacur <jkacur@redhat.com>,
-        Yordan Karadzhov <y.karadz@gmail.com>,
-        Tzvetomir Stoyanov <tstoyanov@vmware.com>,
-        Slavomir Kaslev <kaslevs@vmware.com>, howaboutsynergy@pm.me,
-        Bas van Dijk <v.dijk.bas@gmail.com>
-Subject: Re: [ANNOUNCE] KernelShark 1.0
-Message-ID: <20190726105203.13c7f0e7@gandalf.local.home>
-In-Reply-To: <20190726144938.GA3078@ArchLinux>
-References: <20190726095730.0674d81d@gandalf.local.home>
-        <20190726144938.GA3078@ArchLinux>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 30 Jul 2019 10:24:17 -0400
+Received: by mail-io1-f45.google.com with SMTP id j6so8664102ioa.5
+        for <linux-trace-users@vger.kernel.org>; Tue, 30 Jul 2019 07:24:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=wM9OeH4khsj0EwqOa0IBnxDXU2A4leeCwMxQxngZ0yM=;
+        b=Zf0RqpIvVRh8dXkIqLS10XJO2x+piOJ63slmDz+s6sDeUudoCXrrLM36bIAx4NrA1O
+         yFhwQ78hpDDyim5oGk7W5Pq5yWCsy9XTlEPejjuqed7AWafHaM1SzU3S2RQSy/56rUxL
+         mmDth6w2P+m5BXUvgJyW3cGLozUxTbgPE5q+0qDUhvieb8CdbkX7263QT62LlDkXZ78V
+         4zweIbjKcjOkB7yzSkgh5E8yhGEX0IBYnLZO59THUpNadZoSRt72BBnR+3R18nkyb6tc
+         rv3nAEMs7VApiBT0P1WBPBJ3dxkEwDidqi5SYGa9s5ZCbXrzZjwvPgjwOa2dyA24HaKD
+         FXsw==
+X-Gm-Message-State: APjAAAU4iLoi8IjPnZjPFdhym6cZTGdSNnUWuxNeboT2lYcagrxbH5Av
+        NXUTxBCZdSkutr390HWMQFQMb97Oxj7bG4hrOJtBltxWP48=
+X-Google-Smtp-Source: APXvYqw6SqSdM74mHbAfVgklSKQvXr9ibVSN+hGsTpkkdl1X3MwSeosjppEtf5PjW3Dg+Pev0Z8HCHtodVhC2POPNDA=
+X-Received: by 2002:a02:862b:: with SMTP id e40mr35787799jai.7.1564496655921;
+ Tue, 30 Jul 2019 07:24:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+From:   Francis Deslauriers <francis.deslauriers@efficios.com>
+Date:   Tue, 30 Jul 2019 10:24:03 -0400
+Message-ID: <CADcCL0isA3qu9kSerKH5fCmf4er8a64hZZJQKX24vcfiVR9+gw@mail.gmail.com>
+Subject: Tracing Summit 2019 - Schedule Release
+To:     linux-trace-users@vger.kernel.org
+Cc:     info@tracingsummit.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-trace-users-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-On Fri, 26 Jul 2019 20:19:38 +0530
-Bhaskar Chowdhury <unixbhaskar@gmail.com> wrote:
+Hi all,
 
-> Kudos to everyone...time to play with it. :)
-> 
+We're happy to announce the schedule for the Tracing Summit 2019 is now
+available. We are going to have an amazing conference with diverse topics such
+as trace analysis, GPU tracing, distributed systems tracing and more.
 
-Thanks,
+Checkout the schedule and talk abstracts on the website.[1]
 
-Although we're preparing for a ton of bug reports. Nothing is better
-testing to flush out bugs than giving it to users.
+Tracing Summit 2019 will be held in San Diego, California on August 20th, 2019,
+Don't forget to register for the summit either when buying your Open Source
+Summit ticket or using this link [2]!
 
--- Steve
+See you in August!
+
+The Tracing Summit Organizers
+[1] https://tracingsummit.org/wiki/TracingSummit2019
+[2] https://www.cvent.com/events/tracing-summit-2019/registration-63351d06945a46d890b8e5a200dbc0fc.aspx?fqp=true
