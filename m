@@ -1,294 +1,247 @@
-Return-Path: <SRS0=cwR1=YK=vger.kernel.org=linux-trace-users-owner@kernel.org>
+Return-Path: <SRS0=H37N=YZ=vger.kernel.org=linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2477EC00EDD
-	for <linux-trace-users@archiver.kernel.org>; Thu, 17 Oct 2019 22:29:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70948CA9ECF
+	for <linux-trace-users@archiver.kernel.org>; Fri,  1 Nov 2019 22:50:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C73DA21A4C
-	for <linux-trace-users@archiver.kernel.org>; Thu, 17 Oct 2019 22:29:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3AFE921855
+	for <linux-trace-users@archiver.kernel.org>; Fri,  1 Nov 2019 22:50:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="qtLxBwHx"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="BQxaxRiN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438269AbfJQW3G (ORCPT
+        id S1727355AbfKAWuY (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Thu, 17 Oct 2019 18:29:06 -0400
-Received: from mail.efficios.com ([167.114.142.138]:42204 "EHLO
+        Fri, 1 Nov 2019 18:50:24 -0400
+Received: from mail.efficios.com ([167.114.142.138]:59296 "EHLO
         mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732705AbfJQW3G (ORCPT
+        with ESMTP id S1727316AbfKAWuY (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Thu, 17 Oct 2019 18:29:06 -0400
+        Fri, 1 Nov 2019 18:50:24 -0400
 Received: from localhost (ip6-localhost [IPv6:::1])
-        by mail.efficios.com (Postfix) with ESMTP id 9CEA8345336;
-        Thu, 17 Oct 2019 18:29:04 -0400 (EDT)
+        by mail.efficios.com (Postfix) with ESMTP id AD9893A378C
+        for <linux-trace-users@vger.kernel.org>; Fri,  1 Nov 2019 18:50:22 -0400 (EDT)
 Received: from mail.efficios.com ([IPv6:::1])
         by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
-        with ESMTP id c3erq6gp7EXj; Thu, 17 Oct 2019 18:29:04 -0400 (EDT)
+        with ESMTP id GqELwfkQ8fTA for <linux-trace-users@vger.kernel.org>;
+        Fri,  1 Nov 2019 18:50:22 -0400 (EDT)
 Received: from localhost (ip6-localhost [IPv6:::1])
-        by mail.efficios.com (Postfix) with ESMTP id 1830C345332;
-        Thu, 17 Oct 2019 18:29:04 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 1830C345332
+        by mail.efficios.com (Postfix) with ESMTP id ED9713A377E
+        for <linux-trace-users@vger.kernel.org>; Fri,  1 Nov 2019 18:50:21 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com ED9713A377E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1571351344;
-        bh=BIRtIJH7Iz5ti/i1w6z9AbmJOgUNTEXaierPzXMCZmg=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=qtLxBwHx4NzdDQHA9I5OY16MKLiNSwkAVNksIXjStpHAu0/ou3EfyG+6DNISIYr4J
-         kCFJ2LHKkH8kO1NN7sX5HpiRNGHAXpjgTIeqCLUicIX04dEnuKaH9yX8k4XmTyScLB
-         PKDI+BeZWwdE8qpKuYDE799uBTReXn8A6YhZFZJBlRfBANdXbNQtrbSh9/7adKzTdd
-         3zeo7DVjPioPjXM8rzIt5Z1FgxTKaykxs9CNseITU7ZPDM/vVErnsWx2ILoRNHtwDI
-         OSnP1900mRKE8DuWBUoRh/xwHmFUqKNR4dutdHSE0m+JQDZLGoIQjKdxQr6iRRC5oD
-         zqK4mmUXHvgFw==
+        s=default; t=1572648622;
+        bh=l1mPwfX0F7Fcb0Pn8kSjYtFObrOOtnjppCsqY/t4cJ4=;
+        h=MIME-Version:From:Date:Message-ID:To;
+        b=BQxaxRiNeqfmLiII+7dV6xijbQ8p0xuHpfQD23p0DEUyAQINq/NCh2lesTjFvNKOn
+         hoqg6/aSryYsuL+mcvpEaS1Y6BHEv38+KKgIkk/sWzSAphY6ZapRj62PXSt8mui4Ha
+         bd4lK7OupvEv8r42NjQBEk9AzokZEDHJSRaI66F161HWV239s9QTU6/1A2cs8+7dEK
+         rCM6AG8V32TC6RYSPwTZuzwG/k2LYhlw+/wlrX1ibgY1STkOgADK3DZmKG1kIsaSdy
+         M3F1+1BuZ1W8mN61908Gia6bBdWndv43+2aXwDA+ojahnJX9CYKEtRWIXalJw/mFgW
+         MruKvvM5tDPeQ==
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([IPv6:::1])
         by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id 1O36dU-0Thc3; Thu, 17 Oct 2019 18:29:04 -0400 (EDT)
-Received: from mail02.efficios.com (mail02.efficios.com [167.114.142.138])
-        by mail.efficios.com (Postfix) with ESMTP id 026C3345324;
-        Thu, 17 Oct 2019 18:29:04 -0400 (EDT)
-Date:   Thu, 17 Oct 2019 18:29:03 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     lttng-dev@lists.lttng.org
-Cc:     Jeremie Galarneau <jgalar@efficios.com>,
-        linux-trace-users@vger.kernel.org, lwn@lwn.net,
-        diamon-discuss@lists.linuxfoundation.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <2030873454.13028.1571351343905.JavaMail.zimbra@efficios.com>
-Subject: [RELEASE] LTTng 2.11.0 - Lafontaine (Linux kernel and user-space
- tracer)
+        with ESMTP id 86OUaW_PL9Kj for <linux-trace-users@vger.kernel.org>;
+        Fri,  1 Nov 2019 18:50:21 -0400 (EDT)
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+        by mail.efficios.com (Postfix) with ESMTPSA id 9A5103A376B
+        for <linux-trace-users@vger.kernel.org>; Fri,  1 Nov 2019 18:50:21 -0400 (EDT)
+Received: by mail-lj1-f173.google.com with SMTP id 139so11785875ljf.1
+        for <linux-trace-users@vger.kernel.org>; Fri, 01 Nov 2019 15:50:21 -0700 (PDT)
+X-Gm-Message-State: APjAAAVi+YZ9qW0yNXf9ShINJuxMRI5fGqa7exZEyQm0NW9nr5+nsGW7
+        CxHeb5+HhpoAuCYbw8Hv4u4SDaAHigHs1Bb37HU=
+X-Google-Smtp-Source: APXvYqycYz34QSzOKVAJYd7CAMhZr84EWwek2s85HGr1aROIQV5Dj1dUePwImdjDUDVzzFB69m3V+QxLcEE/pNDiW6g=
+X-Received: by 2002:a2e:8555:: with SMTP id u21mr9834632ljj.252.1572648620087;
+ Fri, 01 Nov 2019 15:50:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+From:   =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= 
+        <jeremie.galarneau@efficios.com>
+Date:   Fri, 1 Nov 2019 18:49:43 -0400
+X-Gmail-Original-Message-ID: <CA+jJMxvsE7rE3sVnHWkUkwqzfyw-Rwyg_97Ay4RxiUPmUoBCqg@mail.gmail.com>
+Message-ID: <CA+jJMxvsE7rE3sVnHWkUkwqzfyw-Rwyg_97Ay4RxiUPmUoBCqg@mail.gmail.com>
+Subject: [RELEASE] Babeltrace 2.0.0-rc2
+To:     lttng-dev <lttng-dev@lists.lttng.org>,
+        diamon-discuss@lists.linuxfoundation.org,
+        linux-trace-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [167.114.142.138]
-X-Mailer: Zimbra 8.8.15_GA_3869 (ZimbraWebClient - FF69 (Linux)/8.8.15_GA_3869)
-Thread-Index: vC98spfOsJsC5mUOmwZj50RkqprWGg==
-Thread-Topic: LTTng 2.11.0 - Lafontaine (Linux kernel and user-space tracer)
 Sender: linux-trace-users-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi,
+Hi everyone!
 
-This is a combined release announcement for the 2.11.0 - "Lafontaine"
-release of the LTTng Tools, LTTng UST, and LTTng modules projects.
+Two weeks after having released [1] Babeltrace 2's first release
+candidate, today we're releasing Babeltrace 2.0.0-rc2.
 
-This release is named after a modern Saison beer from Montr=C3=A9al's Oshla=
-g
-microbrewery. It is a refreshing, zesty, rice beer with hints of fruit
-and spices. Some even say it makes for a great Somaek when mixed with
-Chamisul Soju, not that we've tried!
+A prettified version of this announcement is available at:
+https://diamon.org/babeltrace/docs/release-notes/babeltrace-2.0.0-rc2-relea=
+se-notes.html
 
-Lafontaine is also a tongue-in-cheek reference to a water leak that
-affected EfficiOS's offices during the development of this release.
+What's new since Babeltrace 2.0.0-rc1?
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
-The most notable features of this new release are:
+Improvements
+------------
+General:
+    * Introduce `BT_ASSERT_DBG()` for assertions that must only be
+      evaluated in debugging mode (when the `BABELTRACE_DEBUG_MODE`
+      environment variable is set to `1` at configuration time).
 
-  - Session rotation,
-  - Dynamic tracing of user-space (LTTng-modules),
-  - Support for arrays and bitwise binary operators in filters,
-  - User and kernel space call stack capture from the LTTng-modules
-    kernel tracer (LTTng-modules),
-  - Improved networking performance of the relay daemon,
-  - Take NUMA configuration into account for UST buffer allocation
-    (LTTng-UST),
-  - Support unloading of probe providers (dlclose) (LTTng-UST).
+      `BT_ASSERT()` assertions are now always evaluated, regardless of
+      the debugging/production mode.
 
-Important point: since we needed to change the layout of the
-LTTng-UST shared buffers in this release, we had to bump the ABI
-major version between LTTng-UST and lttng-sessiond from 7 to 8.
-Therefore, if incompatible lttng-ust and lttng-sessiond attempt
-to interact, lttng-ust will not perform any tracing. Make sure
-you upgrade both lttng-tools and lttng-ust.
+      This change's purpose is to keep as many slow-path assertions as
+      possible to detect more Babeltrace 2 programming errors, even in
+      production.
 
-This release has been brewing for two years. Indeed, LTTng 2.10.0
-was released in August 2017, a little more than two years ago.
-This means we even had the chance to publish talks and material
-presenting the features introduced in this release already.
-[1, 2, 3, 4, 5]
+      See `98b15851`.
 
-Read on for a short description of each of these features.
+    * Remove ABI versioning in Babeltrace 2 shared object plugins as we
+      don't need this property.
 
+      See `7c0244d6`.
 
--- Session rotation --
+    * In libbabeltrace2's API:
 
-The biggest feature of this release is the long-awaited session
-rotation support. Session rotations now allow you to rotate an
-ongoing tracing session much in the same way as you would rotate
-logs.
+      * Rename `BT_RANGE_SET_` prefixes to `BT_INTEGER_RANGE_SET_`.
 
-The 'lttng rotate' command rotates the current trace chunk of
-the current tracing session. Once a rotation is completed, LTTng does
-not manage the trace chunk archive anymore: you can read it, modify it,
-move it, or remove it.
+        See `eb171ee9`.
 
-Because a rotation causes the tracing session=E2=80=99s current sub-buffers
-to be flushed, trace chunk archives are never redundant, that is, they
-do not overlap over time, unlike snapshots.
+      * Make `bt_version_get_major()`, `bt_version_get_minor()`, and
+        `bt_version_get_patch()` functions return `unsigned int` instead
+        of `int`.
 
-Once a rotation is complete, offline analyses can be performed on
-the resulting trace, much like in 'normal' mode. However, the big
-advantage is that this can be done without interrupting tracing, and
-without being limited to tools which implement the "live" protocol.
+        See `78deb913`.
 
-Moreover, session rotations can be scheduled on a time or size
-basis. The following commands give an idea of how this functionality
-can be used:
+      * Remove the `BT_GRAPH_RUN_STATUS_END` status code:
+        `bt_graph_run()` now returns `BT_GRAPH_RUN_STATUS_OK` when all
+        the graph's sink components are ended.
 
-$ lttng enable-rotation --timer 30s
+        See `9669d693`.
 
-A rotation schedule is set so that an automatic rotation occurs at
-least every 30 seconds.
+`ctf` plugin:
+    Append error causes at more source locations.
 
-$ lttng enable-rotation --size 100M
+    This means more precise error messages reported by the `babeltrace2`
+    [2] CLI tool, for example.
 
-A the rotation schedule is set so that an automatic rotation occurs
-every time the total size of the flushed part of the current trace
-chunk is at least 100 MiB.
+    See `b7d2695a, `b30284d1, `2246e99da, and `1419db2bc.
 
-Conversely, session rotation schedules can be deactivated using the
-'lttng disable-rotation' command.
+`source.ctf.fs` component class:
+    Return an error when failing to load or create an index for a
+    trace.
 
-Finally, it is also possible to use the Notification API to notify
-external tools when a rotation has been completed. This allows
-arbitrary actions to be taken on a trace chunk archive when a scheduled
-rotation is completed. Such actions can include compressing, analyzing,
-or transferring a trace chunk, for example.
+    See `29a8227a`.
 
+`filter.lttng-utils.debug-info` component class:
+    Create stream classes and event classes which correspond to stream
+    classes and event classes in incoming trace classes as soon as we
+    encounter a new trace class, rather than as needed.
 
--- Dynamic tracing of user-space --
+    See `db5d746d`.
 
-This release also marks the introduction of another feature we
-have been eager to introduce for a long time: dynamic tracing.
+Python bindings:
+    In `bt2.Graph.add_component()`, validate that the `params` parameter
+    is implicitly convertible to a `bt2.Mapvalue` object (`dict`, for
+    example).
 
-As of this release, it is possible to dynamically instrument
-function entries of applications and shared libraries, as well as
-DTrace-style SDT probes.
+    See `401b7022`.
 
-The feature relies on the Linux kernel's uprobe facilities. As such,
-the kernel tracer is needed to benefit from this functionality.
+Bug fixes
+---------
+General:
+    Fix many issues reported by static analysis tools (scan-build,
+    Coverity [3], and compiler warnings).
 
-Here is an example instrumenting the libc's 'malloc' function
-which will produce an event named 'libc_malloc' on every
-invocation of malloc() by any application linked on libc:
+`source.ctf.fs` component class:
+    Fix an index handling bug which occured when multiple data stream
+    files in a CTF trace belong to the same data stream.
 
-$ lttng enable-event --kernel \
-                     --userspace-probe /usr/lib/libc-2.28.so:malloc \
-                     libc_malloc
+    See `ce75de14`.
 
-SDT probes are tracepoints distributed in multiple libraries and
-applications. This implementation supports tracing of SDT probes that
-are NOT guarded by a semaphore.
+`source.ctf.lttng-live` component class:
+    Fix a bug in which a disappearing LTTng live tracing session could
+    lead to an assertion failure.
 
-The syntax to enable an SDT tracepoint userspace probe follows:
+    See `ba90bce7`.
 
-$ lttng enable-event --kernel \
-                     --userspace-probe=3Dsdt:/path/to/executable:provider:p=
-robe
+Python bindings:
+    Fix an assertion failure which occurs when a trace or trace class
+    destruction listener raises an exception.
 
-Note that, for the time being, no payload is extracted (function
-arguments or SDT probe parameters).
+    See `64961f8b`.
 
+Upcoming
+=3D=3D=3D=3D=3D=3D=3D=3D
+We are still hard at work putting the finishing touches on our way to
+the final 2.0.0 release.
 
--- User and kernel space call stack capture from the LTTng-modules kernel t=
-racer --
+We invite you to try this release candidate and report any problems you
+may encounter to the `lttng-dev@lists.lttng.org` [4] mailing list or
+through the Babeltrace bug tracker [5].
 
-Two new contexts have been introduced for kernel channels:
-callstack-kernel and callstack-user.
+Documentation
+-------------
+We are currently documenting the entire Babeltrace 2 C API to make the
+development of new component classes as easy as possible.
 
-This allows the sampling of both the kernel and user space call stacks
-when a kernel event occurs.
+We'll also work on the Python bindings documentation.
 
-For example, it is now possible to capture both user and kernel call
-stacks whenever a process issues a 'read()' system call using the
-following commands:
+The documentation of the API will be made available on the official
+Babeltrace website [6].
 
-$ lttng create my_session
-$ lttng enable-event --kernel --syscall read
-$ lttng add-context --kernel --type callstack-kernel \
-                             --type callstack-user
-$ lttng start
+Other tasks
+-----------
+* Improve test coverage.
+* Improve resilience to corrupted/malformed CTF traces.
+* Minor internal cleanups and bug fixes.
 
-Note that it is not always possible for the tracer to reliably sample
-the user space call stack. For instance, it is not possible to sample
-the call stack of user space code compiled with -fomit-frame-pointer.
-In such a case, the tracing is not affected, but the sampled user
-space call stack may only contain the top-most address of the user space
-call stack.
+Important links
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Babeltrace 2.0.0-rc2 tarball:
+    https://www.efficios.com/files/babeltrace/babeltrace-2.0.0-rc2.tar.bz2
 
+Babeltrace website:
+    https://diamon.org/babeltrace
 
--- Support for arrays and bitwise binary operators in filters --
+Mailing list (for support and development):
+    `lttng-dev@lists.lttng.org`
 
-The filtering expression language and interpreter have been extended
-to support new features:
-  - Bracket and dot notations to get nested fields
-  - New bitwise operators (>>, <<, &, ^, and |)
+IRC channel:
+    `#lttng` on `irc.oftc.net`
 
-These improvements make it possible to filter on the content of
-structures, arrays and sequences. The objective behind this work was
-to make it easier to filter events which contain binary payloads
-such as network headers.
+Git repository:
+    https://bugs.lttng.org/projects/babeltrace
 
-As such, it is now possible to use filter expressions of the form:
-"payload[2] & 0xff7 =3D=3D 0x240"
+GitHub project:
+    https://github.com/efficios/babeltrace
 
-Also, the documentation of filter expressions has been expanded in the
-lttng-enable-event(1) man page to include more examples, a table of
-operator precedence and type promotion rules.
+Continuous integration:
+    https://ci.lttng.org/view/Babeltrace/
 
+Code review:
+    https://review.lttng.org/q/project:babeltrace
 
--- Improved networking performance of the relay daemon --
-
-While not a feature per se, a substantial amount of work went into
-mitigating performance degradations which were reported when a large
-number of targets streaming to a given relay daemon were suddenly
-experiencing connectivity issues.
-
-In those scenarios, the relay daemon could timeout on a number of
-network operations, making it unresponsive and unable to process
-incoming traffic for a long moment.
-
-In order to make it more resilient in those situations, the relay's
-communication with consumer daemons (i.e. traced targets) has been
-made entirely asynchronous, thus mitigating issues caused by
-misbehaving consumers. This is the first of many improvements to the
-relay daemon's networking code.
-
-Links
----
-
-Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
-
-[1] FOSDEM 2019 - Fine-grained Distributed Application Monitoring Using LTT=
-ng
-    https://www.efficios.com/blog/2019/03/01/fosdem19-distributed-monitorin=
-g/
-
-[2] The new dynamic user space tracing feature in LTTng
-    https://lttng.org/blog/2019/10/15/new-dynamic-user-space-tracing-in-ltt=
-ng/
-
-[3] LTTng session rotation: the practical way to do continuous tracing
-    https://lttng.org/blog/2019/10/15/lttng-session-rotation/
-
-[4] Open Source Summit Europe 2018 - Fine-grained Distributed Application M=
-onitoring Using LTTng
-    https://osseu18.sched.com/event/FxXw/fine-grained-distributed-applicati=
-on-monitoring-using-lttng-jeremie-galarneau-efficios
-
-[5] FOSDEM 2018 - The LTTng approaches to solving complex problems
-    https://www.efficios.com/blog/2018/02/03/fosdem18-lttng-approaches/
-
-On behalf of the EfficiOS team,
-
-Mathieu and J=C3=A9r=C3=A9mie
+References
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[1]: https://diamon.org/babeltrace/docs/release-notes/babeltrace-2.0.0-rc1-=
+release-notes.html
+[2]: https://diamon.org/babeltrace/docs/v2.0/man1/babeltrace2.1/
+[3]: https://scan.coverity.com/projects/babeltrace
+[4]: https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+[5]: https://bugs.lttng.org/projects/babeltrace
+[6]: https://diamon.org/babeltrace/
 
 --=20
-Mathieu Desnoyers
+J=C3=A9r=C3=A9mie Galarneau
 EfficiOS Inc.
 http://www.efficios.com
