@@ -1,69 +1,74 @@
-Return-Path: <SRS0=6sl8=4V=vger.kernel.org=linux-trace-users-owner@kernel.org>
+Return-Path: <SRS0=v7Zq=5H=vger.kernel.org=linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1884BC3F2D1
-	for <linux-trace-users@archiver.kernel.org>; Wed,  4 Mar 2020 21:27:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AF5CC4332B
+	for <linux-trace-users@archiver.kernel.org>; Sun, 22 Mar 2020 14:06:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C46D820828
-	for <linux-trace-users@archiver.kernel.org>; Wed,  4 Mar 2020 21:27:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3534C20719
+	for <linux-trace-users@archiver.kernel.org>; Sun, 22 Mar 2020 14:06:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="ltGzHkkj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pGQ9a6hY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388281AbgCDV1K (ORCPT
+        id S1725881AbgCVOG0 (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Wed, 4 Mar 2020 16:27:10 -0500
-Received: from mail.efficios.com ([167.114.26.124]:45892 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387762AbgCDV1K (ORCPT
+        Sun, 22 Mar 2020 10:06:26 -0400
+Received: from mail-pj1-f42.google.com ([209.85.216.42]:36494 "EHLO
+        mail-pj1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725785AbgCVOG0 (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Wed, 4 Mar 2020 16:27:10 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 4E5C926F4C1;
-        Wed,  4 Mar 2020 16:27:09 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id UfrujlSfKNro; Wed,  4 Mar 2020 16:27:09 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 03F8426F4BE;
-        Wed,  4 Mar 2020 16:27:09 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 03F8426F4BE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1583357229;
-        bh=JNyJCmg8U7uWmoq8iL+XYfXQOm0pFA3YkDAFZ9/IxPM=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=ltGzHkkjenCskjTiMctP9h84fFNwx2/l1ycfQLKXJnhGpgxKwRKhVjTKZp5XIXScp
-         OYw9+SCqSlWDVtvF2ztm0lUCP4JAWiF9LwyU+0ihA4yEv8v+0As8lW2z9CY6JOZXLz
-         rzpVOoQliNDm620YrPBqORrCx1f+NQKB8sfeiKrBXHhDHhqJ6zb5//n74Mhauyp7mt
-         +pCeXzugHZ4WoulaEfOKVzKdBDDCrVByzhbLRdGjmcXfSLlIecdjf0dDukHUp8BBQn
-         GGyF2umh/+2pYY5L0mBxdPt51WUr2vadq+HEqTOmUbEWc8pm/Wg5JR1mNeMrRCeZ78
-         nx/VY/0OFxB7A==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id m0p9TLCX_nXU; Wed,  4 Mar 2020 16:27:08 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id EDBC226F889;
-        Wed,  4 Mar 2020 16:27:08 -0500 (EST)
-Date:   Wed, 4 Mar 2020 16:27:08 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     lttng-dev@lists.lttng.org,
-        diamon-discuss@lists.linuxfoundation.org,
-        linux-trace-users@vger.kernel.org
-Message-ID: <1372342050.18535.1583357228871.JavaMail.zimbra@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.10.7, 2.11.1, 2.12.0-rc2 (Linux user-space
- tracer)
+        Sun, 22 Mar 2020 10:06:26 -0400
+Received: by mail-pj1-f42.google.com with SMTP id nu11so4804061pjb.1
+        for <linux-trace-users@vger.kernel.org>; Sun, 22 Mar 2020 07:06:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=AEpMjweFXmaol32xAKXL9Lku7uVlFDvgcCVpx14d7gE=;
+        b=pGQ9a6hYtViWxw4dT+Gu0eLXB5B27dVSTn0h/Pp0BQ2kBz5qg4BVtU7qphg3dYKQAD
+         ltThEt0f1B/VQLXQlqAM0ACtNGmQYvarKW4nrqPWlCwSTEYhnZh1oC7qU9Tp2Br17i6d
+         uU+8jX+y+z672BCEJZo5MtLFO+27ddzrjS5g5MFJUDwIMRgCvbx5z7CJT/3uOax5Pd/u
+         iIRpBBXkE0Uy4rbwseEaL+WBKBNvAm6THbN4d+9YZ182UKTiessFKI5o9bAb1Be02Y/N
+         tD78R3r3m5r7t7+ND5s6byLNJphtvkspa6KF5fDdx8dgbyaomLH4IJ6CqQVkSiNA24fV
+         9HNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=AEpMjweFXmaol32xAKXL9Lku7uVlFDvgcCVpx14d7gE=;
+        b=bgC1a5iM+mmGoS6O/7MedP2V6SuIK1AszcS8HwRFHbpbk+KpVyDdeZSrozWUg0CZFE
+         Cw/mkvbGCaCUpsZgDlMK2xNA1sNABNxu23m9g/z9HcSEobvCipAbsdlPkItArgFBr8V/
+         sal5saAJtsL7WlhX+sxTKVG1EbEu9kwr51g4nVg5pbZmZKSZ09XhpAJEBZY3igWKjbFS
+         Jy5UWdYIlkW3vnFDPm9rcVup+KZwk5SF43ZI3/QS+bKttXkfMesMj8LMxWVshLApzPkW
+         OEaLxHQpwpCo9pN6ZmGbYIseYYsLLSGI7C+9nC1ihcmLn6R2+VEV+QxoxRYkZCHrBxvs
+         WCuw==
+X-Gm-Message-State: ANhLgQ20BFyP58U3HxGKD99rxdZDvCatdow/u0NN49L5zbHJmyB1DbC3
+        sZDLCTkLlDRCaTNVta8V8LA=
+X-Google-Smtp-Source: ADFU+vsIMlKDsUibJBGfrxKY+NnsKz+KJAagibIwuJymV8O+QI6lw6OE52fM/2syiSGy3zMOORMVfA==
+X-Received: by 2002:a17:902:7c0c:: with SMTP id x12mr14876358pll.196.1584885984106;
+        Sun, 22 Mar 2020 07:06:24 -0700 (PDT)
+Received: from [192.168.0.18] ([106.254.212.20])
+        by smtp.gmail.com with ESMTPSA id ep7sm9553034pjb.24.2020.03.22.07.06.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Mar 2020 07:06:23 -0700 (PDT)
+To:     linux-trace-users@vger.kernel.org
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+From:   Taeung Song <treeze.taeung@gmail.com>
+Subject: How to recheck 'maxactive' ?
+Message-ID: <4762764a-6df7-bc93-ed60-e336146dce1f@gmail.com>
+Date:   Sun, 22 Mar 2020 23:06:20 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_3901 (ZimbraWebClient - FF73 (Linux)/8.8.15_GA_3895)
-Thread-Index: ha3oPyJw+hb4iGhFqKZ1pDV3/EMvow==
-Thread-Topic: LTTng-UST 2.10.7, 2.11.1, 2.12.0-rc2 (Linux user-space tracer)
 Sender: linux-trace-users-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
@@ -71,45 +76,20 @@ X-Mailing-List: linux-trace-users@vger.kernel.org
 
 Hi,
 
-This announcement covers new releases in the two actively maintained
-stable branches of the LTTng-UST project (2.10.7 and 2.11.1), as well as
-the second release candidate for the 2.12 branch (2.12.0-rc2).
+After setting 'maxactive' for kretprobe,
+how can I recheck the value of 'maxactive' ?
+For example, in order to distinguish the difference
+between two kretprobe events
+(kmem_cache_alloc_node and kmem_cache_alloc_node10)
 
-LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer,
-is a low-overhead application tracer. The library "liblttng-ust" enables
-tracing of applications and libraries.
+   $ cd /sys/kernel/debug/tracing
+   $ echo 'r:kmem_cache_alloc_node kmem_cache_alloc_node' >> kprobe_events
+   $ echo 'r10:kmem_cache_alloc_node10 kmem_cache_alloc_node' >> 
+kprobe_events
 
-* Noteworthy fixes:
-
-All of these releases contain a fix which ensures the FD_CLOEXEC flag
-is set for _all_ file descriptors received by lttng-ust over unix
-socket. This fixes an issue where more file descriptors than expected
-stay open over exec.
-
-Fixes were introduced to please the address sanitizer (ASan) part of
-clang-9. One documented out-of-bound access was done by jhash as an
-"optimization" which was rightfully tripping ASan. Since this is
-not a fast-path, the optimization was removed and we always use the
-slower "valgrind-safe" code path. We also annotated the variables
-emitted in the __tracepoints_ptrs to ensure ASan does not emit
-redzones around those variables, which are means to be contiguous
-within the section.
-
-For the 2.10 and 2.11 branches, building with -fno-common is
-enforced to prepare for the upcoming default behavior change
-in gcc 10.
-
-Please try it out, and as usual, feedback is welcome!
+   $ cat kprobe_events
+   r:kprobes/kmem_cache_alloc_node kmem_cache_alloc_node
+   r:kprobes/kmem_cache_alloc_node10 kmem_cache_alloc_node
 
 Thanks,
-
-Mathieu
-
-Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Taeung
