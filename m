@@ -2,119 +2,148 @@ Return-Path: <SRS0=Ymyf=5I=vger.kernel.org=linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23203C4332B
-	for <linux-trace-users@archiver.kernel.org>; Mon, 23 Mar 2020 10:03:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06303C4332B
+	for <linux-trace-users@archiver.kernel.org>; Mon, 23 Mar 2020 12:54:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F3630206F8
-	for <linux-trace-users@archiver.kernel.org>; Mon, 23 Mar 2020 10:03:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CB71020719
+	for <linux-trace-users@archiver.kernel.org>; Mon, 23 Mar 2020 12:54:30 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="njY/MqV4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727804AbgCWKD3 (ORCPT
+        id S1727582AbgCWMya (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Mon, 23 Mar 2020 06:03:29 -0400
-Received: from mail.ut.ac.ir ([80.66.177.10]:37792 "EHLO mail.ut.ac.ir"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727788AbgCWKD3 (ORCPT
+        Mon, 23 Mar 2020 08:54:30 -0400
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:53352 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728068AbgCWMya (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Mon, 23 Mar 2020 06:03:29 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.ut.ac.ir (Postfix) with ESMTP id AE2011DAADF;
-        Mon, 23 Mar 2020 14:33:26 +0430 (+0430)
-Received: from mail.ut.ac.ir ([127.0.0.1])
-        by localhost (mail.ut.ac.ir [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id Z2L6xYnkygeB; Mon, 23 Mar 2020 14:33:24 +0430 (+0430)
-Received: from mail.ut.ac.ir (mail.ut.ac.ir [194.225.0.10])
-        by mail.ut.ac.ir (Postfix) with ESMTP id 8BFEF1DAACC;
-        Mon, 23 Mar 2020 14:33:24 +0430 (+0430)
+        Mon, 23 Mar 2020 08:54:30 -0400
+Received: by mail-pj1-f66.google.com with SMTP id l36so6138834pjb.3
+        for <linux-trace-users@vger.kernel.org>; Mon, 23 Mar 2020 05:54:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=/wNuyOudK4lnsqabJXpE8j5qJG/piwUesE+vilid6rI=;
+        b=njY/MqV4kTIbyg/UW3k9hanDcjn4a1sKkgXw3Z9TiZeLZRi7EpRSCMUTt/2UtUJNiY
+         mY8t9qVCXFfU/7wqpqyR1zyUZOIw+WMty7Qa5dzMnTjLYsfOswLKKz3P/wcqjD/cQcl+
+         ELn/VNJt4rxEueVnkTzGEfAwQAYeDsTycd656EhnA6VaJMDXwGM/Gd7Qr38orjkIXWX+
+         dUfZ7I82Mpl4u1yxuIGuTfHSAlq461xdXAJLYdEhwIcghuw/xtMgEKpjNHhopw43JHYC
+         FoezGQlFYQcAp5oOqKnT1HK+emrj8AWCJIbIyAZT07p4YR7ld5TL9br+X64S+I3ypN8J
+         7/4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/wNuyOudK4lnsqabJXpE8j5qJG/piwUesE+vilid6rI=;
+        b=ovuHOVF1riwt4B8mFw0SWa1kdMV6b1YOj3L0jhYJPzz479RPfn5U6LNOYOCtJIBxEZ
+         SQ3A9RpeS0FXOEy9p1Wq1076p5hHdDkEKvwE9FXZvd7MZSMeJGZ4k2UdID6ssiFpg53k
+         k6K/kNCi04eoXEBo5/Dc7lBbnyurtrcFEONgbgJr34PR3BlagaHdiLCSyld29WllLq5C
+         e2QurMtdhTTqub1psnTXu0iVLIeWHplM+r6Q7uyu8uYGaG/4vSbP/RnZ9OKSPLWARY/z
+         1d3GfJAqMBSzweWSlCG8OiQErVGedSRmA3jthnJb0jXvruf0GN6vzxUGYqYqUvXzeTcy
+         iyJg==
+X-Gm-Message-State: ANhLgQ3UY41Y69DJ3TYg++sK3l5dwCo2lxhLB2pWHZkNRnVPNFdrKD4W
+        Qc2X/u/PU8GhduVE/4jENsuvSg9t6Wo=
+X-Google-Smtp-Source: ADFU+vtyaEdAbfYW787X1+LvLtviL/vrTe0ZfS2jeq75dNbyXGO9+9rlsTKGrftaFMQrLBCNWOV+Xw==
+X-Received: by 2002:a17:902:ea8a:: with SMTP id x10mr10596888plb.328.1584968068790;
+        Mon, 23 Mar 2020 05:54:28 -0700 (PDT)
+Received: from [192.168.0.18] ([106.254.212.20])
+        by smtp.gmail.com with ESMTPSA id c207sm13230000pfb.47.2020.03.23.05.54.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Mar 2020 05:54:27 -0700 (PDT)
+Subject: Re: How to recheck 'maxactive' ?
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     linux-trace-users@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+References: <4762764a-6df7-bc93-ed60-e336146dce1f@gmail.com>
+ <20200323154741.0643126b3684c950bb37bf7e@kernel.org>
+From:   Taeung Song <treeze.taeung@gmail.com>
+Message-ID: <0dbeb5a0-2834-0f74-66cb-839d5cbf64f9@gmail.com>
+Date:   Mon, 23 Mar 2020 21:54:24 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+In-Reply-To: <20200323154741.0643126b3684c950bb37bf7e@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Date:   Mon, 23 Mar 2020 14:33:24 +0430
-From:   ahmadkhorrami <ahmadkhorrami@ut.ac.ir>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Linux-trace Users <linux-trace-users@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-trace-users-owner@vger.kernel.org,
-        Jin Yao <yao.jin@linux.intel.com>
-Subject: Re: Re: Wrong Perf Backtraces
-In-Reply-To: <20200323084942.GA1534489@krava>
-References: <157597d74ff17f781d9de7e7e3defd13@ut.ac.ir>
- <bd85fc28dfb5dcf7fc10507c3c86a56d@ut.ac.ir>
- <20200322203421.715b32d8@oasis.local.home>
- <21b3df4080709f193d62b159887e2a83@ut.ac.ir> <20200323084942.GA1534489@krava>
-Message-ID: <ee43289d91fcae1c9ef5cc2429dc916b@ut.ac.ir>
-X-Sender: ahmadkhorrami@ut.ac.ir
-User-Agent: Roundcube Webmail/1.3.6
 Sender: linux-trace-users-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi,
-It seems that my previous e-mail is not sent, properly. So, here is a 
-link to the stackoverflow question:
-https://stackoverflow.com/questions/60766026/wrong-perf-backtraces
+Hi Masami,
 
-The perf is for Ubuntu 18.04 with the following "uname -a" output:
-Linux Ahmad-Laptop 5.0.0-37-generic #40~18.04.1-Ubuntu SMP Thu Nov 14 
-12:06:39 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
-I also used a compiled Linux-5.4.7 kernel and its corresponding Perf 
-tool.
+Thank you for the reply!
+And your patch looks great.
 
-Regards.
+Thanks,
+Taeung
 
-On 2020-03-23 13:19, Jiri Olsa wrote:
-
-> On Mon, Mar 23, 2020 at 07:48:26AM +0430, ahmadkhorrami wrote:
+On 3/23/20 3:47 PM, Masami Hiramatsu wrote:
+> Hi Taeung,
 > 
->> Here is a link to the detailed question at Stackoverflow:
->> 
->> https://stackoverflow.com/questions/60766026/wrong-perf-backtraces
+> On Sun, 22 Mar 2020 23:06:20 +0900
+> Taeung Song <treeze.taeung@gmail.com> wrote:
 > 
-> hi,
-> what perf version are you running?
+>> Hi,
+>>
+>> After setting 'maxactive' for kretprobe,
+>> how can I recheck the value of 'maxactive' ?
+>> For example, in order to distinguish the difference
+>> between two kretprobe events
+>> (kmem_cache_alloc_node and kmem_cache_alloc_node10)
+>>
+>>     $ cd /sys/kernel/debug/tracing
+>>     $ echo 'r:kmem_cache_alloc_node kmem_cache_alloc_node' >> kprobe_events
+>>     $ echo 'r10:kmem_cache_alloc_node10 kmem_cache_alloc_node' >>
+>> kprobe_events
+>>
+>>     $ cat kprobe_events
+>>     r:kprobes/kmem_cache_alloc_node kmem_cache_alloc_node
+>>     r:kprobes/kmem_cache_alloc_node10 kmem_cache_alloc_node
 > 
-> jirka
+> Oops! good catch. That must be a bug, since the kprobe_events design policy
+> is to support following operation.
 > 
-> I can copy it here, if needed.
+> $ cat kprobe_events > /etc/event_setting
+> (reboot)
+> $ cat /etc/event_setting > kprobe_events
 > 
-> Thanks
+> What about below patch?
 > 
-> On 2020-03-23 05:04, Steven Rostedt wrote:
+>  From 935ed56819f2bfb7ac977f5c63273c9a6e3dfb42 Mon Sep 17 00:00:00 2001
+> From: Masami Hiramatsu <mhiramat@kernel.org>
+> Date: Mon, 23 Mar 2020 10:57:48 +0900
+> Subject: [PATCH] ftrace/kprobe: Show the maxactive number on kprobe_events
 > 
-> On Mon, 23 Mar 2020 00:54:01 +0430
-> ahmadkhorrami <ahmadkhorrami@ut.ac.ir> wrote:
+> Show maxactive parameter on kprobe_events.
+> This allows user to save the current configuration and
+> restore it without losing maxactive parameter.
 > 
-> Hi,
-> I used "Perf" to extract call graphs in an evince benchmark. The 
-> command
-> used is as follows:
-> sudo perf record -d --call-graph dwarf -c 10000 e
-> mem_load_uops_retired.l3_miss:uppp /opt/evince-3.28.4/bin/evince
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> ---
+>   kernel/trace/trace_kprobe.c | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> I extracted the backtraces using "perf script" and found out that there
-> are many corrupted backtrace instances. Some contained repeated 
-> function
-> calls, for example two consecutive gmallocn()s exactly at the same
-> offsets. There are also some backtraces where the callers and callees 
-> do
-> not match.
-> Could you show some examples of the backtraces you mention?
+> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> index 362cca52f5de..d0568af4a0ef 100644
+> --- a/kernel/trace/trace_kprobe.c
+> +++ b/kernel/trace/trace_kprobe.c
+> @@ -1078,6 +1078,8 @@ static int trace_kprobe_show(struct seq_file *m, struct dyn_event *ev)
+>   	int i;
+>   
+>   	seq_putc(m, trace_kprobe_is_return(tk) ? 'r' : 'p');
+> +	if (trace_kprobe_is_return(tk) && tk->rp.maxactive)
+> +		seq_printf(m, "%d", tk->rp.maxactive);
+>   	seq_printf(m, ":%s/%s", trace_probe_group_name(&tk->tp),
+>   				trace_probe_name(&tk->tp));
+>   
 > 
-> Note that that mappings are correct. In other words, each single line 
-> of
-> the reported backtraces is correct (i.e., addresses match with
-> functions). But is seems that there are some function calls in the
-> middle, which are missed by "Perf". Strangely, in all runs (and also
-> with different sampling frequencies) the problem occurs exactly at the
-> same place.
-> 
-> I am really confused and looking forward to any help. I can also send
-> backtraces if needed.
-> -- Steve
