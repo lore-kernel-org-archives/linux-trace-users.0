@@ -2,125 +2,118 @@ Return-Path: <SRS0=ls0D=5M=vger.kernel.org=linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0FA9C43331
-	for <linux-trace-users@archiver.kernel.org>; Fri, 27 Mar 2020 13:33:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5C56C43331
+	for <linux-trace-users@archiver.kernel.org>; Fri, 27 Mar 2020 15:02:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A6F752082E
-	for <linux-trace-users@archiver.kernel.org>; Fri, 27 Mar 2020 13:33:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F8662072F
+	for <linux-trace-users@archiver.kernel.org>; Fri, 27 Mar 2020 15:02:42 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="tWJrBum2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726540AbgC0NdY (ORCPT
+        id S1727287AbgC0PCm (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Fri, 27 Mar 2020 09:33:24 -0400
-Received: from mail.ut.ac.ir ([80.66.177.10]:40170 "EHLO mail.ut.ac.ir"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726333AbgC0NdY (ORCPT
+        Fri, 27 Mar 2020 11:02:42 -0400
+Received: from mail.efficios.com ([167.114.26.124]:38752 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726900AbgC0PCm (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Fri, 27 Mar 2020 09:33:24 -0400
+        Fri, 27 Mar 2020 11:02:42 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.ut.ac.ir (Postfix) with ESMTP id 52E731DB241;
-        Fri, 27 Mar 2020 18:03:21 +0430 (+0430)
-Received: from mail.ut.ac.ir ([127.0.0.1])
-        by localhost (mail.ut.ac.ir [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id ebzkhTPMGsU6; Fri, 27 Mar 2020 18:03:20 +0430 (+0430)
-Received: from mail.ut.ac.ir (mail.ut.ac.ir [194.225.0.10])
-        by mail.ut.ac.ir (Postfix) with ESMTP id DFBF01DB243;
-        Fri, 27 Mar 2020 18:03:19 +0430 (+0430)
+        by mail.efficios.com (Postfix) with ESMTP id 1A802280587;
+        Fri, 27 Mar 2020 11:02:41 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id ps2rFxB4-Wby; Fri, 27 Mar 2020 11:02:40 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id D0038280586;
+        Fri, 27 Mar 2020 11:02:40 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com D0038280586
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1585321360;
+        bh=tw1BVWCyi3g6nCgKcrcWoUju6S+qxftKZ2ndYv4pow0=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=tWJrBum2TBWAw6FzJhmbR0nSbiWT4xSKJ3Przz36HXtdQMTbdO5ywYH6UrxAJM0SJ
+         DJPgBVUFnt3JGp7KNRM1HCAiPl791mPXajYVXtGYOdUkXscAn8nHzDbDnVqDtW1mP2
+         rgfIpWCF7aLZhYUdXOrggw3tpqWKQIu/ZxXM6KYXqIqDMcgcwwYplxlVHxoe1lQIJw
+         5SQ7078ZQPOy16LmV60t6lm7SHCyLlBG53BlxHUpiPPs1jRYE3vhCRULvoFcLPFcxA
+         1gM3vZ6XmLuuD3rIi9s15QQSwWxSZzm4NNBmm/+crHtwQ03PFecJ7UUjhYeaN5C5nJ
+         zgwnR8Eh7LvbA==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 4981O6qlVVSE; Fri, 27 Mar 2020 11:02:40 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id C3C242802DD;
+        Fri, 27 Mar 2020 11:02:40 -0400 (EDT)
+Date:   Fri, 27 Mar 2020 11:02:40 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     lttng-dev@lists.lttng.org,
+        diamon-discuss@lists.linuxfoundation.org,
+        linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     lwn <lwn@lwn.net>
+Message-ID: <1562486575.14695.1585321360704.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] LTTng-modules and LTTng-UST 2.12.0-rc3 (International
+ Stay At Home Month)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Fri, 27 Mar 2020 18:03:19 +0430
-From:   ahmadkhorrami <ahmadkhorrami@ut.ac.ir>
-To:     Milian Wolff <milian.wolff@kdab.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Steven Rostedt <rostedt@goodmis.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Linux-trace Users <linux-trace-users@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-trace-users-owner@vger.kernel.org,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Changbin Du <changbin.du@intel.com>,
-        Andi Kleen <ak@linux.intel.com>
-Subject: Re: Wrong Perf Backtraces
-In-Reply-To: <3332248.LM0AJKV5NW@agathebauer>
-References: <20200325210252.GC1947699@krava>
- <2478802.X9hSmTKtgW@agathebauer> <ca0cb1410a799267a2e1e23b6e8f7535@ut.ac.ir>
- <3332248.LM0AJKV5NW@agathebauer>
-Message-ID: <55d467c7bc4c65fde69f62fe3d67210b@ut.ac.ir>
-X-Sender: ahmadkhorrami@ut.ac.ir
-User-Agent: Roundcube Webmail/1.3.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_3918 (ZimbraWebClient - FF74 (Linux)/8.8.15_GA_3895)
+Thread-Index: d67Ht2LdRVRIUVf3IAX2GaaFUkAMGQ==
+Thread-Topic: LTTng-modules and LTTng-UST 2.12.0-rc3 (International Stay At Home Month)
 Sender: linux-trace-users-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Sounds Good. Thanks for the help!
+Hi,
 
-On 2020-03-27 17:55, Milian Wolff wrote:
+This release announcement of LTTng-modules 2.12.0-rc3 and LTTng-UST 2.12.0-rc3
+comes at an interesting time, where the entire EfficiOS team bringing you this
+release is working from home, following the physical distancing guidelines from
+Quebec's government.
 
-> On Freitag, 27. März 2020 13:58:33 CET ahmadkhorrami wrote:
-> 
->> Hi,
->> Thanks Milian. So if I am right, I should do the following:
->> 1) Run "perf buildid-list" and catch all the <file path, build-ids>
->> pairs.
->> 2) First check for the existence of the file path.
->> 3) If failed, concatenate "~/.debug", file path, "/" and buildid and 
->> use
->> it as the alternative.
-> 
-> you missed the trailing "/elf" but otherwise yes :)
-> 
->> I thought that GDB is smart enough to detect these situations in the
->> same way that it detects debug info files.
->> Should I check any directory other than ~/.debug?
-> 
-> Hmm good point, GDB should indeed do that by default but maybe it 
-> doesn't do
-> it for the `file` command for some reason? I cannot answer this, sorry.
-> 
-> Cheers
-> 
-> On 2020-03-27 16:40, Milian Wolff wrote: On Freitag, 27. März 2020 
-> 12:04:20 CET ahmadkhorrami wrote: I do the following:
-> If this line is in the perf script backtrace:
-> 7f21ffe256db g_main_context_iteration+0x2b
-> (/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.5600.4)
-> I run the following command:
-> gdb -batch -ex 'file
-> /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.5600.4'
-> -ex 'disass g_main_context_iteration'.
-> You can try to parse the output of `perf buildid-list` to get a mapping
-> that
-> can be used to run this on another person's machine. E.g.
-> 
-> ```
-> $ perf buildid-list
-> 5837b1e7495db791f9a3a56fb6ca29958da75b0c [kernel.kallsyms]
-> 845f98f6a3019620c37a2f611b2f20c27de83d5b
-> /home/milian/projects/kdab/rnd/
-> hotspot/build/tests/test-clients/cpp-parallel/cpp-parallel
-> f6ca5853dae87d9f0503a9ef230f6d1fa15a832d /usr/lib/ld-2.30.so
-> 92883b06055e8e21ded8eb0cd5a61f5704531152 [vdso]
-> 8b04d1825b63d9a600e3d57ac71058935e7ad757 /usr/lib/libpthread-2.30.so
-> 09639b80a8fad179004f2484608764d2b336dd4a /usr/lib/libstdc++.so.6.0.27
-> 33d1f350f13728651d74dd2a56bad1e4e4648f5e /usr/lib/libc-2.30.so
-> $ file
-> ~/.debug/usr/lib/ld-2.30.so/f6ca5853dae87d9f0503a9ef230f6d1fa15a832d/
-> elf
-> /home/milian/.debug/usr/lib/ld-2.30.so/
-> f6ca5853dae87d9f0503a9ef230f6d1fa15a832d/elf: ELF 64-bit LSB shared
-> object,
-> x86-64, version 1 (SYSV), statically linked,
-> BuildID[sha1]=f6ca5853dae87d9f0503a9ef230f6d1fa15a832d, not stripped
-> ```
-> 
-> I'm afraid to say that I currently don't have the time required to be
-> of more
-> help in debugging this issue in general.
-> 
-> Good luck!
+Those are likely the very last release candidates before we reach 2.12.0.
+There has been very little issues on the tracer side recently, and open
+issues which remained within LTTng tools are fixed in the 2.12-rc2 release.
+
+The only bug fix [1] really worth mentioning here is a change to the way the
+LTTng modules (kernel tracer) dumps the kernel file descriptor tables.
+Because it adds/removes fields to LTTng events, it is only introduced within
+LTTng-modules 2.12 and onwards, and not backported to prior LTTng versions.
+
+The lttng_statedump_process_state event gains a new field "file_table_address"
+to allow trace post-processing to distinguish between threads sharing the file
+descriptor table (created with CLONE_FILES) and the relatively less common
+scenario where they do not.
+
+The lttng_statedump_file_descriptor event also gains a new "file_table_address"
+field (which matches the addresses of the field with the same name in
+lttng_statedump_process_state). The "pid" field is removed from the
+lttng_statedump_file_descriptor event because it is semantically inaccurate.
+
+Now that a large part of the world is sitting home trying not to get
+infected and propagate COVID-19, you might as well use this time to
+download and try the latest LTTng 2.12 release candidates.
+
+Feedback is welcome!
+
+Thanks, and please stay home,
+
+Mathieu
+
+
+Project website: https://lttng.org
+Documentation: https://lttng.org/docs
+Download link: https://lttng.org/download
+
+[1] https://bugs.lttng.org/issues/1245
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
