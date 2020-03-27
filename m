@@ -6,34 +6,34 @@ X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC785C43331
-	for <linux-trace-users@archiver.kernel.org>; Fri, 27 Mar 2020 10:59:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 556CCC43331
+	for <linux-trace-users@archiver.kernel.org>; Fri, 27 Mar 2020 11:04:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 880A420714
-	for <linux-trace-users@archiver.kernel.org>; Fri, 27 Mar 2020 10:59:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 35B92206F1
+	for <linux-trace-users@archiver.kernel.org>; Fri, 27 Mar 2020 11:04:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726215AbgC0K7N (ORCPT
+        id S1726333AbgC0LE0 (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Fri, 27 Mar 2020 06:59:13 -0400
-Received: from mail.ut.ac.ir ([80.66.177.10]:59338 "EHLO mail.ut.ac.ir"
+        Fri, 27 Mar 2020 07:04:26 -0400
+Received: from mail.ut.ac.ir ([80.66.177.10]:43422 "EHLO mail.ut.ac.ir"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726165AbgC0K7N (ORCPT
+        id S1726215AbgC0LEZ (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Fri, 27 Mar 2020 06:59:13 -0400
+        Fri, 27 Mar 2020 07:04:25 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.ut.ac.ir (Postfix) with ESMTP id 7CCF71DB22A;
-        Fri, 27 Mar 2020 15:29:09 +0430 (+0430)
+        by mail.ut.ac.ir (Postfix) with ESMTP id 14FF71DB21B;
+        Fri, 27 Mar 2020 15:34:22 +0430 (+0430)
 Received: from mail.ut.ac.ir ([127.0.0.1])
         by localhost (mail.ut.ac.ir [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id Ng1tdRUs2De5; Fri, 27 Mar 2020 15:29:07 +0430 (+0430)
+        with LMTP id Bh6DOyroUXXy; Fri, 27 Mar 2020 15:34:21 +0430 (+0430)
 Received: from mail.ut.ac.ir (mail.ut.ac.ir [194.225.0.10])
-        by mail.ut.ac.ir (Postfix) with ESMTP id C1A651DB228;
-        Fri, 27 Mar 2020 15:29:06 +0430 (+0430)
+        by mail.ut.ac.ir (Postfix) with ESMTP id B73B91DAC9D;
+        Fri, 27 Mar 2020 15:34:20 +0430 (+0430)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Fri, 27 Mar 2020 15:29:06 +0430
+Date:   Fri, 27 Mar 2020 15:34:20 +0430
 From:   ahmadkhorrami <ahmadkhorrami@ut.ac.ir>
 To:     Jiri Olsa <jolsa@redhat.com>
 Cc:     Steven Rostedt <rostedt@goodmis.org>,
@@ -47,7 +47,7 @@ Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Changbin Du <changbin.du@intel.com>,
         Andi Kleen <ak@linux.intel.com>
 Subject: Re: Wrong Perf Backtraces
-In-Reply-To: <20200327092045.GH1947699@krava>
+In-Reply-To: <821540886fc57d7749edee585a50602f@ut.ac.ir>
 References: <20200325210252.GC1947699@krava>
  <20200325170932.34d52269@gandalf.local.home>
  <edcf2ce8838d83b1c2d44204d9ca001f@ut.ac.ir> <20200325214624.GD1947699@krava>
@@ -55,7 +55,8 @@ References: <20200325210252.GC1947699@krava>
  <52904543671bcb68ea9109b90c3e4267@ut.ac.ir> <20200326095928.GF1947699@krava>
  <243486883401862967ec2b06348c67f3@ut.ac.ir> <20200326153950.GG1947699@krava>
  <bf654a5cfe5a2a4188a286f1f5868e17@ut.ac.ir> <20200327092045.GH1947699@krava>
-Message-ID: <821540886fc57d7749edee585a50602f@ut.ac.ir>
+ <821540886fc57d7749edee585a50602f@ut.ac.ir>
+Message-ID: <decdc878b1bf207c68f1bc9e21178486@ut.ac.ir>
 X-Sender: ahmadkhorrami@ut.ac.ir
 User-Agent: Roundcube Webmail/1.3.6
 Sender: linux-trace-users-owner@vger.kernel.org
@@ -63,26 +64,37 @@ Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi,
-Thanks! Could you tell me what should be changed in order to make the 
-code runnable on your system, if it is possible?
+I do the following:
+If this line is in the perf script backtrace:
+             7f21ffe256db g_main_context_iteration+0x2b 
+(/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.5600.4)
+I run the following command:
+gdb -batch -ex 'file /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.5600.4' 
+-ex 'disass g_main_context_iteration'.
+
 Regards.
 
-On 2020-03-27 13:50, Jiri Olsa wrote:
+On 2020-03-27 15:29, ahmadkhorrami wrote:
 
+> Hi,
+> Thanks! Could you tell me what should be changed in order to make the 
+> code runnable on your system, if it is possible?
+> Regards.
+> 
+> On 2020-03-27 13:50, Jiri Olsa wrote:
+> 
 > On Thu, Mar 26, 2020 at 10:49:12PM +0430, ahmadkhorrami wrote:
 > 
->> Hi,
->> Here is the link for the python script:
->> https://gofile.io/?c=1ZSLwe
->> It is written in python-3 and takes the perf script output as input.
->> It looks for consecutive repeated backtrace lines and checks if the 
->> function
->> in these lines calls itself at the offset in the line (i.e., checks if
->> recursion is possible). If not possible it reports an error. Could you 
->> check
->> to see if any error is detected in your outputs, please?
-> 
+> Hi,
+> Here is the link for the python script:
+> https://gofile.io/?c=1ZSLwe
+> It is written in python-3 and takes the perf script output as input.
+> It looks for consecutive repeated backtrace lines and checks if the 
+> function
+> in these lines calls itself at the offset in the line (i.e., checks if
+> recursion is possible). If not possible it reports an error. Could you 
+> check
+> to see if any error is detected in your outputs, please?
 > I'm getting tons of following output:
 > 
 > /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30: No such file or 
