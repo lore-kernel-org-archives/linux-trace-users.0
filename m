@@ -2,118 +2,157 @@ Return-Path: <SRS0=ls0D=5M=vger.kernel.org=linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5C56C43331
-	for <linux-trace-users@archiver.kernel.org>; Fri, 27 Mar 2020 15:02:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E4F2C43331
+	for <linux-trace-users@archiver.kernel.org>; Fri, 27 Mar 2020 18:43:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6F8662072F
-	for <linux-trace-users@archiver.kernel.org>; Fri, 27 Mar 2020 15:02:42 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="tWJrBum2"
+	by mail.kernel.org (Postfix) with ESMTP id 406B4206F2
+	for <linux-trace-users@archiver.kernel.org>; Fri, 27 Mar 2020 18:43:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727287AbgC0PCm (ORCPT
+        id S1727143AbgC0Sni (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Fri, 27 Mar 2020 11:02:42 -0400
-Received: from mail.efficios.com ([167.114.26.124]:38752 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726900AbgC0PCm (ORCPT
+        Fri, 27 Mar 2020 14:43:38 -0400
+Received: from mail.ut.ac.ir ([80.66.177.10]:58254 "EHLO mail.ut.ac.ir"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726937AbgC0Snh (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Fri, 27 Mar 2020 11:02:42 -0400
+        Fri, 27 Mar 2020 14:43:37 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 1A802280587;
-        Fri, 27 Mar 2020 11:02:41 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ps2rFxB4-Wby; Fri, 27 Mar 2020 11:02:40 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id D0038280586;
-        Fri, 27 Mar 2020 11:02:40 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com D0038280586
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1585321360;
-        bh=tw1BVWCyi3g6nCgKcrcWoUju6S+qxftKZ2ndYv4pow0=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=tWJrBum2TBWAw6FzJhmbR0nSbiWT4xSKJ3Przz36HXtdQMTbdO5ywYH6UrxAJM0SJ
-         DJPgBVUFnt3JGp7KNRM1HCAiPl791mPXajYVXtGYOdUkXscAn8nHzDbDnVqDtW1mP2
-         rgfIpWCF7aLZhYUdXOrggw3tpqWKQIu/ZxXM6KYXqIqDMcgcwwYplxlVHxoe1lQIJw
-         5SQ7078ZQPOy16LmV60t6lm7SHCyLlBG53BlxHUpiPPs1jRYE3vhCRULvoFcLPFcxA
-         1gM3vZ6XmLuuD3rIi9s15QQSwWxSZzm4NNBmm/+crHtwQ03PFecJ7UUjhYeaN5C5nJ
-         zgwnR8Eh7LvbA==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 4981O6qlVVSE; Fri, 27 Mar 2020 11:02:40 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id C3C242802DD;
-        Fri, 27 Mar 2020 11:02:40 -0400 (EDT)
-Date:   Fri, 27 Mar 2020 11:02:40 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     lttng-dev@lists.lttng.org,
-        diamon-discuss@lists.linuxfoundation.org,
-        linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     lwn <lwn@lwn.net>
-Message-ID: <1562486575.14695.1585321360704.JavaMail.zimbra@efficios.com>
-Subject: [RELEASE] LTTng-modules and LTTng-UST 2.12.0-rc3 (International
- Stay At Home Month)
+        by mail.ut.ac.ir (Postfix) with ESMTP id E0B051DB35F;
+        Fri, 27 Mar 2020 23:13:29 +0430 (+0430)
+Received: from mail.ut.ac.ir ([127.0.0.1])
+        by localhost (mail.ut.ac.ir [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id YrbYheWS6mj9; Fri, 27 Mar 2020 23:13:28 +0430 (+0430)
+Received: from mail.ut.ac.ir (mail.ut.ac.ir [194.225.0.10])
+        by mail.ut.ac.ir (Postfix) with ESMTP id C64031DB35B;
+        Fri, 27 Mar 2020 23:13:27 +0430 (+0430)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_3918 (ZimbraWebClient - FF74 (Linux)/8.8.15_GA_3895)
-Thread-Index: d67Ht2LdRVRIUVf3IAX2GaaFUkAMGQ==
-Thread-Topic: LTTng-modules and LTTng-UST 2.12.0-rc3 (International Stay At Home Month)
+Date:   Fri, 27 Mar 2020 23:13:27 +0430
+From:   ahmadkhorrami <ahmadkhorrami@ut.ac.ir>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Linux-trace Users <linux-trace-users@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-trace-users-owner@vger.kernel.org,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Milian Wolff <milian.wolff@kdab.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Andi Kleen <ak@linux.intel.com>
+Subject: Re: Wrong Perf Backtraces
+In-Reply-To: <decdc878b1bf207c68f1bc9e21178486@ut.ac.ir>
+References: <20200325210252.GC1947699@krava>
+ <20200325170932.34d52269@gandalf.local.home>
+ <edcf2ce8838d83b1c2d44204d9ca001f@ut.ac.ir> <20200325214624.GD1947699@krava>
+ <fba145203611e7edcd674cc0cec9974b@ut.ac.ir>
+ <52904543671bcb68ea9109b90c3e4267@ut.ac.ir> <20200326095928.GF1947699@krava>
+ <243486883401862967ec2b06348c67f3@ut.ac.ir> <20200326153950.GG1947699@krava>
+ <bf654a5cfe5a2a4188a286f1f5868e17@ut.ac.ir> <20200327092045.GH1947699@krava>
+ <821540886fc57d7749edee585a50602f@ut.ac.ir>
+ <decdc878b1bf207c68f1bc9e21178486@ut.ac.ir>
+Message-ID: <fd99185b401a451fdbf96439eadcb101@ut.ac.ir>
+X-Sender: ahmadkhorrami@ut.ac.ir
+User-Agent: Roundcube Webmail/1.3.6
 Sender: linux-trace-users-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
 Hi,
+I revised the code. Hopefully, it works. Could you check it with your 
+own outputs? It is valuable for me to know if your output contains wrong 
+backtraces or not. Here is the link:
+https://gofile.io/?c=rz2kGc
+Regards.
 
-This release announcement of LTTng-modules 2.12.0-rc3 and LTTng-UST 2.12.0-rc3
-comes at an interesting time, where the entire EfficiOS team bringing you this
-release is working from home, following the physical distancing guidelines from
-Quebec's government.
+On 2020-03-27 15:34, ahmadkhorrami wrote:
 
-Those are likely the very last release candidates before we reach 2.12.0.
-There has been very little issues on the tracer side recently, and open
-issues which remained within LTTng tools are fixed in the 2.12-rc2 release.
-
-The only bug fix [1] really worth mentioning here is a change to the way the
-LTTng modules (kernel tracer) dumps the kernel file descriptor tables.
-Because it adds/removes fields to LTTng events, it is only introduced within
-LTTng-modules 2.12 and onwards, and not backported to prior LTTng versions.
-
-The lttng_statedump_process_state event gains a new field "file_table_address"
-to allow trace post-processing to distinguish between threads sharing the file
-descriptor table (created with CLONE_FILES) and the relatively less common
-scenario where they do not.
-
-The lttng_statedump_file_descriptor event also gains a new "file_table_address"
-field (which matches the addresses of the field with the same name in
-lttng_statedump_process_state). The "pid" field is removed from the
-lttng_statedump_file_descriptor event because it is semantically inaccurate.
-
-Now that a large part of the world is sitting home trying not to get
-infected and propagate COVID-19, you might as well use this time to
-download and try the latest LTTng 2.12 release candidates.
-
-Feedback is welcome!
-
-Thanks, and please stay home,
-
-Mathieu
-
-
-Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
-
-[1] https://bugs.lttng.org/issues/1245
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+> I do the following:
+> If this line is in the perf script backtrace:
+> 7f21ffe256db g_main_context_iteration+0x2b 
+> (/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.5600.4)
+> I run the following command:
+> gdb -batch -ex 'file /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.5600.4' 
+> -ex 'disass g_main_context_iteration'.
+> 
+> Regards.
+> 
+> On 2020-03-27 15:29, ahmadkhorrami wrote:
+> 
+>> Hi,
+>> Thanks! Could you tell me what should be changed in order to make the 
+>> code runnable on your system, if it is possible?
+>> Regards.
+>> 
+>> On 2020-03-27 13:50, Jiri Olsa wrote:
+>> 
+>> On Thu, Mar 26, 2020 at 10:49:12PM +0430, ahmadkhorrami wrote:
+>> 
+>> Hi,
+>> Here is the link for the python script:
+>> https://gofile.io/?c=1ZSLwe
+>> It is written in python-3 and takes the perf script output as input.
+>> It looks for consecutive repeated backtrace lines and checks if the 
+>> function
+>> in these lines calls itself at the offset in the line (i.e., checks if
+>> recursion is possible). If not possible it reports an error. Could you 
+>> check
+>> to see if any error is detected in your outputs, please?
+>> I'm getting tons of following output:
+>> 
+>> /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30: No such file or 
+>> directory.
+>> No symbol table is loaded.  Use the "file" command.
+>> 7ffff71b9bc1 gtk_css_node_invalidate_timestamp+0x31 
+>> (/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30)
+>> 
+>> I assume it's because I have all the dso binaries stored
+>> under .biuldid path, while you check the output name
+>> 
+>> jirka
+>> 
+>> Regards.
+>> On 2020-03-26 20:09, Jiri Olsa wrote:
+>> 
+>> On Thu, Mar 26, 2020 at 05:50:27PM +0430, ahmadkhorrami wrote:
+>> 
+>> Hi,
+>> First of all, many thanks for your time. Did you say that the first
+>> file has
+>> problems?
+>> 
+>> The first file (http://gofile.io/?c=qk6oXv) has repeated gmallocn()s
+>> while
+>> the second (https://gofile.io/?c=oGxgSM) also has problems with
+>> unmatched
+>> (not necessarily repeated) function calls. I am not sure if the
+>> kernel for
+>> the second one is 5.4.7 or the generic Ubuntu kernel. But the first
+>> one is
+>> certainly 5.4.7. Just to be clear, there were many instances of these
+>> unmatched <caller, callees>.
+>> I can se all the files, but I just can't see the issue yet
+>> but it's probably because of issues with perf archive..
+>> 
+>> let's see if somebody else can chime in
+>> 
+>> I have a simple python script that checks for this situation. It
+>> disassembles functions using GDB and checks the (directly called)
+>> target of
+>> each caller. I will put some comments in the script and upload it.
+>> Could you
+>> check to see if the python script detects any mismatches in your
+>> backtraces?
+>> It takes the perf script output file as input. I will upload the
+>> script in
+>> an hour.
+>> ok
+>> 
+>> jirka
