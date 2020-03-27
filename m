@@ -2,182 +2,187 @@ Return-Path: <SRS0=ls0D=5M=vger.kernel.org=linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ABDCC43331
-	for <linux-trace-users@archiver.kernel.org>; Fri, 27 Mar 2020 21:19:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8983C43331
+	for <linux-trace-users@archiver.kernel.org>; Fri, 27 Mar 2020 22:38:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5AC94206F1
-	for <linux-trace-users@archiver.kernel.org>; Fri, 27 Mar 2020 21:19:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B3EBE20717
+	for <linux-trace-users@archiver.kernel.org>; Fri, 27 Mar 2020 22:38:02 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dKfIlzcS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727505AbgC0VTn (ORCPT
+        id S1727585AbgC0WiC (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Fri, 27 Mar 2020 17:19:43 -0400
-Received: from mail-qv1-f68.google.com ([209.85.219.68]:46822 "EHLO
-        mail-qv1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727444AbgC0VTm (ORCPT
+        Fri, 27 Mar 2020 18:38:02 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:37017 "EHLO
+        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726781AbgC0WiB (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Fri, 27 Mar 2020 17:19:42 -0400
-Received: by mail-qv1-f68.google.com with SMTP id m2so5658926qvu.13
-        for <linux-trace-users@vger.kernel.org>; Fri, 27 Mar 2020 14:19:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=l70WF0DuP09hHD7wII4OBF3saI9QGwlfP/kORlWshvI=;
-        b=B7k4bl5WhFaS+0oIHZaejgBpgNYGgpct8kUFwKlAaq4uSj4DAbGKs52aIViaERX91Z
-         UJZPcQOyBurpMIhpfdwZzUHtMOAUaYA4x9FeM62HlDTKhwefx+ySF1IEI4JYsqRa7iS6
-         KViuP0rLzcsB0kFh2As0RuQ8Na2v58bkVgp9aLjC4yox5Ab4AfZ7tjO26A/4vXjlxluz
-         3O147twPt55E5RkONlW+lMrI7RwAzvXzGjdJ3KYstAUmyDJOV4KONOmAa9gq69P12bZi
-         ECqhKIR/6IH+23l4W8RD6rXyhiklu+dvdxbOKuDEcOavsNTEFRP0aOQwlaPtO0QP0yOs
-         yIYg==
-X-Gm-Message-State: ANhLgQ3elY6XLYizNpJBq+4tlS9gK+tv1hwdp4OpdYCYJhYtoGRKJfsk
-        ubX2+3s4tYawTWKVt8Bgir4x/RM0
-X-Google-Smtp-Source: ADFU+vuL/oyk72B/H1JDwmGF59ndG2g7JGBcz7sFw9ncbdAtkxch9jhRVzmVXo/U89tgr7fYpBYySw==
-X-Received: by 2002:a0c:f7d1:: with SMTP id f17mr1267975qvo.24.1585343981175;
-        Fri, 27 Mar 2020 14:19:41 -0700 (PDT)
-Received: from gmail.com (192-222-251-19.qc.cable.ebox.net. [192.222.251.19])
-        by smtp.gmail.com with ESMTPSA id b145sm4590684qkg.52.2020.03.27.14.19.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2020 14:19:39 -0700 (PDT)
-Date:   Fri, 27 Mar 2020 17:19:36 -0400
-From:   =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau 
-        <jeremie.galarneau@efficios.com>
-To:     lttng-dev@lists.lttng.org
-Cc:     diamon-discuss@lists.linuxfoundation.org,
-        linux-trace-users@vger.kernel.org
-Subject: [RELEASE] LTTng 2.12-rc3 - (Ta) Meilleure
-Message-ID: <20200327211936.GA278029@gmail.com>
+        Fri, 27 Mar 2020 18:38:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1585348679;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZBup+S4SKiQxgW1wXOp+D5cRPVLb/GVM+p/T3t3WSqk=;
+        b=dKfIlzcS6fCM+2bkEzFxLmq+8Q7VKw6MZet6DiehqWdImvUyl2ANWgxCWf/Pqlx0OY+U1M
+        B/SifrKpzT7lmE+4K21BrRWGPTdCBSQArk4FR4DiWpNG+C+RhbPTJ1KLaH4oA3rMNgkTE/
+        dt+zdq3F4lW8Vzzz4iEfUthVKj5UAag=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-129-6pdb6nl0OyG-D3u6FnDbSA-1; Fri, 27 Mar 2020 18:37:53 -0400
+X-MC-Unique: 6pdb6nl0OyG-D3u6FnDbSA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 223511005516;
+        Fri, 27 Mar 2020 22:37:51 +0000 (UTC)
+Received: from krava (unknown [10.40.196.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CC83F60BF3;
+        Fri, 27 Mar 2020 22:37:47 +0000 (UTC)
+Date:   Fri, 27 Mar 2020 23:37:43 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     ahmadkhorrami <ahmadkhorrami@ut.ac.ir>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Linux-trace Users <linux-trace-users@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-trace-users-owner@vger.kernel.org,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Milian Wolff <milian.wolff@kdab.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Andi Kleen <ak@linux.intel.com>
+Subject: Re: Wrong Perf Backtraces
+Message-ID: <20200327223743.GA2155755@krava>
+References: <fba145203611e7edcd674cc0cec9974b@ut.ac.ir>
+ <52904543671bcb68ea9109b90c3e4267@ut.ac.ir>
+ <20200326095928.GF1947699@krava>
+ <243486883401862967ec2b06348c67f3@ut.ac.ir>
+ <20200326153950.GG1947699@krava>
+ <bf654a5cfe5a2a4188a286f1f5868e17@ut.ac.ir>
+ <20200327092045.GH1947699@krava>
+ <821540886fc57d7749edee585a50602f@ut.ac.ir>
+ <decdc878b1bf207c68f1bc9e21178486@ut.ac.ir>
+ <fd99185b401a451fdbf96439eadcb101@ut.ac.ir>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <fd99185b401a451fdbf96439eadcb101@ut.ac.ir>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: linux-trace-users-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi everyone,
+On Fri, Mar 27, 2020 at 11:13:27PM +0430, ahmadkhorrami wrote:
+> Hi,
+> I revised the code. Hopefully, it works. Could you check it with your own
+> outputs? It is valuable for me to know if your output contains wrong
+> backtraces or not. Here is the link:
+> https://gofile.io/?c=rz2kGc
 
-Today marks the release of the third LTTng 2.12 - (Ta) Meilleure
-release candidate.
+will check, so far caught one.. might be same case:
 
-The second release candidate was skipped as the configure script
-was garbled by my release script. I unfortunately noticed this
-after having pushed the tag... Mea culpa!
+evince 2168454 1549196.055094:      43831 cycles:u:
+  ffffffffaec012f0 [unknown] ([unknown])
+      7f0dd44776b6 __mmap64+0x26 (inlined)
+      7f0dd44776b6 __mmap64+0x26 (inlined)
 
-Have a look at the first release candidate's release notes for an
-overview of the features introduced in LTTng 2.12.
+will try to investigate next week
 
-https://github.com/lttng/lttng-tools/releases/tag/v2.12.0-rc1
+thanks,
+jirka
 
-This release is named after "Ta Meilleure", a Northeast IPA beer
-brewed by Lagabière. Translating to "Your best one", this beer gives
-out strong aromas of passion fruit, lemon, and peaches. Tastewise,
-expect a lot of fruit, a creamy texture, and a smooth lingering hop
-bitterness.
+> Regards.
+> 
+> On 2020-03-27 15:34, ahmadkhorrami wrote:
+> 
+> > I do the following:
+> > If this line is in the perf script backtrace:
+> > 7f21ffe256db g_main_context_iteration+0x2b
+> > (/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.5600.4)
+> > I run the following command:
+> > gdb -batch -ex 'file /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.5600.4'
+> > -ex 'disass g_main_context_iteration'.
+> > 
+> > Regards.
+> > 
+> > On 2020-03-27 15:29, ahmadkhorrami wrote:
+> > 
+> > > Hi,
+> > > Thanks! Could you tell me what should be changed in order to make
+> > > the code runnable on your system, if it is possible?
+> > > Regards.
+> > > 
+> > > On 2020-03-27 13:50, Jiri Olsa wrote:
+> > > 
+> > > On Thu, Mar 26, 2020 at 10:49:12PM +0430, ahmadkhorrami wrote:
+> > > 
+> > > Hi,
+> > > Here is the link for the python script:
+> > > https://gofile.io/?c=1ZSLwe
+> > > It is written in python-3 and takes the perf script output as input.
+> > > It looks for consecutive repeated backtrace lines and checks if the
+> > > function
+> > > in these lines calls itself at the offset in the line (i.e., checks if
+> > > recursion is possible). If not possible it reports an error. Could
+> > > you check
+> > > to see if any error is detected in your outputs, please?
+> > > I'm getting tons of following output:
+> > > 
+> > > /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30: No such file or
+> > > directory.
+> > > No symbol table is loaded.  Use the "file" command.
+> > > 7ffff71b9bc1 gtk_css_node_invalidate_timestamp+0x31
+> > > (/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30)
+> > > 
+> > > I assume it's because I have all the dso binaries stored
+> > > under .biuldid path, while you check the output name
+> > > 
+> > > jirka
+> > > 
+> > > Regards.
+> > > On 2020-03-26 20:09, Jiri Olsa wrote:
+> > > 
+> > > On Thu, Mar 26, 2020 at 05:50:27PM +0430, ahmadkhorrami wrote:
+> > > 
+> > > Hi,
+> > > First of all, many thanks for your time. Did you say that the first
+> > > file has
+> > > problems?
+> > > 
+> > > The first file (http://gofile.io/?c=qk6oXv) has repeated gmallocn()s
+> > > while
+> > > the second (https://gofile.io/?c=oGxgSM) also has problems with
+> > > unmatched
+> > > (not necessarily repeated) function calls. I am not sure if the
+> > > kernel for
+> > > the second one is 5.4.7 or the generic Ubuntu kernel. But the first
+> > > one is
+> > > certainly 5.4.7. Just to be clear, there were many instances of these
+> > > unmatched <caller, callees>.
+> > > I can se all the files, but I just can't see the issue yet
+> > > but it's probably because of issues with perf archive..
+> > > 
+> > > let's see if somebody else can chime in
+> > > 
+> > > I have a simple python script that checks for this situation. It
+> > > disassembles functions using GDB and checks the (directly called)
+> > > target of
+> > > each caller. I will put some comments in the script and upload it.
+> > > Could you
+> > > check to see if the python script detects any mismatches in your
+> > > backtraces?
+> > > It takes the perf script output file as input. I will upload the
+> > > script in
+> > > an hour.
+> > > ok
+> > > 
+> > > jirka
+> 
 
-Of note, the tracker API was changed and the lttng-track(1) and
-lttng-untrack(1) man pages were updated to clarify the usage of the
-new uid/gid tracking feature.
-
-We have also integrated a number of bug fixes which made their way to
-the master branch as we continue to work on the LTTng 2.13 release.
-
-Be safe!
-
-2020-03-27 lttng-tools 2.12.0-rc3 (International Stay at Home Month)
-	* Fix: remove duplicated AC_INIT directive
-
-2020-03-27 lttng-tools 2.12.0-rc2 (International Stay at Home Month)
-	* Fix: sessiond: NULL pointer dereference after NULL check
-	* Fix: sessiond: missing goto in error handler
-	* Fix: sessiond: user/group name can be leaked on malformed command
-	* configure: add -Wmissing-declarations, -Wmissing-prototypes, and more
-	* Fix: sessiond: make the --without-lttng-ust version of launch_application_notification_thread static
-	* Fix: tests: include callsites.h from callsites.c
-	* Fix: relayd: cast idigit argument to unsigned char
-	* Fix: tests: make some functions static
-	* Fix: tests: add `void` parameter to functions that take no parameters
-	* Fix: common: make lttng_trace_chunk_remove_subdirectory_recursive static
-	* Fix: common: add `void` parameter to log_add_time declaration
-	* CONTRIBUTING.md: harmonize list style with the rest of the docs
-	* CONTRIBUTING.md: clarify the guidelines for commit messages
-	* Fix: lttng-list: don't warn when the kernel domain has no channels
-	* Refactor: lttng-ctl: follow terminology of the tracker documentation
-	* lttng: list: replace domain headers with the official names
-	* lttng: list: print `per-user` and `per-process` buffer types
-	* Docs: overhaul of lttng-track(1) and lttng-untrack(1)
-	* Fix: MI: bump MI schema version to 4.0 in mi-lttng.c
-	* Fix: sessiond: occasional badfd error on repeated SIGTERM
-	* Fix: lttng: incorrect domain list printed when no domain is provided
-	* Fix all -Wdiscarded-qualifiers warning instances
-	* Remove part of last name to fit in a 80 character line
-	* Fix: Tests: trace path wildcards not expanded
-	* Fix: Tests: `gen-ust-events` doesn't error out on invalid option
-	* Fix: Tests: utils.sh: merge `validate_{directory,folder_is}_empty` functions
-	* Fix: Tests: undefined `NR_USEC_WAIT` bash variable
-	* directory-handle: print `errno` reason on `unlinkat()` error
-	* Fix: lttng-ctl: _handle can be NULL
-	* Fix: sessiond: domain subdirectory not deleted on empty clear
-	* Ignore -Wincomplete-setjmp-declaration warnings
-	* tests: put -no-pie in LDFLAGS instead of CFLAGS
-	* Silence `POSIX Yacc` warnings
-	* Fix -Wmissing-declarations warnings in filter-parser.y
-	* Include cmd-2-2.h in cmd-2-1.h
-	* Make create_file function static in gen-ust-tracef.c
-	* Make remove_file_from_hierarchy function static in test_directory_handle.c
-	* Make fd_count function static in test_fd_tracker.c
-	* Add declarations for exported functions in health_exit.c
-	* Add declarations for exported functions in health_fail.c
-	* Make functions in live_test.c static
-	* Add declarations for exported functions in consumer_testpoints.c
-	* Make parse_arguments static in base_client.c
-	* Fix all -Wmissing-declarations warning instances
-	* Fix: fd-tracker: mark symbols as hidden
-	* Fix: liblttng-ctl: hide new tracker config symbols
-	* configure: add --enable-Werror
-	* configure: use AX_APPEND_COMPILE_FLAGS to detect supported warning flags
-	* Tests: notification.c: remove extra space
-	* Tests: remove unused libhealthexit code
-	* Fix: remove broken health monitoring test `test_thread_exit`
-	* Fix: directory-handle: use of free'd handle on fstat() error
-	* Fix: relayd: use of relay_session ref count before initialization
-	* Fix: relayd: unchecked return value when opening relay socket
-	* tests: append to AM_CFLAGS instead of overriding it
-	* Tests: gen-ust-nevents: use options instead of arguments
-	* Tests: Cleanup: test_exclusion: more detailed output
-	* Fix: Tests: `test_exclusion` passing for the wrong reason
-	* Fix: trace-chunk: useless assignment to 'ret'
-	* Fix: lttng: track-untrack: error assigned to wrong variable
-	* Fix: relayd: live: unchecked poll set creation return value
-	* Fix: relayd: live: unchecked return value when opening relay socket
-	* Fix: relayd: unchecked poll set creation return value
-	* Fix: lttng: uninitialized pointer free'd when no sessiond is present
-	* Fix: tracker: inclusion of internal header in public header
-	* Tests: Fix: `wait_on_file()` returns too early
-	* Fix: Tests: utils.sh: fix unbound variable
-	* Tests: Fix typo: registerd -> registered
-	* Tests: Cleanup: remove unused bash variable
-	* Typo: 'toogle' -> 'toggle'
-	* Fix: lttng-sessiond: control reaches end of non-void function warning
-	* Fix: possible null dereference
-	* Fix: string might be uninitialized
-	* Fix: force the use of our _FORTIFY_SOURCE definition
-
-Links
----
-
-Project website: https://lttng.org
-
-Download links:
-https://lttng.org/files/lttng-tools/lttng-tools-2.12.0-rc3.tar.bz2
-https://lttng.org/files/lttng-ust/lttng-ust-2.12.0-rc3.tar.bz2
-https://lttng.org/files/lttng-modules/lttng-modules-2.12.0-rc3.tar.bz2
-
-GPG signatures:
-https://lttng.org/files/lttng-tools/lttng-tools-2.12.0-rc3.tar.bz2.asc
-https://lttng.org/files/lttng-ust/lttng-ust-2.12.0-rc3.tar.bz2.asc
-https://lttng.org/files/lttng-modules/lttng-modules-2.12.0-rc3.tar.bz2.asc
