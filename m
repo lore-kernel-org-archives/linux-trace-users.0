@@ -2,184 +2,169 @@ Return-Path: <SRS0=qAvV=5O=vger.kernel.org=linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFE34C43331
-	for <linux-trace-users@archiver.kernel.org>; Sun, 29 Mar 2020 12:39:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1A96C43331
+	for <linux-trace-users@archiver.kernel.org>; Sun, 29 Mar 2020 13:51:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B68A320714
-	for <linux-trace-users@archiver.kernel.org>; Sun, 29 Mar 2020 12:39:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9B0222073E
+	for <linux-trace-users@archiver.kernel.org>; Sun, 29 Mar 2020 13:51:09 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=kdab.com header.i=@kdab.com header.b="pNUdrSHF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728147AbgC2Mjj (ORCPT
+        id S1728075AbgC2NvJ (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Sun, 29 Mar 2020 08:39:39 -0400
-Received: from mail.ut.ac.ir ([80.66.177.10]:56422 "EHLO mail.ut.ac.ir"
+        Sun, 29 Mar 2020 09:51:09 -0400
+Received: from mail.kdab.com ([176.9.126.58]:21925 "EHLO mail.kdab.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728129AbgC2Mjj (ORCPT
+        id S1727916AbgC2NvJ (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Sun, 29 Mar 2020 08:39:39 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.ut.ac.ir (Postfix) with ESMTP id 283BF1DA9A3;
-        Sun, 29 Mar 2020 17:09:35 +0430 (+0430)
-Received: from mail.ut.ac.ir ([127.0.0.1])
-        by localhost (mail.ut.ac.ir [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id qbjbo5ZltEdz; Sun, 29 Mar 2020 17:09:34 +0430 (+0430)
-Received: from mail.ut.ac.ir (mail.ut.ac.ir [194.225.0.10])
-        by mail.ut.ac.ir (Postfix) with ESMTP id B2C0A1DA80D;
-        Sun, 29 Mar 2020 17:09:33 +0430 (+0430)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Sun, 29 Mar 2020 17:09:33 +0430
-From:   ahmadkhorrami <ahmadkhorrami@ut.ac.ir>
-To:     Jiri Olsa <jolsa@redhat.com>
+        Sun, 29 Mar 2020 09:51:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kdab.com; h=
+ content-type:content-type:mime-version:references:in-reply-to
+ :organization:message-id:date:date:subject:subject:from:from; s=
+ dkim; t=1585489862; x=1586353863; bh=PlTLkaTy78jkXV5rLNLYHkZOY2R
+ DomlqmG75GiACzUw=; b=pNUdrSHFk7MWenCnruzajldsDUcTmQ24txCMOOmfqvd
+ FdgsHRwbroWmt37ae0c1+PBWE7iWVnoRNTi17kgu/bkNNuXOC52oHGAwHa6PN91t
+ egIpPwfU4xREf50qOxU+BlfWugjMxMG7hYIu5VtituNc0DyNpYCL/HUyDOy1ia74
+ =
+X-Virus-Scanned: amavisd-new at kdab.com
+From:   Milian Wolff <milian.wolff@kdab.com>
+To:     Jiri Olsa <jolsa@redhat.com>,
+        ahmadkhorrami <ahmadkhorrami@ut.ac.ir>
 Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
         Linux-trace Users <linux-trace-users@vger.kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         linux-trace-users-owner@vger.kernel.org,
         Jin Yao <yao.jin@linux.intel.com>,
-        Milian Wolff <milian.wolff@kdab.com>,
         Namhyung Kim <namhyung@kernel.org>,
         Andi Kleen <ak@linux.intel.com>
 Subject: Re: Wrong Perf Backtraces
-In-Reply-To: <20200329120816.GD2155755@krava>
+Date:   Sun, 29 Mar 2020 15:50:57 +0200
+Message-ID: <1867036.PIDvDuAF1L@agathebauer>
+Organization: KDAB
+In-Reply-To: <ff979b3fffc8222d8da848b8cb92f77c@ut.ac.ir>
 References: <821540886fc57d7749edee585a50602f@ut.ac.ir>
- <decdc878b1bf207c68f1bc9e21178486@ut.ac.ir>
- <fd99185b401a451fdbf96439eadcb101@ut.ac.ir> <20200327223743.GA2155755@krava>
- <57b9e24200019a41bd465e2d78c09e29@ut.ac.ir> <20200328233431.GB2155755@krava>
- <d7f65793a15bb80667e384c320549e69@ut.ac.ir>
- <8a58f8eda97525e5e49daeb001107c9d@ut.ac.ir> <20200329111959.GC2155755@krava>
- <9f7cae225ed99222e05ca1e840cd93dd@ut.ac.ir> <20200329120816.GD2155755@krava>
-Message-ID: <ff979b3fffc8222d8da848b8cb92f77c@ut.ac.ir>
-X-Sender: ahmadkhorrami@ut.ac.ir
-User-Agent: Roundcube Webmail/1.3.6
+ <20200329120816.GD2155755@krava> <ff979b3fffc8222d8da848b8cb92f77c@ut.ac.ir>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="nextPart2644237.88bMQJbFj6";
+ micalg="sha256"; protocol="application/pkcs7-signature"
 Sender: linux-trace-users-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Thanks. I did both of your changes. Perhaps some outputs are revised. 
-But I still have repeated function calls and the script detects them. 
-Here is one of them when the sampling period is 1000 events:
+--nextPart2644237.88bMQJbFj6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-evince  8751  2605.226573:      10000 
-mem_load_uops_retired.l3_miss:uppp:     5635f8c4cf3a         5080022 
-N/A|SNP N/A|TLB N/A|LCK N/A
-             7f91785a737d gtk_box_forall+0x2d 
-(/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30) gtkbox.c:0
-             7f91788120b5 gtk_widget_propagate_state+0x195 
-(/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30) gtkwidget.c:0
-             7f91785a73cf gtk_box_forall+0x7f 
-(/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30) gtkbox.c:0
-             7f91788120b5 gtk_widget_propagate_state+0x195 
-(/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30) gtkwidget.c:0
-             7f917875ebcf gtk_stack_forall+0x2f 
-(/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30) gtkstack.c:0
-             7f91788120b5 gtk_widget_propagate_state+0x195 
-(/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30) gtkwidget.c:0
-             7f91788120b5 gtk_widget_propagate_state+0x195 
-(/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30) gtkwidget.c:0
-             7f91788154aa gtk_window_forall+0x3a 
-(/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30) gtkwindow.c:0
-             7f91788120b5 gtk_widget_propagate_state+0x195 
-(/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30) gtkwidget.c:0
-             7f9178812a2d gtk_widget_update_state_flags+0x5d 
-(/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30) gtkwidget.c:0
-             7f917881919e gtk_window_state_event+0x21e 
-(/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30) gtkwindow.c:0
-             5635f6fd53ce ev_window_state_event+0x5e 
-(/opt/evince-3.28.4/bin/evince) ev-window.c:4410
-             7f91786b87fa _gtk_marshal_BOOLEAN__BOXED+0x6a 
-(/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30)
-             7f9176b9410c g_closure_invoke+0x19c 
-(/usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.5600.4)
-             7f9176ba6de7 signal_emit_unlocked_R+0xcd7 
-(/usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.5600.4) gsignal.c:0
-             7f9176baf0ae g_signal_emit_valist+0x40e 
-(/usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.5600.4)
-             7f9176bb012e g_signal_emit+0x8e 
-(/usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.5600.4)
-             7f9178800533 gtk_widget_event_internal+0x163 
-(/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30) gtkwidget.c:0
-             7f91786b78cd gtk_main_do_event+0x77d 
-(/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30)
-             7f91781c8764 _gdk_event_emit+0x24 
-(/usr/lib/x86_64-linux-gnu/libgdk-3.so.0.2200.30)
-             7f91781f8f91 gdk_event_source_dispatch+0x21 
-(/usr/lib/x86_64-linux-gnu/libgdk-3.so.0.2200.30) gdkeventsource.c:0
-             7f91768b9416 g_main_context_dispatch+0x2e6 
-(/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.5600.4)
-             7f91768b964f g_main_context_iterate.isra.26+0x1ff 
-(/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.5600.4) gmain.c:0
-             7f91768b96db g_main_context_iteration+0x2b 
-(/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.5600.4)
-             7f9176e7ae3c g_application_run+0x1fc 
-(/usr/lib/x86_64-linux-gnu/libgio-2.0.so.0.5600.4)
-             5635f6fbc707 main+0x447 (/opt/evince-3.28.4/bin/evince) 
-main.c:316
-             7f9175ee0b96 __libc_start_main+0xe6 
-(/lib/x86_64-linux-gnu/libc-2.27.so) libc-start.c:310
-             5635f6fbc899 _start+0x29 (/opt/evince-3.28.4/bin/evince)
+On Sonntag, 29. M=E4rz 2020 14:39:33 CEST ahmadkhorrami wrote:
+> Thanks. I did both of your changes. Perhaps some outputs are revised.
+> But I still have repeated function calls and the script detects them.
+> Here is one of them when the sampling period is 1000 events:
 
-Here, we have two consecutive "7f91788120b5 
-gtk_widget_propagate_state+0x195 
-(/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30) gtkwidget.c:0" lines, 
-while "gtk_widget_propagate_state+0x195" is not recursive. It should 
-call "gtk_container_forall", which does not occur even after the second 
-(inner) call.
+<snip>
 
-Regards.
+> Here, we have two consecutive "7f91788120b5
+> gtk_widget_propagate_state+0x195
+> (/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2200.30) gtkwidget.c:0" lines,
+> while "gtk_widget_propagate_state+0x195" is not recursive. It should
+> call "gtk_container_forall", which does not occur even after the second
+> (inner) call.
 
-On 2020-03-29 16:38, Jiri Olsa wrote:
+Potentially you are just lacking some debug symbols here for this GTK libra=
+ry.=20
+note that "gtkwidget.c:0" is bogus already - the line numbers start with 1,=
+ so=20
+a line of 0 reported indicates a lack of (full) debug information for this=
+=20
+file.
 
-> On Sun, Mar 29, 2020 at 04:22:27PM +0430, ahmadkhorrami wrote:
-> 
->> Hi,
->> Thanks. Still no change. Sorry, I forgot to say that you should 
->> initialize
->> the "perfCMD" variable to your perf binary path.
-> 
-> sure I did that, and your script detected the double entries,
-> now when we show also srcline for them it's silent
-> 
-> so there's no change at all for your perf script output?
-> 
-> jirka
-> 
-> Regards.
-> 
-> On 2020-03-29 15:49, Jiri Olsa wrote:
-> 
-> On Sun, Mar 29, 2020 at 05:46:57AM +0430, ahmadkhorrami wrote:
-> 
-> Hi,
-> Each line is correct. I mean addresses match symbols. But some
-> callers and
-> callees do not match. Perhaps callchain misses some callers in
-> between.
-> Regards
-> right, I missed another case.. how about the change below?
-> your script is silent now on my data
-> 
-> jirka
-> 
-> ---
-> diff --git a/tools/perf/util/evsel_fprintf.c
-> b/tools/perf/util/evsel_fprintf.c
-> index 3b4842840db0..fc4fb88937ed 100644
-> --- a/tools/perf/util/evsel_fprintf.c
-> +++ b/tools/perf/util/evsel_fprintf.c
-> @@ -173,6 +173,8 @@ int sample__fprintf_callchain(struct perf_sample
-> *sample, int left_alignment,
-> 
-> if (print_srcline)
-> printed += map__fprintf_srcline(map, addr, "\n  ", fp);
-> +            else if (node->srcline)
-> +                printed += fprintf(fp, " %s", node->srcline);
-> 
-> if (sym && sym->inlined)
-> printed += fprintf(fp, " (inlined)");
+Cheers
+
+=2D-=20
+Milian Wolff | milian.wolff@kdab.com | Senior Software Engineer
+KDAB (Deutschland) GmbH, a KDAB Group company
+Tel: +49-30-521325470
+KDAB - The Qt, C++ and OpenGL Experts
+--nextPart2644237.88bMQJbFj6
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCDEIw
+ggXmMIIDzqADAgECAhBqm+E4O/8ra58B1dm4p1JWMA0GCSqGSIb3DQEBDAUAMIGFMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYD
+VQQKExFDT01PRE8gQ0EgTGltaXRlZDErMCkGA1UEAxMiQ09NT0RPIFJTQSBDZXJ0aWZpY2F0aW9u
+IEF1dGhvcml0eTAeFw0xMzAxMTAwMDAwMDBaFw0yODAxMDkyMzU5NTlaMIGXMQswCQYDVQQGEwJH
+QjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYDVQQK
+ExFDT01PRE8gQ0EgTGltaXRlZDE9MDsGA1UEAxM0Q09NT0RPIFJTQSBDbGllbnQgQXV0aGVudGlj
+YXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+AL6znlesKHZ1QBbHOAOY08YYdiFQ8yV5C0y1oNF9Olg+nKcxLqf2NHbZhGra0D00SOTq9bus3/mx
+gUsg/Wh/eXQ0pnp8tZ8XZWAnlyKMpjL+qUByRjXCA6RQyDMqVaVUkbIr5SU0RDX/kSsKwer3H1pT
+/HUrBN0X8sKtPTdGX8XAWt/VdMLBrZBlgvnkCos+KQWWCo63OTTqRvaq8aWccm+KOMjTcE6s2mj6
+RkalweyDI7X+7U5lNo6jzC8RTXtVV4/Vwdax720YpMPJQaDaElmOupyTf1Qib+cpukNJnQmwygjD
+8m046DQkLnpXNCAGjuJy1F5NATksUsbfJAr7FLUCAwEAAaOCATwwggE4MB8GA1UdIwQYMBaAFLuv
+fgI9+qbxPISOre44mOzZMjLUMB0GA1UdDgQWBBSCr2yM+MX+lmF86B89K3FIXsSLwDAOBgNVHQ8B
+Af8EBAMCAYYwEgYDVR0TAQH/BAgwBgEB/wIBADARBgNVHSAECjAIMAYGBFUdIAAwTAYDVR0fBEUw
+QzBBoD+gPYY7aHR0cDovL2NybC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2VydGlmaWNhdGlvbkF1
+dGhvcml0eS5jcmwwcQYIKwYBBQUHAQEEZTBjMDsGCCsGAQUFBzAChi9odHRwOi8vY3J0LmNvbW9k
+b2NhLmNvbS9DT01PRE9SU0FBZGRUcnVzdENBLmNydDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3Au
+Y29tb2RvY2EuY29tMA0GCSqGSIb3DQEBDAUAA4ICAQB4XLKBKDRPPO5fVs6fl1bsj6JrF/bz9kkI
+BtTYLzXN30D+03Hj6OxCDBEaIeNmsBhrJmuubvyE7HtoSmR809AgcYboW+rcTNZ/8u/Hv+GTrNI/
+AhqX2/kiQNxmgUPt/eJPs92Qclj0HnVyy9TnSvGkSDU7I5Px+TbO+88G4zipA2psZaWeEykgzClZ
+lPz1FjTCkk77ZXp5cQYYexE6zeeN4/0OqqoAloFrjAF4o50YJafX8mnahjp3I2Y2mkjhk0xQfhNq
+bzlLWPoT3m7j7U26u7zg6swjOq8hITYc3/np5tM5aVyu6t99p17bTbY7+1RTWBviN9YJzK8HxzOb
+XYWBf/L+VGOYNsQDTxAk0Hbvb1j6KjUhg7fO294F29QIhhmiNOr84JHoy+fNLpfvYc/Q9EtFOI5I
+SYgOxLk3nD/whbUe9rmEQXLp8MB933Ij474gwwCPUpwv9mj2PMnXoc7mbrS22XUSeTwxCTP9bcmU
+dp4jmIoWfhQm7X9w/Zgddg+JZ/YnIHOwsGsaTUgj7fIvxqith7DoJC91WJ8Lce3CVJqb1XWeKIJ8
+4F7YLXZN0oa7TktYgDdmQVxYkZo1c5noaDKH9Oq9cbm/vOYRUM1cWcef20Wkyk5S/GFyyPJwG0fR
+1nRas3DqAf4cXxMiEKcff7PNa4M3RGTqH0pWR8p6EjCCBlQwggU8oAMCAQICEAf6KCF9+1doL2oE
+OTPysLwwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNVBAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1h
+bmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0w
+OwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWls
+IENBMB4XDTE3MDUyMzAwMDAwMFoXDTIwMDUyMjIzNTk1OVowggFZMQswCQYDVQQGEwJTRTEPMA0G
+A1UEERMGNjgzIDMxMRIwEAYDVQQIEwlWYWVybWxhbmQxEDAOBgNVBAcTB0hhZ2ZvcnMxGDAWBgNV
+BAkTD05vcnJpbmdzIHZhZWcgMjEPMA0GA1UEEhMGQm94IDMwMSYwJAYDVQQKDB1LbGFyw6RsdmRh
+bGVucyBEYXRha29uc3VsdCBBQjEdMBsGA1UECxMUQSBLREFCIEdyb3VwIENvbXBhbnkxQzBBBgNV
+BAsMOklzc3VlZCB0aHJvdWdoIEtsYXLDpGx2ZGFsZW5zIERhdGFrb25zdWx0IEFCIEUtUEtJIE1h
+bmFnZXIxHzAdBgNVBAsTFkNvcnBvcmF0ZSBTZWN1cmUgRW1haWwxFTATBgNVBAMTDE1pbGlhbiBX
+b2xmZjEkMCIGCSqGSIb3DQEJARYVbWlsaWFuLndvbGZmQGtkYWIuY29tMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAxrzfNBVvRbiAknuTBXuQnNm9sLIFLo0vbPB6kswk78A3tA++Zn5c
+lQUHhGlQq1cdYxagnUpqwvG3Sod15mPSOLkAPf/mabLN7p+lFbRaUP+97ZkTZtvb4BCC3osIEFI4
+G393OSFWqc2qmIPE/SwSASbAA20Fcaa2M6P1lhOk/ttUh2jIurTPF0wUycIA7lBddrOgaOA8e2m6
+iLTNHtlrfRbBaUX91D5ebY+UWmIjXSQ9+CtutMzBkwnF0rZKririvOkklg9VzEGNQVHrQfDF2s/U
+pOtmtuVSwElauGT/KALyCFuIrYC1pmaKH8S1xODJqiRaf6jH8E+KQzKjyM/ErwIDAQABo4IB1TCC
+AdEwHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFN+m99RtIuA1bSdw
+6b1brOX7X3AJMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
+BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
+dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
+LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
+Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
+Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
+KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAgBgNVHREEGTAXgRVtaWxpYW4ud29s
+ZmZAa2RhYi5jb20wDQYJKoZIhvcNAQELBQADggEBABf47LSJADqH+ow9INv3QM1NC/qq2bjxGvsZ
+68iD11VEUAFlsYfsVTgQqUirwPVTYenXtwVBELHZyywsui1JxL7HKQetLQegDDP/RyfjReVaWxhy
+3OpuItsgLVbru9QVgPifnoBFPtfZcwjeJDmeSbLT8oj4Rd0KYBOIve7WKvsfNPsNwfbLwY2zILkE
+LjxZcVi2AwZHDyab+dzL/3YcLuJj1lSawBGn7ilpcdZydlv4aye51pD/MemLIYLcylt+ImrmjnTV
+y+QlAHRF3s5FE8yAr+W1MBD/1bKZCSgFt8VQoAlz3hiQh8QqZp4Zl8WuVL4+mP/mT6VDEWgq/0Bo
+cukxggJuMIICagIBATCBrDCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hl
+c3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNV
+BAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EC
+EAf6KCF9+1doL2oEOTPysLwwDQYJYIZIAWUDBAIBBQCggZMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjAwMzI5MTM1MDU4WjAoBgkqhkiG9w0BCQ8xGzAZMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQg+A6Z7xZ4xuHskGG0ZKr+hkdkLSK6
+x03rCpH7iHRXQHgwDQYJKoZIhvcNAQEBBQAEggEAlobwq3YMBvoIzmqqqszIR7T0D2Dokhdphd8S
+SU6KbxcNf8+vCBLyIzFPqVKXw6mNwTvCxQ0nXfgrXuiBkVw8FWa+bpSs/wbc72DrWLyrhFpH0Ukw
+QBHl/6PWas9G0VLRRId+rRtOHTV6wnzPIkaVZJD0C5919a2OiC5zhsfzDGp0fOz3v4HVlWk0xYeP
+v2fU18oooChUuc8efdBUBvZKRV4FcYqp8dXifeiaXOkrO6xnaAgPJyzdmu/lhvRGVE/GvRyefcNx
+6oYlttNZcSUYTcE+cIa2seF4HzHncaeCyqYd6fMnpWnEurgjZvcT/W2C+784A7NWrBFQb6mZZgcu
+cQAAAAAAAA==
+
+
+--nextPart2644237.88bMQJbFj6--
+
+
