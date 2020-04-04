@@ -1,4 +1,4 @@
-Return-Path: <SRS0=9mrg=5Q=vger.kernel.org=linux-trace-users-owner@kernel.org>
+Return-Path: <SRS0=Teda=5U=vger.kernel.org=linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
@@ -6,34 +6,34 @@ X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD771C43331
-	for <linux-trace-users@archiver.kernel.org>; Tue, 31 Mar 2020 20:57:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CFC4C43331
+	for <linux-trace-users@archiver.kernel.org>; Sat,  4 Apr 2020 01:01:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B23AC2080C
-	for <linux-trace-users@archiver.kernel.org>; Tue, 31 Mar 2020 20:57:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 415B6206F6
+	for <linux-trace-users@archiver.kernel.org>; Sat,  4 Apr 2020 01:01:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727852AbgCaU5s (ORCPT
+        id S1726208AbgDDBBx (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Tue, 31 Mar 2020 16:57:48 -0400
-Received: from mail.ut.ac.ir ([80.66.177.10]:56778 "EHLO mail.ut.ac.ir"
+        Fri, 3 Apr 2020 21:01:53 -0400
+Received: from mail.ut.ac.ir ([80.66.177.10]:36496 "EHLO mail.ut.ac.ir"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728893AbgCaU5s (ORCPT
+        id S1726170AbgDDBBx (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Tue, 31 Mar 2020 16:57:48 -0400
+        Fri, 3 Apr 2020 21:01:53 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.ut.ac.ir (Postfix) with ESMTP id 2669CF80AA;
-        Wed,  1 Apr 2020 01:27:45 +0430 (+0430)
+        by mail.ut.ac.ir (Postfix) with ESMTP id EEA8C1DA7A7;
+        Sat,  4 Apr 2020 05:31:47 +0430 (+0430)
 Received: from mail.ut.ac.ir ([127.0.0.1])
         by localhost (mail.ut.ac.ir [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id 1l8-GxAazV2K; Wed,  1 Apr 2020 01:27:44 +0430 (+0430)
+        with LMTP id t_B5hMaFJUMJ; Sat,  4 Apr 2020 05:31:47 +0430 (+0430)
 Received: from mail.ut.ac.ir (mail.ut.ac.ir [194.225.0.10])
-        by mail.ut.ac.ir (Postfix) with ESMTP id E4031F80A9;
-        Wed,  1 Apr 2020 01:27:43 +0430 (+0430)
+        by mail.ut.ac.ir (Postfix) with ESMTP id 981101DA6BA;
+        Sat,  4 Apr 2020 05:31:46 +0430 (+0430)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8;
  format=flowed
 Content-Transfer-Encoding: 8bit
-Date:   Wed, 01 Apr 2020 01:27:43 +0430
+Date:   Sat, 04 Apr 2020 05:31:46 +0430
 From:   ahmadkhorrami <ahmadkhorrami@ut.ac.ir>
 To:     Milian Wolff <milian.wolff@kdab.com>
 Cc:     Jiri Olsa <jolsa@redhat.com>, Steven Rostedt <rostedt@goodmis.org>,
@@ -45,11 +45,11 @@ Cc:     Jiri Olsa <jolsa@redhat.com>, Steven Rostedt <rostedt@goodmis.org>,
         Namhyung Kim <namhyung@kernel.org>,
         Andi Kleen <ak@linux.intel.com>
 Subject: Re: Wrong Perf Backtraces
-In-Reply-To: <7774721.NyiUUSuA9g@agathebauer>
+In-Reply-To: <e97fc4aeff263bc1eb0206b7a3c22011@ut.ac.ir>
 References: <821540886fc57d7749edee585a50602f@ut.ac.ir>
  <8573002.CDJkKcVGEf@agathebauer> <fe8e797932c0cb6d1b8db2ee9b991ed0@ut.ac.ir>
- <7774721.NyiUUSuA9g@agathebauer>
-Message-ID: <e97fc4aeff263bc1eb0206b7a3c22011@ut.ac.ir>
+ <7774721.NyiUUSuA9g@agathebauer> <e97fc4aeff263bc1eb0206b7a3c22011@ut.ac.ir>
+Message-ID: <9dc590447c61e044934bdad4127297b8@ut.ac.ir>
 X-Sender: ahmadkhorrami@ut.ac.ir
 User-Agent: Roundcube Webmail/1.3.6
 Sender: linux-trace-users-owner@vger.kernel.org
@@ -58,15 +58,23 @@ List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
 Hi,
-On 2020-03-31 19:59, Milian Wolff wrote:
+I think that I should give up and assume that all illogical repeated 
+addresses are inlines. Thanks everybody, especially, Jirka, Milian, 
+Arnaldo and Steven. Perhaps some day I will be back and try to dig 
+deeper (with your hints and assistance).
+Regards.
 
+On 2020-04-01 01:27, ahmadkhorrami wrote:
+
+> Hi,
+> On 2020-03-31 19:59, Milian Wolff wrote:
+> 
 > On Dienstag, 31. März 2020 17:02:37 CEST ahmadkhorrami wrote:
 > 
->> Hi Milian,
->> Thanks for the detailed answer. Well, the bug you mentioned is bad 
->> news.
->> Because I sample using uppp. Perhaps this leads to these weird traces.
-> 
+> Hi Milian,
+> Thanks for the detailed answer. Well, the bug you mentioned is bad 
+> news.
+> Because I sample using uppp. Perhaps this leads to these weird traces.
 > Please read the full thread from here on:
 > 
 > https://lkml.org/lkml/2018/11/2/86
@@ -78,8 +86,8 @@ On 2020-03-31 19:59, Milian Wolff wrote:
 > `ppp`. If not, then you can be pretty sure it's this issue. If you 
 > still see
 > it, then it's something different.
-> 
-Well, the problem exists even when ":uppp" is changed to ":u".
+  Well, the problem exists even when ":uppp" is changed to ":u".
+
 >> Is this a purely software bug?
 > 
 > I wouldn't call it that, personally. Rather, it's a limitation in the 
@@ -95,4 +103,4 @@ Well, the problem exists even when ":uppp" is changed to ":u".
 > too short and thus not practical to use in reality.
 > 
 > Cheers
-Regards.
+  Regards.
