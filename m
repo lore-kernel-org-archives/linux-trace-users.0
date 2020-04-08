@@ -1,106 +1,96 @@
-Return-Path: <SRS0=Teda=5U=vger.kernel.org=linux-trace-users-owner@kernel.org>
+Return-Path: <SRS0=ad/Y=5Y=vger.kernel.org=linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CFC4C43331
-	for <linux-trace-users@archiver.kernel.org>; Sat,  4 Apr 2020 01:01:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D34CFC2D0EA
+	for <linux-trace-users@archiver.kernel.org>; Wed,  8 Apr 2020 15:33:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 415B6206F6
-	for <linux-trace-users@archiver.kernel.org>; Sat,  4 Apr 2020 01:01:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7595B206F7
+	for <linux-trace-users@archiver.kernel.org>; Wed,  8 Apr 2020 15:33:45 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="n4QpMHi1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726208AbgDDBBx (ORCPT
+        id S1727928AbgDHPdp (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Fri, 3 Apr 2020 21:01:53 -0400
-Received: from mail.ut.ac.ir ([80.66.177.10]:36496 "EHLO mail.ut.ac.ir"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726170AbgDDBBx (ORCPT
+        Wed, 8 Apr 2020 11:33:45 -0400
+Received: from mail.efficios.com ([167.114.26.124]:35536 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726709AbgDHPdp (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Fri, 3 Apr 2020 21:01:53 -0400
+        Wed, 8 Apr 2020 11:33:45 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.ut.ac.ir (Postfix) with ESMTP id EEA8C1DA7A7;
-        Sat,  4 Apr 2020 05:31:47 +0430 (+0430)
-Received: from mail.ut.ac.ir ([127.0.0.1])
-        by localhost (mail.ut.ac.ir [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id t_B5hMaFJUMJ; Sat,  4 Apr 2020 05:31:47 +0430 (+0430)
-Received: from mail.ut.ac.ir (mail.ut.ac.ir [194.225.0.10])
-        by mail.ut.ac.ir (Postfix) with ESMTP id 981101DA6BA;
-        Sat,  4 Apr 2020 05:31:46 +0430 (+0430)
+        by mail.efficios.com (Postfix) with ESMTP id D3CE02662C8;
+        Wed,  8 Apr 2020 11:33:43 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id sNMRWeaKy_Z8; Wed,  8 Apr 2020 11:33:43 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 9AE332662C7;
+        Wed,  8 Apr 2020 11:33:43 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 9AE332662C7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1586360023;
+        bh=wNPmhiWClfZbe3BvKq04pjZqsbhkRScL0PGXJtwu+sY=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=n4QpMHi1+2g4GxhjP4TaBb98EhrjAI4ovWazA3gIpB3vyQn3BU8Pm+CZQiuOlnR9D
+         b2UCWh8QEa7k4/S3DmNZgmUts80fT+MINJSkJ78bCqQDOmE+feCeUGcDm58A7Xt2St
+         T3OZxxEjThreLcyCOMA+sOTavg69A76hpL/LREK+/H9Bxo9pkSdQ+nBaGHBmyLOeL1
+         q8HYZD9gw6+vEWDSwTk+fQ11WJjhNk35+hhnCvhkCU6mIi06LShtVh2rnOR4eIaST+
+         xEtmAu6qOvVi4pkqGd4ONUi5tDo+4lA5A+n7hJ+Boz/CvK54ntC2d+C+voE63EvfU7
+         dWYBUctqEuViA==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id IJq0e79VJ8P5; Wed,  8 Apr 2020 11:33:43 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 8B7422662C6;
+        Wed,  8 Apr 2020 11:33:43 -0400 (EDT)
+Date:   Wed, 8 Apr 2020 11:33:43 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     lttng-dev@lists.lttng.org,
+        diamon-discuss@lists.linuxfoundation.org,
+        linux-trace-users@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Message-ID: <173230590.27143.1586360023462.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] LTTng-modules 2.10.5 and 2.11.3 (Linux kernel tracer)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Sat, 04 Apr 2020 05:31:46 +0430
-From:   ahmadkhorrami <ahmadkhorrami@ut.ac.ir>
-To:     Milian Wolff <milian.wolff@kdab.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Steven Rostedt <rostedt@goodmis.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Linux-trace Users <linux-trace-users@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-trace-users-owner@vger.kernel.org,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>
-Subject: Re: Wrong Perf Backtraces
-In-Reply-To: <e97fc4aeff263bc1eb0206b7a3c22011@ut.ac.ir>
-References: <821540886fc57d7749edee585a50602f@ut.ac.ir>
- <8573002.CDJkKcVGEf@agathebauer> <fe8e797932c0cb6d1b8db2ee9b991ed0@ut.ac.ir>
- <7774721.NyiUUSuA9g@agathebauer> <e97fc4aeff263bc1eb0206b7a3c22011@ut.ac.ir>
-Message-ID: <9dc590447c61e044934bdad4127297b8@ut.ac.ir>
-X-Sender: ahmadkhorrami@ut.ac.ir
-User-Agent: Roundcube Webmail/1.3.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_3918 (ZimbraWebClient - FF74 (Linux)/8.8.15_GA_3895)
+Thread-Index: Qs412dd2KVEF6YrsB5UEkpo2pEDxlQ==
+Thread-Topic: LTTng-modules 2.10.5 and 2.11.3 (Linux kernel tracer)
 Sender: linux-trace-users-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi,
-I think that I should give up and assume that all illogical repeated 
-addresses are inlines. Thanks everybody, especially, Jirka, Milian, 
-Arnaldo and Steven. Perhaps some day I will be back and try to dig 
-deeper (with your hints and assistance).
-Regards.
+The LTTng modules provide Linux kernel tracing capability to the LTTng
+tracer toolset.
 
-On 2020-04-01 01:27, ahmadkhorrami wrote:
+This announcement covers the 2.10.15 and 2.11.3 stable branch releases
+for the LTTng-modules project. The 2.10.15 version will be the last for
+the 2.10 branch given that the 2.12 final release is expected today.
 
-> Hi,
-> On 2020-03-31 19:59, Milian Wolff wrote:
-> 
-> On Dienstag, 31. März 2020 17:02:37 CEST ahmadkhorrami wrote:
-> 
-> Hi Milian,
-> Thanks for the detailed answer. Well, the bug you mentioned is bad 
-> news.
-> Because I sample using uppp. Perhaps this leads to these weird traces.
-> Please read the full thread from here on:
-> 
-> https://lkml.org/lkml/2018/11/2/86
-> 
-> But as I said - it should be easy to check if this is really the issue 
-> are
-> running into or not: Try to see if you see the problem when you sample 
-> without
-> `ppp`. If not, then you can be pretty sure it's this issue. If you 
-> still see
-> it, then it's something different.
-  Well, the problem exists even when ":uppp" is changed to ":u".
+Those releases include changes to support updated Ubuntu and CentOS
+(RHEL) kernels. The unused ftrace integration has been removed, and
+some dependencies on kallsyms were replaced by use of exported kernel
+symbols.
 
->> Is this a purely software bug?
-> 
-> I wouldn't call it that, personally. Rather, it's a limitation in the 
-> hardware
-> and software. We would need something completely different to "fix" 
-> this, i.e.
-> something like a deeper LBR. That's btw another alternative you could 
-> try:
-> `perf record --call-graph lbr` and live with the short call stacks. But 
-> at
-> least these should be correct (afaik). For me personally they are 
-> always far
-> too short and thus not practical to use in reality.
-> 
-> Cheers
-  Regards.
+Thanks,
+
+Mathieu
+
+
+Project website: https://lttng.org
+Documentation: https://lttng.org/docs
+Download link: https://lttng.org/download
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
