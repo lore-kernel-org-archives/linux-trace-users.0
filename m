@@ -1,274 +1,169 @@
-Return-Path: <SRS0=ad/Y=5Y=vger.kernel.org=linux-trace-users-owner@kernel.org>
+Return-Path: <SRS0=xzDi=53=vger.kernel.org=linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=FSL_HELO_FAKE,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4824BC2D0F4
-	for <linux-trace-users@archiver.kernel.org>; Wed,  8 Apr 2020 22:32:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 885C9C2BA2B
+	for <linux-trace-users@archiver.kernel.org>; Sat, 11 Apr 2020 16:42:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 16EC620730
-	for <linux-trace-users@archiver.kernel.org>; Wed,  8 Apr 2020 22:32:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5C1E720757
+	for <linux-trace-users@archiver.kernel.org>; Sat, 11 Apr 2020 16:42:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726504AbgDHWcL (ORCPT
+        id S1726107AbgDKQmd (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Wed, 8 Apr 2020 18:32:11 -0400
-Received: from mail-qk1-f178.google.com ([209.85.222.178]:40287 "EHLO
-        mail-qk1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726483AbgDHWcL (ORCPT
+        Sat, 11 Apr 2020 12:42:33 -0400
+Received: from mail.ut.ac.ir ([80.66.177.10]:58810 "EHLO mail.ut.ac.ir"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726069AbgDKQmc (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Wed, 8 Apr 2020 18:32:11 -0400
-Received: by mail-qk1-f178.google.com with SMTP id z15so2072529qki.7
-        for <linux-trace-users@vger.kernel.org>; Wed, 08 Apr 2020 15:32:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=H54PH2sZEAj2IMPfpkKysBq9UVKsTLyjm7tQ1fYoGfw=;
-        b=ZlMeV/gwqiyQLK0yDUc4nFMql/0igYkOqS2I3CGUP6sAATdJTVHnDsNeFN6ik5/D0+
-         LSX6ffUWaIteBtteOypNNfb3T4xxfpLj2htN77Di96SE10i9jVbgMiGPalU2bwgOThuQ
-         maw3nT1Vvy50syQtQdtMi81KYpU6bXSNxr+jEl/lmdYDO+KRZveXYTYYT8ZtjQnQbNf8
-         AjVmigBxWOfme6nd/+m7dCDAMqKEqC8Ne/XvjQxQ52kt61hxFZSX8imTH+15g3xLFUAZ
-         6BCqFoxlpNPWJz1IIVCA2I9TzrS4zJI55jjhEPWjxBky+jSPRtEzuaffbmY9cMgkeHcS
-         4Bjg==
-X-Gm-Message-State: AGi0PubaO0XgPFP3KLvtLhoikH0KZP2mOkLncxtHJJW3mNHJW9PLecI/
-        Y5L6MiBKu/kwPK+7Qc/HbTHPMeIx
-X-Google-Smtp-Source: APiQypKh+CqTFfcO0lWDtVxH7JsDDTSqgvQ+v6I7wOj4p0FWXzh6ieSUyynJEimw6Efz6mI87IfGag==
-X-Received: by 2002:a37:a0ca:: with SMTP id j193mr10206405qke.212.1586385129367;
-        Wed, 08 Apr 2020 15:32:09 -0700 (PDT)
-Received: from gmail.com (192-222-251-19.qc.cable.ebox.net. [192.222.251.19])
-        by smtp.gmail.com with ESMTPSA id 206sm17070534qkd.122.2020.04.08.15.32.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Apr 2020 15:32:08 -0700 (PDT)
-Date:   Wed, 8 Apr 2020 18:32:06 -0400
-From:   =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau 
-        <jeremie.galarneau@efficios.com>
-To:     lttng-dev@lists.lttng.org
-Cc:     diamon-discuss@lists.linuxfoundation.org,
-        linux-trace-users@vger.kernel.org, lwn@lwn.net
-Subject: [RELEASE] LTTng 2.12.0 - (Ta) Meilleure (Linux kernel and user space
- tracer)
-Message-ID: <20200408223206.GA134703@gmail.com>
+        Sat, 11 Apr 2020 12:42:32 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.ut.ac.ir (Postfix) with ESMTP id 835741DA0D8;
+        Sat, 11 Apr 2020 21:12:28 +0430 (+0430)
+Received: from mail.ut.ac.ir ([127.0.0.1])
+        by localhost (mail.ut.ac.ir [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id FcDTx9JJiHz4; Sat, 11 Apr 2020 21:12:26 +0430 (+0430)
+Received: from mail.ut.ac.ir (mail.ut.ac.ir [194.225.0.10])
+        by mail.ut.ac.ir (Postfix) with ESMTP id C049C1DAB0E;
+        Sat, 11 Apr 2020 21:12:25 +0430 (+0430)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
+Date:   Sat, 11 Apr 2020 21:12:25 +0430
+From:   ahmadkhorrami <ahmadkhorrami@ut.ac.ir>
+To:     Milian Wolff <milian.wolff@kdab.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Steven Rostedt <rostedt@goodmis.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Linux-trace Users <linux-trace-users@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-trace-users-owner@vger.kernel.org,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>
+Subject: Re: Wrong Perf Backtraces
+In-Reply-To: <9dc590447c61e044934bdad4127297b8@ut.ac.ir>
+References: <821540886fc57d7749edee585a50602f@ut.ac.ir>
+ <8573002.CDJkKcVGEf@agathebauer> <fe8e797932c0cb6d1b8db2ee9b991ed0@ut.ac.ir>
+ <7774721.NyiUUSuA9g@agathebauer> <e97fc4aeff263bc1eb0206b7a3c22011@ut.ac.ir>
+ <9dc590447c61e044934bdad4127297b8@ut.ac.ir>
+Message-ID: <e624e60c697934beb88cb8744f23c68b@ut.ac.ir>
+X-Sender: ahmadkhorrami@ut.ac.ir
+User-Agent: Roundcube Webmail/1.3.6
 Sender: linux-trace-users-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi everyone,
+Hi,
+I found the problem by building the libraries from source code. The 
+"gmallocn()"s were inlines. So, perhaps it would be better if Perf had 
+reported it as "(inlined)" as in the common case.
+The second problematic case (repeated 
+"gtk_action_muxer_query_action()"s) was purely due to my lack of 
+knowledge. Sorry for wasting your time, specially, Mr. Olsa, :D. It was 
+inter-library tail-call elimination, which I did not know is possible (I 
+thought tail-calls happen only inside each translation unit). In other 
+words, the last operation in the callee at 
+"gtk_action_muxer_query_action+0x6c" is a jump to the beginning of 
+"gtk_action_muxer_query_action()".
+And the debug info for the dbg-packages (Ubuntu in my case), seems to be 
+OK. I wonder why source lines were reported as 0. Perhaps, the unwinding 
+library is bogus.
 
-Today we are releasing LTTng 2.12 - (Ta) Meilleure!
+Finally, I have a new (hopefully, unsilly) question, :D. In the 
+following backtrace, __GI___libc_malloc+0x197 is reported as inline. 
+While its address (i.e., 0x7ffff4b07207) does not match that of its 
+parent function call point (i.e., gmalloc+0x59 which is 0x7fffd9872fb9). 
+Is this logical? And, again, there are many such instances in the Perf 
+output.
 
-This release is named after "Ta Meilleure", a Northeast IPA beer
-brewed by Lagabière. Translating to "Your best one", this beer gives
-out strong aromas of passion fruit, lemon, and peaches. Tastewise,
-expect a lot of fruit, a creamy texture, and a smooth lingering hop
-bitterness.
+EvJobScheduler 10021  8653.926478:        100 
+mem_load_uops_retired.l3_miss:uppp:     7fffd1062a00         5080022 
+N/A|SNP N/A|TLB N/A|LCK N/A
+    7ffff4b07207 tcache_get+0x197 (inlined)
+    7ffff4b07207 __GI___libc_malloc+0x197 (inlined)
+    7fffd9872fb9 gmalloc+0x59 (inlined)
+    7fffd9872fb9 gmallocn+0x59 
+(/usr/lib/x86_64-linux-gnu/libpoppler.so.73.0.0)
+    7fffd9872fb9 gmallocn+0x59 
+(/usr/lib/x86_64-linux-gnu/libpoppler.so.73.0.0)
+    7fffd9951e6f _ZN8TextLine8coalesceEP10UnicodeMap+0xff 
+(/usr/lib/x86_64-linux-gnu/libpoppler.so.73.0.0)
+    7fffd9952f82 _ZN9TextBlock8coalesceEP10UnicodeMapd+0x752 
+(/usr/lib/x86_64-linux-gnu/libpoppler.so.73.0.0)
+    7fffd995bc37 _ZN8TextPage8coalesceEbdb+0x1507 
+(/usr/lib/x86_64-linux-gnu/libpoppler.so.73.0.0)
+    7fffd995cb71 _ZN13TextOutputDev7endPageEv+0x31 
+(/usr/lib/x86_64-linux-gnu/libpoppler.so.73.0.0)
+    7fffe803c6d2 _ZL26poppler_page_get_text_pageP12_PopplerPage+0x92 
+(/usr/lib/x86_64-linux-gnu/libpoppler-glib.so.8.9.0)
+    7fffe803deb3 poppler_page_get_selection_region+0x63 
+(/usr/lib/x86_64-linux-gnu/libpoppler-glib.so.8.9.0)
+    7fffe82ab650 [unknown] 
+(/opt/evince-3.28.4/lib/evince/4/backends/libpdfdocument.so)
+    7ffff795f165 ev_job_page_data_run+0x2f5 
+(/opt/evince-3.28.4/lib/libevview3.so.3.0.0)
+    7ffff7961309 ev_job_thread+0xe9 (inlined)
+    7ffff7961309 ev_job_thread_proxy+0xe9 
+(/opt/evince-3.28.4/lib/libevview3.so.3.0.0)
+    7ffff5492194 g_thread_proxy+0x54 
+(/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.5600.4)
+    7ffff4e686da start_thread+0xda 
+(/lib/x86_64-linux-gnu/libpthread-2.27.so)
+    7ffff4b9188e __GI___clone+0x3e (inlined)
 
-The most notable features of this new release are:
-  - session clearing,
-  - uid and gid tracking,
-  - file descriptor pooling (relay daemon),
-  - per-session grouping (relay daemon),
-  - working directory override (relay daemon),
-  - new network reception entry/exit tracepoints,
-  - statedump of interrupt threads,
-  - statedump of x86 CPU topology,
-  - new product UUID environment field.
+I am looking forward to any help or suggestions.
+Regards.
 
-The documentation for those new features is now online at:
-https://lttng.org/docs/v2.12
+On 2020-04-04 05:31, ahmadkhorrami wrote:
 
-Read on for a short description of each of the new features and the
-links to this release.
-
-A prettified version of this announcement is available here:
-https://github.com/lttng/lttng-tools/releases/tag/v2.12.0
-
-
-Note
-----
-
-LTTng-modules now serializes some fields as "Bitfield Enumerations",
-which are not part of the CTF v1.8.2 specification.
-
-The CTF 1.8 specification will be amended to include those fields as
-part of a future revision. Meanwhile, older CTF readers may encounter
-issues when decoding these traces.
-
-Notably, Babeltrace 1.x will produce warnings when decoding traces
-that contain these fields. We recommend that current users of the
-Babeltrace 1.x release series upgrade to Babeltrace 2.0.
-
-
-Session clearing
----
-
-You can use the new `lttng-clear` command to clear the contents of one
-or more tracing sessions.
-
-In essence, this new feature allows you to prune the content of
-long-running sessions without destroying and reconfiguring them. This
-is especially useful to clear a session's tracing data between
-attempts to reproduce a problem.
-
-Clearing a tracing session deletes the contents of the tracing buffers
-and all local or streamed trace data on a remote peer. Note that an
-lttng-relayd daemon can be configured to disallow clear operations
-using the `LTTNG_RELAYD_DISALLOW_CLEAR` environment variable.
-
-If a session is configured in snapshot mode, only the tracing buffers
-are cleared.
-
-If a session is configured in live mode, any attached client that is
-lagging behind will finish the consumption of its current trace data
-packets and jump forward in time to events generated after the
-beginning of the clear command.
-
-
-uid and gid tracking
----
-
-The existing `lttng-track` command has been expanded to support uid
-and gid tracking.
-
-By default, a tracing session tracks all applications and users,
-following LTTng's permission model.  However, this new option allows
-you to restrict which users and groups are tracked by both the user
-space and kernel tracers.
-
-In previous versions of LTTng, it was effectively possible to filter
-on the basis of uids and gids using the `--filter` mechanism. However,
-this dedicated filtering mechanism is both more efficient in terms of
-tracing overhead, but also prevents the creation of tracing buffers
-for users and groups which are not tracked.
-
-Overall, this results in far less memory consumption by the user space
-tracer on systems which have multiple active users.
-
-
-File descriptor pooling (relay daemon)
----
-
-A number of users have reported having encountered file descriptor
-exhaustion issues when using the relay daemon to serve a large number
-of consumers or live clients.
-
-The current on-disk CTF representation used by LTTng (and expected by
-a number of viewers) uses one file per CPU, per channel, to organize
-traces. This causes the default `RLIMIT_NOFILE` value (1024 on many
-systems) to be reached easily, especially when tracing systems with a
-large number of cores.
-
-In order to alleviate this problem, the new `--fd-pool-size` option
-allows you to specify a maximal number of simultaneously opened file
-descriptors (using the soft `RLIMIT_NOFILE` resource limit of the
-process by default). This is meant as a work-around for users who
-can't bump the system-limit because of permission restrictions.
-
-As its name indicates, this option causes the relay daemon to maintain
-a pool (or cache) of open file descriptors which are re-purposed as
-needed. The most recently used files' file descriptors are kept open
-and only closed as the `--fd-pool-size` limit is reached, keeping the
-number of simultaneously opened file descriptors under the
-user-specified limit.
-
-Note that setting this value too low can degrade the performance of
-the relay daemon.
-
-
-Per-session grouping (relay daemon)
----
-
-By default, the relay daemon writes the traces under a predefined
-directory hierarchy:
-  `$LTTNG_HOME/lttng-traces/HOSTNAME/SESSION/DOMAIN` where
-  - `HOSTNAME` is the remote hostname,
-  - `SESSION` is the full session name,
-  - `DOMAIN` is the tracing domain (`ust` or `kernel`),
-
-Using the new relay daemon `--group-output-by-session` option, you can
-now change this hierarchy to group traces by sessions, rather than by
-hostname:
-  `$LTTNG_HOME/lttng-traces/SESSION/HOST/DOMAIN`.
-
-This proves especially useful if you are tracing a number of hosts
-(with different hostnames) which share the same session name as part
-of their configuration. Hence, a descriptive session name
-(e.g. `connection-hang`) can be used across a fleet of machines
-streaming to a given relay daemon.
-
-Note that the default behaviour can be explicitly specified using the
-`--group-output-by-host` option.
-
-
-Working directory override (relay daemon)
----
-
-Finally, this small quality of life feature allows you to override the
-working directory of the relay daemon using the daemon's launch
-options (`-w PATH`/`--working-directory=PATH`).
-
-
-Statedump of interrupt threads (LTTng-modules)
----
-
-Threaded IRQs have an associated `thread` field in the `irqaction`
-structure which specifies the process to wake up when the IRQ
-happens. This field is now extracted as part of the
-`lttng_statedump_interrupt` statedump tracepoint.
-
-You can use this information to know which processes handle the
-various IRQs. It is also possible to associate the events occurring in
-the context of those processes to their respective IRQ.
-
-
-Statedump of x86 CPU topology (LTTng-modules)
----
-
-A new `lttng_statedump_cpu_topology` tracepoint has been added to
-extract the active CPU/NUMA topology. You can use this information to
-know which CPUs are SMT siblings or part of the same socket. For the
-time being, only x86 is supported since all architectures describe
-their topologies differently.
-
-The `architecture` field is statically defined and should be present
-for all architecture implementations. Hence, it is possible for
-analysis tools to anticipate the event's layout.
-
-Example output:
-lttng_statedump_cpu_topology: { cpu_id = 3 }, { architecture = "x86",
-        cpu_id = 0, vendor = "GenuineIntel", family = 6, model = 142,
-        model_name = "Intel(R) Core(TM) i7-7600U CPU @ 2.80GHz",
-        physical_id = 0, core_id = 0, cores = 2 }
-
-
-New product UUID environment field (LTTng-modules)
----
-
-The product UUID, taken from the DMI system information, is now saved
-as part of the kernel traces' environment fields as the
-`product_uuid`. You can use this field to uniquely identify a machine
-(virtual or physical) in order to correlate traces gathered on
-multiple virtual machines.
-
-
-Links
----
-
-Project website: https://lttng.org
-
-Download links:
-https://lttng.org/files/lttng-tools/lttng-tools-2.12.0.tar.bz2
-https://lttng.org/files/lttng-ust/lttng-ust-2.12.0.tar.bz2
-https://lttng.org/files/lttng-modules/lttng-modules-2.12.0.tar.bz2
-
-GPG signatures:
-https://lttng.org/files/lttng-tools/lttng-tools-2.12.0.tar.bz2.asc
-https://lttng.org/files/lttng-ust/lttng-ust-2.12.0.tar.bz2.asc
-https://lttng.org/files/lttng-modules/lttng-modules-2.12.0.tar.bz2.asc
+> Hi,
+> I think that I should give up and assume that all illogical repeated 
+> addresses are inlines. Thanks everybody, especially, Jirka, Milian, 
+> Arnaldo and Steven. Perhaps some day I will be back and try to dig 
+> deeper (with your hints and assistance).
+> Regards.
+> 
+> On 2020-04-01 01:27, ahmadkhorrami wrote:
+> 
+>> Hi,
+>> On 2020-03-31 19:59, Milian Wolff wrote:
+>> 
+>> On Dienstag, 31. MÃ¤rz 2020 17:02:37 CEST ahmadkhorrami wrote:
+>> 
+>> Hi Milian,
+>> Thanks for the detailed answer. Well, the bug you mentioned is bad 
+>> news.
+>> Because I sample using uppp. Perhaps this leads to these weird traces.
+>> Please read the full thread from here on:
+>> 
+>> https://lkml.org/lkml/2018/11/2/86
+>> 
+>> But as I said - it should be easy to check if this is really the issue 
+>> are
+>> running into or not: Try to see if you see the problem when you sample 
+>> without
+>> `ppp`. If not, then you can be pretty sure it's this issue. If you 
+>> still see
+>> it, then it's something different.
+> Well, the problem exists even when ":uppp" is changed to ":u".
+> 
+> Is this a purely software bug?
+> I wouldn't call it that, personally. Rather, it's a limitation in the 
+> hardware
+> and software. We would need something completely different to "fix" 
+> this, i.e.
+> something like a deeper LBR. That's btw another alternative you could 
+> try:
+> `perf record --call-graph lbr` and live with the short call stacks. But 
+> at
+> least these should be correct (afaik). For me personally they are 
+> always far
+> too short and thus not practical to use in reality.
+> 
+> Cheers
+   Regards.
