@@ -1,69 +1,46 @@
-Return-Path: <SRS0=yZNv=7Q=vger.kernel.org=linux-trace-users-owner@kernel.org>
+Return-Path: <SRS0=Ymwr=73=vger.kernel.org=linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02E94C433E0
-	for <linux-trace-users@archiver.kernel.org>; Wed,  3 Jun 2020 12:03:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42EADC433DF
+	for <linux-trace-users@archiver.kernel.org>; Sun, 14 Jun 2020 13:43:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D1A0120738
-	for <linux-trace-users@archiver.kernel.org>; Wed,  3 Jun 2020 12:03:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="W+i4FzBG"
+	by mail.kernel.org (Postfix) with ESMTP id 28A5520714
+	for <linux-trace-users@archiver.kernel.org>; Sun, 14 Jun 2020 13:43:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726402AbgFCMCv (ORCPT
+        id S1727055AbgFNNnZ (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Wed, 3 Jun 2020 08:02:51 -0400
-Received: from mail.efficios.com ([167.114.26.124]:40482 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726332AbgFCMCc (ORCPT
+        Sun, 14 Jun 2020 09:43:25 -0400
+Received: from mail.ut.ac.ir ([80.66.177.10]:41152 "EHLO mail.ut.ac.ir"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727027AbgFNNnZ (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Wed, 3 Jun 2020 08:02:32 -0400
+        Sun, 14 Jun 2020 09:43:25 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 880F02BB2C4;
-        Wed,  3 Jun 2020 08:02:30 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id r4H48SY884UJ; Wed,  3 Jun 2020 08:02:30 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 1E87D2BAFE5;
-        Wed,  3 Jun 2020 08:02:30 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 1E87D2BAFE5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1591185750;
-        bh=+JKPy8/uTulfEKGfTa48iFeivNq9W046I9r49e09eUQ=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=W+i4FzBG6FaeGRj1qjA0mh/fgtIJIpBs6kM5tDLuyGZPPXFlg+4269AvVYw0paMuH
-         NwgGZZ3nKkpFdflm/6SC9W43bFhORw8B1BeIV7rxr9lU748kTBoNN7lCNQd2ZNldAU
-         PEIeX/4zBWwQJ0voSluU+anjpCdt5mLeTANE/pLhpRR8kjR6MlqysUFLM9wAdWdYcC
-         0kAnfkEVrXLCZ5NzcRahk9a+eoXXGbx+6YhP6pn/vn9EBXOUdl1iiOE5t2qzSWtf1v
-         6kSeW27DZMe7LpfaoAtDtw+bJOZVHUcWIyAE/0BCUbRyg9D9YMuycT9TdUKu2wWVP/
-         keTgvqWaC6f+A==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 4_rRzo5zUasU; Wed,  3 Jun 2020 08:02:30 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 0E7732BADF5;
-        Wed,  3 Jun 2020 08:02:30 -0400 (EDT)
-Date:   Wed, 3 Jun 2020 08:02:29 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     lttng-dev@lists.lttng.org,
-        diamon-discuss@lists.linuxfoundation.org,
-        linux-trace-users@vger.kernel.org, lwn@lwn.net,
-        linux-kernel@vger.kernel.org
-Message-ID: <683437825.51033.1591185749972.JavaMail.zimbra@efficios.com>
-Subject: [RELEASE] LTTng-modules 2.12.1 and 2.11.4 (Linux kernel tracer)
+        by mail.ut.ac.ir (Postfix) with ESMTP id 3DBAA1DA56A
+        for <linux-trace-users@vger.kernel.org>; Sun, 14 Jun 2020 18:13:22 +0430 (+0430)
+Received: from mail.ut.ac.ir ([127.0.0.1])
+        by localhost (mail.ut.ac.ir [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id KjttavRSkwcE for <linux-trace-users@vger.kernel.org>;
+        Sun, 14 Jun 2020 18:13:21 +0430 (+0430)
+Received: from mail.ut.ac.ir (mail.ut.ac.ir [194.225.0.10])
+        by mail.ut.ac.ir (Postfix) with ESMTP id 97F041DA459
+        for <linux-trace-users@vger.kernel.org>; Sun, 14 Jun 2020 18:13:21 +0430 (+0430)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_3928 (ZimbraWebClient - FF76 (Linux)/8.8.15_GA_3928)
-Thread-Index: z3mfQAh1bM5mt5rP3eYWZhqbj4/DQA==
-Thread-Topic: LTTng-modules 2.12.1 and 2.11.4 (Linux kernel tracer)
+Date:   Sun, 14 Jun 2020 18:13:21 +0430
+From:   ahmadkhorrami <ahmadkhorrami@ut.ac.ir>
+To:     Linux-trace Users <linux-trace-users@vger.kernel.org>
+Subject: Perf Script Erroneous User Stack Trace
+Message-ID: <816cb5f558cd0e528812dff2168ef4ca@ut.ac.ir>
+X-Sender: ahmadkhorrami@ut.ac.ir
+User-Agent: Roundcube Webmail/1.3.6
 Sender: linux-trace-users-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
@@ -71,66 +48,88 @@ X-Mailing-List: linux-trace-users@vger.kernel.org
 
 Hi,
 
-This is a release announcement of the LTTng kernel tracer for both
-maintained LTTng stable branches. The main change integrated within
-the new versions 2.12.1 and 2.11.4 is support for the newly released
-5.7 Linux kernel.
+I used the following command to sample backtraces for a simple "ffmpeg" 
+benchmark:
+sudo perf record -d --call-graph dwarf,65528 -c 1000000 -e 
+mem_load_uops_retired.l3_miss:u ffmpeg -i 
+/media/ahmad/DATA/Videos/video.mp4 -threads 1 -vf spp out.mp4
 
-If you followed the news lately [1], you will notice that LTTng had to
-work-around a change which un-exports kallsyms symbols, making those
-inaccessible to GPL modules, which was integrated within Linux 5.7. As a
-matter of fact, LTTng happens to use kallsyms in some cases to access
-symbols otherwise not visible to GPL kernel modules.
+As can be seen PEBS is not used, the stack size is set to the maximum 
+and the sampling period is quite large. I also limited the thread count, 
+but this is the first portion of "perf script --no-demangle" output:
+ffmpeg 11750  6670.061261:    1000000 mem_load_uops_retired.l3_miss:u:   
+              0         5080021 N/A|SNP N/A|TLB N/A|LCK N/A
+         7fffeab68844 x264_pixel_avg_w16_avx2+0x4 
+(/usr/lib/x86_64-linux-gnu/libx264.so.152)
 
-Just to underline the amount of effort that was put into trying to do
-the right thing, here is an explanation of the alternative approaches
-that were attempted before going for a work-around using kprobes
-(taken from commit message of lttng-modules
-commit a65765406b0 "Unbreak LTTng for kernel 5.7"):
+ffmpeg 11750  6670.274835:    1000000 mem_load_uops_retired.l3_miss:u:   
+              0         5080021 N/A|SNP N/A|TLB N/A|LCK N/A
+         7fffeab68844 x264_pixel_avg_w16_avx2+0x4 
+(/usr/lib/x86_64-linux-gnu/libx264.so.152)
 
-    Linux commit 0bd476e6c67190b5eb7b6e105c8db8ff61103281 ("kallsyms:
-    unexport kallsyms_lookup_name() and kallsyms_on_each_symbol()") breaks
-    LTTng-modules by removing symbols used by the LTTng-modules out-of-tree
-    tracer.
-    
-    I pointed this out when the change was originally considered before the
-    5.7 merge window. This generated some discussion but it did not lead to
-    any concrete proposal to fix the issue. [2]
-    
-    The commit has been merged in the 5.7 merge window. At that point, as
-    maintainer of LTTng, I immediately raised a flag about this issue,
-    proposing an alternative approach to solve this: expose the few symbols
-    needed by LTTng to GPL modules. This was NACKed on the ground that the
-    Linux kernel cannot export GPL symbols when there are no in-tree
-    users. [3]
-    
-    Steven Rostedt has shown interest in merging LTTng-modules upstream.
-    LTTng-modules being LGPL, this is very much doable. I have prepared a
-    tree of LTTng-modules "for upstreaming" and sent it to him privately so
-    he can review it. Even if in an ideal scenario LTTng-modules is merged
-    for the following merge window, it leaves LTTng-modules broken on the
-    5.7 kernel.
-    
-    In order to ensure that the LTTng-modules kernel tracer continues working
-    for my end users on kernels 5.7 onwards, as a very last resort, this is
-    with great reluctance that I created this fix for LTTng modules. It
-    basically uses kprobes to lookup the kallsyms_lookup_name symbol, and
-    continues using kallsyms_lookup_name as before.
+ffmpeg 11750  6670.496159:    1000000 mem_load_uops_retired.l3_miss:u:   
+              0         5080021 N/A|SNP N/A|TLB N/A|LCK N/A
+         7fffeab8ef89 x264_pixel_sad_x4_16x16_avx2+0x49 
+(/usr/lib/x86_64-linux-gnu/libx264.so.152)
 
-Steven Rostedt has started looking into lttng-modules, but currently lacks time
-to look into it further. Understandably, this 15 years old project is larger than
-he initially expected. Let's hope we receive concrete feedback on how we can
-improve LTTng to make it acceptable for integration into Linux.
+ffmpeg 11750  6670.852598:    1000000 mem_load_uops_retired.l3_miss:u:   
+              0         5080021 N/A|SNP N/A|TLB N/A|LCK N/A
+         7fffeaac97b3 pixel_memset+0x293 (inlined)
+         7fffeaac97b3 plane_expand_border+0x293 (inlined)
+         7fffeaac97b3 x264_frame_expand_border_filtered+0x293 
+(/usr/lib/x86_64-linux-gnu/libx264.so.152)
+         7fffeab463bc x264_fdec_filter_row+0x69c 
+(/usr/lib/x86_64-linux-gnu/libx264.so.152)
+         7fffeab49523 x264_slice_write+0x1873 
+(/usr/lib/x86_64-linux-gnu/libx264.so.152)
+         7fffeab85285 x264_stack_align+0x15 
+(/usr/lib/x86_64-linux-gnu/libx264.so.152)
+         7fffeab45bdb x264_slices_write+0xfb 
+(/usr/lib/x86_64-linux-gnu/libx264.so.152)
+         5555561e3d87 [unknown] ([heap])
 
-Thanks,
+ffmpeg 11750  6671.110007:    1000000 mem_load_uops_retired.l3_miss:u:   
+              0         5080021 N/A|SNP N/A|TLB N/A|LCK N/A
+         7fffeab6cdde x264_frame_init_lowres_core_avx2+0x8e 
+(/usr/lib/x86_64-linux-gnu/libx264.so.152)
 
-Mathieu
+ffmpeg 11750  6671.463562:    1000000 mem_load_uops_retired.l3_miss:u:   
+              0         5080021 N/A|SNP N/A|TLB N/A|LCK N/A
+         7fffeaabf806 x264_macroblock_load_pic_pointers+0x886 (inlined)
+         7fffeaabf806 x264_macroblock_cache_load+0x886 (inlined)
+         7fffeaabf806 x264_macroblock_cache_load_progressive+0x886 
+(/usr/lib/x86_64-linux-gnu/libx264.so.152)
+         7fffeab49204 x264_slice_write+0x1554 
+(/usr/lib/x86_64-linux-gnu/libx264.so.152)
+         7fffeab85285 x264_stack_align+0x15 
+(/usr/lib/x86_64-linux-gnu/libx264.so.152)
+         7fffeab45bdb x264_slices_write+0xfb 
+(/usr/lib/x86_64-linux-gnu/libx264.so.152)
+                   1c [unknown] ([unknown])
 
-[1] https://lwn.net/Articles/817988/
-[2] https://lore.kernel.org/r/20200302192811.n6o5645rsib44vco@localhost
-[3] https://lore.kernel.org/r/20200409193543.18115-1-mathieu.desnoyers@efficios.com
+None of the backtraces are correct. Because none of them begin with 
+"__start" or "__GI___clone". I also used "LBR", instead. But it has more 
+size constraints and, therefore, not suitable. The important thing to 
+note is that the problem occurs only with user space events (and for all 
+events that I checked). I do not think that the problem is with 
+DebugInfo. Because I manually used "perf_event_open()" system call 
+(without using "Perf") and the problem was still there (with raw 
+callstack IPs).
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Therefore, I assumed that the problem is inside the kernel. Precisely, 
+it should be where the userspace callchain is extracted or dumped. I 
+looked for the latter (i.e., the callchain dump implementation) and it 
+seemed to be here:
+https://github.com/torvalds/linux/blob/master/kernel/events/core.c#L6786
+
+But I could not (or, equivalently, did not know how to) view the user 
+callchain instruction pointers.
+Am I on the right track? Does anybody know the kernel mechanism for 
+extracting userspace callchains?
+
+Please accept my apology for my frequent questions. I tried to get 
+around the problem, myself, but it has taken more than three complete 
+days and I'm stuck!
+I really appreciate any suggestions.
+
+Regards.
