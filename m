@@ -6,34 +6,34 @@ X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55476C433DF
-	for <linux-trace-users@archiver.kernel.org>; Tue, 16 Jun 2020 17:06:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ED63C433DF
+	for <linux-trace-users@archiver.kernel.org>; Tue, 16 Jun 2020 17:43:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 415E720C09
-	for <linux-trace-users@archiver.kernel.org>; Tue, 16 Jun 2020 17:06:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A2E7214D8
+	for <linux-trace-users@archiver.kernel.org>; Tue, 16 Jun 2020 17:43:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730046AbgFPRGq (ORCPT
+        id S1730997AbgFPRnD (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Tue, 16 Jun 2020 13:06:46 -0400
-Received: from mail.ut.ac.ir ([80.66.177.10]:59578 "EHLO mail.ut.ac.ir"
+        Tue, 16 Jun 2020 13:43:03 -0400
+Received: from mail.ut.ac.ir ([80.66.177.10]:41596 "EHLO mail.ut.ac.ir"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728861AbgFPRGq (ORCPT
+        id S1729771AbgFPRnC (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Tue, 16 Jun 2020 13:06:46 -0400
+        Tue, 16 Jun 2020 13:43:02 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.ut.ac.ir (Postfix) with ESMTP id 3E4F41DB4BF;
-        Tue, 16 Jun 2020 21:36:44 +0430 (+0430)
+        by mail.ut.ac.ir (Postfix) with ESMTP id 8ABDF1DB4D1;
+        Tue, 16 Jun 2020 22:13:00 +0430 (+0430)
 Received: from mail.ut.ac.ir ([127.0.0.1])
         by localhost (mail.ut.ac.ir [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id 7QFvHQEDe8v0; Tue, 16 Jun 2020 21:36:43 +0430 (+0430)
+        with LMTP id nnnysX5YRYvL; Tue, 16 Jun 2020 22:12:57 +0430 (+0430)
 Received: from mail.ut.ac.ir (mail.ut.ac.ir [194.225.0.10])
-        by mail.ut.ac.ir (Postfix) with ESMTP id 46E631DB4BC;
-        Tue, 16 Jun 2020 21:36:43 +0430 (+0430)
+        by mail.ut.ac.ir (Postfix) with ESMTP id 470231DB4C8;
+        Tue, 16 Jun 2020 22:12:57 +0430 (+0430)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Tue, 16 Jun 2020 21:36:43 +0430
+Date:   Tue, 16 Jun 2020 22:12:57 +0430
 From:   ahmadkhorrami <ahmadkhorrami@ut.ac.ir>
 To:     Milian Wolff <milian.wolff@kdab.com>
 Cc:     Ian Rogers <irogers@google.com>,
@@ -42,12 +42,12 @@ Cc:     Ian Rogers <irogers@google.com>,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
         linux-perf-users <linux-perf-users@vger.kernel.org>,
         linux-trace-users-owner@vger.kernel.org
-Subject: Re: Sp! Re: Perf Script Erroneous User Stack Trace
+Subject: Re: Perf Script Erroneous User Stack Trace
 In-Reply-To: <5121466.Fqp1Q3JDDc@agathebauer>
 References: <816cb5f558cd0e528812dff2168ef4ca@ut.ac.ir>
  <7e31757ab3c4ccea654c0921b8a50303@ut.ac.ir>
  <2eef8c33a31ae627010d985ac2ffae96@ut.ac.ir> <5121466.Fqp1Q3JDDc@agathebauer>
-Message-ID: <7a76a2c9392114e96b7f792b3385ac46@ut.ac.ir>
+Message-ID: <12edc65415f3b8144760fd70e89d8d02@ut.ac.ir>
 X-Sender: ahmadkhorrami@ut.ac.ir
 User-Agent: Roundcube Webmail/1.3.6
 Sender: linux-trace-users-owner@vger.kernel.org
