@@ -3,55 +3,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFB6BC433DF
-	for <linux-trace-users@archiver.kernel.org>; Thu, 16 Jul 2020 16:26:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD7B7C433E0
+	for <linux-trace-users@archiver.kernel.org>; Thu, 16 Jul 2020 16:34:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8D02F20739
-	for <linux-trace-users@archiver.kernel.org>; Thu, 16 Jul 2020 16:26:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 93F2720739
+	for <linux-trace-users@archiver.kernel.org>; Thu, 16 Jul 2020 16:34:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729151AbgGPQ0R (ORCPT
+        id S1729048AbgGPQe1 (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Thu, 16 Jul 2020 12:26:17 -0400
-Received: from mail.ut.ac.ir ([80.66.177.10]:37688 "EHLO mail.ut.ac.ir"
+        Thu, 16 Jul 2020 12:34:27 -0400
+Received: from mail.ut.ac.ir ([80.66.177.10]:33132 "EHLO mail.ut.ac.ir"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728845AbgGPQ0R (ORCPT
+        id S1728845AbgGPQe1 (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Thu, 16 Jul 2020 12:26:17 -0400
+        Thu, 16 Jul 2020 12:34:27 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.ut.ac.ir (Postfix) with ESMTP id 0896F1DAF64;
-        Thu, 16 Jul 2020 20:56:15 +0430 (+0430)
+        by mail.ut.ac.ir (Postfix) with ESMTP id 683691DAF6B;
+        Thu, 16 Jul 2020 21:04:24 +0430 (+0430)
 Received: from mail.ut.ac.ir ([127.0.0.1])
         by localhost (mail.ut.ac.ir [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id fyBNJ0CFXIIt; Thu, 16 Jul 2020 20:56:14 +0430 (+0430)
+        with LMTP id tBJ0s9Rs1eq8; Thu, 16 Jul 2020 21:04:22 +0430 (+0430)
 Received: from mail.ut.ac.ir (mail.ut.ac.ir [194.225.0.10])
-        by mail.ut.ac.ir (Postfix) with ESMTP id E5B2D1DAF5B;
-        Thu, 16 Jul 2020 20:56:13 +0430 (+0430)
+        by mail.ut.ac.ir (Postfix) with ESMTP id 2451F1DA59D;
+        Thu, 16 Jul 2020 21:04:22 +0430 (+0430)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Thu, 16 Jul 2020 20:56:13 +0430
+Date:   Thu, 16 Jul 2020 21:04:22 +0430
 From:   ahmadkhorrami <ahmadkhorrami@ut.ac.ir>
-To:     "Frank Ch. Eigler" <fche@redhat.com>
-Cc:     Michel Dagenais <michel.dagenais@polymtl.ca>,
-        Steven Rostedt <rostedt@goodmis.org>,
+To:     Michel Dagenais <michel.dagenais@polymtl.ca>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
         linux-trace-users-owner@vger.kernel.org,
         linux-trace-users <linux-trace-users@vger.kernel.org>,
         lttng-dev <lttng-dev@lists.lttng.org>,
         Namhyung Kim <namhyung@kernel.org>
 Subject: Re: [lttng-dev] Capturing User-Level Function Calls/Returns
-In-Reply-To: <20200716014932.GB10566@redhat.com>
+In-Reply-To: <489547987.230950.1594861561764.JavaMail.zimbra@polymtl.ca>
 References: <e9c7400ff0075f3beba2863c4432a905@ut.ac.ir>
  <20200715142849.0bfe909a@oasis.local.home>
  <83963025.14828.1594838718290.JavaMail.zimbra@efficios.com>
  <98de6fe15a816d8f06ba3d5df0f10540@ut.ac.ir>
  <20200715174858.4698803c@oasis.local.home>
  <489547987.230950.1594861561764.JavaMail.zimbra@polymtl.ca>
- <20200716014932.GB10566@redhat.com>
-Message-ID: <7f301943d8e46bb21068c2d8017e7b4f@ut.ac.ir>
+Message-ID: <b0e85dc62211e2d0c908ba395a9fcb5a@ut.ac.ir>
 X-Sender: ahmadkhorrami@ut.ac.ir
 User-Agent: Roundcube Webmail/1.3.6
 Sender: linux-trace-users-owner@vger.kernel.org
@@ -59,49 +57,65 @@ Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi Frank,
+Hi Michel,
 
-Thanks for the point!
+Thanks for the detailed answer! DBI tools are really interesting but I 
+want to do this during normal execution and on multiple programs running 
+simultaneously. I mean this is not supposed to be conventional tracing 
+with multiple re-executions. I want to extract some information about 
+the execution-state at runtime and inform the lower levels in the 
+software stack to make smarter choices. Fortunately, there are only a 
+few functions that need to be traced. But any reduction in the wasted 
+cycles is helpful, specially if it is caused by privilege level 
+transitions.
 
 Regards.
 
 
-On 2020-07-16 06:19, Frank Ch. Eigler wrote:
+On 2020-07-16 05:36, Michel Dagenais wrote:
 
-> Hi -
+>> Without recompiling, how would that be implemented?
 > 
->> If you can afford a more invasive tool, that requires a lot of
->> memory and stops your application for quite some time, you can look
->> at approaches like dyninst that decompile the binary, insert
->> instrumentation code and reassemble the code.
+> As you mentioned, this is possible when "jump patching" 5 bytes 
+> instructions. Fast tracepoints in GDB and in kprobe do it. Kprobe goes 
+> further and patches sequences of instructions (because the target 
+> instruction is less than 5 bytes) if there is no incoming branch into 
+> the middle of the sequence. You can go even further, for instance using 
+> 3 bytes jumps to a trampoline installed in alignment nops. If you 
+> combine different strategies like this, you can eventually reach almost 
+> 100% success rate for "jump patching" tracepoints. This gets quite 
+> hairy though. However, the short story is that there is currently no 
+> tool as far as I know that does that easily and reliably in user space.
 > 
->> https://dyninst.org/
+> https://onlinelibrary.wiley.com/doi/abs/10.1002/spe.2746
+> https://dl.acm.org/doi/pdf/10.1145/3062341.3062344
 > 
-> For the record, systemtap includes a backend that uses dyninst as a
-> pure userspace backend.
+> If you can afford a more invasive tool, that requires a lot of memory 
+> and stops your application for quite some time, you can look at 
+> approaches like dyninst that decompile the binary, insert 
+> instrumentation code and reassemble the code.
 > 
-> % cat foo.c
-> #include <stdio.h>
+> https://dyninst.org/
 > 
-> int foo() {
-> printf("foo\n");
-> return 1;
-> }
-> 
-> int main() {
-> foo();
-> }
-> 
-> % gcc -g foo.c
-> 
-> % stap --runtime=dyninst -e '
-> probe process.function("*").{call,return} { println(pp()) }
-> ' -c a.out
-> 
-> foo
-> process("/home/fche/a.out").function("main@/home/fche/foo.c:8").call
-> process("/home/fche/a.out").function("foo@/home/fche/foo.c:3").call
-> process("/home/fche/a.out").function("foo@/home/fche/foo.c:3").return
-> process("/home/fche/a.out").function("main@/home/fche/foo.c:8").return
-> 
-> - FChE
+>> You would need to insert a jump on top of code, and still be able to
+>> preserve that code. What a trap does, is to insert a int3, that will
+>> trap into the kernel, it would then emulate the code that the int3 was
+>> on, and also call some code that can trace the current state.
+>> 
+>> To do it in user land, you would need to find way to replace the code
+>> at the location you want to trace, with a jump to the tracing
+>> infrastructure, that will also be able to emulate the code that the
+>> jump was inserted on top of. As on x86, that jump will need to be 5
+>> bytes long (covering 5 bytes of text to emulate), where as a int3 is a
+>> single byte.
+>> 
+>> Thus, you either recompile and insert nops where you want to place 
+>> your
+>> jumps, or you trap using int3 that can do the work from within the
+>> kernel.
+>> 
+>> -- Steve
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
