@@ -1,121 +1,153 @@
-Return-Path: <SRS0=CYr2=A3=vger.kernel.org=linux-trace-users-owner@kernel.org>
+Return-Path: <SRS0=jBxe=A4=vger.kernel.org=linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD7B7C433E0
-	for <linux-trace-users@archiver.kernel.org>; Thu, 16 Jul 2020 16:34:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DA94C433E8
+	for <linux-trace-users@archiver.kernel.org>; Fri, 17 Jul 2020 16:12:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 93F2720739
-	for <linux-trace-users@archiver.kernel.org>; Thu, 16 Jul 2020 16:34:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0673E2076A
+	for <linux-trace-users@archiver.kernel.org>; Fri, 17 Jul 2020 16:12:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729048AbgGPQe1 (ORCPT
+        id S1727814AbgGQQMm (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Thu, 16 Jul 2020 12:34:27 -0400
-Received: from mail.ut.ac.ir ([80.66.177.10]:33132 "EHLO mail.ut.ac.ir"
+        Fri, 17 Jul 2020 12:12:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46020 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728845AbgGPQe1 (ORCPT
+        id S1727786AbgGQQMj (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Thu, 16 Jul 2020 12:34:27 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.ut.ac.ir (Postfix) with ESMTP id 683691DAF6B;
-        Thu, 16 Jul 2020 21:04:24 +0430 (+0430)
-Received: from mail.ut.ac.ir ([127.0.0.1])
-        by localhost (mail.ut.ac.ir [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id tBJ0s9Rs1eq8; Thu, 16 Jul 2020 21:04:22 +0430 (+0430)
-Received: from mail.ut.ac.ir (mail.ut.ac.ir [194.225.0.10])
-        by mail.ut.ac.ir (Postfix) with ESMTP id 2451F1DA59D;
-        Thu, 16 Jul 2020 21:04:22 +0430 (+0430)
+        Fri, 17 Jul 2020 12:12:39 -0400
+Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3BAAD2070E;
+        Fri, 17 Jul 2020 16:12:35 +0000 (UTC)
+Date:   Fri, 17 Jul 2020 12:12:33 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Linux-trace Users <linux-trace-users@vger.kernel.org>,
+        "linux-trace-devel@vger.kernel.org" 
+        <linux-trace-devel@vger.kernel.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Yordan Karadzhov <y.karadz@gmail.com>,
+        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Changbin Du <changbin.du@gmail.com>,
+        Patrick McLean <chutzpah@gentoo.org>,
+        Josh Boyer <jwboyer@fedoraproject.org>,
+        Clark Williams <williams@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        John Kacur <jkacur@redhat.com>, Tony Jones <tonyj@suse.de>,
+        Seth Forshee <seth.forshee@canonical.com>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Daniel Wagner <wagi@monom.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Josef Bacik <jbacik@fb.com>, troyengel@gmail.com,
+        Behan Webster <behanw@converseincode.com>
+Subject: [ANNOUNCE] trace-cmd 2.9
+Message-ID: <20200717121233.5d0d131c@oasis.local.home>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Date:   Thu, 16 Jul 2020 21:04:22 +0430
-From:   ahmadkhorrami <ahmadkhorrami@ut.ac.ir>
-To:     Michel Dagenais <michel.dagenais@polymtl.ca>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        linux-trace-users-owner@vger.kernel.org,
-        linux-trace-users <linux-trace-users@vger.kernel.org>,
-        lttng-dev <lttng-dev@lists.lttng.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Subject: Re: [lttng-dev] Capturing User-Level Function Calls/Returns
-In-Reply-To: <489547987.230950.1594861561764.JavaMail.zimbra@polymtl.ca>
-References: <e9c7400ff0075f3beba2863c4432a905@ut.ac.ir>
- <20200715142849.0bfe909a@oasis.local.home>
- <83963025.14828.1594838718290.JavaMail.zimbra@efficios.com>
- <98de6fe15a816d8f06ba3d5df0f10540@ut.ac.ir>
- <20200715174858.4698803c@oasis.local.home>
- <489547987.230950.1594861561764.JavaMail.zimbra@polymtl.ca>
-Message-ID: <b0e85dc62211e2d0c908ba395a9fcb5a@ut.ac.ir>
-X-Sender: ahmadkhorrami@ut.ac.ir
-User-Agent: Roundcube Webmail/1.3.6
 Sender: linux-trace-users-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi Michel,
-
-Thanks for the detailed answer! DBI tools are really interesting but I 
-want to do this during normal execution and on multiple programs running 
-simultaneously. I mean this is not supposed to be conventional tracing 
-with multiple re-executions. I want to extract some information about 
-the execution-state at runtime and inform the lower levels in the 
-software stack to make smarter choices. Fortunately, there are only a 
-few functions that need to be traced. But any reduction in the wasted 
-cycles is helpful, specially if it is caused by privilege level 
-transitions.
-
-Regards.
+I'm happy to announce that after over a year, we finally are able to
+release trace-cmd version 2.9!
 
 
-On 2020-07-16 05:36, Michel Dagenais wrote:
+Features and user visible updates since 2.8:
 
->> Without recompiling, how would that be implemented?
-> 
-> As you mentioned, this is possible when "jump patching" 5 bytes 
-> instructions. Fast tracepoints in GDB and in kprobe do it. Kprobe goes 
-> further and patches sequences of instructions (because the target 
-> instruction is less than 5 bytes) if there is no incoming branch into 
-> the middle of the sequence. You can go even further, for instance using 
-> 3 bytes jumps to a trampoline installed in alignment nops. If you 
-> combine different strategies like this, you can eventually reach almost 
-> 100% success rate for "jump patching" tracepoints. This gets quite 
-> hairy though. However, the short story is that there is currently no 
-> tool as far as I know that does that easily and reliably in user space.
-> 
-> https://onlinelibrary.wiley.com/doi/abs/10.1002/spe.2746
-> https://dl.acm.org/doi/pdf/10.1145/3062341.3062344
-> 
-> If you can afford a more invasive tool, that requires a lot of memory 
-> and stops your application for quite some time, you can look at 
-> approaches like dyninst that decompile the binary, insert 
-> instrumentation code and reassemble the code.
-> 
-> https://dyninst.org/
-> 
->> You would need to insert a jump on top of code, and still be able to
->> preserve that code. What a trap does, is to insert a int3, that will
->> trap into the kernel, it would then emulate the code that the int3 was
->> on, and also call some code that can trace the current state.
->> 
->> To do it in user land, you would need to find way to replace the code
->> at the location you want to trace, with a jump to the tracing
->> infrastructure, that will also be able to emulate the code that the
->> jump was inserted on top of. As on x86, that jump will need to be 5
->> bytes long (covering 5 bytes of text to emulate), where as a int3 is a
->> single byte.
->> 
->> Thus, you either recompile and insert nops where you want to place 
->> your
->> jumps, or you trap using int3 that can do the work from within the
->> kernel.
->> 
->> -- Steve
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+ - git hash is now visible in trace-cmd --version output
+
+ - Build: python-dir can be specified on the command line for python
+   location.
+
+ - Build: NO_UDIS86 on make command line to disable udisc86.
+
+ - Build: All headers needed by kernelshark installed.
+
+ - Added --proc-map to trace-cmd record.
+   Records the /proc/<pid>/maps of the traced file.
+   Used for seeing where page_faults happen (trace-cruncher can use it)
+
+ - Add --user to trace-cmd record, to allow to suid to another user to
+   execute the command also on the command line. Useful as trace-cmd needs
+   to be run as root to start the tracing, but when root should not be used
+   as the application being traced.
+
+ - Build: Install path of plugins have changed:
+                   ~/.traceevent/plugins/ --> ~/.local/lib/traceevent/plugins/
+   (install_prefix)/lib/trace-cmd/plugins --> (install_prefix)/lib/traceevent/plugins
+
+ - trace-cmd reset will now clear the tracing_cpumask file.
+
+ - ** NEW ** trace-cmd clear
+   Clear the trace file.
+
+ - ** NEW ** trace-cmd agent
+   Can be run on a guest, which will listen on a vsock for commands.
+   trace-cmd report -A Gust <options for guest>
+   Will connect to the guest agent and have the agent run tracing commands
+   sending the data back to the host. See man pages for more details.
+   (note, the synchronization of time stamps is not yet available,
+    that will be coming in the next release of trace-cmd).
+
+ - ** NEW ** trace-cmd setup-guest
+   Sets up fifos for a guest and host communications instead of vsocks.
+
+ - Add --cmdline_size option to trace-cmd record.
+   Changes the number of process names that are saved in the cache while
+   tracing.
+
+ - ** NEW ** trace-cmd dump
+   Dumps out raw data of the trace.dat file.
+
+ - Build: New: make test
+   Builds and runs various unit tests.
+
+ - More information from trace-cmd stat.
+
+ - trace-cmd reset will now clear the error log.
+
+ - Add option '-s' to trace-cmd list.
+   This will list the available systems (not events).
+
+ - Recording will now stop if -P is on the command line of trace-cmd record
+   and those processes all exit.
+
+ - trace-cmd start can now run commands.
+   This is useful when -F and -c are specified on the command line.
+   New "--fork" command line to have trace-cmd not wait for the command to
+   finish before exiting.
+
+ - ** New ** trace-cmd set command.
+   Used to set or unset options without messing with other ftrace options.
+
+Plus many fixes and infrastructure improvements.
+Changes are also made to set up having libtraceevent, libtracefs and
+kernelshark be moved into their own git repositories.
+
+We plan on working more more aggressively on the libraries and the tool
+set, such that 3.0 wont take a year to be released.
+
+For more information please visit: https://trace-cmd.org
+
+If you would like to contribute, check out the above web site for where
+we do our development, and feel free to contact us on how to get
+involved.
+
+Enjoy,
+
+-- Steve
