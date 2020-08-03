@@ -1,153 +1,114 @@
-Return-Path: <SRS0=jBxe=A4=vger.kernel.org=linux-trace-users-owner@kernel.org>
+Return-Path: <SRS0=I5B7=BN=vger.kernel.org=linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DA94C433E8
-	for <linux-trace-users@archiver.kernel.org>; Fri, 17 Jul 2020 16:12:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C488FC433E0
+	for <linux-trace-users@archiver.kernel.org>; Mon,  3 Aug 2020 22:34:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0673E2076A
-	for <linux-trace-users@archiver.kernel.org>; Fri, 17 Jul 2020 16:12:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E1A80208C7
+	for <linux-trace-users@archiver.kernel.org>; Mon,  3 Aug 2020 22:34:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727814AbgGQQMm (ORCPT
+        id S1726948AbgHCWe4 (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Fri, 17 Jul 2020 12:12:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46020 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727786AbgGQQMj (ORCPT
+        Mon, 3 Aug 2020 18:34:56 -0400
+Received: from mail-qt1-f176.google.com ([209.85.160.176]:40800 "EHLO
+        mail-qt1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726276AbgHCWe4 (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Fri, 17 Jul 2020 12:12:39 -0400
-Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3BAAD2070E;
-        Fri, 17 Jul 2020 16:12:35 +0000 (UTC)
-Date:   Fri, 17 Jul 2020 12:12:33 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Linux-trace Users <linux-trace-users@vger.kernel.org>,
-        "linux-trace-devel@vger.kernel.org" 
-        <linux-trace-devel@vger.kernel.org>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Yordan Karadzhov <y.karadz@gmail.com>,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Changbin Du <changbin.du@gmail.com>,
-        Patrick McLean <chutzpah@gentoo.org>,
-        Josh Boyer <jwboyer@fedoraproject.org>,
-        Clark Williams <williams@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        John Kacur <jkacur@redhat.com>, Tony Jones <tonyj@suse.de>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Daniel Wagner <wagi@monom.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Josef Bacik <jbacik@fb.com>, troyengel@gmail.com,
-        Behan Webster <behanw@converseincode.com>
-Subject: [ANNOUNCE] trace-cmd 2.9
-Message-ID: <20200717121233.5d0d131c@oasis.local.home>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 3 Aug 2020 18:34:56 -0400
+Received: by mail-qt1-f176.google.com with SMTP id s16so29521058qtn.7
+        for <linux-trace-users@vger.kernel.org>; Mon, 03 Aug 2020 15:34:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=XXXqlxq8vYx19nlPfxnkR6X3lNfVgSLDoF5vGR+u0Wc=;
+        b=rWaX5DpEoJxEfV/2AMeS2cRnllpudUt9tAdLmJUtTR87jch9o5ZhArAHmxeMRTSH0O
+         FvRXGCq5p/eTAgXWRV84gHlWffgeXktC5REpHB4GSAWh4QAXAMJwsCt8449hCJvkX9mL
+         4s/99FueFd4bdLe8ZpY8YV8eK2kKIw6UMttYDcHxOAsT21RACZZTdqwN2UsU08a4L4Ox
+         R4VMXYzCvinRzOmMR2H/oCBL4RN0UPj1oYKd3F/Q6OLQwCiJAjKc+8EzsvQrtRuPbHsU
+         VKC/opFNMA2F4RqSjYayK9r62NlKpV0ojABSRmNDOJpkit/36JF9+BQ58Rir2ohKa+Ex
+         i75A==
+X-Gm-Message-State: AOAM533lHZm0SdaKQdvq+taZjtGRdCYP/Wj/B+trb5yRwIwd2PHv3Q0L
+        +g4g0uILNAsVwBSfl8/Int4=
+X-Google-Smtp-Source: ABdhPJzsxAqefqEhxum08zlaOI2OhW6qitcoRW/EC+Hr6NJXHIcbg99hZB0Hq/o5kltfvH5QXyIo3Q==
+X-Received: by 2002:ac8:6a06:: with SMTP id t6mr18699196qtr.206.1596494094791;
+        Mon, 03 Aug 2020 15:34:54 -0700 (PDT)
+Received: from gmail.com (192-222-251-19.qc.cable.ebox.net. [192.222.251.19])
+        by smtp.gmail.com with ESMTPSA id l31sm24639967qtc.33.2020.08.03.15.34.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Aug 2020 15:34:53 -0700 (PDT)
+Date:   Mon, 3 Aug 2020 18:34:51 -0400
+From:   =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau 
+        <jeremie.galarneau@efficios.com>
+To:     lttng-dev@lists.lttng.org
+Cc:     diamon-discuss@lists.linuxfoundation.org,
+        linux-trace-users@vger.kernel.org
+Subject: [RELEASE] LTTng-tools 2.11.5 - Lafontaine
+Message-ID: <20200803223451.GA2165704@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-trace-users-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-I'm happy to announce that after over a year, we finally are able to
-release trace-cmd version 2.9!
+Hi all,
 
+The fifth bug-fix release of LTTng-tools 2.11 - Lafontaine has just
+been released. This release addresses a number of issues listed below.
 
-Features and user visible updates since 2.8:
+2020-08-03 lttng-tools 2.11.5 (National Watermelon Day)
+	* Fix: lttng: leak of userspace probe path on listing
+	* Fix: uprobe: missing error code on allocation failure
+	* Fix: sessiond: don't negate error code on list error
+	* Fix: send/received actual size is overwritten by 'expected' size
+	* Fix: partial recv lead to client disconnect
+	* tests: return the proper TAP exit code
+	* Tests: live/test_{lttng_,}kernel: use lttng_test_filter_event instead of sched_switch
+	* Fix: consumer: Move sanity check within `consumer_subbuffer` functions
+	* Cleanup: typo in DBG() statements
+	* Fix: relayd: send_viewer_streams sends stack data in padding
+	* Fix: kconsumer: missing wait for metadata thread in do_sync_metadata
+	* Fix: tests: interrupting get_next_notification causes test to fail
+	* Fix: consumer.c: wrong order of parameter in `DBG()` statement
+	* Fix: kernel metadata file outside of kernel/ directory
+	* Fix: consumer: dangling chunk on buffer allocation failure
+	* Fix: consumerd: uninitialized written_bytes on no-data sleep
+	* Build fix: consumerd misnamed label
+	* consumerd: on_sleep not called on stream when no data is available
+	* Fix: invalid discarded events on start/stop without event production
+	* tests: truncate metadata file for regenerate metadata test
+	* Fix: consumerd: user space metadata not regenerated
+	* Fix: tests: output_dir contains the consumerd pipe
+	* Fix: unix: don't PERROR on EAGAIN for non-blocking sockets
+	* Fix: sessiond: sessiond and agent deadlock on destroy
+	* Fix: incorrect specifier %lu used with size_t argument
+	* Fix: consumerd: live client receives incomplete metadata
+	* consumerd: refactor: split read_subbuf into sub-operations
+	* consumerd: move rotation logic to domain-agnostic read path
+	* sessiond: enforce mmap output type for kernel metadata channel
+	* consumerd: tag metadata channel as being part of a live session
+	* consumerd: pass channel instance to stream creation function
+	* consumerd: cleanup: use buffer view interface for mmap read subbuf
+	* consumerd: move address computation from on_read_subbuffer_mmap
+	* consumerd: refactor: combine duplicated check_*_functions
+	* kerner-ctl: add RING_RING_BUFFER_GET_NEXT_SUBBUF_METADATA_CHECK
+	* Add lttng_dynamic_buffer_append_view util
+	* Fix: lttng: Destroying session message repeated during destruction
 
- - git hash is now visible in trace-cmd --version output
+As always, please report any issue you may encounter to bugs.lttng.org
+or on this mailing list.
 
- - Build: python-dir can be specified on the command line for python
-   location.
+Project website: https://lttng.org
 
- - Build: NO_UDIS86 on make command line to disable udisc86.
+Download link:
+https://lttng.org/files/lttng-tools/lttng-tools-2.11.5.tar.bz2
 
- - Build: All headers needed by kernelshark installed.
-
- - Added --proc-map to trace-cmd record.
-   Records the /proc/<pid>/maps of the traced file.
-   Used for seeing where page_faults happen (trace-cruncher can use it)
-
- - Add --user to trace-cmd record, to allow to suid to another user to
-   execute the command also on the command line. Useful as trace-cmd needs
-   to be run as root to start the tracing, but when root should not be used
-   as the application being traced.
-
- - Build: Install path of plugins have changed:
-                   ~/.traceevent/plugins/ --> ~/.local/lib/traceevent/plugins/
-   (install_prefix)/lib/trace-cmd/plugins --> (install_prefix)/lib/traceevent/plugins
-
- - trace-cmd reset will now clear the tracing_cpumask file.
-
- - ** NEW ** trace-cmd clear
-   Clear the trace file.
-
- - ** NEW ** trace-cmd agent
-   Can be run on a guest, which will listen on a vsock for commands.
-   trace-cmd report -A Gust <options for guest>
-   Will connect to the guest agent and have the agent run tracing commands
-   sending the data back to the host. See man pages for more details.
-   (note, the synchronization of time stamps is not yet available,
-    that will be coming in the next release of trace-cmd).
-
- - ** NEW ** trace-cmd setup-guest
-   Sets up fifos for a guest and host communications instead of vsocks.
-
- - Add --cmdline_size option to trace-cmd record.
-   Changes the number of process names that are saved in the cache while
-   tracing.
-
- - ** NEW ** trace-cmd dump
-   Dumps out raw data of the trace.dat file.
-
- - Build: New: make test
-   Builds and runs various unit tests.
-
- - More information from trace-cmd stat.
-
- - trace-cmd reset will now clear the error log.
-
- - Add option '-s' to trace-cmd list.
-   This will list the available systems (not events).
-
- - Recording will now stop if -P is on the command line of trace-cmd record
-   and those processes all exit.
-
- - trace-cmd start can now run commands.
-   This is useful when -F and -c are specified on the command line.
-   New "--fork" command line to have trace-cmd not wait for the command to
-   finish before exiting.
-
- - ** New ** trace-cmd set command.
-   Used to set or unset options without messing with other ftrace options.
-
-Plus many fixes and infrastructure improvements.
-Changes are also made to set up having libtraceevent, libtracefs and
-kernelshark be moved into their own git repositories.
-
-We plan on working more more aggressively on the libraries and the tool
-set, such that 3.0 wont take a year to be released.
-
-For more information please visit: https://trace-cmd.org
-
-If you would like to contribute, check out the above web site for where
-we do our development, and feel free to contact us on how to get
-involved.
-
-Enjoy,
-
--- Steve
+GPG signature:
+https://lttng.org/files/lttng-tools/lttng-tools-2.11.5.tar.bz2.asc
