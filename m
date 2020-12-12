@@ -2,110 +2,143 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
+	SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A4C3C5519F
-	for <linux-trace-users@archiver.kernel.org>; Sat, 21 Nov 2020 01:03:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB42AC4361B
+	for <linux-trace-users@archiver.kernel.org>; Sat, 12 Dec 2020 04:38:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5C6362408E
-	for <linux-trace-users@archiver.kernel.org>; Sat, 21 Nov 2020 01:03:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 86DF023158
+	for <linux-trace-users@archiver.kernel.org>; Sat, 12 Dec 2020 04:38:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728764AbgKUBDS (ORCPT
+        id S2407098AbgLLEh3 (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Fri, 20 Nov 2020 20:03:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38398 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727149AbgKUBDS (ORCPT
+        Fri, 11 Dec 2020 23:37:29 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:42640 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391778AbgLLEhX (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Fri, 20 Nov 2020 20:03:18 -0500
-Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 068AE20729;
-        Sat, 21 Nov 2020 01:03:15 +0000 (UTC)
-Date:   Fri, 20 Nov 2020 20:03:14 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        "linux-trace-devel@vger.kernel.org" 
-        <linux-trace-devel@vger.kernel.org>,
-        Linux-trace Users <linux-trace-users@vger.kernel.org>
-Cc:     Zamir SUN <sztsian@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, zsun@redhat.com,
-        Vitaly Chikunov <vt@altlinux.org>,
-        Tzvetomir Stoyanov <tstoyanov@vmware.com>,
-        Yordan Karadzhov <ykaradzhov@vmware.com>,
-        Ben Hutchings <ben@decadent.org.uk>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Tony Jones <tonyj@suse.de>, John Kacur <jkacur@redhat.com>,
-        Clark Williams <williams@redhat.com>, powertop@lists.01.org,
-        Al Stone <ahs3@debian.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Jes Sorensen <jes.sorensen@gmail.com>
-Subject: [ANNOUNCE] libtracefs.git
-Message-ID: <20201120200314.21efabe5@oasis.local.home>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Fri, 11 Dec 2020 23:37:23 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BC4YkHh140349
+        for <linux-trace-users@vger.kernel.org>; Sat, 12 Dec 2020 04:36:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ from : to : subject; s=corp-2020-01-29;
+ bh=ZC+SelLCxKVxD3mYFCkOdT5rb2EodWIDBnBO4omqq7c=;
+ b=r0DWFQ/3d97SG0z+r9bQAqOcpG/dfDA9fUWlYxIyj78vRTlNUEWXuUT53+tFm34k2vSF
+ jLHx314ZkUUoZ+2lD8TdeDFP29qZTIBM7pUGoZqeqt7Dz91igH1kLKcEErOXlKaTF7u4
+ 1MCCqtjrQNdYpDOm/WgZEdQA2HScm6G/SeBlTVen0Skh7nkp4QzhjwadHZ0Q51BJeMw1
+ 1rW2TUfpr4ghaCfgzn7bXSGkML18nOiKjZRaB3zU4bDW1rBjbuPSb+HXwTzCh9MXyCQt
+ c63yTVLks3Ht3REkvb1CJ7gaYLNXNYuPSjz0nbn+X/CaN0EZYWwYCD/ITrKJJp1mvqAh dQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 35cn9r03xd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL)
+        for <linux-trace-users@vger.kernel.org>; Sat, 12 Dec 2020 04:36:42 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BC4Ox4n180243
+        for <linux-trace-users@vger.kernel.org>; Sat, 12 Dec 2020 04:34:41 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 35ckw8c749-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+        for <linux-trace-users@vger.kernel.org>; Sat, 12 Dec 2020 04:34:41 +0000
+Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0BC4YfR4013535
+        for <linux-trace-users@vger.kernel.org>; Sat, 12 Dec 2020 04:34:41 GMT
+Message-Id: <202012120434.0BC4YfR4013535@aserv0121.oracle.com>
+Received: from localhost (/10.154.176.65)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 11 Dec 2020 20:34:41 -0800
+Date:   Fri, 11 Dec 2020 23:34:38 -0500
+From:   Kris Van Hees <kris.van.hees@oracle.com>
+To:     linux-trace-users@vger.kernel.org
+Subject: RELEASE: New version of DTrace for Linux
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9832 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 suspectscore=0
+ mlxscore=0 mlxlogscore=999 malwarescore=0 adultscore=1 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012120034
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9832 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
+ impostorscore=0 lowpriorityscore=0 clxscore=1015 spamscore=0
+ malwarescore=0 priorityscore=1501 phishscore=0 mlxscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012120035
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-I split out the libtracefs code from trace-cmd.git using "git subtree",
-which recreates all the commits of a directory and makes that directory
-a stand alone. I then updated the Makefiles, and copied over some of
-the header files used to build the library. I pushed this up to:
+I am happy to announce the availability of the latest development version of
+DTrace for Linux (2.0.0-1.4).
 
-  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/
+This new version is based on BPF and other Linux kernel tracing features and
+is implemented entirely as a userspace application.
 
-What libtracefs.so will be use for, is to allow programs to have an API
-to access the tracefs directory. Right now, it has a very limited set
-of functions that do the bare minimum, for example, to print all sched
-events:
+The functionality is still limited in comparison to the kernel module based
+version of DTrace for Linux (currently at version 1.2.1-1).  Development
+continues in an incremental fashion to make the full feature set of DTrace
+available using existing kernel features.
 
-	const char *tracefs_dir;
-	char **sched_events;
-	char *event;
-	int i;
+WHERE TO FIND IT?
 
-	tracefs_dir = tracefs_get_tracing_dir();
+The new version of DTrace for Linux is available at:
+	https://github.com/oracle/dtrace-utils/tree/2.0-branch-dev
 
-	sched_events = tracefs_system_events(tracefs_dir, "sched");
-	if (!sched_events)
-		return -1;
-	for (i = 0; sched_events[i]; i++)
-		printf("sched event: %s\n", sched_events[i]);
+The most recent release tag is 2.0.0-1.4.
 
-	tracefs_list_free(sched_events);
+FEATURES
 
-We plan on adding man pages for all the functions, as well as expand
-the functionality. For example (TBD):
+  - BEGIN and END probe (with full support for the expected semantics).
+  - Function Boundary Tracing (FBT) probes.
+  - System call entry and exit probes.
+  - Timer-based profile-* and tick-* probes.
+  - Statically Defined Tracing (SDT) probes for kernel tracepoints.
+  - [NEW] Aggregated data collection support.
+  - [NEW] Aggregation functions: avg, count, llquantize, lquantize, max, min,
+    quantize, stddev, and sum.
+  - [NEW] Pretty-printing for aggregations using the printa() action.
+  - Direct compilation of D source code into BPF programs.
+  - Efficient use of pre-compiled BPF functions for library functions.
+  - BPF program linking of dynamically generated code and pre-compiled code
+    to facilitate code sharing and code re-use.
+  - Integrated disassembler for generated BPF code at the clause and program
+    level (-S in combination with the new -xdisasm=# option).
+  - Improved trace data buffer handling based on memory mapped perf event
+    ring-buffers.
+  - Deferred creation of kernel level probes.  Listing available probes does
+    not require them to be created at the kernel level.
 
-	char **funcs;
+DEPENDENCIES
 
-	funcs = tracefs_available_filter_functions(tracefs_dir, ".*lock.*");
+DTrace for Linux depends on libctf (part of newer binutils) -or- libdtrace-ctf.
+While libctf is preferred, building against libdtrace-ctf is fully supported.
+It can be found at:
+	https://github.com/oracle/libdtrace-ctf
 
-Which would return a list of all functions that have "lock" in its name
-that can be traced by the function tracer.
+DTrace for Linux makes use of BPF library functions that are compiled at build
+time.  It depends on BPF support in GCC and binutils to generate the
+pre-compiled BPF function library.
 
-Same for setting and getting the ftrace filter, enabling disable
-events, and even setting filters and histograms. The version of this
-library is at 0.1.0 as we are working on it. It is currently at the
-stage that kernelshark can use it. Once libtracecmd is ready, then
-kernelshark will become its own repo as well.
+DTrace for Linux makes use of 3 additional features that are not commonly
+available in the Linux kernel:
 
-The repo is still a little rough around the edges, and needs some
-loving for making sure the library is installed properly, but it is now
-out there for people to have a look, and better yet, send patches! :-)
+  - CTF data generation at compile time: this provides important datatype
+    information for kernel and kernel module symbols.
 
-Note: From now on, updates to libtraceevent and libtracefs will now be
-made in their corresponding git repos on kernel.org, and no longer
-fixed in trace-cmd or the kernel proper (with some exceptions). After a
-couple of years, when these are packaged in all major repos, I tend to
-remove the code from these other locations.
+  - waitfd() system call: this provides a mechanism to monitor for state
+    changes of processes that are being traced.
 
--- Steve
+  - /proc/kallsyms module grouping support: this adds annotation with module
+    names to all symbols that are part of a kernel module even if the module
+    is configured to be compiled into the kernel proper.  This allows for
+    consistent ways to refer to probes by module and function (or probe) name.
+
+These additional support features for tracing are available at:
+	https://github.com/oracle/dtrace-linux-kernel/tree/v2/5.8.1
+
+Please consider joining our development list: dtrace-devel@oss.oracle.com
+
+	Enjoy!
+
+	Kris
