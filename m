@@ -2,86 +2,42 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	PDS_TONAME_EQ_TOLOCAL_SHORT,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8181C433E0
-	for <linux-trace-users@archiver.kernel.org>; Mon, 11 Jan 2021 19:11:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07E57C433E0
+	for <linux-trace-users@archiver.kernel.org>; Mon,  1 Feb 2021 15:20:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 76EE322B30
-	for <linux-trace-users@archiver.kernel.org>; Mon, 11 Jan 2021 19:11:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C81B564EA3
+	for <linux-trace-users@archiver.kernel.org>; Mon,  1 Feb 2021 15:20:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390726AbhAKTLc (ORCPT
+        id S230208AbhBAPTZ (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Mon, 11 Jan 2021 14:11:32 -0500
-Received: from mail.efficios.com ([167.114.26.124]:60286 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390621AbhAKTLb (ORCPT
+        Mon, 1 Feb 2021 10:19:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39898 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229941AbhBAPTU (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Mon, 11 Jan 2021 14:11:31 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 92E68242708;
-        Mon, 11 Jan 2021 14:10:50 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 5fIU6ltaWmJh; Mon, 11 Jan 2021 14:10:50 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 6962A2424E3;
-        Mon, 11 Jan 2021 14:10:50 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 6962A2424E3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1610392250;
-        bh=9JVaWje3ptDlQarmNSm8HaoAAamJjX42E76uz2J9ek4=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=ZUUXQqtgC4Vb9YKqBxdX4S2xMZ2OP9NO1FYOpP6zCKqCFdseW3u5fBcYBIBlwzwNQ
-         Kh6XGdkcIruy+1LslQ1CP1t3zflHegnrw+tfj90R9FIAEbCRQdBDcKLWCWbCd14s4L
-         TKZAd6WCD3Lr7VbLv3nZ17jhkXutpcnkq/QjOXmxli6XjpdzzC8jGwhZ51fNc8oE9O
-         PSGJokkCNqMHaUsX4MzgGjSGH69fp4O29GJeRf4A5qq1ab0N8yzt0RrYt/u1/QIuXb
-         lzZo6MyitSHIFBGeUA3PjrcPWblYvXbR0SGCZqQgnU5c170L9J0MwaoOteokJ29KKz
-         7J22ml1EaLXtQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 2IORqxS2zhVi; Mon, 11 Jan 2021 14:10:50 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 5E3BA2424E2;
-        Mon, 11 Jan 2021 14:10:50 -0500 (EST)
-Date:   Mon, 11 Jan 2021 14:10:50 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     lttng-dev <lttng-dev@lists.lttng.org>,
-        diamon-discuss@lists.linuxfoundation.org,
-        linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <897024476.10469.1610392250359.JavaMail.zimbra@efficios.com>
-Subject: [RELEASE] LTTng-modules 2.11.7 and 2.12.4 (Linux kernel tracer)
+        Mon, 1 Feb 2021 10:19:20 -0500
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 72F0364E9E;
+        Mon,  1 Feb 2021 15:18:39 +0000 (UTC)
+Date:   Mon, 1 Feb 2021 10:18:37 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "linux-trace-users@vger.kernel.org" 
+        <linux-trace-users@vger.kernel.org>,
+        Linux Trace Devel <linux-trace-devel@vger.kernel.org>
+Subject: Test
+Message-ID: <20210201101837.7f790301@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_3991 (ZimbraWebClient - FF84 (Linux)/8.8.15_GA_3980)
-Thread-Index: 5m5q9JQ/0U77YrT12Q0xQhrp1t7WVA==
-Thread-Topic: LTTng-modules 2.11.7 and 2.12.4 (Linux kernel tracer)
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi,
-
-I just released versions 2.11.7 and 2.12.4 of the lttng-modules stable branches.
-These add support for the 5.10 Linux kernel.
-
-Please try them out, and, as usual, feedback is welcome!
-
-Thanks,
-
-Mathieu
-
-Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Testing email to see if they are alive!
