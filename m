@@ -2,85 +2,99 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12AA7C433DB
-	for <linux-trace-users@archiver.kernel.org>; Tue, 23 Feb 2021 16:42:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 219F4C433C1
+	for <linux-trace-users@archiver.kernel.org>; Thu, 25 Mar 2021 21:24:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC75464E61
-	for <linux-trace-users@archiver.kernel.org>; Tue, 23 Feb 2021 16:42:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E731A61A1E
+	for <linux-trace-users@archiver.kernel.org>; Thu, 25 Mar 2021 21:24:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233340AbhBWQmL (ORCPT
+        id S230454AbhCYVYQ (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Tue, 23 Feb 2021 11:42:11 -0500
-Received: from mail-qk1-f180.google.com ([209.85.222.180]:45408 "EHLO
-        mail-qk1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233331AbhBWQmK (ORCPT
+        Thu, 25 Mar 2021 17:24:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53090 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230450AbhCYVX7 (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Tue, 23 Feb 2021 11:42:10 -0500
-Received: by mail-qk1-f180.google.com with SMTP id z128so12230680qkc.12
-        for <linux-trace-users@vger.kernel.org>; Tue, 23 Feb 2021 08:41:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=9VG1zpBMCSz829bCPbFEmOxsMCmT/agd2UxnO9sydxc=;
-        b=OEeiR7J0enMoUNaWTS6ZrgTUtum1yzm0NKsKwSJyiT3UstRgTEcbSSewGHQ7lbPfEN
-         3SdTw2QUHt1OfdI/W6GBIeUiGBV4VK/PK7/vxIJmREZN60nuW2idwzeV4Z8tabP5okxl
-         4loCd9+rU9aDQVOIt1YrfiqAHD4Hpda9yKdz7y8b2rtM1VvyzaZZQ2uVg4BjkpOqiTPl
-         odlYNbjnmR/Tb/a2eJ/TP2V9YjVLtVTjWyAxdrseKEVopDsFEZx9xHhupXmMlbkYhMww
-         aAb8A6mJhVcBuYDN5xD53p3IRlhjWcblvursiCmj0p39t9ZXNmMk9o6czCrH4x4xY+4u
-         4eKg==
-X-Gm-Message-State: AOAM530/ZUqZY/ymZCfO/QtrdibzCS6K5IAaEtCKYZlmJcwBHlmeGcd4
-        oXY5aaaRuQR/gVY03jmlxfw=
-X-Google-Smtp-Source: ABdhPJzYSrumcrE8JBf/rQqJe6XZguTgvMr92feeykYwXt+enKmbDMBP+zS8EICp/nSFg2AZ2St3TQ==
-X-Received: by 2002:a37:a70c:: with SMTP id q12mr27268562qke.378.1614098488828;
-        Tue, 23 Feb 2021 08:41:28 -0800 (PST)
-Received: from gmail.com ([107.159.88.171])
-        by smtp.gmail.com with ESMTPSA id p25sm14840926qkh.79.2021.02.23.08.41.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Feb 2021 08:41:28 -0800 (PST)
-Date:   Tue, 23 Feb 2021 11:41:26 -0500
-From:   =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau 
-        <jeremie.galarneau@efficios.com>
-To:     lttng-dev@lists.lttng.org
-Cc:     diamon-discuss@lists.linuxfoundation.org,
-        linux-trace-users@vger.kernel.org
-Subject: [RELEASE] LTTng-tools 2.11.6 - Lafontaine
-Message-ID: <YDUwNj4q7yrcdpF6@gmail.com>
+        Thu, 25 Mar 2021 17:23:59 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 22250619BF;
+        Thu, 25 Mar 2021 21:23:59 +0000 (UTC)
+Date:   Thu, 25 Mar 2021 17:23:57 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Devel <linux-trace-devel@vger.kernel.org>,
+        "linux-trace-users@vger.kernel.org" 
+        <linux-trace-users@vger.kernel.org>
+Subject: [ANNOUNCE] trace-cmd 2.9.2
+Message-ID: <20210325172357.6e059c31@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi all,
+I'm happy to announce trace-cmd version 2.9.2!
 
-The sixth bug-fix release of LTTng-tools 2.11 - Lafontaine has just
-been released. This release addresses a number of issues listed below.
+*** NOTICE ***
 
-2021-02-22 lttng-tools 2.11.6 (National Margarita Day)
-        * Fix: use MT-safe strtok_r in multithreaded context
-        * Fix: liblttng-ctl: unreported truncations when copying strings
-        * Fix: configure: support Autoconf 2.70
-        * Fix: sessiond: metadata not created on app unregistration during start
-        * Cleanup: use `modprobe --remove` rather than `rmmod`
-        * Tests: Fix: 99% fill ratio for high buffer usage is too high for larger events
-        * Fix: common: poll: compat_poll_wait never finishes
-        * Build fix: implicit declaration of function 'PERROR' on Solaris
-        * Fix: PERROR spam when `tracing` group does not exist
-        * Fix: memcpy used on potentially overlapping regions
+This is the last version that is self contained for interacting
+with the tracefs directory and parsing the events.
 
-As always, please report any issue you may encounter to bugs.lttng.org
-or on this mailing list.
+The parsing of events is now a separate repository:
 
-Project website: https://lttng.org
+  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/
 
-Download link:
-https://lttng.org/files/lttng-tools/lttng-tools-2.11.6.tar.bz2
+And the access to the tracefs directory is here:
 
-GPG signature:
-https://lttng.org/files/lttng-tools/lttng-tools-2.11.6.tar.bz2.asc
+  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/
+
+After this release, trace-cmd will depend on those repositories and
+its internal copies will be removed. Please install those libraries
+for future building of trace-cmd.
+
+
+*** NOTICE 2 ***
+
+KernelShark is now in its own repository (and will depend on libtracecmd
+in this repo, but has not been officially released just yet, but soon!).
+This is the last version that will home KernelShark in this repository.
+
+KernelShark now lives here:
+
+  https://git.kernel.org/pub/scm/utils/trace-cmd/kernel-shark.git/
+
+After this release, "make gui" will no longer build KernelShark.
+
+*** END NOTICES ***
+
+Features and user visible updates since 2.9.1:
+
+- Will use system libraries libtraceevent and libtracefs if they are
+  present and will only build the local versions if they are not.
+
+- The saved comms are stored at the end of running a trace-cmd record
+  to be able to get the names of what is running after they ran.
+
+- trace-cmd clear is now instance aware.
+
+- New trace-cmd report --ts-check option to check if timestamps are
+  monotonic.
+
+- New "make uninstall" to remove an installed instance of trace-cmd
+  executables and libraries.
+
+- Added make-trace-cmd.sh script as a template on how to install the
+  libraries and executables.
+
+For more information, please visit https://www.trace-cmd.org.
+
+-- Steve
