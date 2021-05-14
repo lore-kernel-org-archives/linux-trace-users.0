@@ -6,76 +6,87 @@ X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
 	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14710C433ED
-	for <linux-trace-users@archiver.kernel.org>; Fri, 14 May 2021 19:43:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E81C4C433B4
+	for <linux-trace-users@archiver.kernel.org>; Fri, 14 May 2021 19:52:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E0CD26145B
-	for <linux-trace-users@archiver.kernel.org>; Fri, 14 May 2021 19:43:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C4C466144A
+	for <linux-trace-users@archiver.kernel.org>; Fri, 14 May 2021 19:52:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbhENTof (ORCPT
+        id S230459AbhENTyA (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Fri, 14 May 2021 15:44:35 -0400
-Received: from mail.efficios.com ([167.114.26.124]:57618 "EHLO
+        Fri, 14 May 2021 15:54:00 -0400
+Received: from mail.efficios.com ([167.114.26.124]:34460 "EHLO
         mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbhENToe (ORCPT
+        with ESMTP id S230431AbhENTyA (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Fri, 14 May 2021 15:44:34 -0400
+        Fri, 14 May 2021 15:54:00 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 330222B8285;
-        Fri, 14 May 2021 15:43:22 -0400 (EDT)
+        by mail.efficios.com (Postfix) with ESMTP id 4C77E2B81CE;
+        Fri, 14 May 2021 15:52:48 -0400 (EDT)
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 1QqT508Wc5II; Fri, 14 May 2021 15:43:21 -0400 (EDT)
+        with ESMTP id S2ANtn8JU_DC; Fri, 14 May 2021 15:52:47 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id B266A2B8144;
-        Fri, 14 May 2021 15:43:21 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com B266A2B8144
+        by mail.efficios.com (Postfix) with ESMTP id D27E02B81CD;
+        Fri, 14 May 2021 15:52:47 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com D27E02B81CD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1621021401;
-        bh=lN3BGKDjXEVfPPIZghesZjOo3f4JefopEuk6smetP6I=;
+        s=default; t=1621021967;
+        bh=aCGMeRffw29+0q9FT8t+w01O6x8nGzRb1Pl30xP7c7g=;
         h=Date:From:To:Message-ID:MIME-Version;
-        b=T1Fb9MfCQBU7PI3+H2n485xQsS5C2Q4OI+1sIuQAjLXSmY09aGXnTiSGmw9BNLq+S
-         HjfMtk30nd+2RhriuLZOgqZTsXqZnHSHy3UOpSx9rM0GPEAueLYmDidZodwhtRdgau
-         hslSnCizM7huU1mlzt2X9wqRSTNENIyHzFexV7/y+v4hcMmbdUwhBlQqiyryUj7lSa
-         CenbfA0cUjUcUFI1wrVSqiy1xaRe6X/PzQ7ecmkyzweBMmREsGtMo7vnAqXQ5/GdyV
-         MYHcTsVl1gxjRjGBsZx9l8p0sR+MVJZIO3s8kvj/ZOAh+k7cDop6GtSCh+u+VwqVhy
-         K9tApKrSLnSRg==
+        b=NWTtqRyn6M/5V/fPEUlfK3ihRCJc27ljfUaqTkmJFuiMm07mqZpOp8SqpSY4/XA+s
+         /rQpq3GtIYeLKKuRLBeilTfAivkZnWXn8LEzib03dx+wX+DVwmy2cfz7J3umQANSb4
+         CHzcwuPFdF14pgCqXutZ9s+l6/e8HPI15e/Mm/hCbS11sBg2pPbUEkfSaGY6kwPlmr
+         oJ8UD1VpaskgOu8iK4XwA8fe+/9q3lhO5xDrzi6D9uq6Heu2hq20/VHiJxtznw77JM
+         aFDoliBJgxoSWcvfp54Ugp8bbGXnS2VEVoM6C9BoCdFLCXwj4VhiNbEtUT7pUIWQ0z
+         36iD5eg+oROjg==
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id TZRCHk2-JUaA; Fri, 14 May 2021 15:43:21 -0400 (EDT)
+        with ESMTP id YQ5j_0FY7UXp; Fri, 14 May 2021 15:52:47 -0400 (EDT)
 Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id A3E27347F54;
-        Fri, 14 May 2021 15:43:21 -0400 (EDT)
-Date:   Fri, 14 May 2021 15:43:21 -0400 (EDT)
+        by mail.efficios.com (Postfix) with ESMTP id C52D22B81CC;
+        Fri, 14 May 2021 15:52:47 -0400 (EDT)
+Date:   Fri, 14 May 2021 15:52:47 -0400 (EDT)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     lttng-dev@lists.lttng.org,
         diamon-discuss@lists.linuxfoundation.org,
-        linux-trace-users@vger.kernel.org
-Message-ID: <614865397.45958.1621021401586.JavaMail.zimbra@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.11.4 and 2.12.2
+        linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <1336422991.46023.1621021967687.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] LTTng-modules 2.11.9 and 2.12.6 (Linux kernel tracer)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [167.114.26.124]
 X-Mailer: Zimbra 8.8.15_GA_4018 (ZimbraWebClient - FF88 (Linux)/8.8.15_GA_4007)
-Thread-Index: kFZthwqSfcVZZuZbbWCEFO1VhIFCtg==
-Thread-Topic: LTTng-UST 2.11.4 and 2.12.2
+Thread-Index: 7GWFwXFXkLY7KtGgWu1JPUyXPl1Bvg==
+Thread-Topic: LTTng-modules 2.11.9 and 2.12.6 (Linux kernel tracer)
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
 Hi,
 
-LTTng-UST 2.11.4 and 2.12.2 are bug fix releases of the LTTng-UST user-space tracer for the
-2.11 and 2.12 stable branches.
+The 2.11.9 and 2.12.6 releases of the LTTng kernel tracer are the latest bug fix releases
+of the 2.11 and 2.12 stable branches of the LTTng modules project.
 
-There are a few fixes, as well as a in-depth rework of the benchmark code which was sitting
-in the tests of lttng-ust. This test code was contributed more than 10 years ago before I took
-maintainership of the LTTng-UST project, and it was in a broken state (always returned
-0 second on my test machine because it was truncating significant digits). So I reworked the
-benchmark in the 2.11 and 2.12 stable branches to facilitate comparison of benchmarks between
-branches, especially given the major rework done in the upcoming 2.13 version.
+There are a few minor bug fixes, but those are the noteworthy changes:
+
+- Support for 5.12 Linux kernels,
+- Support recent stable kernel branches 4.14, 4.19, 5.4,
+- Support for newer Ubuntu 4.15, 5.4 and RHEL 8.2/8.3 kernels,
+- Fix: increment buffer offset when failing to copy from user-space:
+
+    Upon failure to copy from user-space due to failing access ok check, the
+    ring buffer offset is not incremented, which could generate unreadable
+    traces because we don't account for the padding we write into the ring
+    buffer.
+    
+    Note that this typically won't affect a common use-case of copying
+    strings from user-space, because unless mprotect is invoked within a
+    narrow race window (between user strlen and user strcpy), the strlen
+    will fail on access ok when calculating the space to reserve, which will
+    match what happens on strcpy.
 
 Thanks,
 
