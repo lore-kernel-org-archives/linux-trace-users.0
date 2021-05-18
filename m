@@ -2,316 +2,143 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-9.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4A28C433B4
-	for <linux-trace-users@archiver.kernel.org>; Sat, 15 May 2021 05:26:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5877AC433B4
+	for <linux-trace-users@archiver.kernel.org>; Tue, 18 May 2021 14:23:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9837F613CE
-	for <linux-trace-users@archiver.kernel.org>; Sat, 15 May 2021 05:26:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3994361350
+	for <linux-trace-users@archiver.kernel.org>; Tue, 18 May 2021 14:23:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234079AbhEOF1m (ORCPT
+        id S231770AbhEROYb (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Sat, 15 May 2021 01:27:42 -0400
-Received: from mail.efficios.com ([167.114.26.124]:39228 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234301AbhEOF1l (ORCPT
+        Tue, 18 May 2021 10:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232548AbhEROY1 (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Sat, 15 May 2021 01:27:41 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id B36A32BCB0A;
-        Sat, 15 May 2021 01:26:26 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id EsxluEzGqOFd; Sat, 15 May 2021 01:26:24 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 9D6EC2BCB07;
-        Sat, 15 May 2021 01:26:24 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 9D6EC2BCB07
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1621056384;
-        bh=r5Ec6t4tIqJi7+VRh6KTPEpKnpfdkNAzUG4iOrqRtDI=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=X+gmSV4p52GOn6GFqSxUe/JsIRJvI69H5ouN00PVt9ZJKyaIBoFAx2PmAGwZTHb8F
-         j2if+bsqNdsbxJ2oIxyV9szMVp9CPch8WcAVPu2nKLaXvip89aHm2yNFDtEIQSRmke
-         DYNPckjG6W25qpSCSez508TOwwAOgEKMJJ4Sc8eG+rPExBoLAdoupw6VhbHw0FynfE
-         yRhGfLGyPYKUs+gSTqzE7pJwdYXsu6sRTU4QcAXPH3t8WF09EyUkWt08KhGv2JdjKr
-         JtUR1rS2GuH5ynlzeoCse7JY+9YcLKD1SoWJB7ZGWMXtm4tXDZJSBTsuKdhxeEEt3I
-         b69d3DmCMnf8g==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id U214ZKN5NQl9; Sat, 15 May 2021 01:26:24 -0400 (EDT)
-Received: from Mercury (unknown [107.159.88.171])
-        by mail.efficios.com (Postfix) with ESMTPSA id 7C4022BCB06;
-        Sat, 15 May 2021 01:26:24 -0400 (EDT)
-Date:   Sat, 15 May 2021 01:26:24 -0400
-From:   =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau 
-        <jeremie.galarneau@efficios.com>
-To:     lttng-dev@lists.lttng.org
-Cc:     diamon-discuss@lists.linuxfoundation.org,
-        linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RELEASE] LTTng =?iso-8859-1?Q?2=2E13=2E0-?=
- =?iso-8859-1?Q?rc2_-_Nordicit=E9?= - Linux kernel and user-space tracer
-Message-ID: <YJ9bgH7uw24flNDD@Mercury>
+        Tue, 18 May 2021 10:24:27 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19619C061756;
+        Tue, 18 May 2021 07:23:08 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id o5so2438421edc.5;
+        Tue, 18 May 2021 07:23:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=BI6frBpCvLWdRpsaa3Qd2jxeaI8MxUUevm7vNpxNyAE=;
+        b=n60TqLkGxp9IbkcR8I7NuOMyu+K1wTJscNybucvKasHcApE9T0JKtK87REXKa2Xftg
+         bmvoU3wYCklEqwTN0pl5sNEsxQ3BSE1IwByUS7pN1KHdAYwJilTd3o+qjgPniJXwIyTi
+         mXZDcuipon5wtAwEsmUbEUDsDwMp/tdJlVi8aatz0DWevYMQv971XhZqXgimDHeezPIj
+         qW4OoPI/B+JICszTBbMxdlDhhV4YoqYQtex3ql/MP0z/o8/Rb5xGLalp7E1YDF2OR4mo
+         ZyOpDVNz1QZjr5/LOQQHHxw5oPPshINw756jsWUXUqcRGquUFHHqLW0cixAcv40AiZZu
+         Vu7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BI6frBpCvLWdRpsaa3Qd2jxeaI8MxUUevm7vNpxNyAE=;
+        b=Lqn/j19MAYeGu246KUIF6XEq+SgwGTTxbbgSo7gdJl5ycbQsDrIvdOr2aMfym/vYHE
+         IYNUTB86EJdN/yX9VCoeuG7JnbYrK7v5lG34+9xmKqIZoNvrFMiMqq0QUmOZC4+GNQ5u
+         nlB+MjCBKa+L2rxo6b2r0Iak4P2WcNHUb4WBMPA5L+qCfDo89VuHQqXHg0h4ECprzw1P
+         Vykv+tDwKCtDluh7/H+/3eiDABrwrwGEYrJTglhOcRwSpGM2DUlMVBFo5e/a3FQxzZYW
+         5Dh686edSuiepCJOsStJyxVlGDzHCur13kkMZ3MdatUx2PM2hi8Wps6eYdbv647b7RBv
+         3CPA==
+X-Gm-Message-State: AOAM530iZX+KccEFvElQVJ+Y4SCsH8cb64Pdmm/fAuP3MzMvWZAOO03X
+        6bNQJCpKxnfukIJf6GTOt5k+Y/bJspY=
+X-Google-Smtp-Source: ABdhPJwKe6n3HKpvi8KSV194C5ZmIwIvHH8ZA5/J8QYLNELFwnq0mWZy8fjiajidBLz1c8jad9XEqQ==
+X-Received: by 2002:a05:6402:3098:: with SMTP id de24mr7270257edb.339.1621347786578;
+        Tue, 18 May 2021 07:23:06 -0700 (PDT)
+Received: from [192.168.0.106] ([84.40.73.151])
+        by smtp.gmail.com with ESMTPSA id y25sm13176612edr.63.2021.05.18.07.23.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 May 2021 07:23:06 -0700 (PDT)
+Subject: [ANNOUNCE] KernelShark 2.0
+To:     LKML <linux-kernel@vger.kernel.org>,
+        "linux-trace-devel@vger.kernel.org" 
+        <linux-trace-devel@vger.kernel.org>,
+        Linux-trace Users <linux-trace-users@vger.kernel.org>
+References: <20210410094046.0a23f960@oasis.local.home>
+From:   Yordan Karadzhov <y.karadz@gmail.com>
+Message-ID: <1c9f9a94-0ae3-e5f6-0cd8-79565d9d53a8@gmail.com>
+Date:   Tue, 18 May 2021 17:23:05 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210410094046.0a23f960@oasis.local.home>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi everyone,
+I am pleased to announce the new version of KernelShark has been released:
 
-Today marks the release of the second LTTng 2.13 - Nordicit=E9 release ca=
-ndidate.
+KernelShark 2.0
 
-A prettyfied version of this annoucement is available here:
-https://github.com/lttng/lttng-tools/releases/tag/v2.13.0-rc2
+https://git.kernel.org/pub/scm/utils/trace-cmd/kernel-shark.git/snapshot/kernel-shark-kernelshark-v2.0.tar.gz
 
-If you were already testing the first release candidate of this release, =
-please
-note that LTTng-UST and LTTng-tools must be updated to "rc2" in locked-st=
-ep
-due to ABI changes. Also note that probe providers must be rebuilt agains=
-t
-LTTng-UST 2.13.0-rc2.
+https://git.kernel.org/pub/scm/utils/trace-cmd/kernel-shark.git/
 
-Have a look at the first release candidate's release notes for an
-overview of the features introduced in LTTng 2.13.
+Major changes since 1.3:
+- Introduces Data streams:
+   With the help of Data stream, KernelShark is able to load and
+   merge multiple trace files (streams). Each stream can have
+   different plugins or filters, registered for it, which means that
+   the raw trace data of the streams can have different formats, and
+   will allow for a great degree of customization of the provided
+   data visualization.
 
-https://github.com/lttng/lttng-tools/releases/tag/v2.13.0-rc1
+- New design of the plugin interface - instead of having a single
+   interface for loading the plugin, we now have 3 different
+   interfaces:
+   - The one that exists in version 1 of KernelShark is now renamed
+     to Data Processing Interface (dpi).
 
+   - The first new interface for loading can be used to register
+     user provided implementation of the Data stream readout and is
+     called Data Readout Interface (dri). Via this plugin loading
+     interface the user can open trace data having an arbitrary
+     format. In order to make this possible the user has to provide
+     a plugin that contains an implementation of the data readout
+     methods defined by the Data stream and to register all those
+     methods.
 
-What's new in LTTng-UST (Linux application tracer) 2.13.0-rc2?
----
+   - The second new plugin loading interface is called Control
+     interface and can be used to provide the plugin with an access
+     to the GUI's Main window object. Via this interface the plugin
+     can became capable to modify the GUI.
 
-- Allow explicit tracepoint instance provider name. Allow re-using a trac=
-epoint
-  class from tracepoint instances in other providers.
+- The modification of the C API are used to implement 3 new
+   plugins:
+   - KVMCombo plugin: The plugin allows the user to visualize
+     the execution flow between the host and guest virtual machines.
+     It exploits the concepts of "Data streams " and "Combo Plots"
+     That allows to have two normal graphs from two data streams
+     stacked together (on top of each other). The plugin uses a
+     "combo" between the task in the host that emulates a virtual
+     CPU and the corresponding CPU graph from the VM. The plugin
+     draws additional graphical elements on top of this "combo",
+     helping the user to intuitively interpret the data and see how
+     the execution flow goes from host to guest and back.
 
-  This is a localized API-breaking change introduced very early in the
-  2.13-rc cycle. The LTTNG_UST_TRACEPOINT_EVENT_INSTANCE macro newly intr=
-oduced
-  in LTTng-UST 2.13-rc1 now takes an extra "template_provider" argument.
+   - LatencyPlot plugin: The plugin allows the user to visualize
+     the latency between two events under the condition that the
+     values of given data fields in the two events are identical
+     (for example having the same PID). The plugin also registers
+     its own dialog, that allows the user to select the events
+     (and the matching field) to be visualized.
 
-  This changes the ABI exposed by the probe providers, so bump the probe
-  provider major version, and make newer LTTng-UST reject old incompatibl=
-e
-  major.
-
-  Probe providers built against LTTng-UST 2.13-rc1 must be rebuilt agains=
-t
-  LTTng-UST 2.13-rc2 to be traced.
-
-- Add probe descriptor field to enumeration and event class
-
-  Also breaks the ABI exposed by probe providers (provider major version =
-already
-  bumped for rc2). This enables additional validation of probe provider
-  compatibility when using event class and enumerations across providers.
-
-- Validate provider version for event class.
-
-- Validate provider version for event enumeration field types.
-
-- Introduce api0 and api1 compilation tests. This tests whether the API 0
-  compatibility API works. See ust-api-compat.h for details.
-
-- Fix Java (JUL and log4j) application context segmentation fault and lea=
-ks.
-
-- liblttng-ust-ctl: implement SIGBUS handling:
-
-  This fixes a long-standing DoS where an unprivileged application could =
-cause
-  a SIGBUS in the consumer daemon by truncating the shared memory files i=
-t
-  receives from the session daemon. This requires that LTTng-tools be upg=
-raded
-  to 2.13-rc2 in locked-step with LTTng-UST 2.13-rc2.
-
-- Restore communication protocol backward compatibility with LTTng-UST 2.=
-12
-
-  - liblttng-ust-ctl: keep using lttng-ust-sock-8 and lttng-ust-wait-8 fi=
-lename
-
-    LTTng-UST 2.13-rc1 erroneously changed the file names of those socket=
- and
-    pipe files from [...]-8 to [...]-9, even though we intended to keep p=
-rotocol
-    compatibility between LTTng-UST 2.12 and LTTng-tools/ust 2.13. This c=
-hanges
-    reverts back to the prior filenames to make sure LTTng-UST 2.12 appli=
-cations
-    can be traced by a 2.13 LTTng-tools using 2.13 LTTng-UST.
-
-  - Fix: add missing fields in struct lttng_ust_abi_channel_config
-
-    Three fields were removed by mistake from this structure which is ABI
-    between the consumer daemon and applications traced with LTTng-UST. A=
-dd them
-    back to allow tracing 2.12 LTTng-UST applications with a 2.13 LTTng-t=
-ools
-    using 2.13 LTTng-UST.
-
-- Fix LTTng-UST communication protocol variable-length data handling
-
-  When mixing older (e.g. 2.12) and newer versions of LTTng-UST talking t=
-o each
-  other between application and LTTng-tools, situations where commands ar=
-e
-  unknown lead to out-of-sync communication protocol.
-
-  Change the protocol for commands new to LTTng-UST 2.13 so they acknowle=
-dge the
-  fixed-size commands before the variable-sized data is sent, so the
-  communication protocol is kept in sync even when unknown command error
-  happens. This also happens for more ancient commands released in prior
-  versions for which we cannot change the protocol. Shutdown the socket f=
-rom the
-  session daemon side when we detect such errors, because there is no poi=
-nt in
-  trying to communicate further on an out-of-sync socket.
-
-- Detect mixed liblttng-ust and liblttng-ust-tracepoint .so.0 and .so.1 l=
-ibraries
-
-  Detect and report with a new "critical" logging message whether .so.0 a=
-nd
-  .so.1 tracer libraries are loaded within a single process, which is an
-  unsupported use-case. Note that the LTTNG_UST_DEBUG environment variabl=
-e must
-  be set to allow users to observe those critical messages.
-
-  We also introduce a new LTTNG_UST_ABORT_ON_CRITICAL environment variabl=
-e to
-  allow the tracer to abort() the process whenever a critical logging sta=
-tement
-  is encountered. This is meant to facilitate discovering problematic
-  deployments where an application indirectly loads different soname majo=
-r
-  numbers of LTTng-UST through its instrumented shared libraries.
-
-See the ChangeLog for the full list of changes:
-https://github.com/lttng/lttng-ust/blob/13861e2d/ChangeLog
+   - EventFieldPlot plugin: The plugin allows the user to visualize
+     the recorded value of a given data field from a given trace
+     event. The user can select the event and field to be visualized.
 
 
-What's new in LTTng-modules (Linux kernel tracer) 2.13.0-rc2?
----
-
-- There are refactoring commits that were introduced after 2.13-rc1 to al=
-ign the
-  code of LTTng-modules with the refactoring that was done in LTTng-UST p=
-rior to
-  2.13-rc1. Given that LTTng-modules does not expose its kernel APIs to e=
-xternal
-  users, it was possible to do this refactoring even after rc1.
-
-- Compiling the system call tracing code has typically been a resource-he=
-avy
-  endeavour both in terms of memory usage (~1G memory required) and CPU t=
-ime. It
-  has been split into smaller compile units to allow parallel compilation=
- and
-  lessen the memory requirements on the compiler.
-
-- Bitwise enumerations are now disabled by default. Only compiled in with=
- make
-  CONFIG_LTTNG_EXPERIMENTAL_BITWISE_ENUM=3Dy.
-
-- Fix: increment buffer offset when failing to copy from user-space.
-
-- Implement ring buffer Pascal string copy: allows taking C-strings as in=
-puts
-  and record them to ctf_array_text and ctf_sequence_text fields (which a=
-re
-  Pascal strings) without causing out-of-bound reads of the C-strings of =
-those
-  are smaller than the size reserved for the pascal strings. This mirrors=
- the
-  behaviour introduced in LTTng-UST 2.13-rc1.
-
-- Support for 5.12 Linux kernels,
-
-- Support recent stable kernel branches 4.14, 4.19, 5.4,
-
-- Support for newer Ubuntu 4.15, 5.4, and RHEL 8.2/8.3 kernels,
-
-See the ChangeLog for the full list of changes:
-https://github.com/lttng/lttng-modules/blob/f982b51a/ChangeLog
-
-
-What's new in LTTng-tools 2.13.0-rc2?
----
-
-- The new features introduced in the 2.13 release are now fully documente=
-d as
-  part of the installed man pages. A number of improvements were also mad=
-e to
-  the existing documentation such as adding examples for the lttng-add-co=
-ntext
-  command.
-
-- lttng client messages referring to "event rule hit" conditions have bee=
-n
-  changed to use the correct "event-rule matches" condition name.
-
-- An example was added under doc/examples/trigger-condition-event-matches=
-. It
-  contains an application instrumented with LTTng-UST, a script that adds
-  triggers to notify external clients whenever the application's events o=
-ccur,
-  and a notification client which consumes the resulting notification alo=
-ng with
-  any captured payload.
-
-  See https://github.com/lttng/lttng-tools/tree/c3195dc0/doc/examples/tri=
-gger-condition-event-matches#readme
-
-- A bug resulting in the production of erroneous path hierarchies when a
-  snapshot is streamed to a relay daemon was fixed. This bug resulted in
-  duplicated domain names being present in the final path of a snapshot
-  ("ust/ust" or "kernel/kernel") which could cause some automation script=
-s to
-  fail.
-
-- A bug that caused some trace data to be invisible to live viewers has b=
-een
-  fixed.
-
-  See https://lists.lttng.org/pipermail/lttng-dev/2021-May/029953.html
-
-- A number of bugs that could result, under rare circumstances, in a hang=
- when
-  using the lttng-clear command against a session that contains kernel ch=
-annels
-  was fixed.
-
-- Miscellaneous stability improvements.
-
-See the ChangeLog for the full list of changes:
-https://github.com/lttng/lttng-tools/blob/4be5babe/ChangeLog
-
-
-Links
----
-
-Project website:
-https://lttng.org
-
-Download links:
-https://lttng.org/files/lttng-tools/lttng-tools-2.13.0-rc2.tar.bz2
-https://lttng.org/files/lttng-ust/lttng-ust-2.13.0-rc2.tar.bz2
-https://lttng.org/files/lttng-modules/lttng-modules-2.13.0-rc2.tar.bz2
-
-GPG signatures:
-https://lttng.org/files/lttng-tools/lttng-tools-2.13.0-rc2.tar.bz2.asc
-https://lttng.org/files/lttng-ust/lttng-ust-2.13.0-rc2.tar.bz2.asc
-https://lttng.org/files/lttng-modules/lttng-modules-2.13.0-rc2.tar.bz2.as=
-c
+Yordan
