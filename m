@@ -2,61 +2,33 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 962F1C47094
-	for <linux-trace-users@archiver.kernel.org>; Thu, 10 Jun 2021 06:07:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 648FFC47094
+	for <linux-trace-users@archiver.kernel.org>; Thu, 10 Jun 2021 14:39:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 80583613C1
-	for <linux-trace-users@archiver.kernel.org>; Thu, 10 Jun 2021 06:07:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 44068613FE
+	for <linux-trace-users@archiver.kernel.org>; Thu, 10 Jun 2021 14:39:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbhFJGJn (ORCPT
+        id S231325AbhFJOl0 (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Thu, 10 Jun 2021 02:09:43 -0400
-Received: from mail-qk1-f201.google.com ([209.85.222.201]:35330 "EHLO
-        mail-qk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbhFJGJn (ORCPT
+        Thu, 10 Jun 2021 10:41:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57872 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231213AbhFJOl0 (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Thu, 10 Jun 2021 02:09:43 -0400
-Received: by mail-qk1-f201.google.com with SMTP id y5-20020a37af050000b02903a9c3f8b89fso18488033qke.2
-        for <linux-trace-users@vger.kernel.org>; Wed, 09 Jun 2021 23:07:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Lg7NuraxXh2lGd7qtwMfaQYNPCgBXTD5T5nmYD665wQ=;
-        b=XQDwLZHgrwTj2N7cSculUYKf7ggeGIYs7rmgGFNgCu63nPGWMljiUz7paT3UduyVph
-         X9JtaGiZtU3nhFNvY1GVXyin2R/z4CefzNxlhW4K+Q+jWv62xcHPnMh2dbjqejXR9url
-         mcz4H36GEvfkpCQbPk+hxJUS6ubSwmmrW6eAgCct0BFnBqkEBf2LCrJbnEh420GnmYno
-         4lfomSXGx1EouNHpYce2HRHonMh8WbiOClMcXqW7dpiXoU6L/X6oQ8OQ8DrrH5Xibf5x
-         U+9IfykvcPwpaKU0AfYBqpanzhoMdYc7dOLOdd2XejjXk/c5M76ZleDcxDWfxJqTG+1O
-         +QFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Lg7NuraxXh2lGd7qtwMfaQYNPCgBXTD5T5nmYD665wQ=;
-        b=dZ5vPW3a5l5hzHPYjBKyKPyJhz/vZlIp9hGGOEMegltrM+L9JxPjYr2S2xex+2nLHD
-         S2hccVOA+RdbHPkN4keyt3+Q+A30jgONratjME2ByzdErPHQJGYeprjx4/KFZC7cxnn+
-         yISVe7ZAp/wlU3yJjzhakxDc/rZxb3ygLEZemfcT+wG64PQwGRBptLKd2JwvoPRvCIRy
-         LuQ3XPif8uOgeJmkIX8GkDnNVJzPyvqur2HGYwplVhzSNW4kpaXBREsPfXVIxB8hNfxY
-         a5AptXiWbN2ffCxjCtDe6iep1Wga3uFUIuHqt7ZjKIvTisJ1dbpkBRdv6CjTYop5dSzz
-         MCXg==
-X-Gm-Message-State: AOAM532XC5d5aHsPoq4QNp0kuUnpm+hKaNVqxIKIx67TKL+4lriQ0nze
-        cM4s4lDAFbVEoV+hV69MKwV03QrGTO/h
-X-Google-Smtp-Source: ABdhPJzG/2358ozZYs12Ycqlx4w1jnfiR285NrgYiNH84RWzpWIUrE5BLAl8Upw+zzR7i5/BgZvTg7zCLSeq
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:7996:689a:4aa:98a7])
- (user=irogers job=sendgmr) by 2002:a0c:fe45:: with SMTP id
- u5mr3629854qvs.53.1623305207282; Wed, 09 Jun 2021 23:06:47 -0700 (PDT)
-Date:   Wed,  9 Jun 2021 23:06:43 -0700
-Message-Id: <20210610060643.595673-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.32.0.272.g935e593368-goog
-Subject: [RFC PATCH] libtraceevent: Increase libtraceevent logging when verbose
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
+        Thu, 10 Jun 2021 10:41:26 -0400
+Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2B510613E3;
+        Thu, 10 Jun 2021 14:39:29 +0000 (UTC)
+Date:   Thu, 10 Jun 2021 10:39:27 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -65,55 +37,49 @@ To:     Peter Zijlstra <peterz@infradead.org>,
         Namhyung Kim <namhyung@kernel.org>,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-trace-users@vger.kernel.org,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     eranian@google.com, Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>, eranian@google.com
+Subject: Re: [RFC PATCH] libtraceevent: Increase libtraceevent logging when
+ verbose
+Message-ID: <20210610103927.44462e35@oasis.local.home>
+In-Reply-To: <20210610060643.595673-1-irogers@google.com>
+References: <20210610060643.595673-1-irogers@google.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-libtraceevent has added more levels of debug printout and with changes
-like:
-https://lore.kernel.org/linux-trace-devel/20210507095022.1079364-3-tz.stoyanov@gmail.com
-previously generated output like "registering plugin" is no longer
-displayed. This change makes it so that if perf's verbose debug output
-is enabled then the debug and info libtraceevent messages can be
-displayed.
-As this API isn't present in the deprecated tools version of
-libtracevent I'm uploading this as an RFC.
+On Wed,  9 Jun 2021 23:06:43 -0700
+Ian Rogers <irogers@google.com> wrote:
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/debug.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+> libtraceevent has added more levels of debug printout and with changes
+> like:
+> https://lore.kernel.org/linux-trace-devel/20210507095022.1079364-3-tz.stoyanov@gmail.com
+> previously generated output like "registering plugin" is no longer
+> displayed. This change makes it so that if perf's verbose debug output
+> is enabled then the debug and info libtraceevent messages can be
+> displayed.
+> As this API isn't present in the deprecated tools version of
+> libtracevent I'm uploading this as an RFC.
 
-diff --git a/tools/perf/util/debug.c b/tools/perf/util/debug.c
-index 2c06abf6dcd2..700828e92fe1 100644
---- a/tools/perf/util/debug.c
-+++ b/tools/perf/util/debug.c
-@@ -24,6 +24,7 @@
- #include "util/parse-sublevel-options.h"
- 
- #include <linux/ctype.h>
-+#include <traceevent/event-parse.h>
- 
- int verbose;
- int debug_peo_args;
-@@ -228,6 +229,13 @@ int perf_debug_option(const char *str)
- 	/* Allow only verbose value in range (0, 10), otherwise set 0. */
- 	verbose = (verbose < 0) || (verbose > 10) ? 0 : verbose;
- 
-+	if (verbose == 1)
-+		tep_set_loglevel(TEP_LOG_INFO);
-+	else if (verbose == 2)
-+		tep_set_loglevel(TEP_LOG_DEBUG);
-+	else if (verbose >= 3)
-+		tep_set_loglevel(TEP_LOG_ALL);
-+
- 	return 0;
- }
- 
--- 
-2.32.0.272.g935e593368-goog
+Thanks Ian,
 
+We need to start porting perf to using the upstream libtraceevent
+library. I think the best way to do that is what we did with trace-cmd.
+That is to have the make files check if the minimum version of
+libtraceevent is installed, and if so, use that instead of the local
+version. If it is not installed, produce a message encouraging the
+developer to install the upstream libtraceevent and warn that it will
+be using a deprecated older versino, then build the deprecated local
+version. After some time, we could simply remove it and make it a
+dependency, but I want to do that when all the main distros being used
+have it.
+
+Currently its in the latest Debian, Ubuntu, and Fedora. I also believe
+its in SUSE but have not checked. It's in Fedora 34, but it doesn't
+appear to be in Fedora 33. As that's not too old, I don't think we
+should make it a dependency as of yet.
+
+-- Steve
