@@ -2,107 +2,164 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0D00C48BD1
-	for <linux-trace-users@archiver.kernel.org>; Thu, 10 Jun 2021 20:47:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00B05C2B9F4
+	for <linux-trace-users@archiver.kernel.org>; Tue, 22 Jun 2021 04:38:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 90B0761374
-	for <linux-trace-users@archiver.kernel.org>; Thu, 10 Jun 2021 20:47:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D4B5261153
+	for <linux-trace-users@archiver.kernel.org>; Tue, 22 Jun 2021 04:38:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbhFJUtv (ORCPT
+        id S229752AbhFVEkk (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Thu, 10 Jun 2021 16:49:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28648 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229961AbhFJUtu (ORCPT
+        Tue, 22 Jun 2021 00:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51614 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229574AbhFVEkj (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Thu, 10 Jun 2021 16:49:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623358074;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sm+EodhIsFN4o5SQoatoiFjJ9gwBumKEi+RXKBSe9pk=;
-        b=Ss8EEBvueoRAIvwUxUrwyVRosz9A1Md/vweYzG6fN1/TwIUxw33lO8e5woG+GQkwnJzci8
-        ovBhdprgxJtCAR0XwgCRxrc6DVAbuo7QQsXgNiF1NZyyYVlB2oepeJ4XNLrFr9JJRMR5Ih
-        Mk1V5zsS3zoNWPFcX7wb3GIfNzLD5r8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-498-MiyXG1o_NDOV8iQ_ILlPXA-1; Thu, 10 Jun 2021 16:47:50 -0400
-X-MC-Unique: MiyXG1o_NDOV8iQ_ILlPXA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ED2511084F44;
-        Thu, 10 Jun 2021 20:47:48 +0000 (UTC)
-Received: from krava (unknown [10.40.195.165])
-        by smtp.corp.redhat.com (Postfix) with SMTP id B05B95D9C6;
-        Thu, 10 Jun 2021 20:47:42 +0000 (UTC)
-Date:   Thu, 10 Jun 2021 22:47:41 +0200
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+        Tue, 22 Jun 2021 00:40:39 -0400
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B870FC06175F
+        for <linux-trace-users@vger.kernel.org>; Mon, 21 Jun 2021 21:38:24 -0700 (PDT)
+Received: by mail-qt1-x849.google.com with SMTP id d12-20020ac8668c0000b0290246e35b30f8so14990871qtp.21
+        for <linux-trace-users@vger.kernel.org>; Mon, 21 Jun 2021 21:38:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=xjwwJU2DWInl98UuzSucz8mPGJZAy/tZZF05M3ACx4g=;
+        b=SxBmB9zwpriFS+ea7DTHPna7ObAx1Cbp+mOw1qXB+g4ea7l5TOmE7zYhrd7srwZDoB
+         maJ1PbCbyKa/mt2QsXSGsAHPRGej7A5HBveqrdnmn9gjth4JtCNBZghET/YSwF6gTOGK
+         R6Ms7Q+LNea+msHOO5SUpbmZmCBYBa46v83hcIxioi2cfRL2mDJaiplJAOiIpilKD0qx
+         s1PMWgszH2bH3ZqrAfiSKYeFZ7u5tsRbx66eFSo/4Sat9aQkR2DlDvJIB76wuh0Zbe7d
+         aMkT3wuMBYNeB2j/KtBYf9+AL/Lev5K/N55O4BnWG4n4ZnPg2Ks6xYY35ljMHHwmXNyB
+         9HvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=xjwwJU2DWInl98UuzSucz8mPGJZAy/tZZF05M3ACx4g=;
+        b=fJmTXz+RoaOkLiOUkDtVjJ2L09l/iiEa56DP/ee+KMR1wEvqlURT7CvhWoyA2odVjC
+         z2KMIGibazz7HTrI/LIrCVQwfsCILLmPrwbYIsyi3JykOJbw/0OXWpReTSHNcdm7wFBp
+         0Zmjc9uv7wGmCVLqM5+XZJq+q95Ogqe/FGqrbgAPe5DwtQGn8KhtgvD6fWEiWngUXBvC
+         zcob++Q5je4i/K3OmHYEgY0LRqa/xJAyrDUc2oPneD8OT/SOYWRzUJa/uctwUSE4jpl2
+         io0ar6DAaFJbdik6iW2x+GjKPLbXNceKszdewphezJCpGIS93BEAaJNnvZulfDl2lkyG
+         k6DQ==
+X-Gm-Message-State: AOAM532SgeSHnAvfWgB+IU4DnBnDaHj+S3tcwC9fV2lGgDVKTePKzyXJ
+        fJeGqkFSaFpxW4K0y023+symGPt+3v+W
+X-Google-Smtp-Source: ABdhPJw4zp2WT6JLXLxngSGapcryB06Lr0NnqU3In77xsNtieZm2+cdkweostg0xo1GRduLuGfoAhdbmMAwd
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:ffd6:b7f5:87ee:7be2])
+ (user=irogers job=sendgmr) by 2002:a25:b70c:: with SMTP id
+ t12mr2273490ybj.90.1624336703769; Mon, 21 Jun 2021 21:38:23 -0700 (PDT)
+Date:   Mon, 21 Jun 2021 21:38:08 -0700
+Message-Id: <20210622043811.3108564-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.32.0.288.g62a8d224e6-goog
+Subject: [PATCH 1/4] perf: Enable libtracefs dynamic linking
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-trace-users@vger.kernel.org,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>, eranian@google.com,
-        Michael Petlan <mpetlan@redhat.com>
-Subject: Re: [RFC PATCH] libtraceevent: Increase libtraceevent logging when
- verbose
-Message-ID: <YMJ6bUQ8yXT+uMAF@krava>
-References: <20210610060643.595673-1-irogers@google.com>
- <20210610103927.44462e35@oasis.local.home>
- <YMJjMPDKo2IdCC6G@krava>
- <20210610155915.20a252d3@oasis.local.home>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210610155915.20a252d3@oasis.local.home>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Claire Jensen <cjense@google.com>
+Cc:     eranian@google.com, Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-On Thu, Jun 10, 2021 at 03:59:15PM -0400, Steven Rostedt wrote:
-> On Thu, 10 Jun 2021 21:08:32 +0200
-> Jiri Olsa <jolsa@redhat.com> wrote:
-> 
-> > Michael did the libtraceevent detection and dynamic linking support:
-> >   https://lore.kernel.org/linux-perf-users/20210428092023.4009-1-mpetlan@redhat.com/
-> > 
-> > I think we should have that in Fedora/RHEL rpms already, or it's on the way.
-> > 
-> > The detection code could be change to contain things we need.
-> 
-> Or it can also be changed to export the version too?
-> 
-> LIBTRACEEVENT_VERSION = $(shell pkg-config --modversion libtraceevent | perl -e '$ver=<>; @v=split /,/,$ver; printf "%d\n", $v[0] * 255 * 255 | $v[1] * 255 | $v[2];')
-> 
-> -DLIBTRACEFS_VERSION=$(LIBTRACEEVENT_VERSION)
+Currently libtracefs isn't used by perf, but there are potential
+improvements by using it as identified Steven Rostedt's e-mail:
+https://lore.kernel.org/lkml/20210610154759.1ef958f0@oasis.local.home/
 
-so the feature detection just gives out on/off answers,
-but we can easily put above to perf's makefile
+This change is modelled on the dynamic libtraceevent patch by Michael
+Petlan:
+https://lore.kernel.org/linux-perf-users/20210428092023.4009-1-mpetlan@redhat.com/
 
-jirka
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/build/Makefile.feature | 1 +
+ tools/build/feature/Makefile | 4 ++++
+ tools/perf/Makefile.config   | 9 +++++++++
+ tools/perf/Makefile.perf     | 2 ++
+ 4 files changed, 16 insertions(+)
 
-> 
-> Then in C have:
-> 
-> #define VERSION(a,b,c) ((a)*255*255|(b)*255|(c))
-> 
-> #if LIBTRACEEVENT_VERSION >= VERSION(1,2,3)
-> 
-> To test if the libtraceevent feature is available?
-> 
-> -- Steve
-> 
+diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
+index 04a8e3db8a54..c87e876b6dd7 100644
+--- a/tools/build/Makefile.feature
++++ b/tools/build/Makefile.feature
+@@ -53,6 +53,7 @@ FEATURE_TESTS_BASIC :=                  \
+         libslang                        \
+         libslang-include-subdir         \
+         libtraceevent                   \
++        libtracefs                      \
+         libcrypto                       \
+         libunwind                       \
+         pthread-attr-setaffinity-np     \
+diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+index ec203e28407f..9488c4b4026e 100644
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -37,6 +37,7 @@ FILES=                                          \
+          test-libslang.bin                      \
+          test-libslang-include-subdir.bin       \
+          test-libtraceevent.bin                 \
++         test-libtracefs.bin                    \
+          test-libcrypto.bin                     \
+          test-libunwind.bin                     \
+          test-libunwind-debug-frame.bin         \
+@@ -200,6 +201,9 @@ $(OUTPUT)test-libslang-include-subdir.bin:
+ $(OUTPUT)test-libtraceevent.bin:
+ 	$(BUILD) -ltraceevent
+ 
++$(OUTPUT)test-libtracefs.bin:
++	$(BUILD) -ltracefs
++
+ $(OUTPUT)test-libcrypto.bin:
+ 	$(BUILD) -lcrypto
+ 
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index a62d09808fef..3a8a54b71654 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -1098,6 +1098,15 @@ ifdef LIBTRACEEVENT_DYNAMIC
+   endif
+ endif
+ 
++ifdef LIBTRACEFS_DYNAMIC
++  $(call feature_check,libtracefs)
++  ifeq ($(feature-libtracefs), 1)
++    EXTLIBS += -ltracefs
++  else
++    dummy := $(error Error: No libtracefs devel library found, please install libtracefs-dev);
++  endif
++endif
++
+ # Among the variables below, these:
+ #   perfexecdir
+ #   perf_include_dir
+diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+index e47f04e5b51e..b56e26b703ff 100644
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -130,6 +130,8 @@ include ../scripts/utilities.mak
+ #
+ # Define LIBTRACEEVENT_DYNAMIC to enable libtraceevent dynamic linking
+ #
++# Define LIBTRACEFS_DYNAMIC to enable libtracefs dynamic linking
++#
+ 
+ # As per kernel Makefile, avoid funny character set dependencies
+ unexport LC_ALL
+-- 
+2.32.0.288.g62a8d224e6-goog
 
