@@ -2,109 +2,139 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05211C49EA2
-	for <linux-trace-users@archiver.kernel.org>; Tue, 22 Jun 2021 04:38:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B58AC12002
+	for <linux-trace-users@archiver.kernel.org>; Fri, 16 Jul 2021 21:56:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DD6AD61153
-	for <linux-trace-users@archiver.kernel.org>; Tue, 22 Jun 2021 04:38:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E6E7B613F3
+	for <linux-trace-users@archiver.kernel.org>; Fri, 16 Jul 2021 21:55:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbhFVEks (ORCPT
+        id S230490AbhGPV6w (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Tue, 22 Jun 2021 00:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbhFVEkp (ORCPT
+        Fri, 16 Jul 2021 17:58:52 -0400
+Received: from mail.efficios.com ([167.114.26.124]:46994 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229951AbhGPV6w (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Tue, 22 Jun 2021 00:40:45 -0400
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A248C061767
-        for <linux-trace-users@vger.kernel.org>; Mon, 21 Jun 2021 21:38:29 -0700 (PDT)
-Received: by mail-qv1-xf49.google.com with SMTP id 12-20020a05621420ecb02902766cc25115so3085770qvk.1
-        for <linux-trace-users@vger.kernel.org>; Mon, 21 Jun 2021 21:38:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=f6S0WBq/K51AHVi882cH7yHUVw3RgS/c1EddbRfRkGY=;
-        b=XJjB3vfBTB14D/uOjWqlVbSdqEOMEKvPIBDNxqz245aG6s4iP3Wt97k13nN3heVdJ6
-         yXw2rg1ihfW005qDP9buBaE/4XCpAr6GhYC5TM1rGAWqXqEnGIbUT9NzTC2IO3wV0X6y
-         l2cdyBKSDaIn1cK13477PFiSXrMIx2fHhT7jw6dtr8TV2eURw2ahAjI9WxgX/tdOP7pe
-         dWwJnArXjAmVRrsmOrux8UnQ9D0HS34lORpdLT37kpx9c4dUxm8lIR39IT0+FJNiEVOn
-         h80EAvdKxtL+saT21doNHKY4cidpkUkGP+WtTrFAa+Bg1/wTXKkJ6H03TaTjMZs7gaCG
-         3f6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=f6S0WBq/K51AHVi882cH7yHUVw3RgS/c1EddbRfRkGY=;
-        b=mKw7AFoOe96XejGnrWww2sDVeD52FwEHzh2ql8rchhLSobVbL+gLXxMxtVgyVSJZoW
-         vdNTsDzdRPC1Js0JDz4Mm/BfDISVSBTLkOh4qRGbbXm1FgeiYYugdfSsM3xn9F4ZyOST
-         cVGNPc7nPAXB0q0Z3pAyR8PcBFW+hd3IumVUnjyoXTZfC50FhLKAKNoAkArrTFSofQhf
-         w0mV3Va2RpzHdqCLI1uu2Nkuo1MNbQ1mjUf/7fdoaM11xOVXLtZdd+5B+nKlleV+oqTC
-         c0sfiPjcOuLKLqQ3jMUBpR4bOiPn0J0rIb3nrBVnyXQmtHb5fapX0sM/3E++GrqeuA8o
-         sb1g==
-X-Gm-Message-State: AOAM531diB49JpWfs/OZ8/7U4T03izu4VbaChAp06HlUZPZBWCQ0aXLu
-        QISnVJjgsGSHLHKvGfKAV11Zn+mwoPJe
-X-Google-Smtp-Source: ABdhPJxEEY/xt/NvaDOiUGhk4FeaGmtuHEugG55zaUrYTpgmZHnDr8YgjhvtfkrruUch1MG0uXP4KH/hY/1A
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:ffd6:b7f5:87ee:7be2])
- (user=irogers job=sendgmr) by 2002:ad4:4e13:: with SMTP id
- dl19mr23694833qvb.9.1624336708448; Mon, 21 Jun 2021 21:38:28 -0700 (PDT)
-Date:   Mon, 21 Jun 2021 21:38:10 -0700
-In-Reply-To: <20210622043811.3108564-1-irogers@google.com>
-Message-Id: <20210622043811.3108564-3-irogers@google.com>
-Mime-Version: 1.0
-References: <20210622043811.3108564-1-irogers@google.com>
-X-Mailer: git-send-email 2.32.0.288.g62a8d224e6-goog
-Subject: [PATCH 3/4] perf: Add define for libtracefs version
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-users@vger.kernel.org,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Claire Jensen <cjense@google.com>
-Cc:     eranian@google.com, Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 16 Jul 2021 17:58:52 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 96F223341F6;
+        Fri, 16 Jul 2021 17:55:56 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id DMGVAkOpagin; Fri, 16 Jul 2021 17:55:55 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 9C7DD334631;
+        Fri, 16 Jul 2021 17:55:55 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 9C7DD334631
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1626472555;
+        bh=/dyYYcX7CfiYNOwTGyCHlNlo2wyMDx0Ah4mjvvTMp9M=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=cYlpZrfgG7aAGQDxJEQr8G+PQN5W6tWGIq/4pUPDePj43qRTpZey/DI1UuBsHD+QC
+         VsC6qbWAhrUe8v2MNqmrGRP1WgBaZcjTCR5EvkfpicR/6KgZFoVe11P65gSY3MuQn/
+         zv6M7I0jCMJOxYbD7CHbcUPQ+79d2eUnA79oYHIHN7OCUXO3mPrpmdelYnQFDSeuD+
+         mmNm5akUW7j8HlRNoPO8VY5Uw3ixqr66PksEp4rVmoCxagxOhdhVA8eQFMmD45mJkv
+         lTmYF+T4WG5FC79g00v6ROiMHx/cDBLAg+SS2ixvNhNR2ONUCKwzjN1j6SzeAiruE9
+         PZGK+8oyxnRRA==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id irWXbAxvOj5G; Fri, 16 Jul 2021 17:55:55 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 91CFB33462E;
+        Fri, 16 Jul 2021 17:55:55 -0400 (EDT)
+Date:   Fri, 16 Jul 2021 17:55:55 -0400 (EDT)
+From:   =?utf-8?B?SsOpcsOpbWll?= Galarneau 
+        <jeremie.galarneau@efficios.com>
+To:     lttng-dev <lttng-dev@lists.lttng.org>
+Cc:     diamon-discuss@lists.linuxfoundation.org,
+        linux-trace-users@vger.kernel.org
+Message-ID: <352801862.23977.1626472555562.JavaMail.zimbra@efficios.com>
+Subject: =?utf-8?Q?[lttng-dev]_[RELEASE]_LTTng_2.13.0-rc3_-_No?=
+ =?utf-8?Q?rdicit=C3=A9_-_Linux_kernel_and_user-space_tracer?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4059 (ZimbraWebClient - FF89 (Linux)/8.8.15_GA_4059)
+Thread-Index: teRjBQLEZeB3Rw0IuqaQtG8G6/JBBQ==
+Thread-Topic: LTTng 2.13.0-rc3 - =?utf-8?Q?Nordicit=C3=A9?= - Linux kernel and user-space tracer
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-This will allow version specific support of libtracefs.
+Hi everyone,
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+Today marks the release of the third LTTng 2.13 - Nordicit=C3=A9 release ca=
+ndidate.
+
+A prettified version of this announcement is available here:
+https://github.com/lttng/lttng-tools/releases/tag/v2.13.0-rc3
+
+Have a look at the first release candidate's release notes for an
+overview of the features introduced in LTTng 2.13.
+
+https://github.com/lttng/lttng-tools/releases/tag/v2.13.0-rc1
+
+
+What's new in LTTng-UST (Linux application tracer) 2.13.0-rc3?
 ---
- tools/perf/Makefile.config | 6 ++++++
- 1 file changed, 6 insertions(+)
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 6f318c16e8f1..9389ef68e2fb 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -1108,6 +1108,12 @@ ifdef LIBTRACEFS_DYNAMIC
-   $(call feature_check,libtracefs)
-   ifeq ($(feature-libtracefs), 1)
-     EXTLIBS += -ltracefs
-+    LIBTRACEFS_VERSION := $(shell $(PKG_CONFIG) --modversion libtracefs)
-+    LIBTRACEFS_VERSION_1 := $(word 1, $(subst ., ,$(LIBTRACEFS_VERSION)))
-+    LIBTRACEFS_VERSION_2 := $(word 2, $(subst ., ,$(LIBTRACEFS_VERSION)))
-+    LIBTRACEFS_VERSION_3 := $(word 3, $(subst ., ,$(LIBTRACEFS_VERSION)))
-+    LIBTRACEFS_VERSION_CPP := $(shell expr $(LIBTRACEFS_VERSION_1) \* 255 \* 255 + $(LIBTRACEFS_VERSION_2) \* 255 + $(LIBTRACEFS_VERSION_3))
-+    CFLAGS += -DLIBTRACEFS_VERSION=$(LIBTRACEFS_VERSION_CPP)
-   else
-     dummy := $(error Error: No libtracefs devel library found, please install libtracefs-dev);
-   endif
--- 
-2.32.0.288.g62a8d224e6-goog
+- Removed vtracelog and vtracef from the v0 compatibility API.
 
+- Various documentation updates.
+
+See the ChangeLog for the full list of changes:
+https://github.com/lttng/lttng-ust/blob/v2.13.0-rc3/ChangeLog
+
+
+What's new in LTTng-modules (Linux kernel tracer) 2.13.0-rc3?
+---
+
+- Adapted the instrumentation for 5.14-rc upstream kernels and recent RHEL =
+8.4 kernels.
+
+See the ChangeLog for the full list of changes:
+https://github.com/lttng/lttng-modules/blob/v2.13.0-rc3/ChangeLog
+
+
+What's new in LTTng-tools 2.13.0-rc3?
+---
+
+- Usage examples were added to all lttng command man pages.
+
+- Some symbols introduced in liblttng-ctl as part of the 2.13 release were =
+changed:
+  - Error query actions are now specified using an lttng_action_path,
+  - The event rule API has been namespaced to include the domain name.
+
+- Bumped the minimal Userspace RCU dependency to 0.11.
+
+- Added the Machine Interface (MI) for the CLI's newly introduced trigger c=
+ommands
+  (add-trigger, remove-trigger, list-triggers).
+
+See the ChangeLog for the full list of changes:
+https://github.com/lttng/lttng-tools/blob/v2.13.0-rc3/ChangeLog
+
+
+Links
+---
+
+Project website:
+https://lttng.org
+
+Download links:
+https://lttng.org/files/lttng-tools/lttng-tools-2.13.0-rc3.tar.bz2
+https://lttng.org/files/lttng-ust/lttng-ust-2.13.0-rc3.tar.bz2
+https://lttng.org/files/lttng-modules/lttng-modules-2.13.0-rc3.tar.bz2
+
+GPG signatures:
+https://lttng.org/files/lttng-tools/lttng-tools-2.13.0-rc3.tar.bz2.asc
+https://lttng.org/files/lttng-ust/lttng-ust-2.13.0-rc3.tar.bz2.asc
+https://lttng.org/files/lttng-modules/lttng-modules-2.13.0-rc3.tar.bz2.asc
