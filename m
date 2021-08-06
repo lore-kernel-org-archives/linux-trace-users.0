@@ -2,317 +2,93 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0A1DC4338F
-	for <linux-trace-users@archiver.kernel.org>; Tue,  3 Aug 2021 18:40:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B47DAC4338F
+	for <linux-trace-users@archiver.kernel.org>; Fri,  6 Aug 2021 20:21:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C797261029
-	for <linux-trace-users@archiver.kernel.org>; Tue,  3 Aug 2021 18:40:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8D77261163
+	for <linux-trace-users@archiver.kernel.org>; Fri,  6 Aug 2021 20:21:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237379AbhHCSke (ORCPT
+        id S244902AbhHFUWK (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Tue, 3 Aug 2021 14:40:34 -0400
-Received: from mail.efficios.com ([167.114.26.124]:47552 "EHLO
+        Fri, 6 Aug 2021 16:22:10 -0400
+Received: from mail.efficios.com ([167.114.26.124]:60202 "EHLO
         mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbhHCSke (ORCPT
+        with ESMTP id S231823AbhHFUWJ (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Tue, 3 Aug 2021 14:40:34 -0400
+        Fri, 6 Aug 2021 16:22:09 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 81383358DE3;
-        Tue,  3 Aug 2021 14:40:22 -0400 (EDT)
+        by mail.efficios.com (Postfix) with ESMTP id 568FD37B382;
+        Fri,  6 Aug 2021 16:21:53 -0400 (EDT)
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 5ayqugLDIobw; Tue,  3 Aug 2021 14:40:21 -0400 (EDT)
+        with ESMTP id THoWE6-3X7P9; Fri,  6 Aug 2021 16:21:52 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 5CFA03591A1;
-        Tue,  3 Aug 2021 14:40:21 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 5CFA03591A1
+        by mail.efficios.com (Postfix) with ESMTP id 59AD037B229;
+        Fri,  6 Aug 2021 16:21:52 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 59AD037B229
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1628016021;
-        bh=Y3ue0NmJ08na6hNBEc4TKwfrQxqjle3ndLp91mKjI0g=;
+        s=default; t=1628281312;
+        bh=WtBj8q1avbA8RiLwG6a1s+x3PjArDG7YEA9QU8Tmvgc=;
         h=Date:From:To:Message-ID:MIME-Version;
-        b=N25jlfSLeutcAY8bU79/pHPDSwNOJ7yyIvNxkV25m+ea1HQo/E6q5qnh4CBZ43LRE
-         k7NKZz/xh18delrWCmxgMsvfb1zNZL3gjJg1KKYgYUk+LB43kp5q5r4kH6enylrcBt
-         0y5aoO6VNMUGZrdy+5/YrNAk4FJwx8QA173KOanx0aJdBJa5jFso+pYHgasnjfVoxK
-         LPEjZOEzygic/Fh4Gcl1QQ0nYdPm7YfdfVRxiKlP5qdJ+FIw5OGoIr/bDOuFczHp7v
-         gwNADyFA1JFlEYdJp6MLGOCJdEhyrdNMK7tTLMGwQ7+09m0wK8f5DtHHiJOinOWfI1
-         /yWyALPruDvfQ==
+        b=QzLZxXutcid9S5yyQ9PPFm/xa/9J0/sWhsKEToFBUhOly4BujkRRp51mRDVfWgePg
+         D6La95Nbm1afix1ilMNC1840M6qCbX6PzQiWGDpwBpFem43sFU2AqDFQiRj6AyhGHH
+         jH6wV63g6CrtQahl6mbusFXi5YrrTLtg2HG247wUkOYgDG5Z4u0wfh3bNqV0rV8acV
+         kj4+eKIaKSa+i9wibN2II41ipxQgISH5+Ea954Rd/cwSLA8s7qL4oojSSuhxFMiPpC
+         4MgbdqoihuyQBdIoP2BATINEAQtsxLMCrWgj6ewYa86ByRTfcSfGuNfWa15nmuBbIM
+         8imAW1btOMzJA==
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id HHEFySIPXKEr; Tue,  3 Aug 2021 14:40:21 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 3F584358E52;
-        Tue,  3 Aug 2021 14:40:21 -0400 (EDT)
-Date:   Tue, 3 Aug 2021 14:40:21 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+        with ESMTP id O0P3TFKZkpOK; Fri,  6 Aug 2021 16:21:52 -0400 (EDT)
+Received: from Mercury (unknown [107.159.88.171])
+        by mail.efficios.com (Postfix) with ESMTPSA id 4025237B228;
+        Fri,  6 Aug 2021 16:21:52 -0400 (EDT)
+Date:   Fri, 6 Aug 2021 16:21:51 -0400
+From:   =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau 
+        <jeremie.galarneau@efficios.com>
 To:     lttng-dev <lttng-dev@lists.lttng.org>
-Cc:     Jeremie Galarneau <jgalar@efficios.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
+Cc:     diamon-discuss <diamon-discuss-bounces@lists.linuxfoundation.org>,
         linux-trace-users <linux-trace-users@vger.kernel.org>
-Message-ID: <1790050742.4759.1628016021132.JavaMail.zimbra@efficios.com>
-Subject: =?utf-8?Q?LTTng_2.13.0_-_Nordicit=C3=A9_-_Lin?=
- =?utf-8?Q?ux_kernel_and_user-space_tracer?=
+Subject: [RELEASE] LTTng 2.12.5 - (Ta) Meilleure
+Message-ID: <YQ2Z3yAtG6QxpQ1H@Mercury>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4101 (ZimbraWebClient - FF90 (Linux)/8.8.15_GA_4059)
-Thread-Index: PqQD//LpuyRhy96Y4KDFlRxjvz+ZYg==
-Thread-Topic: LTTng 2.13.0 - =?utf-8?Q?Nordicit=C3=A9?= - Linux kernel and user-space tracer
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi everyone,
- =20
-Today is the official release of LTTng 2.13 - Nordicit=C3=A9! It is the res=
-ult of
-one year of development from most of the EfficiOS team.
+Hi all,
 
-The most notable features of this new release are:
+The fifth bug-fix release of LTTng-tools 2.12 - (Ta) Meilleure has just been
+released. This release addresses a number of issues listed below.
 
-  - Event-rule matches condition triggers and new actions, allowing interna=
-l
-    actions or external monitoring applications to quickly react when kerne=
-l
-    or user-space instrumentation is hit,
-  - Notification payload capture, allowing external monitoring applications
-    to read elements of the instrumentation payload when instrumentation is
-    hit.
-  - Instrumentation API: vtracef and vtracelog (LTTng-UST),
-  - User space time namespace context (LTTng-UST and LTTng-modules).
+2021-08-06 lttng-tools 2.12.5 (International Beer Day)
+	* Fix: runas: less-than-zero comparison of an unsigned value
+	* Fix: runas: supplementary groups are ignored on lttng save
+	* Fix: lttng: free sessions in cmd_destroy
+	* Fix: lttng: free domains and channels in get_session_stats_str
+	* Fix: rotation client example: leak of handle on error
+	* .gitreview: Set default branch to 'stable-2.12'
+	* tests: Move tap-driver.sh out of the autotools aux directory
+	* Fix: use of uninitialised bytes valgrind warning
+	* Fix: bump minimal urcu dependency to 0.11
+	* Fix: consumer: unbalanced RCU read-side lock on error
+	* Fix: tests: missing LOG_DRIVER and LOG_DRIVER_FLAGS
+	* Fix: list_lttng_agent_events: unbalanced RCU read-side lock on error
 
-This release is named after "Nordicit=C3=A9", the product of a collaboratio=
-n between
-Champ Libre and Bor=C3=A9ale. This farmhouse IPA is brewed with Kveik yeast=
- and
-Qu=C3=A9bec-grown barley, oats and juniper branches. The result is a remark=
-able
-fruity hazy golden IPA that offers a balanced touch of resinous and woodsy
-bitterness.
-
-Based on the LTTng project's documented stable releases lifetime, this 2.13
-release coincides with the end-of-life (EOL) of the LTTng 2.11 release seri=
-es.
-
-Read on for a short description of each of the new features and the
-links to this release.
-
-A prettified version of this announcement will be available soon on GitHub:
-https://github.com/lttng/lttng-tools/releases/tag/v2.13.0
-
-
-Note on LTTng-UST backward compatibility
----
-
-- soname major version change
-  This release changes the LTTng-UST soname major from 0 to 1.
-
-  The event notifier (triggers using an event-rule-matches condition)
-  functionality required a significant rework of public data structures whi=
-ch
-  should never have been made public in the first place.
-
-  Bumping the soname major to 1, will require applications and tracepoint
-  providers to be rebuilt against an updated LTTng-UST to use it.
-
-  Old applications and tracepoint providers linked against libraries with
-  major soname 0 should be able to co-exist on the same system.
-
-- Building probe providers using a C++ compiler requires C++11
-
-- API namespaceing
-  The LTTng-UST API is now systematically namespaced under `lttng_ust_*` (e=
-.g
-  `tracepoint()` becomes `lttng_ust_tracepoint()`).
-
-  However, the non-namespaced names are still exposed to maintain API
-  compatibility.
-
-
-Event-rule matches condition and new actions
----
-
-Expanding the trigger infrastructure and making it usable through the `lttn=
-g`
-client was the core focus of this release.
-
-A trigger is an association between a condition and one or more actions. Wh=
-en
-the condition associated to a trigger is met, the actions associated to tha=
-t
-trigger are executed. The tracing does not have to be active for the condit=
-ions
-to be met, and triggers are independent from tracing sessions.
-
-Since their introduction as part of LTTng 2.10, new conditions and actions =
-were
-added to make this little-known mechanism more flexible.
-
-For instance, before this release, triggers supported the following conditi=
-on
-types:
-  - Buffer usage exceeded a given threshold,
-  - Buffer usage went under a configurable threshold,
-  - A session rotation occurred,
-  - A session rotation completed.
-
-A _notify_ action could be used to send a notification to a third party
-applications whenever those conditions were met.
-
-This made it possible, for instance, to disable certain event rules if the
-tracing buffers were almost full. It could also be used to wait for session
-rotations to be completed to start processing the resulting trace chunk
-archives as part of various post-processing trace analyses.
-
-This release introduces a new powerful condition type: event-rule matches.
-
-This type of condition is met when the tracer encounters an event matching =
-the
-given even rule. The arguments describing the event rule are the same as th=
-ose
-describing the event rules of the `enable-event` command.
-
-While this is not intended as a general replacement for the existing
-high-throughput tracing facilities, this makes it possible for an applicati=
-on
-to wait for a very-specific event to occur and take action whenever it occu=
-rs.
-The purpose of event-rule matches triggers is to react quickly to an event
-without the delay introduced by buffering.
-
-For example, the following command will create a trigger that emits a
-notification whenever the 'openat' system call is invoked with the
-'/etc/passwd' filename argument.
-
-$ lttng add-trigger
-    --condition event-rule-matches
-      --type=3Dkernel:syscall
-      --name=3D'openat'
-    --action notify
-
-New actions were also introduced as part of this release:
-  - Start session
-    This action causes the LTTng session daemon to start tracing for the se=
-ssion
-    with the given name. If no session with the given name exist at the tim=
-e the
-    condition is met, nothing is done.
-
-  - Stop session
-    This action causes the LTTng session daemon to stop tracing for the ses=
-sion
-    with the given name. If no session with the given name exist at the tim=
-e the
-    condition is met, nothing is done.
-
-  - Rotate session
-    This action causes the LTTng session daemon to rotate the session with =
-the
-    given name. See lttng-rotate(1) for more information about the session
-    rotation concept. If no session with the given name exist at the time t=
-he
-    condition is met, nothing is done.
-
-  - Snapshot session
-    This action causes the LTTng session daemon to take a snapshot of the
-    session with the given name. See lttng-snapshot(1) for more information
-    about the session snapshot concept. If no session with the given name e=
-xist
-    at the time the condition is met, nothing is done.
-
-These new actions can also be combined together. For instance, the followin=
-g
-trigger will stop `my_session`, record a snapshot of `my_session`, and noti=
-fy
-any listening application when '/etc/passwd' is opened:
-
-$ lttng add-trigger
-    --condition event-rule-matches
-      --type kernel:syscall
-      --name 'openat'
-      --filter 'filename =3D=3D "/etc/passwd"'
-    --action stop-session my_session
-    --action snapshot-session my_session
-    --action notify
-
-For more information, see the following manual pages:
-  - lttng-add-trigger(1),
-  - lttng-remove-trigger(1),
-  - lttng-list-triggers(1).
-
-
-Notification payload capture
----
-
-The new event-rule matches condition type also allows 'captures'.
-This allow event record and context fields to be captured when an event-rul=
-e
-matches condition is satisfied.
-
-The captured field values are made available in the evaluation object of th=
-e
-notifications transmitted to listening applications.
-
-Capture descriptors can be specified using a syntax reminiscent of the one =
-used
-by the filter expressions.
-
-The following example will capture a process's name and the 'filename' argu=
-ment
-of all `openat()` system calls:
-
-$ lttng add-trigger
-    --condition event-rule-matches
-      --type kernel:syscall
-      --name 'openat'
-      --capture 'filename'
-      --capture '$ctx.procname'
-    --action notify
-
-See the lttng-add-trigger(1) manual page for more information.
-
-
-vtracef and vtracelog (LTTng-UST)
----
-
-New versions of the `tracef()` and `tracelog()` tracing helpers accepting
-variable argument lists are introduced as `vtracef()` and `vtracelog()`.
-
-See the tracef(3) and tracelog(3) manual pages for more information.
-
-
-Add time namespace context (LTTng-UST and LTTng-modules)
----
-
-It is now possible to add the time namespace of a process as a context to
-channels (`time_ns`) using the `add-context` command.
-
-See the time_namespaces(7) manual page for more information.
-
-
-Links
----
+As always, please report any issue you may encounter to bugs.lttng.org
+or on this mailing list.
 
 Project website: https://lttng.org
 
-Download links:
-https://lttng.org/files/lttng-tools/lttng-tools-2.13.0.tar.bz2
-https://lttng.org/files/lttng-ust/lttng-ust-2.13.0.tar.bz2
-https://lttng.org/files/lttng-modules/lttng-modules-2.13.0.tar.bz2
+Download link:
+https://lttng.org/files/lttng-tools/lttng-tools-2.12.5.tar.bz2
 
-GPG signatures:
-https://lttng.org/files/lttng-tools/lttng-tools-2.13.0.tar.bz2.asc
-https://lttng.org/files/lttng-ust/lttng-ust-2.13.0.tar.bz2.asc
-https://lttng.org/files/lttng-modules/lttng-modules-2.13.0.tar.bz2.asc
-
---=20
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+GPG signature:
+https://lttng.org/files/lttng-tools/lttng-tools-2.12.5.tar.bz2.asc
