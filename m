@@ -2,95 +2,109 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73184C433EF
-	for <linux-trace-users@archiver.kernel.org>; Fri, 10 Dec 2021 20:45:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65CC9C433F5
+	for <linux-trace-users@archiver.kernel.org>; Fri, 17 Dec 2021 19:01:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232511AbhLJUtQ (ORCPT
+        id S240064AbhLQTBO (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Fri, 10 Dec 2021 15:49:16 -0500
-Received: from mail.efficios.com ([167.114.26.124]:54258 "EHLO
+        Fri, 17 Dec 2021 14:01:14 -0500
+Received: from mail.efficios.com ([167.114.26.124]:53072 "EHLO
         mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbhLJUtP (ORCPT
+        with ESMTP id S236522AbhLQTBN (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Fri, 10 Dec 2021 15:49:15 -0500
+        Fri, 17 Dec 2021 14:01:13 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 19B943927D9;
-        Fri, 10 Dec 2021 15:45:40 -0500 (EST)
+        by mail.efficios.com (Postfix) with ESMTP id F33C13C20F7;
+        Fri, 17 Dec 2021 14:01:12 -0500 (EST)
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id agyuk7p1VXmw; Fri, 10 Dec 2021 15:45:39 -0500 (EST)
+        with ESMTP id 7R8K8EQ8VgxH; Fri, 17 Dec 2021 14:01:11 -0500 (EST)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 2609F3928D0;
-        Fri, 10 Dec 2021 15:45:39 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 2609F3928D0
+        by mail.efficios.com (Postfix) with ESMTP id DBAEC3C2165;
+        Fri, 17 Dec 2021 14:01:11 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com DBAEC3C2165
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1639169139;
-        bh=96PzG0f2K2ZYvQViJnt4qmcH+8jusjsHwKU3YD7QShA=;
+        s=default; t=1639767671;
+        bh=UVMkNS5PgvRvVSQbDCQMDpAqXdy5+C1MPIQuk5ufbBk=;
         h=Date:From:To:Message-ID:MIME-Version;
-        b=FIfDhvNM2QeEJbD58fsAb4jmVwN4rwhLIU+T2+aJs7+97VtcgRkHRFXFRauCvoCKp
-         +W8ufrepgvBY2Yy280hJUMXv18E2318Ku+6BkvofhOtSM8Pkzhm7PSZxHEipdH9qa0
-         qbhbHPrZanv+hx3Sld56E41YSvEms4nFQ3i2gKpsVM3f/BY3C7II6cQfx8QPO629G6
-         bkRPxlLladoozu42EQvmMDrBZAhk2ZbKZ8fbVnj2CQDIaHW2EXlynY60yDdadmtRc2
-         wSvQWfH4PgJJc2RCxnDu2YaIIsShrUuHjQRyROvitO7w+H9r3koFYmjbxXW1nq//FB
-         4NBJ83PdGZTiQ==
+        b=l5U0jRrKnLjATPsmPWZhh4GsWY6hjEESjPsFwst+WZwFnbavmldUyJq5PDuxfU/8v
+         oTtmoZd1ktS8Jnr/VR3jHTsPqvMjEgN1iFMLlQsI7UYFHBc6S4yPb5YxlSUakxs0g8
+         VRwm1RxaKF4Nn8S5ebtKDsYG0FoVkcnrb1MA4IxR4kgEfqhasUhqwEL3NTYJuBW+3t
+         gwDIqz2NtyciXFYCYMXAwxg9D8lubQjtxVWx80vJrY4T175KrUx9yYh98tvQ122tCO
+         KEHMS/gx0s1Tn5DUDKZqV6FRUr/xWz81ixmDy1oCcsg0K8MlYJ1tsADc77GBpD9pk1
+         BcxT48rMjaT2g==
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id lPglTssnjNj3; Fri, 10 Dec 2021 15:45:39 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 18C10392B27;
-        Fri, 10 Dec 2021 15:45:39 -0500 (EST)
-Date:   Fri, 10 Dec 2021 15:45:38 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     lttng-dev <lttng-dev@lists.lttng.org>
-Cc:     diamon-discuss@lists.linuxfoundation.org,
-        linux-trace-users@vger.kernel.org
-Message-ID: <1697490258.28441.1639169138969.JavaMail.zimbra@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.13.1 (Linux user-space tracer)
+        with ESMTP id hmRjV0ChLmLr; Fri, 17 Dec 2021 14:01:11 -0500 (EST)
+Received: from carbonara (unknown [107.159.88.171])
+        by mail.efficios.com (Postfix) with ESMTPSA id AE51D3C2263;
+        Fri, 17 Dec 2021 14:01:11 -0500 (EST)
+Date:   Fri, 17 Dec 2021 14:01:11 -0500
+From:   =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau 
+        <jeremie.galarneau@efficios.com>
+To:     lttng-dev@lists.lttng.org
+Cc:     diamon-discuss <diamon-discuss@lists.linuxfoundation.org>,
+        linux-trace-users <linux-trace-users@vger.kernel.org>
+Subject: [RELEASE] LTTng-tools =?iso-8859-1?B?Mi4x?=
+ =?iso-8859-1?Q?3=2E2_-_Nordicit=E9?=
+Message-ID: <Ybzed+wMHvpvQ3Pz@carbonara>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4173 (ZimbraWebClient - FF94 (Linux)/8.8.15_GA_4177)
-Thread-Index: A/kqqja9BDVf/kUNVOsd4rXMEufssA==
-Thread-Topic: LTTng-UST 2.13.1 (Linux user-space tracer)
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-This 2.13.1 release of LTTng-UST is a bugfix-only release for various
-shortcomings that were identified in the 2.13.0 release.
+Hi all,
 
-A few key highlights: the C++ support for building probe providers has
-been improved, async-signal-safety of the close wrapper has been fixed,
-pthread cancelstate in nested use scenarios is now properly handled.
+We have just released the second bug-fix release of LTTng-tools 2.13 - No=
+rdicit=E9.
+This release addresses a number of issues listed below.
 
-2021-12-10 (Lost and Found Day) lttng-ust 2.13.1
-        * Fix: ust-compiler: constructor/destructor build on g++ 4.8
-        * ust-compiler: constructor/destructor whitespaces layout and macro dependency
-        * Fix: ust-cancelstate: include string.h for strerror
-        * Fix: libnuma is prepended to LIBS
-        * fix: Allow disabling some abi compat tests
-        * Fix: generate probe registration constructor as a C++ constuctor
-        * Fix: nestable pthread cancelstate
-        * Fix: abort on decrement_sem_count during concurrent tracing start and teardown
-        * fix: allocating C++ compound literal on heap with Clang
-        * Check for C++11 when building C++ probe providers
-        * fix: liblttng-ust-fd async-signal-safe close()
-        * tracepoints: print debug message when lttng-ust-tracepoint.so is not found
-        * Fix: static_assert unavailable with glibc < 2.16
-        * Fix: combined tracing of lttng-ust 2.12/2.13 generates corrupted traces
-        * doc/man: Document LTTNG_UST_ABORT_ON_CRITICAL variable
-        * fix: remove autoconf features default value in help message
-        * Set git-review branch to stable-2.13
-        * Fix: add extern "C" to two header files
+2021-12-17 lttng-tools 2.13.2 (National Ugly Christmas Sweater Day)
+	* Validate channel context mismatch across UST applications
+	* Fix: relayd: compare viewer chunks by ID rather than address
+	* Fix: relayd: live: erroneous message timestamp observed from live view=
+er
+	* Fix: relayd comm: improperly packed rotate streams command header
+	* Test: snapshot after regenerate metadata
+	* Fix: ust-consumer: segfault on snapshot after regenerate metadata
+	* lttng: list valid condition / action names if missing or unknown
+	* lttng: mention argument number on unknown action / condition name
+	* lttng: fix argument numbers in add-trigger error messages
+	* argpar-utils: tweak unknown option error message
+	* argpar: sync with upstream - adjust to iterator API
+	* common: move append_str to string-utils
+	* lttng-create(1): specify that `--shm-path` only applies to UST channel=
+s
+	* Fix: sessiond: action-executor: misquoted strings in logging
+	* Tests: live kernel: no plan printed when non-root
+	* Fix: sessiond: assert on lttng_ht_add_unique_str on ltt_sessions_ht_by=
+_name
+	* Fix: sessiond: snapshot: leak of trace chunk
+	* Fix: test: use BABELTRACE_BIN instead of babeltrace
+	* Fix: action executor: ref count imbalance for session object
+	* Fix: relayd: `!vsession->current_trace_chunk` assertion failed
+	* Fix: tests: fix unused-but-set warning in test_fd_tracker.c
+	* Fix: sessiond: fix possible buffer overflow warning
+	* Fix: tests: app unregistering is not guaranteed by app lifetime
+	* Fix: lttng-ctl: tracing_group memory leaks
+	* Fix: use <unistd.h> instead of <sys/unistd.h>
+	* Fix: Tests: unchecked `close()` return value
+	* Fix: relayd: live: mishandled initial null trace chunk
+	* Fix: configure.ac: reporting SDT uprobe as a UST feature
+	* Fix: Tests: leaking epoll fd
+	* Typo: occurences -> occurrences
+
+As always, please report any issue you may encounter to bugs.lttng.org
+or on this mailing list.
 
 Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
 
+Download link:
+https://lttng.org/files/lttng-tools/lttng-tools-2.13.2.tar.bz2
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+GPG signature:
+https://lttng.org/files/lttng-tools/lttng-tools-2.13.2.tar.bz2.asc
