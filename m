@@ -2,90 +2,97 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1B1CC433F5
-	for <linux-trace-users@archiver.kernel.org>; Fri, 17 Dec 2021 19:03:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5C3AC433F5
+	for <linux-trace-users@archiver.kernel.org>; Wed,  5 Jan 2022 19:12:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240212AbhLQTDH (ORCPT
+        id S243389AbiAETMP (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Fri, 17 Dec 2021 14:03:07 -0500
-Received: from mail.efficios.com ([167.114.26.124]:53950 "EHLO
+        Wed, 5 Jan 2022 14:12:15 -0500
+Received: from mail.efficios.com ([167.114.26.124]:60148 "EHLO
         mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235807AbhLQTDH (ORCPT
+        with ESMTP id S243385AbiAETL7 (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Fri, 17 Dec 2021 14:03:07 -0500
+        Wed, 5 Jan 2022 14:11:59 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id CC3DD3C2604;
-        Fri, 17 Dec 2021 14:03:06 -0500 (EST)
+        by mail.efficios.com (Postfix) with ESMTP id 8DDE33C8B56;
+        Wed,  5 Jan 2022 14:11:57 -0500 (EST)
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id UWG1UnloVw-Z; Fri, 17 Dec 2021 14:03:06 -0500 (EST)
+        with ESMTP id 9oNEJfGvcF-Y; Wed,  5 Jan 2022 14:11:57 -0500 (EST)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 617563C2339;
-        Fri, 17 Dec 2021 14:03:06 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 617563C2339
+        by mail.efficios.com (Postfix) with ESMTP id 13C5E3C887C;
+        Wed,  5 Jan 2022 14:11:57 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 13C5E3C887C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1639767786;
-        bh=qwd/Bo5TN76rWC0g9X+lTf40xwNdScuXASiOtiK5Ev4=;
+        s=default; t=1641409917;
+        bh=lxXU7MkbOVO9jDbLz5VrWqQwIoBMKaSskabZ9LfVyz4=;
         h=Date:From:To:Message-ID:MIME-Version;
-        b=p45JfRfC9w9UQ0RjP63fEGh/uM45OaJLxLSPtRNTOJHREPfflluO5Eb8YmOaLj5hc
-         nZJmpehioY5GmavWAwchhNuH+mnN5EfMMzk4abAvYzks+f+pLFpo+baUMzOoH5+V8g
-         UivtTxnf0loNjmsCoXaJAa6wHHKZrK6zeDhy2TKn3pXRKcGLkBr6G+lSmlzvhrm3Mi
-         FE4UCC70z+vyxXXrTQAP8jHxuxeVWCqlEV+DvjI62BUrzNkaVQj50qpsr1kWOh6Bfm
-         ss9zwngB413DtWZFCcCESw7qcmjOTlH6gW9zjrzoWcxFDQWJJR6+uCkanVLyNlBmjf
-         WRcXKqsb9Rwww==
+        b=HGx2mZL0xmxdCpgOi2I84umS01L70+DBdRfti++nlE15nF9XlrLbtiYWhq5sjeSi5
+         fgoFgngGAB6ZtMRDaxA6iDgiDGHCSHv7zH3hrUpx0Hjc5TvkMyU45v40SU1Hu22oFS
+         JcGxGYqNA9ea1yzFiEmhczB2riRIRQAgVohjCfE0MM3mtIn99XAip5NYE5f82IRbAt
+         X1p2vJK68mgBrV+CdIhUL/5yWRlPjrlNvAB510ysU9gNXqoKJkqxKI+KuIeFOQXYtQ
+         6FJlNHh8KxSE4XSTlJf6MQf7s6/a7DwGs08o3bakh5OtfKxrVPPYJpDww/myimHvhA
+         qh8ecxATGAr+w==
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id fffHH_yVda8l; Fri, 17 Dec 2021 14:03:06 -0500 (EST)
-Received: from carbonara (unknown [107.159.88.171])
-        by mail.efficios.com (Postfix) with ESMTPSA id 345423C2433;
-        Fri, 17 Dec 2021 14:03:06 -0500 (EST)
-Date:   Fri, 17 Dec 2021 14:03:05 -0500
-From:   =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau 
-        <jeremie.galarneau@efficios.com>
-To:     lttng-dev@lists.lttng.org
-Cc:     diamon-discuss <diamon-discuss@lists.linuxfoundation.org>,
-        linux-trace-users <linux-trace-users@vger.kernel.org>
-Subject: [RELEASE] LTTng-tools 2.12.7 - (Ta) Meilleure
-Message-ID: <Ybze6ZpA95wGqjUv@carbonara>
+        with ESMTP id 93rxNQm326DQ; Wed,  5 Jan 2022 14:11:57 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 08E483C8AE4;
+        Wed,  5 Jan 2022 14:11:57 -0500 (EST)
+Date:   Wed, 5 Jan 2022 14:11:56 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     lttng-dev@lists.lttng.org,
+        diamon-discuss@lists.linuxfoundation.org,
+        linux-trace-users@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <1275248080.2857.1641409916909.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] LTTng-modules 2.12.7 and 2.13.1 (Linux kernel tracer)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4180 (ZimbraWebClient - FF95 (Linux)/8.8.15_GA_4177)
+Thread-Index: 7cLqhylIvorgVNK6xQZrdmHTvto22w==
+Thread-Topic: LTTng-modules 2.12.7 and 2.13.1 (Linux kernel tracer)
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi all,
+Hi,
 
-We have just released the seventh bug-fix release of LTTng-tools 2.12 - (Ta)
-Meilleure. This release addresses a number of issues listed below.
+This is a release announcement for the LTTng Linux kernel tracer 2.12.7 and
+2.13.1 releases. Both are bug fix releases in the lttng-modules stable branches.
+They also enable support for the most recent Linux kernel releases.
 
-2021-12-17 lttng-tools 2.12.7 (National Ugly Christmas Sweater Day)
-	* Validate channel context mismatch across UST applications
-	* Fix: relayd: compare viewer chunks by ID rather than address
-	* Fix: relayd: live: erroneous message timestamp observed from live viewer
-	* Fix: relayd comm: improperly packed rotate streams command header
-	* test: snapshot after regenerate metadata
-	* Fix: ust-consumer: segfault on snapshot after regenerate metadata
-	* Tests: live kernel: no plan printed when non-root
-	* Fix: sessiond: snapshot: leak of trace chunk
-	* Fix: test: use BABELTRACE_BIN instead of babeltrace
-	* Fix: relayd: `!vsession->current_trace_chunk` assertion failed
-	* Fix: tests: fix unused-but-set warning in test_fd_tracker.c
-	* Fix: sessiond: fix possible buffer overflow warning
-	* Fix: lttng-ctl: tracing_group memory leaks
-	* Fix: Tests: unchecked `close()` return value
-	* Fix: relayd: live: mishandled initial null trace chunk
-	* Fix: configure.ac: reporting SDT uprobe as a UST feature
-	* Fix: Tests: leaking epoll fd
+LTTng-modules 2.12.7 contains instrumentation fixes for the 5.14, 5.15 and
+5.16-rc Linux kernels. Kernel version ranges were adjusted for instrumentation
+of the RHEL 8.4 kernel.
 
-As always, please report any issue you may encounter to bugs.lttng.org
-or on this mailing list.
+LTTng-modules 2.13.1 fixes scenarios where trigger actions are missing:
+
+    There is an issue when associating multiple actions to a single system
+    call, where the first action is effectively added, but the following
+    actions are silently ignored.
+
+The affected on-event trigger is a feature newly introduced in 2.13.
+
+This 2.13.1 release also contains instrumentation fixes for the 5.15 and 5.16-rc
+Linux kernels. It now emits a warning in the kernel console whenever registration
+of events internally fails within LTTng-modules, for example in case of
+out-of-memory error.
+
+As always, feedback is welcome!
+
+Thanks,
+
+Mathieu
 
 Project website: https://lttng.org
+Documentation: https://lttng.org/docs
+Download link: https://lttng.org/download
 
-Download link:
-https://lttng.org/files/lttng-tools/lttng-tools-2.12.7.tar.bz2
-
-GPG signature:
-https://lttng.org/files/lttng-tools/lttng-tools-2.12.7.tar.bz2.asc
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
