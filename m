@@ -2,99 +2,203 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00BEAC433F5
-	for <linux-trace-users@archiver.kernel.org>; Thu, 27 Jan 2022 20:37:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75012C433F5
+	for <linux-trace-users@archiver.kernel.org>; Wed, 23 Feb 2022 23:40:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235660AbiA0Uh3 (ORCPT
+        id S245018AbiBWXkc (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Thu, 27 Jan 2022 15:37:29 -0500
-Received: from mail.efficios.com ([167.114.26.124]:40760 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232519AbiA0Uh3 (ORCPT
+        Wed, 23 Feb 2022 18:40:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244999AbiBWXkZ (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Thu, 27 Jan 2022 15:37:29 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id DF84D3782F3;
-        Thu, 27 Jan 2022 15:37:28 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id PTavphWkYKx1; Thu, 27 Jan 2022 15:37:28 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 5F5813787B2;
-        Thu, 27 Jan 2022 15:37:28 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 5F5813787B2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1643315848;
-        bh=z7HN9bZ4OXSffusMwr4iygsXkvvLsv+N8vADDAIyRrM=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=dXhV8vT8aiQrs4mUrdMcBybwCFXoEuC8iuwJFMQWuycGjQi3kXErfCU0SdsvuaUPr
-         H67WoZ2cW0WqfzPGpCXZtAThDJKCyCyfng77hqiB8akv9FmZB/stdInluFJWC1iGoe
-         sC8peumXT3a1YZRB9NB8UnTJKE0jvB7xrA0FXAZBUw6B3jMhDLKWJsEpc8joOEdj1Q
-         Z90R5iBizO3N5BDulnX0VxgcPezOEETwTJ8trznQkzABZeRApqywfeQq++29nPd7ym
-         9BfAwrc8Ha1C9ALCbv7MnQMVpT2HNknBBU/bfB5BWEw+xdNDkQPn6Bm4UsrqfT58lk
-         S0/5P4Dwj+zKQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id RNPLVCDXop1S; Thu, 27 Jan 2022 15:37:28 -0500 (EST)
-Received: from Mercury (unknown [107.159.88.171])
-        by mail.efficios.com (Postfix) with ESMTPSA id 3B88A37889C;
-        Thu, 27 Jan 2022 15:37:28 -0500 (EST)
-Date:   Thu, 27 Jan 2022 15:37:28 -0500
-From:   =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau 
-        <jeremie.galarneau@efficios.com>
-To:     lttng-dev@lists.lttng.org
-Cc:     diamon-discuss@lists.linuxfoundation.org,
-        linux-trace-users@vger.kernel.org
-Subject: [RELEASE] LTTng-tools 2.12.8 - (Ta) Meilleure
-Message-ID: <YfMCiCbVI/t2zBkX@Mercury>
+        Wed, 23 Feb 2022 18:40:25 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296845AEE2;
+        Wed, 23 Feb 2022 15:39:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 19D10CE1CF0;
+        Wed, 23 Feb 2022 23:39:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5055CC340F5;
+        Wed, 23 Feb 2022 23:39:41 +0000 (UTC)
+Date:   Wed, 23 Feb 2022 18:39:39 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        "linux-trace-devel@vger.kernel.org" 
+        <linux-trace-devel@vger.kernel.org>,
+        Linux-trace Users <linux-trace-users@vger.kernel.org>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc:     Zamir SUN <sztsian@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>, zsun@redhat.com,
+        Vitaly Chikunov <vt@altlinux.org>,
+        Tzvetomir Stoyanov <tstoyanov@vmware.com>,
+        Yordan Karadzhov <ykaradzhov@vmware.com>,
+        Ben Hutchings <ben@decadent.org.uk>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Tony Jones <tonyj@suse.de>, John Kacur <jkacur@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        Al Stone <ahs3@debian.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Jes Sorensen <jes.sorensen@gmail.com>
+Subject: [ANNOUNCE] libtracefs 1.3
+Message-ID: <20220223183939.3650aabd@rorschach.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi all,
+Long over due, but libtracefs 1.3 has finally been released!
 
-We have just released the eighth bug-fix release of LTTng-tools 2.12=E2=80=
-=94(Ta)
-Meilleure. This release addresses a number of issues listed below.
+With 90 new interfaces, it makes accessing tracefs much simpler.
 
-2022-01-26 lttng-tools 2.12.8 (National Peanut Brittle Day)
-    * Relicence all source and header files included in LGPL code
-    * Fix: sessiond: use of null session when session is not found
-    * Move utils_expand_path and utils_expand_path_keep_symlink to libpat=
-h.la
-    * Link lttng executable on libcommon-lgpl.a
-    * Introduce libcommon-lgpl for liblttng-ctl
-    * Rename libcommon.so to libcommon-gpl.so
-    * Copyright ownership transfer
-    * Copyright ownership transfer
-    * Fix: relayd: erroneous rundir permission logging message
-    * Fix: sessiond: rotation thread: fatal error when not finding a sess=
-ion
-    * Fix: relayd: rotation failure for multi-domain session
-    * Fix: lttng-ctl: lttng_list_sessions: initialize out_sessions to NUL=
-L when returning 0
-    * Fix: lttng: initialize variable in run_command_string
-    * Fix: consumer-stream: live viewers observe timestamps going backwar=
-ds
-    * Fix: relayd: ressource leaks on viewer_stream_create error
-    * Fix: relayd: live: erroneous message timestamp observed from live v=
-iewer
-    * Fix: relayd: failure to open chunk files concurrently with session =
-clear
-    * Fix: relayd: live: metadata stream reference count < 0 assert
+Official release notes:
 
-As always, please report any issue you may encounter to bugs.lttng.org
-or on this mailing list.
+libtracefs 1.3
 
-Project website: https://lttng.org
+Critical:
+ - Optimized string list handling. It was always stated that some string
+   lists must be freed with tracefs_list_free(), and now it is mandatory, as
+   metadata is used to store the size, and normal freeing of the list will
+   cause memory issues.
 
-Download link:
-https://lttng.org/files/lttng-tools/lttng-tools-2.12.8.tar.bz2
+Fixes:
+ - More consistency with errno values
 
-GPG signature:
-https://lttng.org/files/lttng-tools/lttng-tools-2.12.8.tar.bz2.asc
+Notes:
+ - sqlhist is now officially built
+ - make samples creates executables in bin/ from examples in the man pages.
+
+New methods:
+
+ - New methods for setting and reading affinity
+    tracefs_instance_set_affinity_set()
+    tracefs_instance_set_affinity_raw()
+    tracefs_instance_set_affinity()
+    tracefs_instance_get_affinity()
+    tracefs_instance_get_affinity_raw()
+    tracefs_instance_get_affinity_set()
+
+ - New method to see the system tracers
+    tracefs_instances()
+
+ - New methods to read and clear the error log
+    tracefs_error_last()
+    tracefs_error_all()
+    tracefs_error_clear()
+
+ - New methods to modify the string lists
+    tracefs_list_add()
+    tracefs_list_size()
+
+ - New method to stop the iterator over raw events
+    tracefs_iterate_stop()
+
+ - New methods to make it easier to access event files
+    tracefs_event_get_file()
+    tracefs_event_file_read()
+    tracefs_event_file_write()
+    tracefs_event_file_append()
+    tracefs_event_file_clear()
+    tracefs_event_file_exists()
+
+ - New method to get the available filter functions
+    tracefs_filter_functions()
+
+ - New methods to enable or disable tracers
+    tracefs_tracer_set()
+    tracefs_tracer_clear()
+
+ - New methods for streaming the trace_pipe file
+    tracefs_trace_pipe_stream()
+    tracefs_trace_pipe_print()
+    tracefs_trace_pipe_stop()
+
+ - New methods for creating, modifying and destroying dynamic events
+    tracefs_dynevent_create()
+    tracefs_dynevent_destroy()
+    tracefs_dynevent_destroy_all()
+    tracefs_dynevent_free()
+    tracefs_dynevent_list_free()
+    tracefs_dynevent_get_all()
+    tracefs_dynevent_get()
+    tracefs_dynevent_info()
+    tracefs_dynevent_get_event()
+
+ - New method to create an event probe (then use dynamic methods above)
+    tracefs_eprobe_alloc()
+
+ - New methods to create kprobes and kretprobes
+    tracefs_kprobe_alloc()
+    tracefs_kretprobe_alloc()
+    tracefs_kprobe_raw()
+    tracefs_kretprobe_raw()
+
+ - New methods for creating, modifying and destroying histograms
+    tracefs_hist_free()
+    tracefs_hist_alloc()
+    tracefs_hist_alloc_2d()
+    tracefs_hist_alloc_nd()
+    tracefs_hist_get_name()
+    tracefs_hist_get_event()
+    tracefs_hist_get_system()
+    tracefs_hist_add_key()
+    tracefs_hist_add_value()
+    tracefs_hist_add_sort_key()
+    tracefs_hist_set_sort_key()
+    tracefs_hist_sort_key_direction()
+    tracefs_hist_add_name()
+    tracefs_hist_append_filter()
+    tracefs_hist_echo_cmd()
+    tracefs_hist_command()
+    tracefs_hist_start()
+    tracefs_hist_pause()
+    tracefs_hist_continue()
+    tracefs_hist_reset()
+    tracefs_hist_destroy()
+
+ - New methods for creating, modifying and destroying synthetic events
+    tracefs_synth_get_name()
+    tracefs_synth *tracefs_synth_alloc()
+    tracefs_synth_add_match_field()
+    tracefs_synth_add_compare_field()
+    tracefs_synth_add_start_field()
+    tracefs_synth_add_end_field()
+    tracefs_synth_append_start_filter()
+    tracefs_synth_append_end_filter()
+    tracefs_synth_trace()
+    tracefs_synth_snapshot()
+    tracefs_synth_save()
+    tracefs_synth_complete()
+    tracefs_synth_get_start_hist()
+    tracefs_synth_create()
+    tracefs_synth_destroy()
+    tracefs_synth_free()
+    tracefs_synth_echo_cmd()
+    tracefs_synth_raw_fmt()
+    tracefs_synth_show_event()
+    tracefs_synth_show_start_hist()
+    tracefs_synth_show_end_hist()
+    tracefs_synth_get_event()
+
+ - New methods to modify event filters
+    tracefs_filter_string_append()
+    tracefs_filter_string_verify()
+    tracefs_event_filter_apply()
+    tracefs_event_filter_clear()
+    tracefs_event_append_filter()
+    tracefs_event_verify_filter()
+
+ - New method to create a synthetic event via a SQL string
+    tracefs_sql()
+    The man page comes with its own program (sqlhist).
+
+Enjoy!
+
+-- Steve
+
