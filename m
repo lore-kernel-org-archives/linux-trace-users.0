@@ -2,70 +2,110 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75CAEC433F5
-	for <linux-trace-users@archiver.kernel.org>; Thu, 24 Feb 2022 00:10:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 920BCC433F5
+	for <linux-trace-users@archiver.kernel.org>; Mon,  7 Mar 2022 21:26:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245146AbiBXAK0 (ORCPT
+        id S233761AbiCGV12 (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Wed, 23 Feb 2022 19:10:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
+        Mon, 7 Mar 2022 16:27:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245143AbiBXAKZ (ORCPT
+        with ESMTP id S232764AbiCGV11 (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Wed, 23 Feb 2022 19:10:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA4E5F24D;
-        Wed, 23 Feb 2022 16:09:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE05160B49;
-        Thu, 24 Feb 2022 00:09:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 491C0C340E7;
-        Thu, 24 Feb 2022 00:09:54 +0000 (UTC)
-Date:   Wed, 23 Feb 2022 19:09:52 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Devel <linux-trace-devel@vger.kernel.org>,
-        "linux-trace-users@vger.kernel.org" 
-        <linux-trace-users@vger.kernel.org>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc:     Zamir SUN <sztsian@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, zsun@redhat.com,
-        Vitaly Chikunov <vt@altlinux.org>,
-        Tzvetomir Stoyanov <tstoyanov@vmware.com>,
-        Yordan Karadzhov <ykaradzhov@vmware.com>,
-        Ben Hutchings <ben@decadent.org.uk>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Tony Jones <tonyj@suse.de>, John Kacur <jkacur@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Jes Sorensen <jes.sorensen@gmail.com>
-Subject: Re: [ANNOUNCE] libtracefs 1.3
-Message-ID: <20220223190952.084f4685@rorschach.local.home>
-In-Reply-To: <20220223183939.3650aabd@rorschach.local.home>
-References: <20220223183939.3650aabd@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 7 Mar 2022 16:27:27 -0500
+X-Greylist: delayed 515 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Mar 2022 13:26:32 PST
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D584D60CD1
+        for <linux-trace-users@vger.kernel.org>; Mon,  7 Mar 2022 13:26:32 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id B624D34EBBB;
+        Mon,  7 Mar 2022 16:17:55 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id suQxVMfNVwYo; Mon,  7 Mar 2022 16:17:55 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 6DED234E8F7;
+        Mon,  7 Mar 2022 16:17:55 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 6DED234E8F7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1646687875;
+        bh=sshHbozYZgHQWJpj5X4ksRxk1zVZ1/A5U8cI8+UqYVw=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=WuiPGgfIvxr3eEt35tX7ZoAuGYJwhiaunUh56bjuFR7nj7fcYmTzYCzoz3xrELQ1R
+         +ZnqwlPhmyv12lApHdA5u7bVfy93u7cqIqNxiQ+8m0lHLAfFRG0VoxihKB3pRxsZw9
+         Esxsnn46Hc5y669RQQoHs6nrjvrKXdHqzc99gmSgkZmsIaOiv4oE/qTZOFzjnIYa9j
+         s7f2dzyNgvY8Fspq1ROT/tG69RlUqz5A4nhEwAyPwrgR0aNMxQitz6OrpOw+tHGV8F
+         2AsdaYP0YrRRNClevH5G53Pz2L6bzbbVDoze/4JEqbQ+Hd1BM9+xdnIHEFImjXBJ46
+         9A8AEoNMrpcVQ==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id lEyQmS_tXKbR; Mon,  7 Mar 2022 16:17:55 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 62EC234ED19;
+        Mon,  7 Mar 2022 16:17:55 -0500 (EST)
+Date:   Mon, 7 Mar 2022 16:17:55 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     lttng-dev@lists.lttng.org,
+        diamon-discuss@lists.linuxfoundation.org,
+        linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <1107588912.127428.1646687875294.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] LTTng-modules 2.13.2 (Linux kernel tracer)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF97 (Linux)/8.8.15_GA_4232)
+Thread-Index: sdhEkjIbeJvKI/brt+/jEwlhtEXs8w==
+Thread-Topic: LTTng-modules 2.13.2 (Linux kernel tracer)
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-[ Resend as one of my emails was corrupted]
+Hi,
 
-On Wed, 23 Feb 2022 18:39:39 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+The 2.13.2 release of the LTTng kernel tracer includes a fix for the
+syscall tracing feature. A bug crept into 2.13.0 which caused the
+system call input arguments to be recorded on return from system call
+rather than the output arguments. This fix was in the master branch of
+lttng-modules, but was not cherry-picked into the 2.13 stable branch.
 
-> Long over due, but libtracefs 1.3 has finally been released!
+This missing backport went unnoticed through our CI integration       
+because the relevant kernel tracer tests were not part of lttng-tools 
+default test suite: "make check". This is now fixed in the lttng-tools
+project.
 
-And I forgot to post the links:
+This release also contains commits needed to trace the 5.17 kernels
+(currently at v5.17-rc7).
 
-git repo: https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/
+Users of lttng-modules 2.13.0 and 2.13.1 should upgrade to 2.13.2
+if they want to gather useful output arguments on return from system
+call into their trace, rather than an extra copy of the system call
+input arguments.
 
-tarball: https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot/libtracefs-1.3.0.tar.gz
+Thanks,
 
-man pages: https://www.trace-cmd.org/Documentation/libtracefs/libtracefs.html
+Mathieu
 
--- Steve
+Changelog:
+
+2022-03-07 (National Cereal Day) LTTng modules 2.13.2
+        * Fix: incorrect in/out direction for syscall exit
+        * fix: net: socket: rename SKB_DROP_REASON_SOCKET_FILTER (v5.17)
+        * fix: net: skb: introduce kfree_skb_reason() (v5.17)
+        * fix: random: rather than entropy_store abstraction, use global (v5.17)
+        * fix: btrfs: pass fs_info to trace_btrfs_transaction_commit (v5.17)
+        * fix: mm: compaction: fix the migration stats in trace_mm_compaction_migratepages() (v5.17)
+        * fix: block: remove the ->rq_disk field in struct request (v5.17)
+        * fix: block: remove GENHD_FL_SUPPRESS_PARTITION_INFO (v5.17)
+        * Copyright ownership transfer
+
+Project website: https://lttng.org
+Documentation: https://lttng.org/docs
+Download link: https://lttng.org/download
+
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
