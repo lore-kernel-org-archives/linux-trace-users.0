@@ -2,110 +2,80 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 920BCC433F5
-	for <linux-trace-users@archiver.kernel.org>; Mon,  7 Mar 2022 21:26:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D161C433F5
+	for <linux-trace-users@archiver.kernel.org>; Tue,  8 Mar 2022 10:12:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233761AbiCGV12 (ORCPT
+        id S235094AbiCHKMs (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Mon, 7 Mar 2022 16:27:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42734 "EHLO
+        Tue, 8 Mar 2022 05:12:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232764AbiCGV11 (ORCPT
+        with ESMTP id S240869AbiCHKMr (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Mon, 7 Mar 2022 16:27:27 -0500
-X-Greylist: delayed 515 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Mar 2022 13:26:32 PST
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D584D60CD1
-        for <linux-trace-users@vger.kernel.org>; Mon,  7 Mar 2022 13:26:32 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id B624D34EBBB;
-        Mon,  7 Mar 2022 16:17:55 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id suQxVMfNVwYo; Mon,  7 Mar 2022 16:17:55 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 6DED234E8F7;
-        Mon,  7 Mar 2022 16:17:55 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 6DED234E8F7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1646687875;
-        bh=sshHbozYZgHQWJpj5X4ksRxk1zVZ1/A5U8cI8+UqYVw=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=WuiPGgfIvxr3eEt35tX7ZoAuGYJwhiaunUh56bjuFR7nj7fcYmTzYCzoz3xrELQ1R
-         +ZnqwlPhmyv12lApHdA5u7bVfy93u7cqIqNxiQ+8m0lHLAfFRG0VoxihKB3pRxsZw9
-         Esxsnn46Hc5y669RQQoHs6nrjvrKXdHqzc99gmSgkZmsIaOiv4oE/qTZOFzjnIYa9j
-         s7f2dzyNgvY8Fspq1ROT/tG69RlUqz5A4nhEwAyPwrgR0aNMxQitz6OrpOw+tHGV8F
-         2AsdaYP0YrRRNClevH5G53Pz2L6bzbbVDoze/4JEqbQ+Hd1BM9+xdnIHEFImjXBJ46
-         9A8AEoNMrpcVQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id lEyQmS_tXKbR; Mon,  7 Mar 2022 16:17:55 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 62EC234ED19;
-        Mon,  7 Mar 2022 16:17:55 -0500 (EST)
-Date:   Mon, 7 Mar 2022 16:17:55 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     lttng-dev@lists.lttng.org,
-        diamon-discuss@lists.linuxfoundation.org,
-        linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <1107588912.127428.1646687875294.JavaMail.zimbra@efficios.com>
-Subject: [RELEASE] LTTng-modules 2.13.2 (Linux kernel tracer)
+        Tue, 8 Mar 2022 05:12:47 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BAF42EF0
+        for <linux-trace-users@vger.kernel.org>; Tue,  8 Mar 2022 02:11:50 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id i8so27609321wrr.8
+        for <linux-trace-users@vger.kernel.org>; Tue, 08 Mar 2022 02:11:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=TU/cQ7P0Db2mPqNl5P9K+U5Qs2IocMXhE1ttmS/WqK8=;
+        b=icjtxWpPcLQlOgS8hS6xP7c32ZnbGleipEL4flYtpZp8v4u2YCyAHvzfh2BeB1gS3N
+         odspsD4ZKzrcuNxp8hVrQRqFrRzaGlX1RqG/IiEB8YVDQ84FSEJgbzLoJbbWaj4aVyPc
+         JgS7eVCa6p1PrNwbi6SMRMH/bMgF/D4/kgW1waj30FxgmCqO3CKtDOva2uoNAQLFSE5X
+         qO3kM464VU7aWJ5h2aV2wS+4iM/2j4ezQ/juY35rcRwx9SqpGtEy2z0IAsPLcdBuDi/L
+         Op6rRTF4IgS4uOK+C3b5dJyOR/bP13JN1AXi9XiTh9J3co0Q/bdGoEnnbXOiHwsJNbYH
+         krTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=TU/cQ7P0Db2mPqNl5P9K+U5Qs2IocMXhE1ttmS/WqK8=;
+        b=TemnZXEV32Cfa678aIkQYO/Aj3s+L1gxceXvEnzKideqCTfP7unDDajthcfvAeEex3
+         SRYQ4lFhDXMOs0E10mCZn3sZUjyGVXIi0t6iAJB6BPIrjjNroaLS8ekC3LN5cCQyIvGF
+         fuB1zjaozlbwpQYOaAZYNdmdTZaexRLU52jV+167xBLKBUYYli0VoWSb9dh8TpAIlNN4
+         fiiMz1Zf0z33YXZBrE1S6qfWKVumb9vzhba23f/xLoIh/PMJA7/hJGW2VYMHEkz6H7Lj
+         XoqDyMZSWYisES/wlCzWGyp11FtbuBEugr5fm/gAa+5DegZDYQCvpp7rZ5rlId6n0yE9
+         wLpA==
+X-Gm-Message-State: AOAM5320nxwWAx7I7+xXPvjVFp0jwxRqhvT8FMcHziLFpgkuuvowOdED
+        s2e/aaPY2dA/WVVe6ysw4SY1kHFU6JoA2vy65LtPDjNEEH0=
+X-Google-Smtp-Source: ABdhPJwz5ng8mu0zbWTne11AKuyJWqH41QvxnYZ1I4c4a1g7t5ZAQX0Y6Z298cK/UC3iypvQYb4yh3kHU59oqc37msU=
+X-Received: by 2002:a5d:5449:0:b0:1f0:1a0c:963f with SMTP id
+ w9-20020a5d5449000000b001f01a0c963fmr11279948wrv.98.1646734308970; Tue, 08
+ Mar 2022 02:11:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF97 (Linux)/8.8.15_GA_4232)
-Thread-Index: sdhEkjIbeJvKI/brt+/jEwlhtEXs8w==
-Thread-Topic: LTTng-modules 2.13.2 (Linux kernel tracer)
+From:   Federico Di Pierro <nierro92@gmail.com>
+Date:   Tue, 8 Mar 2022 11:11:38 +0100
+Message-ID: <CAMZm_C=NR8rmYn_1gnhw5Udx4ypMZy1nwcFucc0=wbYYHhTpHg@mail.gmail.com>
+Subject: arm64 execve/clone sys_exit tracepoints
+To:     linux-trace-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi,
+Hi everyone,
 
-The 2.13.2 release of the LTTng kernel tracer includes a fix for the
-syscall tracing feature. A bug crept into 2.13.0 which caused the
-system call input arguments to be recorded on return from system call
-rather than the output arguments. This fix was in the master branch of
-lttng-modules, but was not cherry-picked into the 2.13 stable branch.
+While testing Falco on arm64 my team and I encountered some weird
+issues; basically, it seems like execve() exit tracepoint is never
+called.
+Moreover, the clone() exit tracepoint referred to the child process is
+also missing.
+The issue is present on both the kmod and eBPF probe.
 
-This missing backport went unnoticed through our CI integration       
-because the relevant kernel tracer tests were not part of lttng-tools 
-default test suite: "make check". This is now fixed in the lttng-tools
-project.
+I tested on amznlinux2 with kernel 5.10.96-90.460.amzn2.aarch64, but
+other team members tested on other kernel versions too (down to
+4.14.X).
+I was also able to reproduce the problem using bpftrace tool: hooking
+on tracepoint:syscalls:sys_exit_execve; no event is received:
 
-This release also contains commits needed to trace the 5.17 kernels
-(currently at v5.17-rc7).
+bpftrace -e 'tracepoint:syscalls:sys_exit_execve { printf("execve!\n"); }'
 
-Users of lttng-modules 2.13.0 and 2.13.1 should upgrade to 2.13.2
-if they want to gather useful output arguments on return from system
-call into their trace, rather than an extra copy of the system call
-input arguments.
+Since sys_enter tracepoints are indeed called, we'd expect the
+sys_exit ones to be called too, just like it happens on x86.
+The question is: are we missing anything obvious here?
 
-Thanks,
-
-Mathieu
-
-Changelog:
-
-2022-03-07 (National Cereal Day) LTTng modules 2.13.2
-        * Fix: incorrect in/out direction for syscall exit
-        * fix: net: socket: rename SKB_DROP_REASON_SOCKET_FILTER (v5.17)
-        * fix: net: skb: introduce kfree_skb_reason() (v5.17)
-        * fix: random: rather than entropy_store abstraction, use global (v5.17)
-        * fix: btrfs: pass fs_info to trace_btrfs_transaction_commit (v5.17)
-        * fix: mm: compaction: fix the migration stats in trace_mm_compaction_migratepages() (v5.17)
-        * fix: block: remove the ->rq_disk field in struct request (v5.17)
-        * fix: block: remove GENHD_FL_SUPPRESS_PARTITION_INFO (v5.17)
-        * Copyright ownership transfer
-
-Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Thank you very much for your time,
+Regards
+Federico
