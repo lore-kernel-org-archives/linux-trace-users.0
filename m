@@ -2,105 +2,137 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2432DC433F5
-	for <linux-trace-users@archiver.kernel.org>; Tue,  8 Mar 2022 15:01:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ABD4C433FE
+	for <linux-trace-users@archiver.kernel.org>; Thu, 10 Mar 2022 21:44:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbiCHPC0 (ORCPT
+        id S1344042AbiCJVpb (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Tue, 8 Mar 2022 10:02:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
+        Thu, 10 Mar 2022 16:45:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235737AbiCHPCZ (ORCPT
+        with ESMTP id S1343994AbiCJVp3 (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:02:25 -0500
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161944D9E0
-        for <linux-trace-users@vger.kernel.org>; Tue,  8 Mar 2022 07:01:28 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 3CA0E366948;
-        Tue,  8 Mar 2022 10:01:27 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id dJu981JQG3VX; Tue,  8 Mar 2022 10:01:26 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id CCECD366947;
-        Tue,  8 Mar 2022 10:01:26 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com CCECD366947
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1646751686;
-        bh=/zPF+yhnDoydy5aFRSeAqSbtTGZbvsj+/52FE5jPX1U=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=nfK/OcOVNnEzeODhQRs9u09WvGVHq1F36le3nTfeVSGAlhh6NUUn5X2zFYajuCH6Y
-         Ma3y+Ce/K1Onj+GeOpXb1Vo6TK1iG5HqIM4v0dXgtFCb5pixDPgDucCRRLcVJUApjU
-         Ne9d1tBkGQ1rXktCk9eS02PIKz3tqnKfCyv6iDrKH1Pky3HBrCScdQn7nr0TuGwgFp
-         0mcK6MiOTLttUYcoDovSB6SvXTZ0O4GP1hbNqUf0otm8b4ntk+ispWxmvJqHzVTJph
-         BoEfvdp6hB9ljGmuV8ylZq0XXJwduRjFcqhWeMh3kQ+JWFZLUvqDU9jD+Q0waXMCzW
-         eTHHHBmIzUkjw==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id ru3Q4UzyvD9l; Tue,  8 Mar 2022 10:01:26 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id C2226366946;
-        Tue,  8 Mar 2022 10:01:26 -0500 (EST)
-Date:   Tue, 8 Mar 2022 10:01:26 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Federico Di Pierro <nierro92@gmail.com>
-Cc:     linux-trace-users <linux-trace-users@vger.kernel.org>
-Message-ID: <1491155105.129307.1646751686676.JavaMail.zimbra@efficios.com>
-In-Reply-To: <CAMZm_C=NR8rmYn_1gnhw5Udx4ypMZy1nwcFucc0=wbYYHhTpHg@mail.gmail.com>
-References: <CAMZm_C=NR8rmYn_1gnhw5Udx4ypMZy1nwcFucc0=wbYYHhTpHg@mail.gmail.com>
-Subject: Re: arm64 execve/clone sys_exit tracepoints
+        Thu, 10 Mar 2022 16:45:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61028158E81;
+        Thu, 10 Mar 2022 13:44:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E75D161A39;
+        Thu, 10 Mar 2022 21:44:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9424CC340E8;
+        Thu, 10 Mar 2022 21:44:23 +0000 (UTC)
+Date:   Thu, 10 Mar 2022 16:44:22 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        "linux-trace-users@vger.kernel.org" 
+        <linux-trace-users@vger.kernel.org>,
+        Linux Trace Devel <linux-trace-devel@vger.kernel.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Yordan Karadzhov <y.karadz@gmail.com>,
+        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Changbin Du <changbin.du@gmail.com>,
+        Patrick McLean <chutzpah@gentoo.org>,
+        Josh Boyer <jwboyer@fedoraproject.org>,
+        Clark Williams <williams@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        John Kacur <jkacur@redhat.com>, Tony Jones <tonyj@suse.de>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Daniel Wagner <wagi@monom.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Josef Bacik <jbacik@fb.com>, troyengel@gmail.com,
+        Behan Webster <behanw@converseincode.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [ANNOUNCE] trace-cmd 3.0
+Message-ID: <20220310164422.41c57c7c@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF97 (Linux)/8.8.15_GA_4232)
-Thread-Topic: arm64 execve/clone sys_exit tracepoints
-Thread-Index: 3IA4q7EM8rUxVnJ7M5B/gyWZj4ePqA==
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
------ On Mar 8, 2022, at 5:11 AM, Federico Di Pierro nierro92@gmail.com wrote:
+[ Resending without corrupted email headers ]
 
-> Hi everyone,
-> 
-> While testing Falco on arm64 my team and I encountered some weird
-> issues; basically, it seems like execve() exit tracepoint is never
-> called.
-> Moreover, the clone() exit tracepoint referred to the child process is
-> also missing.
-> The issue is present on both the kmod and eBPF probe.
-> 
-> I tested on amznlinux2 with kernel 5.10.96-90.460.amzn2.aarch64, but
-> other team members tested on other kernel versions too (down to
-> 4.14.X).
-> I was also able to reproduce the problem using bpftrace tool: hooking
-> on tracepoint:syscalls:sys_exit_execve; no event is received:
-> 
-> bpftrace -e 'tracepoint:syscalls:sys_exit_execve { printf("execve!\n"); }'
-> 
-> Since sys_enter tracepoints are indeed called, we'd expect the
-> sys_exit ones to be called too, just like it happens on x86.
-> The question is: are we missing anything obvious here?
+I'm happy to announce that after over a year, we finally are able to
+release trace-cmd version 3.0!
 
-I'm not sure about your clone issue, but wrt execve, I know there
-may be some discrepancy when exec turns a non-compat executable into
-a compat one and vice-versa. Do you exec a binary with a different
-bitness, and therefore a different syscall table, on return from exec ?
+The two biggest changes:
 
-Thanks,
+1) Updated trace.dat to version 7 (not compatible with older versions of
+   trace-cmd). But now supports compression.
 
-Mathieu
+2) Better synchronization between host and guest kernel tracing.
 
 
-> 
-> Thank you very much for your time,
-> Regards
-> Federico
+Features and user visible updates since 2.9:
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+- Relies on upstream repos for libtraceevent and libtracefs:
+    * Removed libtraceevent code (Upstream minimum version 1.5)
+    * Removed libtracefs code (Upstream minimum version 1.3)
+
+- KernelShark is no longer installed in the trace-cmd repo.
+
+- Some perf support
+
+- trace-cmd dump updates:
+   * Display the clock used in the file
+
+- New trace-cmd clock: tsc2nsec to use the tsc clock in the ring buffer but
+  to display it as nanoseconds. Requires architecture support, but trace-cmd
+  list -C will show if it supported or not.
+
+- New option --raw-ts for trace-cmd report to show raw timestamps without any
+  modifications.
+
+- New timestamp synchronization between host and guests.
+   * P2P : timing back and forth of host and guest
+   * KVM : queries the kernel for the multiplier, offset and shift for exact
+           synchronization of host and guest timestamps.
+
+- tracecmd_warning() API for writing error messages in libtracecmd library.
+
+- Better bash tab completion.
+
+- Plugins now go into /usr/[local/]lib/trace-cmd instead of traceevent
+  directory.
+
+- New option --full for trace-cmd list to show "print fmt" of event formats
+  specified by -e <event> -F
+
+- trace-cmd list now shows ftrace events as well as events that can be
+  enabled.
+
+- Supports non qemu VM host/guest tracing.
+
+- New option --align-ts for trace-cmd report that will make the timestamps of
+  all events a delta from the first event. (0.000003 instead of 16292.633984)
+
+- New option -V for trace-cmd report to change verbosity.
+
+- New option --verbose for a bunch of commands to trace-cmd.
+
+- New option --poll for trace-cmd record to poll which makes trace-cmd check
+  the buffers with O_NONBLOCK instead of relying on IPIs to wake it up. This
+  reduces latency on recording tasks that trace-cmd is not running on.
+
+- trace.dat output has been updated to Version 7 (incompatible with older
+  trace-cmd, but trace-cmd convert can convert back to version 6, with
+  possible lost of features).
+   * The file is broken up into sections (defined as options) just like an ELF
+     file.
+   * Allows for sections to be compressed.
+      .  Supports zlib compression
+      .  Supports ZSTD compression
+   * Will allow for new types of data to be added
+      . Target for perf data to be included (still in development)
+
+- New command: trace-cmd convert, to convert between trace-cmd 7 and 6 files.
