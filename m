@@ -2,73 +2,88 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC2FFC433EF
-	for <linux-trace-users@archiver.kernel.org>; Wed, 13 Apr 2022 20:44:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9268AC433EF
+	for <linux-trace-users@archiver.kernel.org>; Sun, 15 May 2022 22:06:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbiDMUrG (ORCPT
+        id S235087AbiEOWGs (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Wed, 13 Apr 2022 16:47:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
+        Sun, 15 May 2022 18:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237650AbiDMUrF (ORCPT
+        with ESMTP id S234992AbiEOWGr (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Wed, 13 Apr 2022 16:47:05 -0400
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C5A3CA47
-        for <linux-trace-users@vger.kernel.org>; Wed, 13 Apr 2022 13:44:43 -0700 (PDT)
-Received: by mail-qt1-f181.google.com with SMTP id s6so2274308qta.1
-        for <linux-trace-users@vger.kernel.org>; Wed, 13 Apr 2022 13:44:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=qZ8VUEH+umA1mG47WV7GNIgSGaCrUAJLmm1ZK8h2WG4=;
-        b=jozIjBj5RdE6TJDleikpUem+9HUQFAqB/Bnp3e06ZMsp6POp+ffPJyM2ESYPIijqmD
-         DfAH6ljMPabRV2sFa3LwHqZ3noAxZZ+QYHX1qsL9uo2ASor1aysaxMREZSoH28lCQY0q
-         YH22QkumHYudPrJvuFoKIJQzfIFyzEdGN2oWeK2JNXNIKugwlccfKH9Kvl+QX0N1dbFX
-         tk3hBYIiyzFEDU9Is6jqYlgRhsfPeL+P68zc2ZXqdGQYFBj8IZhuZhzdT6nFWw2jasRq
-         VUFcuidfj7Bx0r8FWq/j/bbRWzik2fTYtqM9uiZOMGrdSQUWjh5rJAR0BN2i7Q5ZRf9B
-         cjpQ==
-X-Gm-Message-State: AOAM530ACWhTIZIWGo8ej8S0Tbcy3qQPYDDeMOCxP4Y7wlR9LxpniPPw
-        ue8uf+tG1A8VvYpSYYggTJ7iQlvXqP4S7A==
-X-Google-Smtp-Source: ABdhPJyW7i2n6f3H8VuoRuH+xwzNrRwyy7Rnk4TyZnpjEeGk1w2M7mzpd3VqpF55lAkfSzkZPEYgzw==
-X-Received: by 2002:ac8:1487:0:b0:2ef:ca47:89c1 with SMTP id l7-20020ac81487000000b002efca4789c1mr8644717qtj.646.1649882682235;
-        Wed, 13 Apr 2022 13:44:42 -0700 (PDT)
-Received: from gmail.com (192-222-180-24.qc.cable.ebox.net. [192.222.180.24])
-        by smtp.gmail.com with ESMTPSA id l21-20020a05620a211500b0069bf630f3b4sm8562348qkl.125.2022.04.13.13.44.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 13:44:41 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 16:44:40 -0400
-From:   =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau 
-        <jeremie.galarneau@efficios.com>
-To:     lttng-dev@lists.lttng.org
-Cc:     diamon-discuss <diamon-discuss@lists.linuxfoundation.org>,
-        linux-trace-users <linux-trace-users@vger.kernel.org>
-Subject: [RELEASE] LTTng-tools 2.12.11 - (Ta) Meilleure
-Message-ID: <Ylc2OCHxPC93anyQ@gmail.com>
+        Sun, 15 May 2022 18:06:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D67205D5;
+        Sun, 15 May 2022 15:06:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFA49B80E66;
+        Sun, 15 May 2022 22:06:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0803EC385B8;
+        Sun, 15 May 2022 22:06:41 +0000 (UTC)
+Date:   Sun, 15 May 2022 18:06:40 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Vasily Averin <vvs@openvz.org>, Shakeel Butt <shakeelb@google.com>,
+        Ingo Molnar <mingo@redhat.com>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>, linux-mm@kvack.org,
+        "linux-trace-users@vger.kernel.org" 
+        <linux-trace-users@vger.kernel.org>
+Subject: Re: [PATCH v2] percpu: improve percpu_alloc_percpu event trace
+Message-ID: <20220515180640.0ae2ead5@gandalf.local.home>
+In-Reply-To: <YnsgbXKiNNSF+1ZO@carbon>
+References: <2b388d09-940e-990f-1f8a-2fdaa9210fa0@openvz.org>
+        <a07be858-c8a3-7851-9086-e3262cbcf707@openvz.org>
+        <YnsgbXKiNNSF+1ZO@carbon>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi all,
+On Tue, 10 May 2022 19:33:17 -0700
+Roman Gushchin <roman.gushchin@linux.dev> wrote:
 
-We have just released the eleventh bug-fix release of LTTng-tools 2.12 - (Ta)
-Meilleure. This release addresses a number of issues listed below.
+>  --- a/include/trace/events/percpu.h
+> > +++ b/include/trace/events/percpu.h
+> > @@ -6,15 +6,20 @@
+> >  #define _TRACE_PERCPU_H
+> >  
+> >  #include <linux/tracepoint.h>
+> > +#include <trace/events/mmflags.h>
+> >  
+> >  TRACE_EVENT(percpu_alloc_percpu,
+> >  
+> > -	TP_PROTO(bool reserved, bool is_atomic, size_t size,
+> > -		 size_t align, void *base_addr, int off, void __percpu *ptr),
+> > +	TP_PROTO(unsigned long call_site,
+> > +		 bool reserved, bool is_atomic, size_t size,
+> > +		 size_t align, void *base_addr, int off,
+> > +		 void __percpu *ptr, size_t bytes_alloc, gfp_t gfp_flags),  
+> 
+> Don't we want to preserve the order and add the call_site at the end?
+> Trace events are not ABI, but if we don't have a strong reason to break it,
+> I'd preserve the old order.
 
-2022-04-13 lttng-tools 2.12.11 (International Day of Pink)
-	* Fix: notification: assert on len > 0 for dropped notification message
-	* Fix: sessiond: cmd_enable_channel: negative error code used
+Ideally everyone should be using libtraceevent which will parse the format
+file for the needed entries.
 
-As always, please report any issue you may encounter to bugs.lttng.org
-or on this mailing list.
+Nothing (important) should be parsing the raw ascii from the trace files.
+It's slow and unreliable. The raw format (trace_pipe_raw) files, along with
+libtraceevent will handle fining the fields you are looking for, even if
+the fields move around (internally or externally).
 
-Project website: https://lttng.org
+Then there's trace-cruncher (a python script that uses libtracefs and
+libtraceevent) that will work too.
 
-Download link:
-https://lttng.org/files/lttng-tools/lttng-tools-2.12.11.tar.bz2
+  https://github.com/vmware/trace-cruncher
 
-GPG signature:
-https://lttng.org/files/lttng-tools/lttng-tools-2.12.11.tar.bz2.asc
+-- Steve
