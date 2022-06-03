@@ -2,128 +2,107 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65A4FC43334
-	for <linux-trace-users@archiver.kernel.org>; Fri,  3 Jun 2022 19:30:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2839C433EF
+	for <linux-trace-users@archiver.kernel.org>; Fri,  3 Jun 2022 20:09:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345949AbiFCTao (ORCPT
+        id S1344437AbiFCUJM (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Fri, 3 Jun 2022 15:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
+        Fri, 3 Jun 2022 16:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241021AbiFCTan (ORCPT
+        with ESMTP id S231804AbiFCUJL (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Fri, 3 Jun 2022 15:30:43 -0400
+        Fri, 3 Jun 2022 16:09:11 -0400
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F78159BBA;
-        Fri,  3 Jun 2022 12:30:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FAC289BF;
+        Fri,  3 Jun 2022 13:09:10 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id D56CA3FD55B;
-        Fri,  3 Jun 2022 15:30:35 -0400 (EDT)
+        by mail.efficios.com (Postfix) with ESMTP id 634453FDD4D;
+        Fri,  3 Jun 2022 16:09:10 -0400 (EDT)
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id PoAEU5B-W_Nf; Fri,  3 Jun 2022 15:30:35 -0400 (EDT)
+        with ESMTP id IXGYnuZSSVoF; Fri,  3 Jun 2022 16:09:09 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 56F813FD2E8;
-        Fri,  3 Jun 2022 15:30:35 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 56F813FD2E8
+        by mail.efficios.com (Postfix) with ESMTP id 29FD23FDD4C;
+        Fri,  3 Jun 2022 16:09:09 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 29FD23FDD4C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1654284635;
-        bh=f56zKEv6Nh3cphP2EsdkVgMEWZOWaZE4zDAQFr2H9Qs=;
+        s=default; t=1654286949;
+        bh=x5FVjvTCK5EfFQUkameFsjLk1/pbvmKvXtwrFvaVs3s=;
         h=Date:From:To:Message-ID:MIME-Version;
-        b=vFAGmtmgVTf/yuynbZKkUFMRNW/uJyOVJqkg/bEX1v+fmPO6c6nz+RnRjbiMG0MRG
-         lMI5cWVsQNHKa3fYuL4g8R/CL1gtDnTYDUpBSZl+W/hsBAJMHlKsWcPbnEbe6vgEYK
-         Vc0s6yDzyVVtgVrNktJ4ql4mhJFhj/DQj7xGa4P6TQjj9jZt5odsVmDXaaLRV65aSx
-         aX7U+/zQkF3nqalzvrP6bikr+pp+EW6Y7pWS73MvpP4uRkvyB8U8ekug85E8/OVu6V
-         LI1S7BVCWktSJFgm9HCvsU0h2YxAFl4dhnX5w8XOeESs/MqSXOyWO4kEmNeMlhOM+z
-         +iixtNM3AUV5g==
+        b=iiQjLW8mDg8UjgCR8EyQHE0Q0IUKTYnP6uZul6mwoPSy2hoWsflh528TLbVrhw7AT
+         QCOoO1eIk85nEy2ZnwLlDg3E5frdfv6VanshHoRe6yTyKQWYK1yOJ9ehobwPvyrbvZ
+         Y4NhKhdaez+Narv/qlQlbV8DRUfUUq5RMabVeWFooE+jeletyhNyetPNpZsLABXdW0
+         ds9JCzRe9dqLEDpSIU/TX0+YB/d5Y4olsOGqdCwA5ujwyoG1A7PGd/koFX2oGQGFam
+         0/KA0dTHHGtnQIAVAR8sh3sc5kOQJUUmtWtN0N0KgXDw47UzP6Nymikl6bWI3VRYju
+         NFAb775zLvTag==
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id y1CIPhIGFxiu; Fri,  3 Jun 2022 15:30:35 -0400 (EDT)
+        with ESMTP id ONeGqzd6vEo1; Fri,  3 Jun 2022 16:09:09 -0400 (EDT)
 Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 4BE963FD619;
-        Fri,  3 Jun 2022 15:30:35 -0400 (EDT)
-Date:   Fri, 3 Jun 2022 15:30:35 -0400 (EDT)
+        by mail.efficios.com (Postfix) with ESMTP id 1CE6C3FDD4B;
+        Fri,  3 Jun 2022 16:09:09 -0400 (EDT)
+Date:   Fri, 3 Jun 2022 16:09:08 -0400 (EDT)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     lttng-dev <lttng-dev@lists.lttng.org>,
-        Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
+To:     Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
+        lttng-dev <lttng-dev@lists.lttng.org>,
         linux-trace-users <linux-trace-users@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <846400291.20840.1654284635213.JavaMail.zimbra@efficios.com>
-Subject: [RELEASE] LTTng-modules 2.13.4 and 2.12.9 (Linux kernel tracer)
+Message-ID: <2013849140.21031.1654286948952.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] LTTng-UST 2.13.3 and 2.12.5 (Linux user-space tracer)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [167.114.26.124]
 X-Mailer: Zimbra 8.8.15_GA_4272 (ZimbraWebClient - FF100 (Linux)/8.8.15_GA_4257)
-Thread-Index: DHrGG1JJg8YJlaBmRz8CT/+mTxeC+w==
-Thread-Topic: LTTng-modules 2.13.4 and 2.12.9 (Linux kernel tracer)
+Thread-Index: GvhBkQpsvyTv3F9IyFg96OTAu3APcA==
+Thread-Topic: LTTng-UST 2.13.3 and 2.12.5 (Linux user-space tracer)
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
 Hi,
 
-The 2.13.4 and 2.12.9 releases are bug fix releases for the currently
-maintained LTTng-modules stable branches.
+This is a stable release announcement for the LTTng-UST project. LTTng-UST
+is a tracer for Linux user-space applications. The respective versions are
+2.13.3 and 2.12.5.
 
-Noteworthy in the 2.12.9 release:
+Those are bug fix releases correcting a few issues in both stable branches,
+namely by removing use of non-async-signal-safe functions in the ERR()
+error-printing macros, and fixing a use-after-free memory read in a list
+traversal within the statedump code.
 
-The README.md file now document that the stable-2.12 branch of
-LTTng-modules supports Linux kernels between 3.0 and 5.17 (inclusive).
-Support for the 5.18 kernel is provided starting from the stable-2.13
-branch of LTTng-modules. Also, tracepoint instrumentation was adapted
-to follow changes to upstream kernels: the "random" tracepoint
-subsystem was removed from 5.18, and this removal was backported to
-stable kernels as well. Finally, a compaction subsystem instrumentation
-name-spacing fix is included.
-
-Noteworthy in the 2.13.4 release: 
-
-The same instrumentation fixes as 2.12.4 were integrated, affecting the
-compaction and random subsystems. Changes to tracepoint instrumentation
-were done to support the 5.18 Linux kernel, affecting the block, compaction,
-sched, scsi, and kvm subsystems. The kprobes instrumentation was adapted
-to use the rethooks if possible (needed for 5.18).
-
-Now that the kvm subsystem unexports the kvm_x86_ops symbols in 5.18,
-lttng-modules relies on kallsyms to use this symbol.
-
-Finally, two changes are really more in the "bug fix" category rather than
-adapting to newer kernels: the bytecode interpreter in lttng-modules left the
+Specifically in 2.13.3, the bytecode interpreter in LTTng-UST left the
 context fields byte order uninitialized, thus leading to bogus context field
 values in the event notification capture feature. Fix this by initializing
-the byte order. A hard-to-trigger race is also fixed in the event notifier
-use of the ring buffer.
+the byte order.
 
-Changelog:
+Also specifically in 2.13.3, a too-strict validation of array/sequence field
+types is relaxed to allow pointer types to be used as integer values. This
+was allowed prior to 2.13, and this too-strict validation was therefore an
+instrumentation API regression.
 
-2022-06-03 (National Repeat Day) (National Repeat Day) LTTng modules 2.13.4
-        * Fix: event notifier: racy use of last subbuffer record
+Detailed Changelog:
+
+2022-06-03 (National Repeat Day) (National Repeat Day) lttng-ust 2.13.3
+        * Document ust lock async-signal-safety
+        * Fix: don't use strerror() from ust lock nocheck
+        * Fix: remove non-async-signal-safe fflush from ERR()
+        * Fix: Pointers are rejected by integer element compile time assertion for array and sequence
+        * Fix: statedump: invalid read during iter_end
         * Fix: bytecode interpreter context_get_index() leaves byte order uninitialized
-        * fix: 'random' tracepoints removed in stable kernels
-        * fix: random: remove unused tracepoints (v5.10, v5.15)
-        * fix: sched/tracing: Append prev_state to tp args instead (v5.18)
-        * fix: mm: compaction: cleanup the compaction trace events (v5.18)
-        * fix: scsi: core: Remove <scsi/scsi_request.h> (v5.18)
-        * fix: kprobes: Use rethook for kretprobe if possible (v5.18)
-        * fix: random: remove unused tracepoints (v5.18)
-        * fix: scsi: block: Remove REQ_OP_WRITE_SAME support (v5.18)
-        * fix: block: remove genhd.h (v5.18)
-        * fix: sched/tracing: Don't re-read p->state when emitting sched_switch event (v5.18)
-        * fix: KVM: x86: Unexport kvm_x86_ops (v5.18)
-        * Fix: do not warn on unknown counter ioctl
-        * Fix: tracepoint event: allow same provider and event name
-        * Fix: compaction migratepages event name
 
-2022-06-03 (National Repeat Day) (National Repeat Day) LTTng modules 2.12.9
-        * fix: 'random' tracepoints removed in stable kernels
-        * fix: random: remove unused tracepoints (v5.10, v5.15)
-        * fix: random: remove unused tracepoints (v5.18)
-        * Document supported kernel versions for stable-2.12 branch
-        * Fix: include erroneously removed by backport
-        * Fix: tracepoint event: allow same provider and event name
-        * Fix: compaction migratepages event name
+2022-06-03 (National Repeat Day) (National Repeat Day) lttng-ust 2.12.5
+        * Document ust lock async-signal-safety
+        * Fix: don't use strerror() from ust lock nocheck
+        * Fix: remove non-async-signal-safe fflush from ERR()
+        * Fix: statedump: invalid read during iter_end
+        * Fix: bytecode interpreter context_get_index() leaves byte order uninitialized
+
+Thanks,
+
+Mathieu
 
 Project website: https://lttng.org
 Documentation: https://lttng.org/docs
