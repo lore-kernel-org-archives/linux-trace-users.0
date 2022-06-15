@@ -2,124 +2,74 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADCA4CCA483
-	for <linux-trace-users@archiver.kernel.org>; Tue,  7 Jun 2022 17:36:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E03A4C43334
+	for <linux-trace-users@archiver.kernel.org>; Wed, 15 Jun 2022 15:18:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344299AbiFGRgr (ORCPT
+        id S1349004AbiFOPSw convert rfc822-to-8bit (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Tue, 7 Jun 2022 13:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53222 "EHLO
+        Wed, 15 Jun 2022 11:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347421AbiFGRfO (ORCPT
+        with ESMTP id S1347617AbiFOPSq (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:35:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B848B120886
-        for <linux-trace-users@vger.kernel.org>; Tue,  7 Jun 2022 10:30:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654623002;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=Cd64zesxXwO9DDUxUPRw9NFg82m3SyiLm8HJHcXtYxs=;
-        b=EwQhh1GWs+NSlGnRIt3oBdfVII2m5AN1KPc3oWfndVsOMQb2V3MS09eu3qRMgtDHORYUHw
-        f4zS86Ip0irL26pwejhBAC/F/ibctbjP2l1jHnsP/0DcfmPDZBhyUzGa3pcHPDIROJphsA
-        8NPcWn1WcASgdB7tiIrPxOu3+kbZLwg=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-508-UoyJmIKgOhes_lqF1kDlRQ-1; Tue, 07 Jun 2022 13:30:01 -0400
-X-MC-Unique: UoyJmIKgOhes_lqF1kDlRQ-1
-Received: by mail-qk1-f197.google.com with SMTP id q7-20020a05620a0d8700b006a6b5428cb1so6206517qkl.2
-        for <linux-trace-users@vger.kernel.org>; Tue, 07 Jun 2022 10:30:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=Cd64zesxXwO9DDUxUPRw9NFg82m3SyiLm8HJHcXtYxs=;
-        b=PwEcRDOh0gNpb9ULYSisaI8s2leQp7JDHHXK5YHkYXSVRu8R9ZRoB30TmQ/BB/Ro0o
-         TcXeO+6IKwgI2YYbf1XvHQuY8PTVqy7bUMIxFyBfy1v9pVGyaqJjJoq465AOv/LUeA1g
-         ZFkXRJ3uSH8XBLQ1U/sqLv/QG/OgH/6T8qBGSNV6TmV/xQyAnqLxJ5rY/TQuNXoGgslR
-         uXvkZDnLRTIlbZR1VHwC13qQ7jyGAWEYGAiFSi8Nh0ZUC8iFdXoXD+P55o42Oe3d0ZjV
-         DO1vs3aqvtWWgKZniOQK9UEsZEOgZvBjuJQhfzMc2S5dd3W33C533UmbJGEFI8Z0YS7r
-         RCDw==
-X-Gm-Message-State: AOAM533NISTCm20VhSMVl1Zo9dffiODDBitOO+gQnCoPxRQtPQ8RUOsI
-        NSVRa5R1pQnjSj7JQ7FglqhBkDYB74gT/CdJV4W2UghQV/3xX4YxjkaZoQaXjQOp/R4mLcp6tIt
-        814RtP3bHTJfP57FFHeCQIY/19e+LGaxf+Bxk77Iadyl/c5o=
-X-Received: by 2002:a37:510:0:b0:6a6:ab9e:1b80 with SMTP id 16-20020a370510000000b006a6ab9e1b80mr12714394qkf.770.1654623000846;
-        Tue, 07 Jun 2022 10:30:00 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyzBLb3AR0/c4UB2dMyC54NtqNuvP7ErFpaHdRPIuWyOScdvAhUmZE3B0ZcDDKCwgmCaug3oBt7gQ4WiS/BOaY=
-X-Received: by 2002:a37:510:0:b0:6a6:ab9e:1b80 with SMTP id
- 16-20020a370510000000b006a6ab9e1b80mr12714382qkf.770.1654623000642; Tue, 07
- Jun 2022 10:30:00 -0700 (PDT)
+        Wed, 15 Jun 2022 11:18:46 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EFE2E09B
+        for <linux-trace-users@vger.kernel.org>; Wed, 15 Jun 2022 08:18:45 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LNTTm40ppz687qR
+        for <linux-trace-users@vger.kernel.org>; Wed, 15 Jun 2022 23:18:36 +0800 (CST)
+Received: from lhreml745-chm.china.huawei.com (10.201.108.195) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 15 Jun 2022 17:18:42 +0200
+Received: from lhreml739-chm.china.huawei.com (10.201.108.189) by
+ lhreml745-chm.china.huawei.com (10.201.108.195) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 15 Jun 2022 16:18:42 +0100
+Received: from lhreml739-chm.china.huawei.com ([10.201.108.189]) by
+ lhreml739-chm.china.huawei.com ([10.201.108.189]) with mapi id
+ 15.01.2375.024; Wed, 15 Jun 2022 16:18:41 +0100
+From:   Matteo Bertolino <matteo.bertolino@huawei.com>
+To:     "linux-trace-users@vger.kernel.org" 
+        <linux-trace-users@vger.kernel.org>
+Subject: Format of trace.dat flyrecord section
+Thread-Topic: Format of trace.dat flyrecord section
+Thread-Index: AdiAyt5H6PwunLT9TtSAaZGsGqRogg==
+Date:   Wed, 15 Jun 2022 15:18:41 +0000
+Message-ID: <e3287c4e7ae2407f873bedf74df9651c@huawei.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.123.160.240]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-From:   Alexander Aring <aahringo@redhat.com>
-Date:   Tue, 7 Jun 2022 13:29:49 -0400
-Message-ID: <CAK-6q+gzQSbsfCEu5Gma_X7H16p0UipbK+nZeGNAqOi-czP+XA@mail.gmail.com>
-Subject: ANNOUNCE: Linux Distributed Lock Manager Viewer
-To:     cluster-devel <cluster-devel@redhat.com>
-Cc:     David Teigland <teigland@redhat.com>,
-        Christine Caulfield <ccaulfie@redhat.com>, rostedt@goodmis.org,
-        tz.stoyanov@gmail.com, chan@mcs.anl.gov, gropp@mcs.anl.gov,
-        lusk@mcs.anl.gov, song@kernel.org,
-        linux-trace-users@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi,
+Dear community,
 
-I've built with existing open source software a Linux DLM (Distributed
-Lock Manager) viewer [0]. The Linux DLM subsystem can be found in
-"fs/dlm" and its main users are gfs2, ocfs2 and cluster-md. It is like
-the name already propagates a distributed lock manager for Linux
-clusters. A cluster can have shared resources among several nodes. DLM
-offers to protect shared resources against mutual access e.g. cluster
-file system gfs2 which operates on shared block devices among several
-nodes. The viewer offers a graphical view about the used lock states
-over time in a cluster.
+[Goal] I am trying to understand more about tracing. In one of my experiments, I decided to try to write my own trace.dat file (with some dummy entries).
+To do that, I am following the documentation for a "version-7 .dat" provided in https://github.com/rostedt/trace-cmd/blob/master/Documentation/trace-cmd/trace-cmd.dat.v7.5.txt , 
+and trying to looking at the code of libtraceevent, trace-cmd and kernelshark. I use kernelshark to be sure I am writing a good trace.
 
-Therefore we need to capture Linux DLM traces on all cluster nodes.
-This is done by using the trace-cmd record command with the time
-synchronization feature between multiple Linux machines which are part
-of the DLM cluster. Another tool is dlm2slog2 [1] reads the recorded
-Linux trace files, merges and converts them into a "drawable" open
-format known as "slog2" [2] by using the open slog2 sdk. The slog2sdk
-contains a viewer named "jumpshot" [3] which can be used to visualize
-the slog2 file. Originally this drawable format was invented to trace
-MPI (Message Passing Interface) applications, however it does not
-depend on MPI and offers a graphical tracing for distributed
-applications which I adapted for DLM lock states.
+[Context] I managed to write a complete header (I double-checked checking in strategical points in trace-cmd, kernelshark and libtraceevent code). In this header, I have three sections:
+- Section 0, with options 16 (header_infos), option 8 (in which I stated to have a single CPU), and option 3. The latter states that I have a cpu whose data starts at offset 4096 of the trace.
+- Section 16: in which I transfers the information of `header_page` and `header_event` files.
+- Section 3: the flyrecord section, whose header is followed by a padding to be one-page aligned. After the padding, there should be the CPU datas.
+Yet another check of the header's correctness are outputs of commands `trace-cmd dump --flyrecord -i mytrace.dat` and `trace-cmd dump --summary -i ../mytrace_v7.dat`.
 
-The only "missing" piece here was the convert and merge of the
-recorded Linux traces to the slog2 fileformat. Hereby I would like to
-thank all trace-cmd developers (especially those who made the time
-synchronization feature) and slog2sdk developers which offered they
-work as open source so it was easy for me to make a small piece of
-software "dlm2slog2" that works as a bridge between trace-cmd/linux
-tracing and slog2sdk.
+[Problem] The problems occur there. I don't manage to get the format of flyrecords. 
+I understood that timestamps need to follow the structure of ringbuffers (those expressed in `header_event` file), so 5 bits for the type_len, 27 for the time_delta, and an u32 array[].
+But, kernelshark entries contains also: timestamp, CPUs, PID, EVENT, TASK, LATENCY and "INFO". 
 
-As the slog2sdk is written in Java I did Java bindings similar to the
-existing python bindings for libtracecmd, similar classes, etc.
-underneath it uses swig. I would like to try to bring those bindings
-upstream to trace-cmd. It's _not_ necessary to have a Java dependency
-on trace-cmd, there should be some trace-cmd-java package available
-which installs the necessary swig library libctracecmdjava that offers
-jni access to libtracecmd. As well a jar file which can be seen as a
-library/python module and follows the same license as libtracecmd. The
-alternative here would be to maintain an out-of-tree trace-cmd-java
-package. I would like to hear some feedback for it, the current code
-can be found at [4].
+Through flybuffer schema, I can only provide TIMESTAMP divided by CPUs, but where do I take other fields?
+In addition to this, I didn't understand how I can provide multiple entries.
 
-If you want to get started or simply see what this is all about
-inclusive screenshots, see [0].
-
-- Alex
-
-[0] https://gitlab.com/netcoder/dlm2slog2/-/wikis/home
-[1] https://gitlab.com/netcoder/dlm2slog2
-[2] https://www.mcs.anl.gov/research/projects/perfvis/software/log_format/index.htm#SLOG-2
-[3] https://www.mcs.anl.gov/research/projects/perfvis/software/viewers/index.htm#Jumpshot-4
-[4] https://gitlab.com/netcoder/trace-cmd/-/commits/java_bindings
+Thanks for you possible help,
+Matteo
 
