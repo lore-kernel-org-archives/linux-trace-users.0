@@ -2,34 +2,34 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40995C433EF
-	for <linux-trace-users@archiver.kernel.org>; Fri, 17 Jun 2022 13:08:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15103C433EF
+	for <linux-trace-users@archiver.kernel.org>; Fri, 17 Jun 2022 13:10:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236563AbiFQNIn convert rfc822-to-8bit (ORCPT
+        id S236148AbiFQNKt convert rfc822-to-8bit (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Fri, 17 Jun 2022 09:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
+        Fri, 17 Jun 2022 09:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236509AbiFQNIn (ORCPT
+        with ESMTP id S1381267AbiFQNKs (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Fri, 17 Jun 2022 09:08:43 -0400
+        Fri, 17 Jun 2022 09:10:48 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F49610FC9
-        for <linux-trace-users@vger.kernel.org>; Fri, 17 Jun 2022 06:08:42 -0700 (PDT)
-Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LPfVh477Bz6GDFb;
-        Fri, 17 Jun 2022 21:08:28 +0800 (CST)
-Received: from lhreml738-chm.china.huawei.com (10.201.108.188) by
- fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE162488A0
+        for <linux-trace-users@vger.kernel.org>; Fri, 17 Jun 2022 06:10:43 -0700 (PDT)
+Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LPfSw3Zmkz6H71g;
+        Fri, 17 Jun 2022 21:06:56 +0800 (CST)
+Received: from lhreml744-chm.china.huawei.com (10.201.108.194) by
+ fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 17 Jun 2022 15:08:40 +0200
+ 15.1.2375.24; Fri, 17 Jun 2022 15:10:41 +0200
 Received: from lhreml739-chm.china.huawei.com (10.201.108.189) by
- lhreml738-chm.china.huawei.com (10.201.108.188) with Microsoft SMTP Server
+ lhreml744-chm.china.huawei.com (10.201.108.194) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 17 Jun 2022 14:08:39 +0100
+ 15.1.2375.24; Fri, 17 Jun 2022 14:10:41 +0100
 Received: from lhreml739-chm.china.huawei.com ([10.201.108.189]) by
  lhreml739-chm.china.huawei.com ([10.201.108.189]) with mapi id
- 15.01.2375.024; Fri, 17 Jun 2022 14:08:39 +0100
+ 15.01.2375.024; Fri, 17 Jun 2022 14:10:41 +0100
 From:   Matteo Bertolino <matteo.bertolino@huawei.com>
 To:     "linux-trace-users@vger.kernel.org" 
         <linux-trace-users@vger.kernel.org>
@@ -37,13 +37,14 @@ CC:     Steven Rostedt <rostedt@goodmis.org>,
         Tzvetomir Stoyanov <tz.stoyanov@gmail.com>
 Subject: RE: Format of trace.dat flyrecord section
 Thread-Topic: Format of trace.dat flyrecord section
-Thread-Index: AdiAyt5H6PwunLT9TtSAaZGsGqRoggArhoSAAAAJFwAANIJIQA==
-Date:   Fri, 17 Jun 2022 13:08:39 +0000
-Message-ID: <7082a3842cac4fe4bd3e6fcb8e693ff6@huawei.com>
+Thread-Index: AdiAyt5H6PwunLT9TtSAaZGsGqRoggArhoSAAAAJFwAANIJIQAAAFDyw
+Date:   Fri, 17 Jun 2022 13:10:41 +0000
+Message-ID: <c5e0ecf5677e40a98ffd4d72ee4127ca@huawei.com>
 References: <e3287c4e7ae2407f873bedf74df9651c@huawei.com>
         <20220616090237.2c9dda8b@gandalf.local.home>
  <20220616090338.3172219b@gandalf.local.home>
-In-Reply-To: <20220616090338.3172219b@gandalf.local.home>
+ <7082a3842cac4fe4bd3e6fcb8e693ff6@huawei.com>
+In-Reply-To: <7082a3842cac4fe4bd3e6fcb8e693ff6@huawei.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -56,6 +57,19 @@ X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
+
+Typo in the previous mail (towards the end): " Trying to put "1" on time_type (5bits), 1 on delta (27 bits) and ....."
+I also corrected the cited text, below.
+
+Bests,
+Matteo
+
+-----Original Message-----
+From: Matteo Bertolino [mailto:matteo.bertolino@huawei.com] 
+Sent: Friday, June 17, 2022 3:09 PM
+To: linux-trace-users@vger.kernel.org
+Cc: Steven Rostedt <rostedt@goodmis.org>; Tzvetomir Stoyanov <tz.stoyanov@gmail.com>
+Subject: RE: Format of trace.dat flyrecord section
 
 Dear Mr Rostedt and mr Stoyanov,
 thanks for your warming welcoming and for your answers.
@@ -81,8 +95,7 @@ format:
 	field:unsigned long ip;	offset:8;	size:8;	signed:0;
 	field:unsigned long parent_ip;	offset:16;	size:8;	signed:0;
 
-print fmt: " %ps <-- %ps", (void *)REC->ip, (void *)REC->parent_ip
-```
+print fmt: " %ps <-- %ps", (void *)REC->ip, (void *)REC->parent_ip ```
 
 Now, in my trace.dat, I want to write the real information.
 If you permit me, I'd like to continue this discussion with a concrete example.
@@ -112,7 +125,7 @@ Then, I have the 4080 bytes of payload event, but I use only 24 of them, as expr
 Unfortunately, in this way, only CPU number and timestamp are correctly displayed on the frontend (kernelshark).
 Event is marked as "unknown" and PID is wrong.
 Timestamp astonishes me too: to correctly display it, I just need to write 900000000000 on 8 bytes.
-Trying to put "1" on time_type (5bits), 0 on delta (27 bits) and 900000000000 on array (1*4 bytes), the timestamp is not correct.
+Trying to put "1" on time_type (5bits), 1 on delta (27 bits) and 900000000000 on array (1*4 bytes), the timestamp is not correct.
 
 Thus, I think I am doing something wrong. May you help me in correcting this example, please?
 
@@ -123,7 +136,7 @@ Thanks for your help,
 Matteo
 
 -----Original Message-----
-From: Steven Rostedt [mailto:rostedt@goodmis.org] 
+From: Steven Rostedt [mailto:rostedt@goodmis.org]
 Sent: Thursday, June 16, 2022 3:04 PM
 To: Matteo Bertolino <matteo.bertolino@huawei.com>
 Cc: linux-trace-users@vger.kernel.org
