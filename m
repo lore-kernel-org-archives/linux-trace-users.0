@@ -2,169 +2,223 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE065C43334
-	for <linux-trace-users@archiver.kernel.org>; Fri, 17 Jun 2022 15:26:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 906A4C433EF
+	for <linux-trace-users@archiver.kernel.org>; Mon, 20 Jun 2022 16:00:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382626AbiFQP0F (ORCPT
+        id S232421AbiFTQAE (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Fri, 17 Jun 2022 11:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
+        Mon, 20 Jun 2022 12:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382150AbiFQP0F (ORCPT
+        with ESMTP id S229487AbiFTQAD (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Fri, 17 Jun 2022 11:26:05 -0400
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C852A72B
-        for <linux-trace-users@vger.kernel.org>; Fri, 17 Jun 2022 08:26:04 -0700 (PDT)
-Received: by mail-vk1-xa32.google.com with SMTP id z17so2132273vkb.13
-        for <linux-trace-users@vger.kernel.org>; Fri, 17 Jun 2022 08:26:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0H9akfmgJa0fk9gzl5H3x214FEVRQhvJAL3kDqij3r8=;
-        b=mO/ghKeuCATHW3qigg7/DoFNRyIB2B902q8A7P1t/OH4ZP7CxS0qJxPd45mPJGA/VC
-         7kWa/N4+Ni7rF8U+DPYstvBxIDl3Eahg2spAAj2srtvvQFz6Mn0tSIWl0FZQwQvxwp/8
-         BO8Juki7THJSzSZXVyNgIqFDfYI5627+g4mBeZGE5zYQmZytizBm7aergTWEi/G6AvLT
-         C73ILWYe6heXk1at2BeZDVVqX4jPHtEwpOXu1WzikMft7qiXXYDfr9Ml2/q935qieDIt
-         Bcf0uP9r3FFOFNCmmDKf32aETElL35+nfYge2nvsomKsUI8BtTT0eJZaVIfkNP7pGj7/
-         cuyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0H9akfmgJa0fk9gzl5H3x214FEVRQhvJAL3kDqij3r8=;
-        b=7WGSsHuGUNeD5PXM8PbcUUHG4c+8XoBJzgXLO3WYZ7DLvNh4xq8F81Baq0T8AvElRS
-         O40ufNpUo2cXzFDn66HqEo8n/7fd9Jrw7WK1UWNm/6F1QxM9vq1oIEUWmYSNHF7uJjV5
-         EkWwhj1E050pQKRNVsVSWflzz/+ntCIPZMjxB0Z/SRnABQ7mvM4K0BdcU5/njLn+Z9At
-         PFyUbw4c8ZbfeGzpnK7Gro2g7GiCDUqUCh2aw6D8p3ztBD5/JqvHXbbsqeszTdVTOz8U
-         5me6EeULIpAUp+6umL5yZGaYIL9fwqnS7llGkC1IW3RMZnIW+nfRV+zBDW+ncZflniIR
-         5z5Q==
-X-Gm-Message-State: AJIora8qdvhQrbpHHaRzG+snoErOtTf5IHEGiny3R8gGa0LR4rIdU3qF
-        hPk5uZbCwVo8euQMAVg+Ie0qZjp0oakmZVkf7joLZVoEDmo=
-X-Google-Smtp-Source: AGRyM1tHmDI40ZR+wDd7qRq9ny4mgLN/7DnMCHmVxNaX6/aemxb5P3VWFzV7frP+aNDIWEwImTRXyKz/IXJI2cTgEMM=
-X-Received: by 2002:a1f:2154:0:b0:368:aaba:31b8 with SMTP id
- h81-20020a1f2154000000b00368aaba31b8mr5078683vkh.33.1655479563546; Fri, 17
- Jun 2022 08:26:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <e3287c4e7ae2407f873bedf74df9651c@huawei.com> <20220616090237.2c9dda8b@gandalf.local.home>
- <20220616090338.3172219b@gandalf.local.home> <7082a3842cac4fe4bd3e6fcb8e693ff6@huawei.com>
-In-Reply-To: <7082a3842cac4fe4bd3e6fcb8e693ff6@huawei.com>
-From:   Tzvetomir Stoyanov <tz.stoyanov@gmail.com>
-Date:   Fri, 17 Jun 2022 18:25:47 +0300
-Message-ID: <CAPpZLN7x_w9FTJ1Knrrmv2Rny2T5T-SH+jh=sHNnxWKqYK7s6g@mail.gmail.com>
-Subject: Re: Format of trace.dat flyrecord section
-To:     Matteo Bertolino <matteo.bertolino@huawei.com>
-Cc:     "linux-trace-users@vger.kernel.org" 
+        Mon, 20 Jun 2022 12:00:03 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70D012AB2
+        for <linux-trace-users@vger.kernel.org>; Mon, 20 Jun 2022 09:00:00 -0700 (PDT)
+Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LRZ8n6KMVz687rC;
+        Mon, 20 Jun 2022 23:59:37 +0800 (CST)
+Received: from lhreml743-chm.china.huawei.com (10.201.108.193) by
+ fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 20 Jun 2022 17:59:58 +0200
+Received: from lhreml739-chm.china.huawei.com (10.201.108.189) by
+ lhreml743-chm.china.huawei.com (10.201.108.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 20 Jun 2022 16:59:57 +0100
+Received: from lhreml739-chm.china.huawei.com ([10.201.108.189]) by
+ lhreml739-chm.china.huawei.com ([10.201.108.189]) with mapi id
+ 15.01.2375.024; Mon, 20 Jun 2022 16:59:57 +0100
+From:   Matteo Bertolino <matteo.bertolino@huawei.com>
+To:     Tzvetomir Stoyanov <tz.stoyanov@gmail.com>
+CC:     "linux-trace-users@vger.kernel.org" 
         <linux-trace-users@vger.kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: RE: Format of trace.dat flyrecord section
+Thread-Topic: Format of trace.dat flyrecord section
+Thread-Index: AdiAyt5H6PwunLT9TtSAaZGsGqRoggArhoSAAAAJFwAANIJIQAACvz6AAJfEonA=
+Date:   Mon, 20 Jun 2022 15:59:57 +0000
+Message-ID: <9fef9ecfda1f4367984dce3457574801@huawei.com>
+References: <e3287c4e7ae2407f873bedf74df9651c@huawei.com>
+ <20220616090237.2c9dda8b@gandalf.local.home>
+ <20220616090338.3172219b@gandalf.local.home>
+ <7082a3842cac4fe4bd3e6fcb8e693ff6@huawei.com>
+ <CAPpZLN7x_w9FTJ1Knrrmv2Rny2T5T-SH+jh=sHNnxWKqYK7s6g@mail.gmail.com>
+In-Reply-To: <CAPpZLN7x_w9FTJ1Knrrmv2Rny2T5T-SH+jh=sHNnxWKqYK7s6g@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.123.160.240]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 4:08 PM Matteo Bertolino
-<matteo.bertolino@huawei.com> wrote:
->
-> Dear Mr Rostedt and mr Stoyanov,
-> thanks for your warming welcoming and for your answers.
->
-> I had clearer ideas now. If possible, I would like to ask some clarifications.
-> Once everything is clear in my mind, I will write a resume with an example for the mailing list, so it can be usefulf for future experiments.
->
-> Let's suppose that I want to write some events like the "function tracer":
-> Thanks to your explanation, I successfully communicated in the header this format. This is confirmed by:
->
-> ```
-> dreamer@dreamer-VB:~/Desktop/mydotdat/input$ trace-cmd dump --events -i ../mytrace_v7.dat
->         [Section 18 @ 617: "Unknown", flags 0x0, 485 bytes]
->         [Events format, 1 systems]
-> name: function
-> ID: 1
-> format:
->         field:unsigned short common_type;       offset:0;       size:2; signed:0;
->         field:unsigned char common_flags;       offset:2;       size:1; signed:0;
->         field:unsigned char common_preempt_count;       offset:3;       size:1; signed:0;
->         field:int common_pid;   offset:4;       size:4; signed:1;
->
->         field:unsigned long ip; offset:8;       size:8; signed:0;
->         field:unsigned long parent_ip;  offset:16;      size:8; signed:0;
->
-> print fmt: " %ps <-- %ps", (void *)REC->ip, (void *)REC->parent_ip
-> ```
->
-> Now, in my trace.dat, I want to write the real information.
-> If you permit me, I'd like to continue this discussion with a concrete example.
->
-> Let's suppose that I want to represent the following information:
->
-> Event: function trace event
-> Timestamp 9 seconds
-> PID: 7777
-> Function address: 0x2266D
-> Parent: 0x2266E
->
-> I start by filling the header_event information:
-> - Writing 900000000000 on 8 bytes (timestamp).
-> - Writing `24`in 8 bytes (commit) --> event data for event ID are on 24 bytes, indeed: common_* are on 8 bytes, ip and parent ip on 8.
-> - Ignoring overwrite: indeed, I already used commit.
->
-> Then, I have the 4080 bytes of payload event, but I use only 24 of them, as expressed in commit.
-> - common_type is 1, (2 bytes), because I want a function event
-> - common_flags is 0 (1 byte)
-> - common_preempt_count is 0 (1 byte)
-> - common_pid is 7777 (4 bytes)
-> - ip is 0x2266D (8 bytes)
-> - parent_ip is 0x2266E (8 bytes)
-> - the remaining 4096 - 24 bytes are of padding, so I can complete the 4080 bytes of data.
->
-> Unfortunately, in this way, only CPU number and timestamp are correctly displayed on the frontend (kernelshark).
-> Event is marked as "unknown" and PID is wrong.
-> Timestamp astonishes me too: to correctly display it, I just need to write 900000000000 on 8 bytes.
-> Trying to put "1" on time_type (5bits), 0 on delta (27 bits) and 900000000000 on array (1*4 bytes), the timestamp is not correct.
-
-Hi Matteo,
-The 'type_len' should be 6 for your event, as the payload is 24 bytes
-(6*4). The 'time_delta' is the delta from the timestamp written in the
-page header, i.e. if you put 199 in 'time_delta' the time stamp of the
-event is 900000000199. One very important note - take care of the
-endian, used for all numbers in the file. The endian of the file can
-be different from the endian of the host, where the file is displayed.
-That's why that information is written in the trace.dat - in the very
-beginning of the file.
-
->
-> Thus, I think I am doing something wrong. May you help me in correcting this example, please?
->
-> Another thing that did let me with a doubt is the following one: do I need a page (4096 bytes) for an event?
-> In other words: the 4096-24 bytes of padding to complete the 4080 bytes of "data" are mandatory to express another event?
->
-> Thanks for your help,
-> Matteo
->
-> -----Original Message-----
-> From: Steven Rostedt [mailto:rostedt@goodmis.org]
-> Sent: Thursday, June 16, 2022 3:04 PM
-> To: Matteo Bertolino <matteo.bertolino@huawei.com>
-> Cc: linux-trace-users@vger.kernel.org
-> Subject: Re: Format of trace.dat flyrecord section
->
->
-> OK, this is a claws-mail bug. It added the '\' in the email address when doing a reply all.
->
-> -- Steve
->
->
-> On Thu, 16 Jun 2022 09:02:37 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> > This is just a test to see if the added '\' was due to a claws-mail
-> > bug or somehow I did it.
-> >
-> > -- Steve
->
-
-
--- 
-Tzvetomir (Ceco) Stoyanov
-VMware Open Source Technology Center
+RGVhciBUenZldG9taXIsDQpUaGFua3MgZm9yIHlvdXIgYW5zd2VyLiBFdmVyeXRoaW5nIGlzIGNs
+ZWFyIHRvIG1lIG5vdy4NCg0KSW4gdGhlIHJlc3Qgb2YgdGhpcyBtYWlsLCBJJ2QgbGlrZSB0byBz
+aGFyZSB0byB0aGUgY29tbXVuaXR5IHNvbWUgY29uc2lkZXJhdGlvbnMgYWJvdXQgaG93IHRvIHN0
+cnVjdHVyZSB0aGUgZmx5IHJlY29yZCBzZWN0aW9uIGluIGEgdHJhY2UuZGF0IGZpbGUuDQpUaGlz
+IHJlc3VtZSBpcyBub3QgY29tcGxldGUgYXQgYWxsOiBpdCBvbmx5IGluY2x1ZGVzIHBvaW50cyB0
+aGF0IHdlcmUgbm90IGNsZWFyIHRvIG1lIGJlZm9yZSBleGNoYW5naW5nIHdpdGggTXIuIFN0b3lh
+bm92IGFuZCBNci4gUm9zdGVkdCwuIE1heWJlIHNvbWUgcGVvcGxlIG1heSBhbHNvIGZpbmQgaXQg
+dXNlZnVsLg0KDQotIEluIGEgRmx5cmVjb3JkIHNlY3Rpb24gKElEOiAzKSwgIGRhdGEgYXJlIGRp
+dmlkZWQgcGVyIENQVS4gQWZ0ZXIgdGhlIHNlY3Rpb24ncyBoZWFkZXIsIGEgcGFkZGluZyBtdXN0
+IGJlIHByZXNlbnQgdG8gZW5zdXJlIHRoZSByZWFsIGRhdGEgdG8gc3RhcnQgYXQgYSBvZmZzZXQg
+dGhhdCBpcyBwYWdlLWFsaWduZWQgKGUuZy4sIDQwOTYgaXMgYSBjb21tb24gc2l0dWF0aW9uKS4N
+Ci0gTGV0J3MgaW1hZ2luZSB0aGF0LCBmb3IgQ1BVIDAsIGRhdGEgc3RhcnRzIGF0IG9mZnNldCA0
+MDk2IG9mIHRoZSB0cmFjZS5kYXQNCi0gUmVhbCB0cmFjaW5nIGRhdGEgYXJlIGRpdmlkZWQgaW4g
+InBhZ2VzIi9idWZmZXJzIG9mIDQwOTYgYnl0ZXMuICBFYWNoIHBhZ2Ugc3RhcnRzIHdpdGggYSBo
+ZWFkZXIsIHdob3NlIGZvcm1hdCBpcyBleHBsaWNhdGVkIGluICJoZWFkZXJfcGFnZSIgZmlsZS4g
+DQoNCglmaWVsZDogdTY0IHRpbWVzdGFtcDsJb2Zmc2V0OjA7CXNpemU6ODsJc2lnbmVkOjE7DQoJ
+ZmllbGQ6IGxvY2FsX3QgY29tbWl0OwlvZmZzZXQ6ODsJc2l6ZTo4OwlzaWduZWQ6MTsNCglmaWVs
+ZDogaW50IG92ZXJ3cml0ZTsJb2Zmc2V0Ojg7CXNpemU6MTsJc2lnbmVkOjE7DQoJZmllbGQ6IGNo
+YXIgZGF0YTsJb2Zmc2V0OjE2OwlzaXplOjQwODA7CXNpZ25lZDoxOw0KDQotIEluIGhlYWRlcl9w
+YWdlLCBwYXkgYXR0ZW50aW9uIHRoYXQgZmllbGRzIGBjb21taXRgIGFuZCBgb3ZlcndyaXRlYCBh
+cmUgbXV0dWFsbHkgZXhjbHVzaXZlIChzYW1lIG9mZnNldCEpLg0KLSBJbiBoZWFkZXJfcGFnZSwg
+dGltZXN0YW1wIGlzIGEgNjQtYml0IG51bWJlciB0aGF0IHJlcHJlc2VudCB0aGUgYmFzZSB0aW1l
+c3RhbXAgZm9yIGFsbCB0aGUgZW50cmllcyBvZiB0aGF0IHBhZ2UuIExldCdzIHN1cHBvc2UgdGhh
+dCB3ZSB3cml0ZSA5MDAwMDAwMDAwICg5IHNlY29uZHMpIG9uIGl0OiB0aGlzIGA5MDAwMDAwMDAw
+YCB3aWxsIG5vdCBldmVudHVhbGx5IGRpc3BsYXllZCBvbiBrZXJuZWxzaGFyay4gSXQncyBqdXN0
+IGEgc3RhcnRpbmcgcG9pbnQuICJkYXRhIiBpcyB0aGUgYnVmZmVyIGluIHdoaWNoIHRoZSByZWFs
+IGVudHJpZXMgKHNldmVyYWwpIHdpbGwgYmUgd3JpdHRlbi4NCi0gVGhlbiwgaXQncyB0aW1lIHRv
+IHdyaXRlIHRoZSByZWFsIGVudHJpZXMgKGFsc28gbmFtZWQgImV2ZW50cyIuIEVudHJpZXMgYXJl
+IGNvbXBvc2VkIG9mIDIgcGFydHM6IDEpIGEgaGVhZGVyICBhbmQgMikgcmVzdCBvZiB0aGUgZGF0
+YS4NCi0gRXZlbnRzJyBoZWFkZXIgaXMgZXhwbGFpbmVkIGluIHRoZSBmaWxlICJoZWFkZXJfZXZl
+bnQiLiBUaGlzIGlzIHRoZSBzYW1lIGFzIExpbnV4J3MgcmluZ2J1ZmZlciBmb3JtYXQ6IGh0dHBz
+Oi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L2xhdGVzdC9zb3VyY2UvaW5jbHVkZS9saW51eC9y
+aW5nX2J1ZmZlci5oIzE1IC0+DQoNCiMgY29tcHJlc3NlZCBlbnRyeSBoZWFkZXINCgl0eXBlX2xl
+biAgICA6ICAgIDUgYml0cw0KCXRpbWVfZGVsdGEgIDogICAyNyBiaXRzDQoJYXJyYXkgICAgICAg
+OiAgIDMyIGJpdHMNCg0KCXBhZGRpbmcgICAgIDogdHlwZSA9PSAyOQ0KCXRpbWVfZXh0ZW5kIDog
+dHlwZSA9PSAzMA0KCXRpbWVfc3RhbXAgOiB0eXBlID09IDMxDQoJZGF0YSBtYXggdHlwZV9sZW4g
+ID09IDI4DQoNCi0gWW91IHBhc3MgYm90aCBoZWFkZXJzIGZpbGVzIHdpdGhpbiB0aGUgc2VjdGlv
+biAxNi4NCi0gRXZlbnRzJy9FbnRyaWVzJyBoZWFkZXIgb25seSBleHBsaWNpdCB0aGUgdGltZXN0
+YW1wIG9mIHRoZSBlbnRyeS4gSSB3aWxsIG5vdCBleHBsYWluIGl0IHNpbmNlIGl0J3MgdmVyeSBj
+bGVhciBieSBwcmV2aW91cyBleGNoYW5nZXMgd2l0aCBNci4gU3RveWFub3YgYW5kIE1yLiBSb3N0
+ZWR0IGFuZCBmcm9tIExpbnV4IHNvdXJjZSBjb2RlLiBIb3dldmVyLCBsZXQgbWUgY2xhcmlmeSBz
+b21lIG1hZ2ljIHBvaW50cy4NCi0gTGV0J3MgdGFrZSB0aGUgYmFzZSBvZiAgOSBzZWNvbmRzLiBX
+ZSB3YW50IHRvIGFkZCAyMCBtcyB0byBpdC4gSW4gdGhpcyBjYXNlLCB0aGUgcmVhc29uaW5nIHNo
+YWxsIGJlOiAiOXMgKyAyMCBtcyBpcyByZXByZXNlbnRlZCBvbiAyNCBieXRlcyAoNio0KS4gU28s
+IEkgbmVlZCB0byB3cml0ZSA2IG9uIHRoZSBmaXJzdCA1IGJpdHMgKHR5cGVfbGVuKSwgMjAwMDAw
+MDAgb24gdGhlIHJlbWFpbmluZyAyNyBiaXRzICh0aW1lIGRlbHRhKSIgKGZvciBhIHRvdGFsIG9m
+IDQgYnl0ZXMpIEFORCBOT1QgV1JJVElORyB0aGUgMzIgYml0cyBvZiBhcnJheTogSSBkb24ndCB1
+c2UgaXQsIHNvIEkgZG9uJ3Qgd3JpdGUgaXQuIE5vdGU6IDYgYnl0ZXMgYXJlIHJlcXVpcmVkIHRv
+IGNvbnRhaW4gdGhlIHZhbHVlIG9mIHRoZSBCQVNFIChvZiA5cykgKyB0aGUgZGVsdGEgKG9mIDIw
+IG1zKS4gSW4gdGhpcyB3YXksIGtlcm5lbHNoYXJrIHdpbGwgZGlzcGxheSA5LjAyIHMuDQotIElm
+IHdlIG5lZWQgdG8gYWRkIGFub3RoZXIgZW50cnksIGtlZXAgaW4gbWluZCB0aGF0IHRoZSB0aW1l
+IGRlbHRhIGlzIHJlc3BlY3QgdG8gdGhlIHByZXZpb3VzIGVudHJ5LCBhbmQgbm90IHRoZSBiYXNl
+IGFueW1vcmUuDQotIEF0IHRoaXMgcG9pbnQgd2UgdW5kZXJzdG9vZCBob3cgdG8gd3JpdGUgdGhl
+IHRpbWVzdGFtcHMsIGJ1dCBhIHRyYWNlIGlzIGNvbXBvc2VkIG9mIG1hbnkgb3RoZXIgZmllbGRz
+OiBQSUQsIGZ1bmN0aW9uIGFkZHJlc3MsIGNhbGxlciwgZXRjLg0KLSBGaXJzdCBvZiBhbGwsIHdl
+IG5lZWQgdG8gcGljayBhIGZvcm1hdC4gTmF0dXJhbGx5IHdlIGNhbiB3cml0ZSBvdXIgb3duIGZv
+cm1hdCwgYnV0LCBpZiB5b3Ugd2FudCB0byBkaXNwbGF5IHRoaXMgdHJhY2Ugd2l0aCBrZXJuZWxz
+aGFyayB3aXRob3V0IHdyaXRpbmcga2VybmVsc2hhcmsgcGx1Z2lucywgeW91IG5lZWQgdG8gcmVz
+cGVjdCBvbmUgb2YgdGhlIGV4aXN0aW5nIGZvcm1hdHMuIEZvciBpbnN0YW5jZSwgbGV0J3Mgc3Vw
+cG9zZSB0byB1c2UgImZ1bmN0aW9uIHRyYWNlciIgb2YgZnRyYWNlLiBJbiBkZWJ1Z2ZzLCBsb29r
+IGZvcjogL3N5cy9rZXJuZWwvZGVidWcvdHJhY2luZy9ldmVudHMvZnRyYWNlL2Z1bmN0aW9uL2Zv
+cm1hdA0KDQpJRDogMQ0KZm9ybWF0Og0KCWZpZWxkOnVuc2lnbmVkIHNob3J0IGNvbW1vbl90eXBl
+OwlvZmZzZXQ6MDsJc2l6ZToyOwlzaWduZWQ6MDsNCglmaWVsZDp1bnNpZ25lZCBjaGFyIGNvbW1v
+bl9mbGFnczsJb2Zmc2V0OjI7CXNpemU6MTsJc2lnbmVkOjA7DQoJZmllbGQ6dW5zaWduZWQgY2hh
+ciBjb21tb25fcHJlZW1wdF9jb3VudDsJb2Zmc2V0OjM7CXNpemU6MTsJc2lnbmVkOjA7DQoJZmll
+bGQ6aW50IGNvbW1vbl9waWQ7CW9mZnNldDo0OwlzaXplOjQ7CXNpZ25lZDoxOw0KDQoJZmllbGQ6
+dW5zaWduZWQgbG9uZyBpcDsJb2Zmc2V0Ojg7CXNpemU6ODsJc2lnbmVkOjA7DQoJZmllbGQ6dW5z
+aWduZWQgbG9uZyBwYXJlbnRfaXA7CW9mZnNldDoxNjsJc2l6ZTo4OwlzaWduZWQ6MDsNCg0KcHJp
+bnQgZm10OiAiICVwcyA8LS0gJXBzIiwgKHZvaWQgKilSRUMtPmlwLCAodm9pZCAqKVJFQy0+cGFy
+ZW50X2lwDQoNCi0gSWYgeW91IGRpZG4ndCBhbHJlYWR5IGRvIGl0LCB5b3UgbmVlZCB0byBwYXNz
+IHRoaXMgZm9ybWF0IHRvIHRoZSB0cmFjZS5kYXQgdGhyb3VnaCBzZWN0aW9uIDE4Lg0KLSBjb21t
+b25fdHlwZSBpcyB0aGUgSUQgb2YgdGhlIGV2ZW50IChub3RpY2U6IGZvciB0aGUgcHJldmlvdXMg
+ZXZlbnQsIGl0J3MgMSwgYXMgd2UgY2FuIG5vdGljZSBhdCB0aGUgYmVnaW5uaW5nIG9mIHRoZSBm
+aWxlKQ0KLSBjb21tb25fZmxhZ3MgYW5kIGNvbW1vbl9wcmVlbXB0X2NvdW50IGltcGFjdHMgdGhl
+IGZpZWxkICJsYXRlbmN5IiBvZiBrZXJuZWxzaGFyay4NCi0gY29tbW9uX3BpZCBpcywgaW5kZWVk
+LCB0aGUgUElEDQotIGlwIGFuZCBwYXJlbnRfaXAgYXJlIHRoZSB0cmFjZSBmdW5jdGlvbidzIGFk
+ZHJlc3MgYW5kIGhpcyBjYWxsZXIuDQotIFRoZSBmaW5hbCBwcmludCB3aWxsIGltcGFjdCB0aGUg
+ZmllbGQgImluZm8iIG9mIGtlcm5lbHNoYXJrLg0KDQpIb3BlZnVsbHkgdGhpcyB3aWxsIGJlIHVz
+ZWZ1bCBmb3IgdGhlIGZ0cmFjZS11c2VycyBjb21tdW5pdHkuDQpCZXN0cywNCk1hdHRlbw0KDQot
+LS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KRnJvbTogVHp2ZXRvbWlyIFN0b3lhbm92IFttYWls
+dG86dHouc3RveWFub3ZAZ21haWwuY29tXSANClNlbnQ6IEZyaWRheSwgSnVuZSAxNywgMjAyMiA1
+OjI2IFBNDQpUbzogTWF0dGVvIEJlcnRvbGlubyA8bWF0dGVvLmJlcnRvbGlub0BodWF3ZWkuY29t
+Pg0KQ2M6IGxpbnV4LXRyYWNlLXVzZXJzQHZnZXIua2VybmVsLm9yZzsgU3RldmVuIFJvc3RlZHQg
+PHJvc3RlZHRAZ29vZG1pcy5vcmc+DQpTdWJqZWN0OiBSZTogRm9ybWF0IG9mIHRyYWNlLmRhdCBm
+bHlyZWNvcmQgc2VjdGlvbg0KDQpPbiBGcmksIEp1biAxNywgMjAyMiBhdCA0OjA4IFBNIE1hdHRl
+byBCZXJ0b2xpbm8gPG1hdHRlby5iZXJ0b2xpbm9AaHVhd2VpLmNvbT4gd3JvdGU6DQo+DQo+IERl
+YXIgTXIgUm9zdGVkdCBhbmQgbXIgU3RveWFub3YsDQo+IHRoYW5rcyBmb3IgeW91ciB3YXJtaW5n
+IHdlbGNvbWluZyBhbmQgZm9yIHlvdXIgYW5zd2Vycy4NCj4NCj4gSSBoYWQgY2xlYXJlciBpZGVh
+cyBub3cuIElmIHBvc3NpYmxlLCBJIHdvdWxkIGxpa2UgdG8gYXNrIHNvbWUgY2xhcmlmaWNhdGlv
+bnMuDQo+IE9uY2UgZXZlcnl0aGluZyBpcyBjbGVhciBpbiBteSBtaW5kLCBJIHdpbGwgd3JpdGUg
+YSByZXN1bWUgd2l0aCBhbiBleGFtcGxlIGZvciB0aGUgbWFpbGluZyBsaXN0LCBzbyBpdCBjYW4g
+YmUgdXNlZnVsZiBmb3IgZnV0dXJlIGV4cGVyaW1lbnRzLg0KPg0KPiBMZXQncyBzdXBwb3NlIHRo
+YXQgSSB3YW50IHRvIHdyaXRlIHNvbWUgZXZlbnRzIGxpa2UgdGhlICJmdW5jdGlvbiB0cmFjZXIi
+Og0KPiBUaGFua3MgdG8geW91ciBleHBsYW5hdGlvbiwgSSBzdWNjZXNzZnVsbHkgY29tbXVuaWNh
+dGVkIGluIHRoZSBoZWFkZXIgdGhpcyBmb3JtYXQuIFRoaXMgaXMgY29uZmlybWVkIGJ5Og0KPg0K
+PiBgYGANCj4gZHJlYW1lckBkcmVhbWVyLVZCOn4vRGVza3RvcC9teWRvdGRhdC9pbnB1dCQgdHJh
+Y2UtY21kIGR1bXAgLS1ldmVudHMgLWkgLi4vbXl0cmFjZV92Ny5kYXQNCj4gICAgICAgICBbU2Vj
+dGlvbiAxOCBAIDYxNzogIlVua25vd24iLCBmbGFncyAweDAsIDQ4NSBieXRlc10NCj4gICAgICAg
+ICBbRXZlbnRzIGZvcm1hdCwgMSBzeXN0ZW1zXQ0KPiBuYW1lOiBmdW5jdGlvbg0KPiBJRDogMQ0K
+PiBmb3JtYXQ6DQo+ICAgICAgICAgZmllbGQ6dW5zaWduZWQgc2hvcnQgY29tbW9uX3R5cGU7ICAg
+ICAgIG9mZnNldDowOyAgICAgICBzaXplOjI7IHNpZ25lZDowOw0KPiAgICAgICAgIGZpZWxkOnVu
+c2lnbmVkIGNoYXIgY29tbW9uX2ZsYWdzOyAgICAgICBvZmZzZXQ6MjsgICAgICAgc2l6ZToxOyBz
+aWduZWQ6MDsNCj4gICAgICAgICBmaWVsZDp1bnNpZ25lZCBjaGFyIGNvbW1vbl9wcmVlbXB0X2Nv
+dW50OyAgICAgICBvZmZzZXQ6MzsgICAgICAgc2l6ZToxOyBzaWduZWQ6MDsNCj4gICAgICAgICBm
+aWVsZDppbnQgY29tbW9uX3BpZDsgICBvZmZzZXQ6NDsgICAgICAgc2l6ZTo0OyBzaWduZWQ6MTsN
+Cj4NCj4gICAgICAgICBmaWVsZDp1bnNpZ25lZCBsb25nIGlwOyBvZmZzZXQ6ODsgICAgICAgc2l6
+ZTo4OyBzaWduZWQ6MDsNCj4gICAgICAgICBmaWVsZDp1bnNpZ25lZCBsb25nIHBhcmVudF9pcDsg
+IG9mZnNldDoxNjsgICAgICBzaXplOjg7IHNpZ25lZDowOw0KPg0KPiBwcmludCBmbXQ6ICIgJXBz
+IDwtLSAlcHMiLCAodm9pZCAqKVJFQy0+aXAsICh2b2lkICopUkVDLT5wYXJlbnRfaXAgYGBgDQo+
+DQo+IE5vdywgaW4gbXkgdHJhY2UuZGF0LCBJIHdhbnQgdG8gd3JpdGUgdGhlIHJlYWwgaW5mb3Jt
+YXRpb24uDQo+IElmIHlvdSBwZXJtaXQgbWUsIEknZCBsaWtlIHRvIGNvbnRpbnVlIHRoaXMgZGlz
+Y3Vzc2lvbiB3aXRoIGEgY29uY3JldGUgZXhhbXBsZS4NCj4NCj4gTGV0J3Mgc3VwcG9zZSB0aGF0
+IEkgd2FudCB0byByZXByZXNlbnQgdGhlIGZvbGxvd2luZyBpbmZvcm1hdGlvbjoNCj4NCj4gRXZl
+bnQ6IGZ1bmN0aW9uIHRyYWNlIGV2ZW50DQo+IFRpbWVzdGFtcCA5IHNlY29uZHMNCj4gUElEOiA3
+Nzc3DQo+IEZ1bmN0aW9uIGFkZHJlc3M6IDB4MjI2NkQNCj4gUGFyZW50OiAweDIyNjZFDQo+DQo+
+IEkgc3RhcnQgYnkgZmlsbGluZyB0aGUgaGVhZGVyX2V2ZW50IGluZm9ybWF0aW9uOg0KPiAtIFdy
+aXRpbmcgOTAwMDAwMDAwMDAwIG9uIDggYnl0ZXMgKHRpbWVzdGFtcCkuDQo+IC0gV3JpdGluZyBg
+MjRgaW4gOCBieXRlcyAoY29tbWl0KSAtLT4gZXZlbnQgZGF0YSBmb3IgZXZlbnQgSUQgYXJlIG9u
+IDI0IGJ5dGVzLCBpbmRlZWQ6IGNvbW1vbl8qIGFyZSBvbiA4IGJ5dGVzLCBpcCBhbmQgcGFyZW50
+IGlwIG9uIDguDQo+IC0gSWdub3Jpbmcgb3ZlcndyaXRlOiBpbmRlZWQsIEkgYWxyZWFkeSB1c2Vk
+IGNvbW1pdC4NCj4NCj4gVGhlbiwgSSBoYXZlIHRoZSA0MDgwIGJ5dGVzIG9mIHBheWxvYWQgZXZl
+bnQsIGJ1dCBJIHVzZSBvbmx5IDI0IG9mIHRoZW0sIGFzIGV4cHJlc3NlZCBpbiBjb21taXQuDQo+
+IC0gY29tbW9uX3R5cGUgaXMgMSwgKDIgYnl0ZXMpLCBiZWNhdXNlIEkgd2FudCBhIGZ1bmN0aW9u
+IGV2ZW50DQo+IC0gY29tbW9uX2ZsYWdzIGlzIDAgKDEgYnl0ZSkNCj4gLSBjb21tb25fcHJlZW1w
+dF9jb3VudCBpcyAwICgxIGJ5dGUpDQo+IC0gY29tbW9uX3BpZCBpcyA3Nzc3ICg0IGJ5dGVzKQ0K
+PiAtIGlwIGlzIDB4MjI2NkQgKDggYnl0ZXMpDQo+IC0gcGFyZW50X2lwIGlzIDB4MjI2NkUgKDgg
+Ynl0ZXMpDQo+IC0gdGhlIHJlbWFpbmluZyA0MDk2IC0gMjQgYnl0ZXMgYXJlIG9mIHBhZGRpbmcs
+IHNvIEkgY2FuIGNvbXBsZXRlIHRoZSA0MDgwIGJ5dGVzIG9mIGRhdGEuDQo+DQo+IFVuZm9ydHVu
+YXRlbHksIGluIHRoaXMgd2F5LCBvbmx5IENQVSBudW1iZXIgYW5kIHRpbWVzdGFtcCBhcmUgY29y
+cmVjdGx5IGRpc3BsYXllZCBvbiB0aGUgZnJvbnRlbmQgKGtlcm5lbHNoYXJrKS4NCj4gRXZlbnQg
+aXMgbWFya2VkIGFzICJ1bmtub3duIiBhbmQgUElEIGlzIHdyb25nLg0KPiBUaW1lc3RhbXAgYXN0
+b25pc2hlcyBtZSB0b286IHRvIGNvcnJlY3RseSBkaXNwbGF5IGl0LCBJIGp1c3QgbmVlZCB0byB3
+cml0ZSA5MDAwMDAwMDAwMDAgb24gOCBieXRlcy4NCj4gVHJ5aW5nIHRvIHB1dCAiMSIgb24gdGlt
+ZV90eXBlICg1Yml0cyksIDAgb24gZGVsdGEgKDI3IGJpdHMpIGFuZCA5MDAwMDAwMDAwMDAgb24g
+YXJyYXkgKDEqNCBieXRlcyksIHRoZSB0aW1lc3RhbXAgaXMgbm90IGNvcnJlY3QuDQoNCkhpIE1h
+dHRlbywNClRoZSAndHlwZV9sZW4nIHNob3VsZCBiZSA2IGZvciB5b3VyIGV2ZW50LCBhcyB0aGUg
+cGF5bG9hZCBpcyAyNCBieXRlcyAoNio0KS4gVGhlICd0aW1lX2RlbHRhJyBpcyB0aGUgZGVsdGEg
+ZnJvbSB0aGUgdGltZXN0YW1wIHdyaXR0ZW4gaW4gdGhlIHBhZ2UgaGVhZGVyLCBpLmUuIGlmIHlv
+dSBwdXQgMTk5IGluICd0aW1lX2RlbHRhJyB0aGUgdGltZSBzdGFtcCBvZiB0aGUgZXZlbnQgaXMg
+OTAwMDAwMDAwMTk5LiBPbmUgdmVyeSBpbXBvcnRhbnQgbm90ZSAtIHRha2UgY2FyZSBvZiB0aGUg
+ZW5kaWFuLCB1c2VkIGZvciBhbGwgbnVtYmVycyBpbiB0aGUgZmlsZS4gVGhlIGVuZGlhbiBvZiB0
+aGUgZmlsZSBjYW4gYmUgZGlmZmVyZW50IGZyb20gdGhlIGVuZGlhbiBvZiB0aGUgaG9zdCwgd2hl
+cmUgdGhlIGZpbGUgaXMgZGlzcGxheWVkLg0KVGhhdCdzIHdoeSB0aGF0IGluZm9ybWF0aW9uIGlz
+IHdyaXR0ZW4gaW4gdGhlIHRyYWNlLmRhdCAtIGluIHRoZSB2ZXJ5IGJlZ2lubmluZyBvZiB0aGUg
+ZmlsZS4NCg0KPg0KPiBUaHVzLCBJIHRoaW5rIEkgYW0gZG9pbmcgc29tZXRoaW5nIHdyb25nLiBN
+YXkgeW91IGhlbHAgbWUgaW4gY29ycmVjdGluZyB0aGlzIGV4YW1wbGUsIHBsZWFzZT8NCj4NCj4g
+QW5vdGhlciB0aGluZyB0aGF0IGRpZCBsZXQgbWUgd2l0aCBhIGRvdWJ0IGlzIHRoZSBmb2xsb3dp
+bmcgb25lOiBkbyBJIG5lZWQgYSBwYWdlICg0MDk2IGJ5dGVzKSBmb3IgYW4gZXZlbnQ/DQo+IElu
+IG90aGVyIHdvcmRzOiB0aGUgNDA5Ni0yNCBieXRlcyBvZiBwYWRkaW5nIHRvIGNvbXBsZXRlIHRo
+ZSA0MDgwIGJ5dGVzIG9mICJkYXRhIiBhcmUgbWFuZGF0b3J5IHRvIGV4cHJlc3MgYW5vdGhlciBl
+dmVudD8NCj4NCj4gVGhhbmtzIGZvciB5b3VyIGhlbHAsDQo+IE1hdHRlbw0KPg0KPiAtLS0tLU9y
+aWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBTdGV2ZW4gUm9zdGVkdCBbbWFpbHRvOnJvc3Rl
+ZHRAZ29vZG1pcy5vcmddDQo+IFNlbnQ6IFRodXJzZGF5LCBKdW5lIDE2LCAyMDIyIDM6MDQgUE0N
+Cj4gVG86IE1hdHRlbyBCZXJ0b2xpbm8gPG1hdHRlby5iZXJ0b2xpbm9AaHVhd2VpLmNvbT4NCj4g
+Q2M6IGxpbnV4LXRyYWNlLXVzZXJzQHZnZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogRm9y
+bWF0IG9mIHRyYWNlLmRhdCBmbHlyZWNvcmQgc2VjdGlvbg0KPg0KPg0KPiBPSywgdGhpcyBpcyBh
+IGNsYXdzLW1haWwgYnVnLiBJdCBhZGRlZCB0aGUgJ1wnIGluIHRoZSBlbWFpbCBhZGRyZXNzIHdo
+ZW4gZG9pbmcgYSByZXBseSBhbGwuDQo+DQo+IC0tIFN0ZXZlDQo+DQo+DQo+IE9uIFRodSwgMTYg
+SnVuIDIwMjIgMDk6MDI6MzcgLTA0MDANCj4gU3RldmVuIFJvc3RlZHQgPHJvc3RlZHRAZ29vZG1p
+cy5vcmc+IHdyb3RlOg0KPg0KPiA+IFRoaXMgaXMganVzdCBhIHRlc3QgdG8gc2VlIGlmIHRoZSBh
+ZGRlZCAnXCcgd2FzIGR1ZSB0byBhIGNsYXdzLW1haWwgDQo+ID4gYnVnIG9yIHNvbWVob3cgSSBk
+aWQgaXQuDQo+ID4NCj4gPiAtLSBTdGV2ZQ0KPg0KDQoNCi0tDQpUenZldG9taXIgKENlY28pIFN0
+b3lhbm92DQpWTXdhcmUgT3BlbiBTb3VyY2UgVGVjaG5vbG9neSBDZW50ZXINCg==
