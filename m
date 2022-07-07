@@ -2,104 +2,92 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 944FBC43334
-	for <linux-trace-users@archiver.kernel.org>; Thu,  7 Jul 2022 14:01:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13454C433EF
+	for <linux-trace-users@archiver.kernel.org>; Thu,  7 Jul 2022 14:07:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234209AbiGGOBR (ORCPT
+        id S235209AbiGGOHa (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Thu, 7 Jul 2022 10:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
+        Thu, 7 Jul 2022 10:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232815AbiGGOBQ (ORCPT
+        with ESMTP id S235576AbiGGOHZ (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:01:16 -0400
+        Thu, 7 Jul 2022 10:07:25 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E931BE98
-        for <linux-trace-users@vger.kernel.org>; Thu,  7 Jul 2022 07:01:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25467220E4
+        for <linux-trace-users@vger.kernel.org>; Thu,  7 Jul 2022 07:07:25 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7F2C11FE2E;
-        Thu,  7 Jul 2022 14:01:14 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D97721FEFB;
+        Thu,  7 Jul 2022 14:07:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1657202474; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1657202843; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=vimwdhAXWy1OMPTgMGEXDrxxd7tmD5V8AXDBhX1XhXU=;
-        b=o0od81yF1v4JW/JY9LLducn4/nH+fQIzQhUyjvQ/XP8vHzR0PMjnho+6lzS9L6k7sTkgaY
-        +lnlQEXDEgGerhoDl0KM/MafJN8kEYe09Gx+XOkfT89DSzbCxw04zvODAcnjdRPU/m2SBw
-        XionixhwiN186PTLfo7ePea6MYC/vuA=
+        bh=eAKkk8fQsoAp2fjfloLYUJX3lexa2PZy21OTlh1Dfgg=;
+        b=aoCoD9RjL/8fyO8g/At+va7E63Ab5Je8bu/ftfjXT8HMlaEabfBQ5UmSwCfMzppkT2ubWe
+        BYAGlGUgpECWAkoqc8hKbdmpDhhDsy5RtkiW+KGwM9DYRvWZNBXj6RWUY46XcIUQUu1DuI
+        o33VNr3SOv2jxDyLXaXjhHIeluNl4qo=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1657202474;
+        s=susede2_ed25519; t=1657202843;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=vimwdhAXWy1OMPTgMGEXDrxxd7tmD5V8AXDBhX1XhXU=;
-        b=dQkYLNHMzzbrFKkfk53S1bJPxnfg7iCp08QdowRau0rfUYZ96yjHsMBkV91EM8s+N5iT9N
-        gGI/xV/RRYbJh2Bw==
+        bh=eAKkk8fQsoAp2fjfloLYUJX3lexa2PZy21OTlh1Dfgg=;
+        b=emer0eR6Z8dNbwmp6RFINykrT5RVZGIJQxxv8lzlrLebrYIG31ccWmvUSaAV74Pm5AfLel
+        AHLpMYzS9Z36HwCA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 719D813A33;
-        Thu,  7 Jul 2022 14:01:14 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CC3FB13A33;
+        Thu,  7 Jul 2022 14:07:23 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id GHOxGyrnxmK4IwAAMHmgww
-        (envelope-from <dwagner@suse.de>); Thu, 07 Jul 2022 14:01:14 +0000
-Date:   Thu, 7 Jul 2022 16:01:13 +0200
+        id LdvVMZvoxmIzJwAAMHmgww
+        (envelope-from <dwagner@suse.de>); Thu, 07 Jul 2022 14:07:23 +0000
+Date:   Thu, 7 Jul 2022 16:07:23 +0200
 From:   Daniel Wagner <dwagner@suse.de>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     linux-trace-users@vger.kernel.org
-Subject: Re: [RFC v1] libtraceevent: Add initial support for meson
-Message-ID: <20220707140113.ephz6il665xc4nh4@carbon>
-References: <20220707121440.28216-1-dwagner@suse.de>
- <20220707094422.1bf96c9d@gandalf.local.home>
+Subject: Re: [RFC v1 1/2] libtracefs: Use explicit libtraceevent include path
+Message-ID: <20220707140723.hhkkjuckchqwnvnl@carbon>
+References: <20220707121542.28434-1-dwagner@suse.de>
+ <20220707094752.6ec14f7a@gandalf.local.home>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220707094422.1bf96c9d@gandalf.local.home>
+In-Reply-To: <20220707094752.6ec14f7a@gandalf.local.home>
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 09:44:22AM -0400, Steven Rostedt wrote:
-> Thanks for doing this. Hopefully I'll get some time to try it out.
+On Thu, Jul 07, 2022 at 09:47:52AM -0400, Steven Rostedt wrote:
+> On Thu,  7 Jul 2022 14:15:41 +0200
+> Daniel Wagner <dwagner@suse.de> wrote:
+> 
+> > The libtraceevent pkg-config generated by meson is not adding the
+> > subdirectory to the CLFAGS. This is generally a good idea in order to
+> > avoid any file name collisions. Hence use explicit include paths for
+> > libtraceevent.
+> 
+> Is there a way to fix this. Honestly, I hate the libtraceevent name (should
+> at least be traceevent), and I have been thinking of changing it.
 
-Cool, let me know if you need any help. There are some (low) hurdles to
-jump over but nothing serious IMO.
+I suppose we can change pkg-config so that the complete path is
+included, with the downside that file name collisions are more likely to
+happen. E.g. the kbuffer.h is very a generic name.
 
-> Anyway, as for the libtraceevent-dynamic-list, it was brought over from the
-> kernel tools/lib directory. I guess it is needed for the plugins to work
-> properly, although I have not had issues with it.
+In libnvme/nvme-cli we had some troubles consuming libuuid because of
+inconsistent use of include paths. As far I can tell we just need to
+state what the correct includes paths are.
 
-The current Makefile doesn't install it nor use it in anyway. Chances
-are no one is using it. Also looking at the content shows a handful of
-symbols which shouldn't be there:
+> If we do not have pkg-config working and everything needs to add explicit
+> include paths, then I'll never be able to change it, or even just get rid
+> of the subdirectory.
 
-{
-        free;
-        memcpy;
-        memset;
-        realloc;
-        sprintf;
-        strcmp;
-        strdup;
-        strncmp;
-        tep_find_any_field;
-        tep_find_field;
-        tep_find_function;
-...
-};
-
-> But if you want to know more, see commit e3d09ec8126fe ("tools lib
-> traceevent: Export dynamic symbols used by traceevent plugins") in the
-> Linux kernel source.
-
-Well, if this is a use case which needs to be supported we might need to
-figure out how to get a correct export map. In a different project we
-currently maintain the map file manual with the usual problems of
-syncing up the *.c files and the map file. I was thinking about
-introducing a macro like the ones in the kernel *_EXPORT from which the
-map file is generated. Just as idea.
+I am not really expert how to structure the include paths. As said, I
+think the most important bit is that we use it consistent. Let me try to
+add the include path to pkg-config.
