@@ -2,56 +2,56 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24534C43334
-	for <linux-trace-users@archiver.kernel.org>; Thu,  7 Jul 2022 12:14:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B501C43334
+	for <linux-trace-users@archiver.kernel.org>; Thu,  7 Jul 2022 12:15:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235212AbiGGMOs (ORCPT
+        id S235239AbiGGMPs (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Thu, 7 Jul 2022 08:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
+        Thu, 7 Jul 2022 08:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235105AbiGGMOs (ORCPT
+        with ESMTP id S230187AbiGGMPr (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Thu, 7 Jul 2022 08:14:48 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9DC193EC
-        for <linux-trace-users@vger.kernel.org>; Thu,  7 Jul 2022 05:14:45 -0700 (PDT)
+        Thu, 7 Jul 2022 08:15:47 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1532710FC3
+        for <linux-trace-users@vger.kernel.org>; Thu,  7 Jul 2022 05:15:47 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A6B281FDE5;
-        Thu,  7 Jul 2022 12:14:44 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C865822146;
+        Thu,  7 Jul 2022 12:15:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1657196084; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1657196145; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=gzOug2n/HdJQcehqmjEYUfGjuLQZMBH/sRldpZ9cts0=;
-        b=yEj4argAV5VNvW80Qv2zAzFE5hGGWe0DNc13+11v3PnEL77jSM6ozOK2RP2fhwQ9Tc1FPT
-        doa21EjgJIxi5758xeDd9Dqn6UHF/PyF64CdwO0LITMI8FxkybXJ9bfhGK7USCUoMmJPpp
-        E/qtaDYfgxyKbmTPBf4Y3rXPdRqwpwk=
+        bh=ADeKNuyejaAIg7Yvswi+95QMpZCOY/QtqTHS9xv6Ip0=;
+        b=I4zUm644cO8dym31cX4giyffcxmzjPKdWRMMLy31Vys+wVZ5bfkTIdwugVV/VGkB9H/oIn
+        /fC42wb8aqpyasGUDvSH0qbzwG7WukVo6KY4rNFfRFyDOjYiEh4g/aaCyzHtbuOufZbXrR
+        ppcU9w0KM8M23NZ8w2obnzyQFtxJUqo=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1657196084;
+        s=susede2_ed25519; t=1657196145;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=gzOug2n/HdJQcehqmjEYUfGjuLQZMBH/sRldpZ9cts0=;
-        b=fEw6VQ5zl4+8xTJUSgezvakmlhhwZyShcRCO7rCXMiiQxuD4pAK5OIwNHW8GxH7R7QOBj9
-        KOT49qQ0ZDYmGpDQ==
+        bh=ADeKNuyejaAIg7Yvswi+95QMpZCOY/QtqTHS9xv6Ip0=;
+        b=IOGU1x+X9sjumLKPFz4cGKyIRbaBfMHJ7YG38a+6+gl5+k1ZGmynrwMXTlW0hN/eBl8I30
+        1OK6tLng32b0fYCg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9744513461;
-        Thu,  7 Jul 2022 12:14:44 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BAB8813461;
+        Thu,  7 Jul 2022 12:15:45 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id iV3EJDTOxmLSagAAMHmgww
-        (envelope-from <dwagner@suse.de>); Thu, 07 Jul 2022 12:14:44 +0000
+        id iEuTLXHOxmJtawAAMHmgww
+        (envelope-from <dwagner@suse.de>); Thu, 07 Jul 2022 12:15:45 +0000
 From:   Daniel Wagner <dwagner@suse.de>
 To:     linux-trace-users@vger.kernel.org
 Cc:     Daniel Wagner <dwagner@suse.de>
-Subject: [RFC v1] libtraceevent: Add initial support for meson
-Date:   Thu,  7 Jul 2022 14:14:40 +0200
-Message-Id: <20220707121440.28216-1-dwagner@suse.de>
+Subject: [RFC v1 1/2] libtracefs: Use explicit libtraceevent include path
+Date:   Thu,  7 Jul 2022 14:15:41 +0200
+Message-Id: <20220707121542.28434-1-dwagner@suse.de>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -59,251 +59,87 @@ Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Add support for building the project with meson. It's not complete
-yet, for example building and installing the documentation is missing.
-
-The rest should work as expected. The only thing I was not really
-clear what the purpose is the libtraceevent-dynamic-list which seems
-not be used or installed. The meson build will also generate the file
-but using the host nm and not the cross tool chain if any is used. I
-didn't want to invest too much time figuring out this detail if it is
-actually not used.
-
-Obviously, meson is not make and there are some changes in how to use
-this build system. The meson documentation is outstanding good and
-usually has good tips and tricks to solve problems. But sure there is
-learning curve but hopefully not so step.
-
-Anyway, as pure user the build steps are (in source tree builds are
-not supported):
-
-  # configure using .build as build directory and install destination
-  # /tmp/test
-  meson .build --prefix=/tmp/test
-
-  # trigger the build
-  ninja -C .build
-
-  # install the library
-  ninja -C .build install
-
-I am using an alias for 'ninja -C .build' which is called 'ni'. This
-makes way more convenient to use.
+The libtraceevent pkg-config generated by meson is not adding the
+subdirectory to the CLFAGS. This is generally a good idea in order to
+avoid any file name collisions. Hence use explicit include paths for
+libtraceevent.
 
 Signed-off-by: Daniel Wagner <dwagner@suse.de>
 ---
- include/traceevent/meson.build | 12 ++++++++++
- meson.build                    | 38 ++++++++++++++++++++++++++++++++
- meson_options.txt              |  2 ++
- plugins/dynamic_list.sh        | 14 ++++++++++++
- plugins/meson.build            | 40 ++++++++++++++++++++++++++++++++++
- src/meson.build                | 34 +++++++++++++++++++++++++++++
- utest/meson.build              | 14 ++++++++++++
- 7 files changed, 154 insertions(+)
- create mode 100644 include/traceevent/meson.build
- create mode 100644 meson.build
- create mode 100644 meson_options.txt
- create mode 100755 plugins/dynamic_list.sh
- create mode 100644 plugins/meson.build
- create mode 100644 src/meson.build
- create mode 100644 utest/meson.build
+ include/tracefs.h     | 2 +-
+ src/tracefs-events.c  | 2 +-
+ src/tracefs-filter.c  | 2 +-
+ src/tracefs-sqlhist.c | 2 +-
+ src/tracefs-utils.c   | 4 ++--
+ 5 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/include/traceevent/meson.build b/include/traceevent/meson.build
-new file mode 100644
-index 000000000000..7be88bf3ab47
---- /dev/null
-+++ b/include/traceevent/meson.build
-@@ -0,0 +1,12 @@
-+# SPDX-License-Identifier: LGPL-2.1
-+
-+headers = [
-+   'event-parse.h',
-+   'event-utils.h',
-+   'kbuffer.h',
-+   'trace-seq.h',
-+]
-+
-+foreach h : headers
-+	install_headers(h, subdir : 'libtraceevent')
-+endforeach
-diff --git a/meson.build b/meson.build
-new file mode 100644
-index 000000000000..ef27a12fe76a
---- /dev/null
-+++ b/meson.build
-@@ -0,0 +1,38 @@
-+# SPDX-License-Identifier: LGPL-2.1
-+
-+project(
-+    'libtraceevent', ['c'],
-+    meson_version: '>= 0.47.0',
-+    license: 'LGPL-2.1',
-+    version: '1.5.3',
-+    default_options: [
-+      'c_std=gnu99',
-+      'buildtype=release',
-+      'prefix=/usr',
-+      'warning_level=1',
-+    ]
-+)
-+
-+library_version = meson.project_version()
-+
-+cunit_dep = dependency('cunit', required : false)
-+
-+prefixdir  = get_option('prefix')
-+libdir     = join_paths(prefixdir, get_option('libdir'))
-+
-+plugindir  = get_option('plugindir') == '' ? join_paths(libdir, 'libtraceevent/plugins') : get_option('plugindir')
-+
-+add_project_arguments(
-+    [
-+      '-D_GNU_SOURCE',
-+      '-DPLUGIN_DIR="@0@"'.format(plugindir),
-+    ],
-+    language : 'c',
-+)
-+
-+incdir = include_directories(['include', 'include/traceevent'])
-+
-+subdir('src')
-+subdir('include/traceevent')
-+subdir('plugins')
-+subdir('utest')
-diff --git a/meson_options.txt b/meson_options.txt
-new file mode 100644
-index 000000000000..ee52f11799dd
---- /dev/null
-+++ b/meson_options.txt
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: LGPL-2.1
-+option('plugindir', type : 'string', description : 'set the plugin dir')
-diff --git a/plugins/dynamic_list.sh b/plugins/dynamic_list.sh
-new file mode 100755
-index 000000000000..e1480eaa694f
---- /dev/null
-+++ b/plugins/dynamic_list.sh
-@@ -0,0 +1,14 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: LGPL-2.1
-+
-+symbol_type=$(nm -u -D $@ | awk 'NF>1 {print $1}' | xargs echo "U w W" |
-+	      tr 'w ' 'W\n' | sort -u | xargs echo)
-+
-+if [ "$symbol_type" = "U W" ]; then
-+	echo '{'
-+
-+	nm -u -D $@ | awk 'NF>1 {sub("@.*", "", $2); print "\t"$2";"}' |
-+	sort -u
-+
-+	echo '};'
-+fi
-diff --git a/plugins/meson.build b/plugins/meson.build
-new file mode 100644
-index 000000000000..659f864581d0
---- /dev/null
-+++ b/plugins/meson.build
-@@ -0,0 +1,40 @@
-+# SPDX-License-Identifier: LGPL-2.1
-+
-+plugins = [
-+    'plugin_jbd2.c',
-+    'plugin_hrtimer.c',
-+    'plugin_kmem.c',
-+    'plugin_kvm.c',
-+    'plugin_mac80211.c',
-+    'plugin_sched_switch.c',
-+    'plugin_function.c',
-+    'plugin_futex.c',
-+    'plugin_xen.c',
-+    'plugin_scsi.c',
-+    'plugin_cfg80211.c',
-+    'plugin_tlb.c',
-+]
-+
-+pdeps = []
-+foreach plugin : plugins
-+    pdeps += library(
-+        plugin.replace('.c', ''),
-+        plugin,
-+        name_prefix: '',
-+        version: library_version,
-+        dependencies: [libtraceevent_dep],
-+        include_directories: [incdir],
-+        install: true,
-+        install_dir: plugindir)
-+endforeach
-+
-+# not used?
-+dynamic_list_file = find_program('dynamic_list.sh')
-+custom_target(
-+    'dynamic_list',
-+    depends: pdeps,
-+    input: pdeps,
-+    output: 'libtraceevent-dynamic-list',
-+    command: [dynamic_list_file, '@INPUT@'],
-+    capture: true,
-+    build_by_default: true)
-diff --git a/src/meson.build b/src/meson.build
-new file mode 100644
-index 000000000000..20c1876b3e2d
---- /dev/null
-+++ b/src/meson.build
-@@ -0,0 +1,34 @@
-+# SPDX-License-Identifier: LGPL-2.1
-+
-+sources= [
-+   'event-parse-api.c',
-+   'event-parse.c',
-+   'event-plugin.c',
-+   'kbuffer-parse.c',
-+   'parse-filter.c',
-+   'parse-utils.c',
-+   'tep_strerror.c',
-+   'trace-seq.c',
-+]
-+
-+libtraceevent = library(
-+    'traceevent',
-+    sources,
-+    version: library_version,
-+    include_directories: [incdir],
-+    install: true,
-+)
-+
-+pkg = import('pkgconfig')
-+pkg.generate(libtraceevent,
-+    filebase: meson.project_name(),
-+    name: meson.project_name(),
-+    version: meson.project_version(),
-+    description: 'Manage trace evevent',
-+    url: 'https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/',
-+)
-+
-+libtraceevent_dep = declare_dependency(
-+    include_directories: ['.'],
-+    link_with: libtraceevent,
-+)
-diff --git a/utest/meson.build b/utest/meson.build
-new file mode 100644
-index 000000000000..e6ad5b50e9be
---- /dev/null
-+++ b/utest/meson.build
-@@ -0,0 +1,14 @@
-+# SPDX-License-Identifier: LGPL-2.1
-+
-+source = [
-+    'trace-utest.c',
-+    'traceevent-utest.c',
-+]
-+
-+e = executable(
-+   'trace-utest',
-+   source,
-+   include_directories: [incdir],
-+   dependencies: [libtraceevent_dep, cunit_dep])
-+
-+test('trace-utest', e)
+diff --git a/include/tracefs.h b/include/tracefs.h
+index 693860d47a56..dd339464ca0e 100644
+--- a/include/tracefs.h
++++ b/include/tracefs.h
+@@ -8,7 +8,7 @@
+ 
+ #include <fcntl.h>
+ #include <sched.h>
+-#include <event-parse.h>
++#include <libtraceevent/event-parse.h>
+ 
+ char *tracefs_get_tracing_file(const char *name);
+ void tracefs_put_tracing_file(char *name);
+diff --git a/src/tracefs-events.c b/src/tracefs-events.c
+index 65d5707362c6..ebff59e4cb7a 100644
+--- a/src/tracefs-events.c
++++ b/src/tracefs-events.c
+@@ -15,7 +15,7 @@
+ #include <fcntl.h>
+ #include <limits.h>
+ 
+-#include <kbuffer.h>
++#include <libtraceevent/kbuffer.h>
+ 
+ #include "tracefs.h"
+ #include "tracefs-local.h"
+diff --git a/src/tracefs-filter.c b/src/tracefs-filter.c
+index 85d0be17f6b7..cac4e255d7d4 100644
+--- a/src/tracefs-filter.c
++++ b/src/tracefs-filter.c
+@@ -6,7 +6,7 @@
+  * Copyright (C) 2021, VMware, Tzvetomir Stoyanov <tz.stoyanov@gmail.com>
+  *
+  */
+-#include <trace-seq.h>
++#include <libtraceevent/trace-seq.h>
+ #include <stdlib.h>
+ #include <ctype.h>
+ #include <errno.h>
+diff --git a/src/tracefs-sqlhist.c b/src/tracefs-sqlhist.c
+index 27c9c82647e4..fbdf29d5bebb 100644
+--- a/src/tracefs-sqlhist.c
++++ b/src/tracefs-sqlhist.c
+@@ -6,7 +6,7 @@
+  * Copyright (C) 2021, VMware, Tzvetomir Stoyanov <tz.stoyanov@gmail.com>
+  *
+  */
+-#include <trace-seq.h>
++#include <libtraceevent/trace-seq.h>
+ #include <stdlib.h>
+ #include <stdarg.h>
+ #include <ctype.h>
+diff --git a/src/tracefs-utils.c b/src/tracefs-utils.c
+index 22f82afe032b..c1260d3c7c8a 100644
+--- a/src/tracefs-utils.c
++++ b/src/tracefs-utils.c
+@@ -15,8 +15,8 @@
+ #include <unistd.h>
+ #include <errno.h>
+ 
+-#include <event-parse.h>
+-#include <event-utils.h>
++#include <libtraceevent/event-parse.h>
++#include <libtraceevent/event-utils.h>
+ #include "tracefs.h"
+ #include "tracefs-local.h"
+ 
 -- 
 2.36.1
 
