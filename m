@@ -2,130 +2,112 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09496C433EF
-	for <linux-trace-users@archiver.kernel.org>; Wed, 13 Jul 2022 19:20:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 670ACC25B07
+	for <linux-trace-users@archiver.kernel.org>; Tue,  9 Aug 2022 13:32:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231638AbiGMTUE (ORCPT
+        id S237990AbiHINcJ convert rfc822-to-8bit (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Wed, 13 Jul 2022 15:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41908 "EHLO
+        Tue, 9 Aug 2022 09:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbiGMTUD (ORCPT
+        with ESMTP id S231578AbiHINcI (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Wed, 13 Jul 2022 15:20:03 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F1721818;
-        Wed, 13 Jul 2022 12:20:02 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 9E9E242685E;
-        Wed, 13 Jul 2022 15:20:00 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id kKbS3WRHe1BQ; Wed, 13 Jul 2022 15:20:00 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 112C0426C13;
-        Wed, 13 Jul 2022 15:20:00 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 112C0426C13
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1657740000;
-        bh=RMWgUjxlJ5h9ifad36+paV2jGXpFbQkk5sUyLZfsdlU=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=EARasB/73KXy5eMCnFCiftad+GY4PfT9vwRYEREFi4KXWiDE0Pa5mTT8LNfVjS2cV
-         aiYjyjO4EfYYiJh3JhkpbEfbHGDHeGYMaLWFM1cGYPp7ggL4rHOR/vnFsZEQCXCpnj
-         41DCR8a6bV6YiAU7NgQSsiqQRRnJZqzH0Mfxu/Nq2Hgmk/TS3NE9ZhFPJnnInRjH/l
-         0aq0BaYpqf91Ko8fKoJb3/XJ4r53Fg1KUcGgtlc0FW0b9iDi80k2C5i5haygpt71Fk
-         3KFZnBttk7V5Zvmc7Cj7jEiT4ha8WdFFBCfaHffiwaXa7vFGpHCosb5KvSbBbwDLP9
-         G/4i3WZQt2r2w==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id LbT8Uuda7r0a; Wed, 13 Jul 2022 15:20:00 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id DBA664268F3;
-        Wed, 13 Jul 2022 15:19:59 -0400 (EDT)
-Date:   Wed, 13 Jul 2022 15:19:59 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        linux-trace-users <linux-trace-users@vger.kernel.org>,
-        linuxtools-dev@eclipse.org, lttng-dev <lttng-dev@lists.lttng.org>,
-        lwn <lwn@lwn.net>,
-        Trace Compass Developer Discussions 
-        <tracecompass-dev@eclipse.org>
-Message-ID: <1084656607.67311.1657739999848.JavaMail.zimbra@efficios.com>
-Subject: Tracing Summit 2022: Announcement and Call for Proposals, October
- 11th - 13th, 2022, London, United Kingdom
+        Tue, 9 Aug 2022 09:32:08 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3381FA
+        for <linux-trace-users@vger.kernel.org>; Tue,  9 Aug 2022 06:32:07 -0700 (PDT)
+Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M2DSM2cDHz67GMp
+        for <linux-trace-users@vger.kernel.org>; Tue,  9 Aug 2022 21:29:23 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 9 Aug 2022 15:32:05 +0200
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 9 Aug 2022 14:32:05 +0100
+Received: from lhrpeml500003.china.huawei.com ([7.191.162.67]) by
+ lhrpeml500003.china.huawei.com ([7.191.162.67]) with mapi id 15.01.2375.024;
+ Tue, 9 Aug 2022 14:32:04 +0100
+From:   Matteo Bertolino <matteo.bertolino@huawei.com>
+To:     "linux-trace-users@vger.kernel.org" 
+        <linux-trace-users@vger.kernel.org>
+Subject: Format of funcgraph_{entry, exit} ftrace event
+Thread-Topic: Format of funcgraph_{entry, exit} ftrace event
+Thread-Index: Adir8XMFshY36WwNQGaM9Zipr+gIaQ==
+Date:   Tue, 9 Aug 2022 13:32:04 +0000
+Message-ID: <41ac8a9190b647d4ad711d3d8f82ceea@huawei.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.123.160.240]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4304 (ZimbraWebClient - FF100 (Linux)/8.8.15_GA_4304)
-Thread-Index: GhFp6sgYm5dGm85QpgTZYdYT1/wVUg==
-Thread-Topic: Tracing Summit 2022: Announcement and Call for Proposals, October 11th - 13th, 2022, London, United Kingdom
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi all,
+Dear community, 
+I wish to ask you some clarifications about the format of two ftrace events: `funcgraph_entry` and `funcgraph_exit`, basically those in `$ANY_DEBUG_FS/tracing/events/ftrace`.
+Let me copy and paste them here:
 
-This is a Call for Proposals for the Tracing Summit 2022[0] which will be held in London, United Kingdom on 11th to 13th of October, 2022.
 
-- Location: Google, 6 Pancras Sq, London N1C 4AG, UK
-- Event dates: Tuesday the 11th to Thursday the 13th of October, 2022
-- Cost: Free
-- CFP link: [1]
-- Register to attend: [2]
+# cat funcgraph_entry/format
+name: funcgraph_entry
+ID: 11
+format:
+	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
+	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
+	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
+	field:int common_pid;	offset:4;	size:4;	signed:1;
 
-Timeline:
+	field:unsigned long func;	offset:8;	size:8;	signed:0;
+	field:int depth;	offset:16;	size:4;	signed:1;
 
-- CFP Opens: July 13th, 2022
-- Registration opens: July 13th, 2022
-- CFP Closes: September 1st, 2022
-- Registration closes: October 3rd, 2022
+print fmt: "--> %ps (%d)", (void *)REC->func, REC->depth
 
-You can subscribe to the mailing list to get the latest information on the event: [3]
 
-The Tracing Summit is a three-day, single-track conference on the topic of tracing. The event focuses on software and hardware tracing, gathering developers and end-users of tracing and trace analysis tools. The main goal of the Tracing Summit is to provide space for discussion between people of the various areas that benefit from tracing, namely parallel, distributed and/or real-time systems, as well as kernel development.
+AND
 
-We are welcoming 30 minute presentations on topics covering, but not limited to:
+# cat funcgraph_exit/format
+name: funcgraph_exit
+ID: 10
+format:
+	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
+	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
+	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
+	field:int common_pid;	offset:4;	size:4;	signed:1;
 
-- Investigation workflow of real-time, latency, and throughput issues,
-- Trace collection and extraction,
-- Trace filtering,
-- Trace aggregation,
-- Trace formats,
-- Tracing multi-core systems,
-- Trace abstraction,
-- Trace modeling,
-- Automated trace analysis (e.g. dependency analysis),
-- Tracing large clusters and distributed systems,
-- Hardware-level tracing (e.g. DSP, GPU, bare-metal),
-- Trace visualization,
-- Interaction between debugging and tracing,
-- Tracing remote control,
-- Analysis of large trace datasets,
-- Cloud trace collection and analysis,
-- Integration between trace tools,
-- Live tracing & monitoring,
-- Programmable tracing (e.g. eBPF).
+	field:unsigned long func;	offset:8;	size:8;	signed:0;
+	field:int depth;	offset:16;	size:4;	signed:1;
+	field:unsigned int overrun;	offset:20;	size:4;	signed:0;
+	field:unsigned long long calltime;	offset:24;	size:8;	signed:0;
+	field:unsigned long long rettime;	offset:32;	size:8;	signed:0;
 
-Those can cover available technologies, ongoing work, and yet non-existent technologies (which are compelling to end-users).
-Please understand that this open forum is not the proper place to present sales or marketing pitches, nor technologies which are prevented from being freely used in open source.
+print fmt: "<-- %ps (%d) (start: %llx  end: %llx) over: %d", (void *)REC->func, REC->depth, REC->calltime, REC->rettime, REC->depth
 
-This year tickets are free and seating is limited to 80 people.
 
-To register use the following link: [2]
+While writing a `trace.dat`, I know that all the entries have an header, described by the Linux ringbuffer format (file `header_event`):
+# compressed entry header
+	type_len    :    5 bits
+	time_delta  :   27 bits
+	array       :   32 bits
 
-Please send any queries about this conference to info@tracingsummit.org .
+	padding     : type == 29
+	time_extend : type == 30
+	time_stamp : type == 31
+	data max type_len  == 28
 
-[0]: https://tracingsummit.org
-[1]: https://docs.google.com/forms/d/e/1FAIpQLSf65-LaD5EiYSxSN6D6XGRazExSur0SW7oG6ZIpGpDN4ra_rg/viewform
-[2]: https://docs.google.com/forms/d/e/1FAIpQLSdq4whieesZeoHJq1h2CDbWeO5FuQnPk6G257hfSLgnWRenvg/viewform
-[3]: http://eepurl.com/goakfv
+Such header includes a timestamp (that can be a delta of the timestamp present in the `header_page`).
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+I have one question for the ftrace's community:
+Why are the following fields of a `funcgraph_exit` entry useful? ` calltime` and ` rettime`. 
+They look like redundant for me, because the timing information is already present on the `header_event`. 
+
+Please can you clarify me whether I am wrong? 
+Best Regards && have lovely holidays,
+Matteo
