@@ -2,67 +2,45 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39887C00140
-	for <linux-trace-users@archiver.kernel.org>; Mon, 15 Aug 2022 15:03:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5828C25B0E
+	for <linux-trace-users@archiver.kernel.org>; Tue, 16 Aug 2022 22:05:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232344AbiHOPDC (ORCPT
+        id S237112AbiHPWFA (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Mon, 15 Aug 2022 11:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
+        Tue, 16 Aug 2022 18:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232438AbiHOPC7 (ORCPT
+        with ESMTP id S233253AbiHPWE7 (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:02:59 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98CD25285
-        for <linux-trace-users@vger.kernel.org>; Mon, 15 Aug 2022 08:02:57 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 464FA325B67;
-        Mon, 15 Aug 2022 11:02:56 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id xpG_F8Mlhlsg; Mon, 15 Aug 2022 11:02:55 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id C5845325B66;
-        Mon, 15 Aug 2022 11:02:55 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com C5845325B66
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1660575775;
-        bh=3iLZ2v16xM+T3ZJ4e73BcK51wiFIV3htCy6QbOX/AGk=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=P2yxtFZt7T2ObRNeCLA2MAALlIgUyxUh4yY2fuM1P3F0YMYorWoMFMxGXrh84rkQY
-         5G+Gg74JBtR4j1U/tqe0o+zls9C1NXuMH57G4I1MjZ44MuTfVGNMboJGp8lGo91lKT
-         RI7iXFV/SvIh6kT6qlLzGy+hZa+ii8Bpj1cIhC2ZNCwKCqLoWDzKeUlXtZxsYxmk96
-         mJgav0+4PZV4j9ni+7zIQvXX4QD2x0+mBpBuZCtw6h85VqgFRRZ8Ya1++aYpxsXnJ2
-         5eEAV+aWOiOG6vb/N43w6CUZ+Hox+31dmbKVHkG9XIvLhIJ1qJon9HbHAwap/CKCbH
-         A4mKv5Z4f/xoQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id NC0uH84XFycr; Mon, 15 Aug 2022 11:02:55 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id BA7A3325DA2;
-        Mon, 15 Aug 2022 11:02:55 -0400 (EDT)
-Date:   Mon, 15 Aug 2022 11:02:55 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+        Tue, 16 Aug 2022 18:04:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D76D72EED
+        for <linux-trace-users@vger.kernel.org>; Tue, 16 Aug 2022 15:04:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D590FB81B1F
+        for <linux-trace-users@vger.kernel.org>; Tue, 16 Aug 2022 22:04:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D59AC433C1;
+        Tue, 16 Aug 2022 22:04:55 +0000 (UTC)
+Date:   Tue, 16 Aug 2022 18:05:03 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
 To:     Alexander Aring <aahringo@redhat.com>
-Cc:     linux-trace-users <linux-trace-users@vger.kernel.org>
-Message-ID: <897351806.4484.1660575775681.JavaMail.zimbra@efficios.com>
+Cc:     linux-trace-users@vger.kernel.org
+Subject: Re: stream based live time synchronized tracing?
+Message-ID: <20220816180503.319dd3e6@gandalf.local.home>
 In-Reply-To: <CAK-6q+hJ4KjhUqNOGT0a046M7t3McbdstJy7xYzUAwHCp4yZRw@mail.gmail.com>
 References: <CAK-6q+hJ4KjhUqNOGT0a046M7t3McbdstJy7xYzUAwHCp4yZRw@mail.gmail.com>
-Subject: Re: stream based live time synchronized tracing?
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4372 (ZimbraWebClient - FF103 (Linux)/8.8.15_GA_4372)
-Thread-Topic: stream based live time synchronized tracing?
-Thread-Index: 5zM/XiyqsCImCOh6qvtrsGXHuk+b4A==
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
------ On Aug 15, 2022, at 9:28 AM, Alexander Aring aahringo@redhat.com wrote:
+On Mon, 15 Aug 2022 09:28:48 -0400
+Alexander Aring <aahringo@redhat.com> wrote:
 
 > Hi,
 > 
@@ -72,6 +50,9 @@ X-Mailing-List: linux-trace-users@vger.kernel.org
 > would like to get all "merged" events from all machines provided by -A
 > parameters. I think it isn't required to get them in order, but the
 > timestamp should be synchronized.
+
+Are these for guests, or machines on a network?
+
 > 
 > I could probably build something like that with libtracecmd to have it
 > directly implemented in an application, but I am curious if there
@@ -82,18 +63,13 @@ X-Mailing-List: linux-trace-users@vger.kernel.org
 > I have in my mind to collect stats and doing kernel runtime
 > optimizations.
 
-You may want to have a look at babeltrace2 [1]. It allows merging multiple
-traces together as they are read. Using the "lttng-live" source, you can read
-traces as they are produced.
+So basically not save to a file? Just record the events live and interleave
+them for different machines?
+
+I'm not exactly sure what you are asking for. Can you please elaborate some
+more?
 
 Thanks,
 
-Mathieu
+-- Steve
 
-[1] https://babeltrace.org
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
