@@ -2,184 +2,92 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D774DC28B2B
-	for <linux-trace-users@archiver.kernel.org>; Fri, 19 Aug 2022 18:05:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6432EC3F6B0
+	for <linux-trace-users@archiver.kernel.org>; Fri, 19 Aug 2022 18:57:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349623AbiHSSFC (ORCPT
+        id S1350408AbiHSS5N (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Fri, 19 Aug 2022 14:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
+        Fri, 19 Aug 2022 14:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349184AbiHSSEQ (ORCPT
+        with ESMTP id S1350111AbiHSS5M (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Fri, 19 Aug 2022 14:04:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA86641C
-        for <linux-trace-users@vger.kernel.org>; Fri, 19 Aug 2022 10:50:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12EBD617E9
-        for <linux-trace-users@vger.kernel.org>; Fri, 19 Aug 2022 17:50:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BBAFC433D6;
-        Fri, 19 Aug 2022 17:50:34 +0000 (UTC)
-Date:   Fri, 19 Aug 2022 13:50:47 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Prasad Pandit <ppandit@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     linux-trace-users@vger.kernel.org
-Subject: Re: About tracing clues
-Message-ID: <20220819135047.45243742@gandalf.local.home>
-In-Reply-To: <CAE8KmOwGONSzSDczNdadyMSvn84qBbqS0wKUMbctnPgio0Uxgg@mail.gmail.com>
-References: <CAE8KmOwGONSzSDczNdadyMSvn84qBbqS0wKUMbctnPgio0Uxgg@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 19 Aug 2022 14:57:12 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBB3FEE92;
+        Fri, 19 Aug 2022 11:57:10 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 0B31F3B7A74;
+        Fri, 19 Aug 2022 14:57:10 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 3lZMkGODt-IH; Fri, 19 Aug 2022 14:57:09 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 874613B78F5;
+        Fri, 19 Aug 2022 14:57:09 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 874613B78F5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1660935429;
+        bh=6rmtj4UFHePqWJceVQhRqpzznhW6LnpT2VRjtwGS2TA=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=vRnfSePuLRdGSlWXFTbKnecqhWw30sGY2up/Lrcj4v2bt/ENJd5zvtypXLrJo1hsc
+         BGpB9jqhz1K0TwjpOaB3cURChp/ZcKQNYoLbFFhb5H3/LvPLEtCR0vMSAaaMwunfTw
+         GDf3fdgaMdXz1KpThKEaTAlGp3taFmQW+wm/ZP6KNHX/uT7dxWx8llBpKQztNzDhIK
+         61E8p+NwriNfP4FB7Blk2Qnevgq8uwkZSOlGGv79y/Lx94EAN871SvFnyNbrVWL8eg
+         T6ZlqbuuzU9ymAlQseYZxZkoiTcujtyS6qCHeRWNzA+D+NItg+ObIL91G58f5DXkaq
+         hgTAdUK72GhDg==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id fiECbDsY4bAE; Fri, 19 Aug 2022 14:57:09 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 7961A3B7FA6;
+        Fri, 19 Aug 2022 14:57:09 -0400 (EDT)
+Date:   Fri, 19 Aug 2022 14:57:09 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     lttng-dev <lttng-dev@lists.lttng.org>,
+        Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
+        linux-trace-users <linux-trace-users@vger.kernel.org>,
+        lwn <lwn@lwn.net>, linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <1273091514.17599.1660935429453.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] LTTng-modules 2.12.10 and 2.13.5 (Linux kernel tracer)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4372 (ZimbraWebClient - FF103 (Linux)/8.8.15_GA_4372)
+Thread-Index: njpMKIkDnXU7Voqt9NfXwqumSfFwyQ==
+Thread-Topic: LTTng-modules 2.12.10 and 2.13.5 (Linux kernel tracer)
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-On Fri, 19 Aug 2022 15:36:03 +0530
-Prasad Pandit <ppandit@redhat.com> wrote:
+Hi,
 
-> Hello,
-> 
-> * While running oslat(8) tests in a guest running on RHEL kernel-rt
-> host, I'm seeing occasional peculiar latency spikes as below
-> ===
-> # trace-cmd record -p nop --poll -M 1E -e all
-> /home/test/rt-tests/oslat --cpu-list 1-4 --rtprio 1 --duration 12h -T
-> 30
+This is a release announcement for the two currently maintained stable branches
+of the LTTng kernel tracer.
 
-Hmm you need to turn off line wraps when pasting in output like this.
-Because the line wraps make it very difficult to follow.
+* New in these releases:
 
-/me fixes it:
+Version 2.12.10 and 2.13.5 fix tracepoint instrumentation to support stable kernels in the
+version range v5.15.58 to 5.16. They also fix incorrect stub prototypes for
+CONFIG_HAVE_SYSCALL_TRACEPOINTS=n. A minor fix to tie compaction probe build to
+CONFIG_COMPACTION has also been added.
 
-> ===
-> # trace-cmd record -p nop --poll -M 1E -e all /home/test/rt-tests/oslat --cpu-list 1-4 --rtprio 1 --duration 12h -T 30 oslat V 2.30
-> INFO: debugfs mountpoint: /sys/kernel/debug/tracing/
-> Total runtime:          43200 seconds
-> Thread priority:        SCHED_FIFO:1
-> CPU list:               1-4
-> CPU for main thread:    0
-> Workload:               no
-> Workload mem:           0 (KiB)
-> Preheat cores:          4
-> 
-> Pre-heat for 1 seconds...
-> Test starts...
-> /home/test/rt-tests/oslat: Trace threshold (30 us) triggered on cpu 2
-> with 67 us!
-> Stopping the test.
-> ...
->              <idle>-0     [002]   265.041487: tlb_flush: pages=0 reason=flush on task switch (0)
->            oslat-16074 [002]   265.041489: print: tracing_mark_write: /home/test/rt-tests/oslat: Starting thread on CPU 2.
->            oslat-16074 [002]   265.041490: kfree: (__audit_syscall_exit+0x249) call_site=ffffffff95fb8889 ptr=(nil)
->            oslat-16074 [002]   265.041490: sys_exit:             NR 1 = 53
->            oslat-16074 [002]   265.041490: sys_exit_write:       0x35
->            oslat-16074 [002]   265.041490: user_enter:
->            oslat-16074 [002]   300.576710: user_exit:
+Version 2.13.5 updates the tracepoint instrumentation to support Linux kernel
+v5.19, and v6.0-rc1.
 
-Here's where it exits the user app.
+Feedback is welcome,
 
-Hmm, what's the 24us delay here?
+Thanks,
 
->            oslat-16074 [002]   300.576734: irq_handler_entry: irq=21 name=virtio3
->            oslat-16074 [002]   300.576734: irq_handler_exit: irq=21 ret=handled
->            oslat-16074 [002]   300.576734: sched_waking: comm=irq/21-virtio3 pid=219 prio=49 target_cpu=002
->            oslat-16074 [002]   300.576736: sched_migrate_task: comm=irq/21-virtio3 pid=219 prio=49 orig_cpu=2 dest_cpu=0
->            oslat-16074 [002]   300.576740: write_msr:            830, value fd
->            oslat-16074 [002]   300.576740: sched_wakeup: irq/21-virtio3:219 [49] success=1 CPU:000
->            oslat-16074 [002]   300.576742: read_msr:             819, value 4
->            oslat-16074 [002]   300.576754: irq_matrix_alloc: bit=38 cpu=0 online=1 avl=195 alloc=6 managed=1 online_maps=6 global_avl=1178, global_rsvd=10, total_alloc=28
->            oslat-16074 [002]   300.576755: vector_update: irq=21 vector=38 cpu=0 prev_vector=34 prev_cpu=2
->            oslat-16074 [002]   300.576755: vector_alloc: irq=21 vector=38 reserved=0 ret=0
->            oslat-16074 [002]   300.576756: vector_config: irq=21 vector=38 cpu=0 apicdest=0x00000000
+Mathieu
 
-And here's where it enters.
+Project website: https://lttng.org
+Documentation: https://lttng.org/docs
+Download link: https://lttng.org/download
 
-
->            oslat-16074 [002]   300.576773: user_enter:
->            oslat-16074 [002]   300.576778: user_exit:
->            oslat-16074 [002]   300.576778: sys_enter:            NR 1 (3, 7fcbb683c300, 65, 0, 0, 7fcbb683b816)
->            oslat-16074 [002]   300.576778: sys_enter_write:      fd: 0x00000003, buf: 0x7fcbb683c300, count: 0x00000065
->            oslat-16074 [002]   300.576780: print: tracing_mark_write: /home/test/rt-tests/oslat: Trace threshold (30 us) triggered on cpu 2 with 67 us!  Stopping the test.
->            oslat-16074 [002]   300.576780: kfree: (__audit_syscall_exit+0x249) call_site=ffffffff95fb8889 ptr=(nil)
->            oslat-16074 [002]   300.576781: sys_exit:             NR 1 = 101
->            oslat-16074 [002]   300.576781: sys_exit_write:       0x65
->            oslat-16074 [002]   300.576781: user_enter:
-> ===
-
-
-
-> 
-> * Looking at these traces it is difficult to see/conclude the source
-> of the said (67us) latency spike.
-> * Other logs I have for the same host/guest show
-> _call_function_entry/exit or timer softirq entries in traces.
-> * Peculiar is that these spikes seem to occur when oslat(8) is invoked
-> after the guest boot-up.
->    Subsequent oslat(8) sessions in the same guest run over 12 hrs
-> without any sign of latency spike.
-> 
-> * Is there a way to find further clues or conclusively figure out the
-> source of such occasional latency spikes?
-> 
-
-Since this is run on a guest, the host can obviously cause noise. If you
-have the latest trace-cmd (at least 3.1.2) and install that on both the
-host and guest, you can do a trace to get more info. You can even start
-trace-cmd on the guest and kick off the host. But you need to have vsockets
-enabled on the guest.
-
-To get the vsocket CID id, you can run the agent:
-
-  # trace-cmd agent
-listening on @3:823
-
-The @3 is the CID (823 is the port).
-
-Hit Ctrl-C on to kill the agent.
-
-Then on the host, run:
-
- # trace-cmd agent -P 3
-
-Where 3 is the CID of the guest you want to connect the host (the same
-number from the 'trace-cmd agent'. That is, if it was @4:823, then use
-'-P 4'). The host agent above should also have a:
-
- listening on @2:823
-
-or something. You'll need the host's CID too.
-
-Then on the guest, run:
-
-[ You do not need -p nop if you have -e used ]
-
-  # trace-cmd record --poll -M 1E -e all --proxy 2 --name host -e kvm -e sched -e irq /home/test/rt-tests/oslat --cpu-list 1-4 --rtprio 1 --duration 12h -T 30 oslat V 2.30
-
-And then when it ends, you'll have two files. One that is trace.dat and one
-that is trace-host.dat. If everything worked well, the two would also be in
-sync with each other. Doing:
-
-  # trace-cmd report -i trace-host.dat -i trace.dat
-
-Will show the host events happening with the guest events. If the host
-caused the latency, you will definitely see it.
-
-If you have the latest kernelshark, you can run:
-
-  kernelshark trace-host.dat -a trace.dat
-
-And then select "Plots" -> "KVM Combo Plots" and in the popup, select the
-box for "all".
-
-Then you'll see plots for each virtual CPU and the host thread that
-represents it.
-
--- Steve
-
-
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
