@@ -2,108 +2,130 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C9C0C32772
-	for <linux-trace-users@archiver.kernel.org>; Fri, 19 Aug 2022 20:38:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AF3CC25B08
+	for <linux-trace-users@archiver.kernel.org>; Sat, 20 Aug 2022 09:21:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349825AbiHSUi4 (ORCPT
+        id S245610AbiHTJVW (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Fri, 19 Aug 2022 16:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36082 "EHLO
+        Sat, 20 Aug 2022 05:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349461AbiHSUiz (ORCPT
+        with ESMTP id S244085AbiHTJVV (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Fri, 19 Aug 2022 16:38:55 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B786F69F40;
-        Fri, 19 Aug 2022 13:38:53 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 9845D3C0A55;
-        Fri, 19 Aug 2022 16:38:51 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id EQnzhJTjtQtC; Fri, 19 Aug 2022 16:38:51 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id E96DD3C0A54;
-        Fri, 19 Aug 2022 16:38:50 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com E96DD3C0A54
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1660941530;
-        bh=zHYXDU3OBJlo2f7kOevIZTmU79fOSY6P6oEc16MdY2E=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=IQETqVpUlJXgSSXmO9FwnBtLCC+J0RyU0Nb88mRnH70F6jS+Lauin+XOT7mw3tk6T
-         NCKkMjN2lA0aH6QPg8NbKQ8NPmah5CIRFO3uihoFQKQlCxMHPBxz25htK/vYsgtDTg
-         AKSO6lT8PZRzNp11km8kSmFHRttQUocQoVuZ1cN2ltedJwSjToBLr4OtDIvYIDSWko
-         OL8OAX8uWSYfU6J+rfE+jWdhV3EqobiO6GggpdbLbASi62TmrEm4coNjjqHnL6G8Yy
-         uTcWU6DjJFC2EEBw1EkGS//Um3Ke5T4ks2iN+bu/ZBk6zbk9n4KMGV7g013U1aKoTJ
-         jrio6rQlDyb1Q==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id s-DeMP4_bKJx; Fri, 19 Aug 2022 16:38:50 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id DB6DE3C0A53;
-        Fri, 19 Aug 2022 16:38:50 -0400 (EDT)
-Date:   Fri, 19 Aug 2022 16:38:50 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     lttng-dev <lttng-dev@lists.lttng.org>,
-        Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
-        linux-trace-users <linux-trace-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, lwn <lwn@lwn.net>
-Message-ID: <1557496534.17909.1660941530779.JavaMail.zimbra@efficios.com>
-Subject: [RELEASE] LTTng-ust 2.12.6 and 2.13.4 (Linux user-space tracer)
+        Sat, 20 Aug 2022 05:21:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92C9B69C7
+        for <linux-trace-users@vger.kernel.org>; Sat, 20 Aug 2022 02:21:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660987279;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RJhUICJH6FacSXTDCxEf7kZpPdw/UJ30I9DkKp+RhRE=;
+        b=PYEe8LQQdgZ7ZFWLJ3oeXhDiryA9aH8oX7lCCDtEjR5704l8rKVhrc0T+/3wzriBH5B1zB
+        rV171l//v1S30mpA+XjbhTLEEFlBBjZhCoJkl5wat+DcziB4W+wIF+J+Jjs85djCSSQ1aU
+        3cJ334sT5NTJwAuo/jOX+/WZW/sA2X4=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-154-aaj-S_xTPp-ul4BgVFkfWA-1; Sat, 20 Aug 2022 05:21:18 -0400
+X-MC-Unique: aaj-S_xTPp-ul4BgVFkfWA-1
+Received: by mail-oi1-f200.google.com with SMTP id ay32-20020a056808302000b002f96abff093so1206786oib.23
+        for <linux-trace-users@vger.kernel.org>; Sat, 20 Aug 2022 02:21:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=RJhUICJH6FacSXTDCxEf7kZpPdw/UJ30I9DkKp+RhRE=;
+        b=dctWH2DoW3dmtnp0w7xLgjlP1ZXp3C8MXRY+CCj+wsxDcbB0ldlk5S1XsQ+tNha02g
+         tmvsd/ilxHSm8YcTjDJO9wNF8cwAj22X6r0OPEGXoVuQGtypbsVHB2zAJsHSI2Z98csE
+         3TDu58ecD5FOm6WgNVBsB26LkbsfWlu8pkn5YliEtiFtxhYhTi6jmPVWgfrOVP18MMgV
+         rPNLWKiSI/MtaXqWHsYIx5pdLivsH9NPKwXisuXT/vtREQtC9fU4JgP6tJi3Hg9tvu/1
+         EG3IBb4yNMJcNJ94rjzoaC3txgpxPHSxDErJfwmirOcZvdhBhxvdMmx3Ib590vJju2NA
+         6ewA==
+X-Gm-Message-State: ACgBeo2u0ZUouSp1SK2VGgdeJbHq/MB3IP+JTsyFKqInPIgJFihkJpOk
+        +pAFwFreHbsHC365ZatRp0TZYuY6igONVD/UBUGkPpQROTVbHkNOdVr4LHi1kQoovUooUayfdyT
+        967WIGcm2LU8lY8TlbUSq2lEI+zagU202sVVMTo7eBjRd8N4=
+X-Received: by 2002:a05:6808:f0c:b0:344:bb8d:a99f with SMTP id m12-20020a0568080f0c00b00344bb8da99fmr5008148oiw.151.1660987277945;
+        Sat, 20 Aug 2022 02:21:17 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5bPE/mIczKvSVxaV+64RQl3rDEMl7ReEDO+4CT6/P16Jj9sSooAHtFpikkE4VyVBVGTLxV7o4Lfb6gYdSys9U=
+X-Received: by 2002:a05:6808:f0c:b0:344:bb8d:a99f with SMTP id
+ m12-20020a0568080f0c00b00344bb8da99fmr5008145oiw.151.1660987277762; Sat, 20
+ Aug 2022 02:21:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4372 (ZimbraWebClient - FF103 (Linux)/8.8.15_GA_4372)
-Thread-Index: BBsWiGWbzxfD3y6w1mw3EXGTI3mZlw==
-Thread-Topic: LTTng-ust 2.12.6 and 2.13.4 (Linux user-space tracer)
+References: <CAE8KmOwGONSzSDczNdadyMSvn84qBbqS0wKUMbctnPgio0Uxgg@mail.gmail.com>
+ <20220819135047.45243742@gandalf.local.home>
+In-Reply-To: <20220819135047.45243742@gandalf.local.home>
+From:   Prasad Pandit <ppandit@redhat.com>
+Date:   Sat, 20 Aug 2022 14:51:02 +0530
+Message-ID: <CAE8KmOyUyRCCN035ScjbcsD9ftOvsn_Z++piiThyVgy7cwL4kw@mail.gmail.com>
+Subject: Re: About tracing clues
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        linux-trace-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi,
+Hello Steven,
 
-This is a release announcement for the currently maintained stable
-branches of the LTTng-UST project. Versions 2.12.6 and 2.13.4 are
-now available.
+On Fri, 19 Aug 2022 at 23:29, Steven Rostedt <rostedt@goodmis.org> wrote:
+> Hmm you need to turn off line wraps when pasting in output like this.
+> Because the line wraps make it very difficult to follow.
 
-* New in these releases:
+* True, I should've done that; I'll remember to do it.
 
-In 2.13.4, a compile-time check that disallows using types other
-than integer or pointer for tracepoint array and sequence fields
-has been removed in C. This is because the check relies on pointer
-arithmetic, which does not support opaque pointer types, which was
-therefore a regression.
+> To get the vsocket CID id, you can run the agent:
+>
+>   # trace-cmd agent
+> listening on @3:823
+>
+> The @3 is the CID (823 is the port).
+>
+> Hit Ctrl-C on to kill the agent.
+>
+> Then on the host, run:
+>
+>  # trace-cmd agent -P 3
+>
+> Where 3 is the CID of the guest you want to connect the host (the same
+> number from the 'trace-cmd agent'. That is, if it was @4:823, then use
+> '-P 4'). The host agent above should also have a:
+>
+>  listening on @2:823
+>
+> or something. You'll need the host's CID too.
+>
+> Then on the guest, run:
+>
+> [ You do not need -p nop if you have -e used ]
+>
+>   # trace-cmd record --poll -M 1E -e all --proxy 2 --name host -e kvm -e sched -e irq /home/test/rt-tests/oslat --cpu-list 1-4 --rtprio 1 --duration 12h -T 30 oslat V 2.30
+>
+> And then when it ends, you'll have two files. One that is trace.dat and one
+> that is trace-host.dat. If everything worked well, the two would also be in
+> sync with each other. Doing:
+>
+>   # trace-cmd report -i trace-host.dat -i trace.dat
+>
+> Will show the host events happening with the guest events. If the host
+> caused the latency, you will definitely see it.
+>
+> If you have the latest kernelshark, you can run:
+>
+>   kernelshark trace-host.dat -a trace.dat
+>
+> And then select "Plots" -> "KVM Combo Plots" and in the popup, select the
+> box for "all".
+>
+> Then you'll see plots for each virtual CPU and the host thread that represents it.
 
-In both 2.12.6 and 2.13.4, the mechanism to get the maximum cpu
-number value has been changed to not rely on sysconf(3)
-_SC_NPROCESSORS_CONF, but rather use /sys/devices/system/cpu/possible
-on Linux. This fixes an issue observed with recent lxc, which
-caused scenarios where holes in the configured CPU list causes
-the returned value to be lower than the maximum cpu number + 1.
+* I see, thank you so much for these interesting details. I'll try
+these steps and get back to you soon.
 
-In both 2.12.6 and 2.13.4, the function lttng_ust_ctl_duplicate_ust_object_data
-now returns a negative error value, fixing a segmentation fault on error
-in lttng-tools.
 
-In both 2.12.6 and 2.13.4, spurious futex wakeups are now handled
-correctly. Failure to do so did not cause any user-observable issues
-other than using slightly more CPU time than strictly needed, because
-this spurious wakeup would only cause an additional connection attempt
-to the session daemon to fail.
+Thank you.
+---
+  - P J P
 
-Feedback is welcome,
-
-Thanks,
-
-Mathieu
-
-Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
