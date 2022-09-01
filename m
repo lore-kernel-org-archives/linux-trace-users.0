@@ -2,132 +2,152 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7915DECAAD4
-	for <linux-trace-users@archiver.kernel.org>; Wed, 31 Aug 2022 15:24:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CEEAECAAD1
+	for <linux-trace-users@archiver.kernel.org>; Thu,  1 Sep 2022 14:07:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbiHaPY4 convert rfc822-to-8bit (ORCPT
+        id S232889AbiIAOHD (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Wed, 31 Aug 2022 11:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
+        Thu, 1 Sep 2022 10:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbiHaPYy (ORCPT
+        with ESMTP id S230136AbiIAOHC (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Wed, 31 Aug 2022 11:24:54 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B419E2DD3
-        for <linux-trace-users@vger.kernel.org>; Wed, 31 Aug 2022 08:24:49 -0700 (PDT)
-Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MHnv241t6z6HJH0
-        for <linux-trace-users@vger.kernel.org>; Wed, 31 Aug 2022 23:21:02 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 31 Aug 2022 17:24:47 +0200
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 31 Aug 2022 16:24:47 +0100
-Received: from lhrpeml500003.china.huawei.com ([7.191.162.67]) by
- lhrpeml500003.china.huawei.com ([7.191.162.67]) with mapi id 15.01.2375.024;
- Wed, 31 Aug 2022 16:24:47 +0100
-From:   Matteo Bertolino <matteo.bertolino@huawei.com>
-To:     "linux-trace-users@vger.kernel.org" 
-        <linux-trace-users@vger.kernel.org>
-Subject: RE: `fungraph_entry` and `funcgraph_exit` entries: is there a
- mismatch between trace-cmd and the format of debugfs?
-Thread-Topic: `fungraph_entry` and `funcgraph_exit` entries: is there a
- mismatch between trace-cmd and the format of debugfs?
-Thread-Index: Adi8UaCYyVhy3GKeRViBYI/Q5yasxAA/AmWg
-Date:   Wed, 31 Aug 2022 15:24:46 +0000
-Message-ID: <50fa51e229964968879861898ffde830@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.123.160.159]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 1 Sep 2022 10:07:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07ED310FE;
+        Thu,  1 Sep 2022 07:07:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7860B826DB;
+        Thu,  1 Sep 2022 14:06:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4EC8C433D6;
+        Thu,  1 Sep 2022 14:06:57 +0000 (UTC)
+Date:   Thu, 1 Sep 2022 10:07:28 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Michael Petlan <mpetlan@redhat.com>,
+        "linux-trace-users@vger.kernel.org" 
+        <linux-trace-users@vger.kernel.org>,
+        Linux Trace Devel <linux-trace-devel@vger.kernel.org>
+Subject: Re: libtraceevent -- undefined functions
+Message-ID: <20220901100728.54562054@gandalf.local.home>
+In-Reply-To: <alpine.LRH.2.20.2208301214410.12613@Diego>
+References: <alpine.LRH.2.20.2208301214410.12613@Diego>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Dear community,
-My problem was a bad understanding of the `type_len` field of the event header.
-You can ignore this mail, sorry.
-Bests,
-Matteo
 
------Original Message-----
-From: Matteo Bertolino 
-Sent: Tuesday, August 30, 2022 11:20 AM
-To: 'linux-trace-users@vger.kernel.org' <linux-trace-users@vger.kernel.org>
-Subject: `fungraph_entry` and `funcgraph_exit` entries: is there a mismatch between trace-cmd and the format of debugfs?
+[ This is helpful information for trace users and developers so I've
+  included the two lists ]
 
-Dear Community,
+On Tue, 30 Aug 2022 12:59:46 +0200 (CEST)
+Michael Petlan <mpetlan@redhat.com> wrote:
 
-I would like to share with you something interesting came out from one of my tests. 
+> Hello Steve,
+> 
+> during perf testing, I have found out that the print formats of some tracepoints
+> are translated to quite complicated code, that differs per architecture and quite
+> often contains various builtins and functions that are not recognized by the parser
+> in libtraceevent.
+> 
+> It looks like this:
+> 
+> [root@gigabyte-r120-03 base_kmem]# perf kmem --page record -o ./perf.data -- true
+> libtraceevent: No such file or directory
+>   [kmem:mm_page_alloc] function __builtin_constant_p not defined
+>   [kmem:mm_page_free] function __builtin_constant_p not defined
+> 
+> I have digged down to event-parse.c source and commits like 1b20d9491cf9 ("tools
+> lib traceevent: Add handler for __builtin_expect()") that add some missing func
+> support.
+> 
+> I have added __builtin_constant_p, it helped to suppress the warning, but then
+> I found out I was missing sizeof()...
+> 
+> On an x86_64 F35 machine, I have found the following list of missing funcs:
+>  __builtin_choose_expr
+>  decode_prq_descriptor
+>  jiffies_to_msecs
+>  libata_trace_parse_eh_action
+>  libata_trace_parse_host_stat
+>  libata_trace_parse_qc_flags
+>  libata_trace_parse_subcmd
+>  libata_trace_parse_tf_flags
+>  mc_event_error_type
+>  pgd_val
+>  pmd_val
+>  pte_val
+>  pud_val
+>  scsi_trace_parse_cdb
+>  sizeof
 
-I am manually  writing a binary trace composed of `funcgraph_entry` and `funcgraph_exit` entries: 
-This is an example:
-CPU0: Task A entry ------- Task B entry  ------- Task B exit ------- Task A exit.
+The problem with a lot of the above is that user space does not know how to
+parse them. "jiffies_to_msecs" depends on knowing the HZ value. Now if the
+kernel exported this, we could look for it and save this information, and
+then be able to parse it correctly.
 
-After writing the trace, I display it with Kernelshark.
+>  xen_hypercall_name
+>  xhci_decode_ctrl_ctx
+>  xhci_decode_doorbell
+>  xhci_decode_ep_context
+>  xhci_decode_portsc
+>  xhci_decode_slot_context
+>  xhci_ring_type_string
+> 
+> There are of course more, since on other platforms, the print format expands to
+> different code.
+> 
+> I wonder, whether it might be useful to add these functions to libtraceevent
+> parser. Finally, what is the purpose of the handlers, such as __builtin_expect()
+> you have added? It looks like that the parser machine now accepts this token and
+> handles that it has to have two parameters, but does nothing more with it. It
+> lets the parser to dive deeper and process the first arg and forgets the second,
+> just like replacing
+>   __builtin_expect( exp, c)
+> by
+>   exp
+> so when something executes the code, it ignores the builtin? Am I right?
 
-Both entries and exit give me problems. Let's start with the entry.
+Correct. As __builtin_expect() is just a compile time optimization that
+"likely()" and "unlikely()" are defined to, it has no meaning to the
+parser. But we still want the contents of the expression.
 
-I gave to the section 17 of the trace.dat the following file:
-````
-name: funcgraph_entry
-ID: 11
-format:
-	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
-	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
-	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
-	field:int common_pid;	offset:4;	size:4;	signed:1;
-	field:unsigned long func;	offset:8;	size:8;	signed:0;
-	field:int depth;	offset:16;	size:4;	signed:1;
+I had to update libtraceevent to basically ignore the __builtin_expect().
 
-print fmt: "--> %ps (%d)", (void *)REC->func, REC->depth ````
+That is, "unlikely(cond)" turns into "!!__builtin_exepect(cond, 0)"
 
-So, in the trace, after the event header, I write 2 bytes for the ID (11 in this case), 1 for the flags, and so and so, until the last one: 4 bytes for depth.
-The problem arrives there: if I don't write 4 additional bytes on field `depth` (or 4 additional bytes of padding), the next entry is not displayed on Kernelshark, which shows an [UNKNOWN EVENT[.
+libtraceevent does not care about the "unlikely()" part, only the
+condition, so the parser basically treats it the same:
 
-A little hypothesis: I noticed that `fgraph_ent_handler()` function on `trace-ftrace.c` calls `print_graph_nested()`. The latter declares `depth` as `unsigned long long depth;`  , namely on 8 bytes instead of the declared 4.
+  "unlikely(cond)" == "cond"
 
-If I modify the file in this way (below) and, for each `funcgraph_entry` entry, I write the depth 8 bytes instead of 4, everything is ok:
-````
-name: funcgraph_entry
-ID: 11
-format:
-	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
-	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
-	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
-	field:int common_pid;	offset:4;	size:4;	signed:1;
-	field:unsigned long func;	offset:8;	size:8;	signed:0;
-	field:int depth;	offset:16;	size:8;	signed:1;
+> 
+> The __builtin_constant_p(arg) should decide whether arg is constant or not and
+> return 1 or 0 respectively...
+> 
 
-print fmt: "--> %ps (%d)", (void *)REC->func, REC->depth ````
+What is using __builting_constant_p() inside the TP_printk()?
 
-Now, unfortunately, I have the same problem with `funcgraph_exit` entries, but this this I cannot find a workaround.
-The first `funcgraph_exit` entry that I write is perfectly displayed on Kernelshark, but everything subsequent to it is broken.
+> My questions are:
+>    1) Does it matther whether or not the above functions are accepted by the parser
+>    grammar or not?
 
-Example of `funcgraph_exit` entry:
-4 bytes of TS delta
-2 bytes for the ID (11)
-1 byte for common_flags, I don't use this field, so I wrote the value 0.
-1 byte for common_preempt_count, I don't use this field, so I wrote the value 0.
-4 bytes of PID
-8 bytes of func field
-4 bytes of depth (here, I left this on 4 bytes)
-4 bytes of overrun, I don't use this field, so I wrote value 0.
-8 bytes for calltime
-8 bytes for rettime.
+When it can't parse something, it falls back to just printing out the raw
+fields the best it can.
 
-My questions are:
-1- Do you think that my fix for `funcgraph_entry` entry's depth value is correct?
-2- If so, can we have a double check on the `funcgraph_exit` entry as well?
+>    2) Does (1) affect how the code is later executed somewhere?
 
-Cheers,
-Matteo
+It affects how it prints the event. It then ignores the TP_printk() format,
+and then, as mentioned above, just prints the raw fields.
+
+>    3) Would e.g. replacing __builtin_constant_p(arg) by 0 by default help/simplify
+>    anything?
+
+I have to see how it's used. What event does that?
+
+-- Steve
