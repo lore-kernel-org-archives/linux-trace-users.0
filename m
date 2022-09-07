@@ -2,153 +2,136 @@ Return-Path: <linux-trace-users-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46C64ECAAA1
-	for <linux-trace-users@archiver.kernel.org>; Tue,  6 Sep 2022 18:01:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78A26C38145
+	for <linux-trace-users@archiver.kernel.org>; Wed,  7 Sep 2022 08:08:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbiIFSBR (ORCPT
+        id S230029AbiIGIIr (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Tue, 6 Sep 2022 14:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
+        Wed, 7 Sep 2022 04:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiIFSBQ (ORCPT
+        with ESMTP id S230297AbiIGIIq (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Tue, 6 Sep 2022 14:01:16 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86291ABF15
-        for <linux-trace-users@vger.kernel.org>; Tue,  6 Sep 2022 11:01:13 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id nc14so25063743ejc.4
-        for <linux-trace-users@vger.kernel.org>; Tue, 06 Sep 2022 11:01:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=YUvk5eL8bPVmgH9y/S5HgMB7yynGncdpOGkdVZP9oX4=;
-        b=fcOCaAl9WoCAvFatZOOl+i/IuP3BXEgU1RBEsBLXAWg/llxH8QmJ5ClAiVOvgiHTZU
-         73TLQElrBulfnBzU0dftAMMCcu1ZSgPW0TGJ7PcY9hm13XrtERvYbYj+AXFAkVuKZvmh
-         0xAnzKBASGk+pXN6fZ2doORamAqiOcrl/aYJckRB4u637svaII0xc6byNafNkvhc4xDm
-         bvq6YnVd4GmXCPODw3dOe/ToGzLFh2z4TWz04kH4g7ScMmG7BYnfoQz0DY/W8BHUijcx
-         MDbvALxZ2cCBLhVDLEIO8GyHBfUEAILs8kbB7319BLt2KcOzGB8lPxISV2i7rc7LYomM
-         S0SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=YUvk5eL8bPVmgH9y/S5HgMB7yynGncdpOGkdVZP9oX4=;
-        b=gztyctbnj6iezc1Ggxoonc6nErVoZjPZl1aDwWxcmvqC5m2Sjn1Nd/v7OjqIZyBNQa
-         6xnsr+KmUAFbzoHSPkaIRL9PyNTKZh8zIf8ZUteEWfxqmcAz0Am5Xfm7OW7rXrsu7NUR
-         YzGF6dYNsXTPsy6b2JtDHzzDKYKFjzrJ+2W6LCX3mpRUN1xAmc00REEBJIWDdC1it5T6
-         5DhMKUVf0bdsaUaqdZgk0Zdx6tIxmFwtQnHD1eHMIsHnzzUtHjGfq9nGSceucY8HyFwU
-         QIjxmCS0q2DuL6T6rAVxkYL5myLWdBA2c3E/oUpuDtWXF5MNXmKsPI1ewLBSgV6WWWVc
-         AfFg==
-X-Gm-Message-State: ACgBeo0qQo+H3Z3HTWJkKxQ4iq2hWlrnTRwUN6xV9dE1ZSsacgX60rgt
-        Mxdm2Wm3z005cRoyq9FeMKnxD4CsEEY=
-X-Google-Smtp-Source: AA6agR55b1FdwfBbrsU7Mz3ssMIWRO2cbrEolNEHTuqMIf+HsLtW+hJzkkdPopQ9ccHryJmnQ+5zEQ==
-X-Received: by 2002:a17:907:d87:b0:76f:128c:4caa with SMTP id go7-20020a1709070d8700b0076f128c4caamr2680566ejc.720.1662487271417;
-        Tue, 06 Sep 2022 11:01:11 -0700 (PDT)
-Received: from [192.168.1.8] (78-154-13-219.ip.btc-net.bg. [78.154.13.219])
-        by smtp.gmail.com with ESMTPSA id r14-20020aa7c14e000000b0044e7adbe0c5sm4751389edp.87.2022.09.06.11.01.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 11:01:10 -0700 (PDT)
-Message-ID: <531dad7b-f88f-4c75-af9f-3e025fba6f8f@gmail.com>
-Date:   Tue, 6 Sep 2022 21:01:09 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: Kernelshark: funcgraph_exit events don't seem to exit?
-Content-Language: en-US
-To:     Matteo Bertolino <matteo.bertolino@huawei.com>,
+        Wed, 7 Sep 2022 04:08:46 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7381587090
+        for <linux-trace-users@vger.kernel.org>; Wed,  7 Sep 2022 01:08:44 -0700 (PDT)
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MMvtG2VR3z6HJ6B
+        for <linux-trace-users@vger.kernel.org>; Wed,  7 Sep 2022 16:04:38 +0800 (CST)
+Received: from lhrpeml100002.china.huawei.com (7.191.160.241) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 7 Sep 2022 10:08:42 +0200
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ lhrpeml100002.china.huawei.com (7.191.160.241) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 7 Sep 2022 09:08:41 +0100
+Received: from lhrpeml500003.china.huawei.com ([7.191.162.67]) by
+ lhrpeml500003.china.huawei.com ([7.191.162.67]) with mapi id 15.01.2375.031;
+ Wed, 7 Sep 2022 09:08:41 +0100
+From:   Matteo Bertolino <matteo.bertolino@huawei.com>
+To:     Yordan Karadzhov <y.karadz@gmail.com>,
         "linux-trace-users@vger.kernel.org" 
         <linux-trace-users@vger.kernel.org>
+Subject: RE: Kernelshark: funcgraph_exit events don't seem to exit?
+Thread-Topic: Kernelshark: funcgraph_exit events don't seem to exit?
+Thread-Index: AdjB0vgZiTKOLdjrR7qANsLEu7G47AAAmpGAAAQc5jAACxspgAAfH0EQ
+Date:   Wed, 7 Sep 2022 08:08:41 +0000
+Message-ID: <134054c70c58468383174c1f62179fc3@huawei.com>
 References: <97aca26a196b4c72aaf2141b5a0c12c9@huawei.com>
  <9252a7a4-f36c-356a-f069-9b17367ffff1@gmail.com>
  <f2feee0c5a6b49f3949eba9ded500842@huawei.com>
-From:   Yordan Karadzhov <y.karadz@gmail.com>
-In-Reply-To: <f2feee0c5a6b49f3949eba9ded500842@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <531dad7b-f88f-4c75-af9f-3e025fba6f8f@gmail.com>
+In-Reply-To: <531dad7b-f88f-4c75-af9f-3e025fba6f8f@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.123.160.159]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi Matteo,
-
-I confirm that the logic that you want can be implemented via plugin. 
-However, there is even simpler way to accomplish what you want. When 
-recording your trace, enable the 'sched_switch' events. This way in your 
-data you will know exactly when the execution switches form one task to 
-another (or to idle). The good thing here is that KernelShark already 
-has a plugin for 'sched_switch' end you will see a the behavior that you 
-expect.
-
-cheers,
-Y.
-
-
-On 9/6/22 14:57, Matteo Bertolino wrote:
-> Dear Yordan,
-> Thanks for your reply!
-> 
-> I would like to do a double check to be sure that we're on the same rail.
-> Can you please take my screenshot again? Between 8.090000 and 8.130000 the trace doesn't provide any information.
-> 
-> We don't know whether:
-> A) task1 continues after the end of foo1 running something else that is not traced
-> Or
-> B) The CPU is idle/a non-traced task is running.
-> 
-> Today, the default behavior of kernelshark is A). Indeed, in my screenshot, the bar indicated by the light-blue arrow is red.
-> 
-> Instead, I wish to code a plugin with a third option:
-> C) when we do not know what happens, just color with gray.
-> 
-> Do your instructions cover this case?
-> If so, I would like to have some hints and I will try to implement it :-)
-> 
-> Best Regards,
-> Matteo
-> 
-> -----Original Message-----
-> From: Yordan Karadzhov [mailto:y.karadz@gmail.com]
-> Sent: Tuesday, September 6, 2022 12:45 PM
-> To: Matteo Bertolino <matteo.bertolino@huawei.com>; linux-trace-users@vger.kernel.org
-> Subject: Re: Kernelshark: funcgraph_exit events don't seem to exit?
-> 
-> Hi Matteo,
-> Thanks for reporting this issue!
-> 
-> I understand what you would like to see being visualized, but
-> unfortunately this is different from the implemented generic logic of
-> the visualization model that changes the color at the place of the first
-> event that belongs to the new task. Note that this generic logic is
-> expected to provide adequate visualization for all types of events,
-> while the behavior that you would like to see makes sense only for very
-> specific events.
-> 
-> However, what you want is actually very easy to achieve. You just have
-> to write a kernelshark plugin for funcgraph_exit events. If you are
-> interested in contributing such plugin to kernelshark, I can send you
-> instructions what has to be done. It will be really trivial work.
-> 
-> cheers,
-> Yordan
-> 
-> 
-> On 9/6/22 12:29, Matteo Bertolino wrote:
->> Dear community,
->> In order to explain my problem, I need to ask you to have a look to the visual trace in my github (I cannot attach it to the mail nor using an image uploading service): https://github.com/the-red-robin/trace-cmd-experiments/blob/main/README.md
->>
->> In the trace, we have one CPU, CPU0. On it:
->> - `Task3` runs `foo5()` at time 8.000000 cycles
->> - `Task2` takes place running `foo3()` at time 8.010000 cycles.
->> - `Task1` takes place running `foo1()` at time 8.060000 cycles.
->> For now, everything OK.
->> Then, I wish to `exit` the three tasks.
->>
->> - `Task1` exits at 8.090000 cycles. Here the trace does not show what I expect, namely `Task1` (in red) shall end at 8.090000 cycles. Instead, there is a red trace until the beginning of the next exit event, `Task2` at 8.130000.
->>
->> This doesn't seem an `exit` event. Do you have any suggestions to show what I wish on Kernelshark?
->>
->> Best Regards,
->> Matteo
+SGVsbG8gWW9yZGFuLA0KVGhhbmtzIGFnYWluIGZvciB5b3VyIHByZWNpb3VzIGFuc3dlcnMhDQoN
+CkkgZ290IHlvdXIgcG9pbnQuIEhvbmVzdGx5LCBJIHdvdWxkIGxpa2UgdG8gYXZvaWQgdG8gcmVn
+aXN0ZXIgdGhlIGBzY2hlZF9zd2l0Y2hgLiANCkJlY2F1c2Ugb2YgbXkgY3VycmVudCBuZWVkcywg
+SSBwcmVmZXIgdG8gcmVjb3JkIGZldyB0aGluZ3MgKHdpdGggc3Ryb25nIGZpbHRlcnMpLg0KDQpT
+bywgb2Z0ZW4sIEkgbWF5IGhhdmUgaW4gbXkgdHJhY2UgYmlnIHRlbXBvcmFsIGdhcHMgaW4gd2hp
+Y2ggSSBkb24ndCBrbm93IHdoZXRoZXIgYSB0YXNrIFgNCmlzIHN0aWxsIHJ1bm5pbmcgd2l0aCBh
+IGZ1bmN0aW9uIHRoYXQgSSBkb24ndCByZWNvcmQsIG9yIGEgdGFzayBZIHRoYXQgSSBkb24ndCBy
+ZWNvcmQgYXQgYWxsLCBvciBpZGxlLg0KDQpJbiBhbGwgdGhlc2UgYHVuY2VydGFpbmAgY2FzZXMs
+IEknZCBsaWtlIHRvIHNpbXBseSBjb2xvciB0aGUgdGltZWJhciB3aXRoIGEgZ3JheSBzaGFwZS4N
+Cg0KSWYgdGhhdCBkb2Vzbid0IGFubm95IHlvdSB0b28gbXVjaCwgbWF5IHlvdSBnaXZlIG1lIHNv
+bWUgaGludHMgYWJvdXQgd3JpdGluZyBhIEtlcm5lbHNoYXJrJ3MgcGx1Z2luPyANClRoYW5rcyEN
+Ck1hdHRlbw0KDQotLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KRnJvbTogWW9yZGFuIEthcmFk
+emhvdiBbbWFpbHRvOnkua2FyYWR6QGdtYWlsLmNvbV0gDQpTZW50OiBUdWVzZGF5LCBTZXB0ZW1i
+ZXIgNiwgMjAyMiA4OjAxIFBNDQpUbzogTWF0dGVvIEJlcnRvbGlubyA8bWF0dGVvLmJlcnRvbGlu
+b0BodWF3ZWkuY29tPjsgbGludXgtdHJhY2UtdXNlcnNAdmdlci5rZXJuZWwub3JnDQpTdWJqZWN0
+OiBSZTogS2VybmVsc2hhcms6IGZ1bmNncmFwaF9leGl0IGV2ZW50cyBkb24ndCBzZWVtIHRvIGV4
+aXQ/DQoNCkhpIE1hdHRlbywNCg0KSSBjb25maXJtIHRoYXQgdGhlIGxvZ2ljIHRoYXQgeW91IHdh
+bnQgY2FuIGJlIGltcGxlbWVudGVkIHZpYSBwbHVnaW4uIA0KSG93ZXZlciwgdGhlcmUgaXMgZXZl
+biBzaW1wbGVyIHdheSB0byBhY2NvbXBsaXNoIHdoYXQgeW91IHdhbnQuIFdoZW4gcmVjb3JkaW5n
+IHlvdXIgdHJhY2UsIGVuYWJsZSB0aGUgJ3NjaGVkX3N3aXRjaCcgZXZlbnRzLiBUaGlzIHdheSBp
+biB5b3VyIGRhdGEgeW91IHdpbGwga25vdyBleGFjdGx5IHdoZW4gdGhlIGV4ZWN1dGlvbiBzd2l0
+Y2hlcyBmb3JtIG9uZSB0YXNrIHRvIGFub3RoZXIgKG9yIHRvIGlkbGUpLiBUaGUgZ29vZCB0aGlu
+ZyBoZXJlIGlzIHRoYXQgS2VybmVsU2hhcmsgYWxyZWFkeSBoYXMgYSBwbHVnaW4gZm9yICdzY2hl
+ZF9zd2l0Y2gnIGVuZCB5b3Ugd2lsbCBzZWUgYSB0aGUgYmVoYXZpb3IgdGhhdCB5b3UgZXhwZWN0
+Lg0KDQpjaGVlcnMsDQpZLg0KDQoNCk9uIDkvNi8yMiAxNDo1NywgTWF0dGVvIEJlcnRvbGlubyB3
+cm90ZToNCj4gRGVhciBZb3JkYW4sDQo+IFRoYW5rcyBmb3IgeW91ciByZXBseSENCj4gDQo+IEkg
+d291bGQgbGlrZSB0byBkbyBhIGRvdWJsZSBjaGVjayB0byBiZSBzdXJlIHRoYXQgd2UncmUgb24g
+dGhlIHNhbWUgcmFpbC4NCj4gQ2FuIHlvdSBwbGVhc2UgdGFrZSBteSBzY3JlZW5zaG90IGFnYWlu
+PyBCZXR3ZWVuIDguMDkwMDAwIGFuZCA4LjEzMDAwMCB0aGUgdHJhY2UgZG9lc24ndCBwcm92aWRl
+IGFueSBpbmZvcm1hdGlvbi4NCj4gDQo+IFdlIGRvbid0IGtub3cgd2hldGhlcjoNCj4gQSkgdGFz
+azEgY29udGludWVzIGFmdGVyIHRoZSBlbmQgb2YgZm9vMSBydW5uaW5nIHNvbWV0aGluZyBlbHNl
+IHRoYXQgDQo+IGlzIG5vdCB0cmFjZWQgT3INCj4gQikgVGhlIENQVSBpcyBpZGxlL2Egbm9uLXRy
+YWNlZCB0YXNrIGlzIHJ1bm5pbmcuDQo+IA0KPiBUb2RheSwgdGhlIGRlZmF1bHQgYmVoYXZpb3Ig
+b2Yga2VybmVsc2hhcmsgaXMgQSkuIEluZGVlZCwgaW4gbXkgc2NyZWVuc2hvdCwgdGhlIGJhciBp
+bmRpY2F0ZWQgYnkgdGhlIGxpZ2h0LWJsdWUgYXJyb3cgaXMgcmVkLg0KPiANCj4gSW5zdGVhZCwg
+SSB3aXNoIHRvIGNvZGUgYSBwbHVnaW4gd2l0aCBhIHRoaXJkIG9wdGlvbjoNCj4gQykgd2hlbiB3
+ZSBkbyBub3Qga25vdyB3aGF0IGhhcHBlbnMsIGp1c3QgY29sb3Igd2l0aCBncmF5Lg0KPiANCj4g
+RG8geW91ciBpbnN0cnVjdGlvbnMgY292ZXIgdGhpcyBjYXNlPw0KPiBJZiBzbywgSSB3b3VsZCBs
+aWtlIHRvIGhhdmUgc29tZSBoaW50cyBhbmQgSSB3aWxsIHRyeSB0byBpbXBsZW1lbnQgaXQgDQo+
+IDotKQ0KPiANCj4gQmVzdCBSZWdhcmRzLA0KPiBNYXR0ZW8NCj4gDQo+IC0tLS0tT3JpZ2luYWwg
+TWVzc2FnZS0tLS0tDQo+IEZyb206IFlvcmRhbiBLYXJhZHpob3YgW21haWx0bzp5LmthcmFkekBn
+bWFpbC5jb21dDQo+IFNlbnQ6IFR1ZXNkYXksIFNlcHRlbWJlciA2LCAyMDIyIDEyOjQ1IFBNDQo+
+IFRvOiBNYXR0ZW8gQmVydG9saW5vIDxtYXR0ZW8uYmVydG9saW5vQGh1YXdlaS5jb20+OyANCj4g
+bGludXgtdHJhY2UtdXNlcnNAdmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBLZXJuZWxz
+aGFyazogZnVuY2dyYXBoX2V4aXQgZXZlbnRzIGRvbid0IHNlZW0gdG8gZXhpdD8NCj4gDQo+IEhp
+IE1hdHRlbywNCj4gVGhhbmtzIGZvciByZXBvcnRpbmcgdGhpcyBpc3N1ZSENCj4gDQo+IEkgdW5k
+ZXJzdGFuZCB3aGF0IHlvdSB3b3VsZCBsaWtlIHRvIHNlZSBiZWluZyB2aXN1YWxpemVkLCBidXQg
+DQo+IHVuZm9ydHVuYXRlbHkgdGhpcyBpcyBkaWZmZXJlbnQgZnJvbSB0aGUgaW1wbGVtZW50ZWQg
+Z2VuZXJpYyBsb2dpYyBvZiANCj4gdGhlIHZpc3VhbGl6YXRpb24gbW9kZWwgdGhhdCBjaGFuZ2Vz
+IHRoZSBjb2xvciBhdCB0aGUgcGxhY2Ugb2YgdGhlIA0KPiBmaXJzdCBldmVudCB0aGF0IGJlbG9u
+Z3MgdG8gdGhlIG5ldyB0YXNrLiBOb3RlIHRoYXQgdGhpcyBnZW5lcmljIGxvZ2ljIA0KPiBpcyBl
+eHBlY3RlZCB0byBwcm92aWRlIGFkZXF1YXRlIHZpc3VhbGl6YXRpb24gZm9yIGFsbCB0eXBlcyBv
+ZiBldmVudHMsIA0KPiB3aGlsZSB0aGUgYmVoYXZpb3IgdGhhdCB5b3Ugd291bGQgbGlrZSB0byBz
+ZWUgbWFrZXMgc2Vuc2Ugb25seSBmb3IgDQo+IHZlcnkgc3BlY2lmaWMgZXZlbnRzLg0KPiANCj4g
+SG93ZXZlciwgd2hhdCB5b3Ugd2FudCBpcyBhY3R1YWxseSB2ZXJ5IGVhc3kgdG8gYWNoaWV2ZS4g
+WW91IGp1c3QgaGF2ZSANCj4gdG8gd3JpdGUgYSBrZXJuZWxzaGFyayBwbHVnaW4gZm9yIGZ1bmNn
+cmFwaF9leGl0IGV2ZW50cy4gSWYgeW91IGFyZSANCj4gaW50ZXJlc3RlZCBpbiBjb250cmlidXRp
+bmcgc3VjaCBwbHVnaW4gdG8ga2VybmVsc2hhcmssIEkgY2FuIHNlbmQgeW91IA0KPiBpbnN0cnVj
+dGlvbnMgd2hhdCBoYXMgdG8gYmUgZG9uZS4gSXQgd2lsbCBiZSByZWFsbHkgdHJpdmlhbCB3b3Jr
+Lg0KPiANCj4gY2hlZXJzLA0KPiBZb3JkYW4NCj4gDQo+IA0KPiBPbiA5LzYvMjIgMTI6MjksIE1h
+dHRlbyBCZXJ0b2xpbm8gd3JvdGU6DQo+PiBEZWFyIGNvbW11bml0eSwNCj4+IEluIG9yZGVyIHRv
+IGV4cGxhaW4gbXkgcHJvYmxlbSwgSSBuZWVkIHRvIGFzayB5b3UgdG8gaGF2ZSBhIGxvb2sgdG8g
+DQo+PiB0aGUgdmlzdWFsIHRyYWNlIGluIG15IGdpdGh1YiAoSSBjYW5ub3QgYXR0YWNoIGl0IHRv
+IHRoZSBtYWlsIG5vciANCj4+IHVzaW5nIGFuIGltYWdlIHVwbG9hZGluZyBzZXJ2aWNlKTogDQo+
+PiBodHRwczovL2dpdGh1Yi5jb20vdGhlLXJlZC1yb2Jpbi90cmFjZS1jbWQtZXhwZXJpbWVudHMv
+YmxvYi9tYWluL1JFQUQNCj4+IE1FLm1kDQo+Pg0KPj4gSW4gdGhlIHRyYWNlLCB3ZSBoYXZlIG9u
+ZSBDUFUsIENQVTAuIE9uIGl0Og0KPj4gLSBgVGFzazNgIHJ1bnMgYGZvbzUoKWAgYXQgdGltZSA4
+LjAwMDAwMCBjeWNsZXMNCj4+IC0gYFRhc2syYCB0YWtlcyBwbGFjZSBydW5uaW5nIGBmb28zKClg
+IGF0IHRpbWUgOC4wMTAwMDAgY3ljbGVzLg0KPj4gLSBgVGFzazFgIHRha2VzIHBsYWNlIHJ1bm5p
+bmcgYGZvbzEoKWAgYXQgdGltZSA4LjA2MDAwMCBjeWNsZXMuDQo+PiBGb3Igbm93LCBldmVyeXRo
+aW5nIE9LLg0KPj4gVGhlbiwgSSB3aXNoIHRvIGBleGl0YCB0aGUgdGhyZWUgdGFza3MuDQo+Pg0K
+Pj4gLSBgVGFzazFgIGV4aXRzIGF0IDguMDkwMDAwIGN5Y2xlcy4gSGVyZSB0aGUgdHJhY2UgZG9l
+cyBub3Qgc2hvdyB3aGF0IEkgZXhwZWN0LCBuYW1lbHkgYFRhc2sxYCAoaW4gcmVkKSBzaGFsbCBl
+bmQgYXQgOC4wOTAwMDAgY3ljbGVzLiBJbnN0ZWFkLCB0aGVyZSBpcyBhIHJlZCB0cmFjZSB1bnRp
+bCB0aGUgYmVnaW5uaW5nIG9mIHRoZSBuZXh0IGV4aXQgZXZlbnQsIGBUYXNrMmAgYXQgOC4xMzAw
+MDAuDQo+Pg0KPj4gVGhpcyBkb2Vzbid0IHNlZW0gYW4gYGV4aXRgIGV2ZW50LiBEbyB5b3UgaGF2
+ZSBhbnkgc3VnZ2VzdGlvbnMgdG8gc2hvdyB3aGF0IEkgd2lzaCBvbiBLZXJuZWxzaGFyaz8NCj4+
+DQo+PiBCZXN0IFJlZ2FyZHMsDQo+PiBNYXR0ZW8NCg==
