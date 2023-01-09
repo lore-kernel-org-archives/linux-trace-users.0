@@ -2,131 +2,138 @@ Return-Path: <linux-trace-users-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEF42C3DA7A
-	for <linux-trace-users@archiver.kernel.org>; Fri,  6 Jan 2023 19:12:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9102DC54EBD
+	for <linux-trace-users@archiver.kernel.org>; Mon,  9 Jan 2023 06:59:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231786AbjAFTMM (ORCPT
+        id S233143AbjAIG7X (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Fri, 6 Jan 2023 14:12:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
+        Mon, 9 Jan 2023 01:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjAFTML (ORCPT
+        with ESMTP id S230327AbjAIG7N (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Fri, 6 Jan 2023 14:12:11 -0500
-Received: from CAN01-YQB-obe.outbound.protection.outlook.com (mail-yqbcan01on2083.outbound.protection.outlook.com [40.107.116.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A726A0E6
-        for <linux-trace-users@vger.kernel.org>; Fri,  6 Jan 2023 11:12:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ieRr6lgdA7WWGo1iNbmMi14aM2ByMH59DMuXeIK7gfHfPiG6tutWhGNm5gtQB3eQLXokLa4vWZg/K8EdgyqvRFe1rqz2if5b4pjEyrxY2FnWOloORSqyTZUmXjtEh6/5nTOSSLhQPvI5rSh1fu6Y5YOV/qXnQo8fu/saeZ1+CoQgf7mXnDqBdyQRInEfaitFlW+s+bUnRezUEywQq45S8qh85gyLUFkrx0R2AeVWIE9JGeijp2MMlWCxSleO6P4dqgM7y/aFkm8iDuCWp8r/KHTVAwmU1qzlQCv9Rt1xCrSzh9Sii8eoLQ45+4l6wFIxd+Rq6mtrmwaFrhC+BTI5fg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jPCY83rYE0NC7Bn8skpxNxm2GC01UvkC/YnRz/EormQ=;
- b=Vsu1LTBTE1qnaExzoo0uw+Mj7JVfEjRjGn473nripe06PZ3R3pw7mMzhwx463C1i4z0eM3Kc8zFKeUn2ECtJETVe67fR4mWxDTKcCsfBHN98UafSIwXOGIdabsZo58DbkG6zqPMv5YzU6KMKmn4AOLFRQ43TruLtXd8gQM03uH96lQLjx+KK3Vd4zEkbkjOE1PoDT2oAIM7IHq5ADtmCQC3C1lxsub3bhagD6G8ix0LtTJQC5Goga4h6FKZJSodTOMzag4daiQxvqCmoV5hOFWH1mHgLJJXQ0CcBM5MGzQHC8NoeFWHIiIhFBNihquS8bGCEZPybQbgf1Gp3iia4Vw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jPCY83rYE0NC7Bn8skpxNxm2GC01UvkC/YnRz/EormQ=;
- b=kfYqOKFhkWfUbhtU6ip0+0wDDSNK3cS/HtIO8Ngan6N0tE1VDOcT4PRyUtZIzduTbtGISWoc3o0MlXJIX0gQslmkee2O5cU+tIwkhHOSTWLnjCfsPqHEnAin6dECgEbKj2/4Mja7KvGJ6ZBKI+ztUuC36kMLdEjXJVLiSpKJJ0s4pqQ4JAnjgDy28doc1CM5On7oe3kwTn6FXvQaktGwkXOPq4T9oxpHAPB3yTg7GXt++HIKagZfOITcYBxoVy4meS6AMxeh7T6buTEgyo+d89mRsOXAkf+TfYgtS6TpU3+sJovhTP+WFHFD/s+S/uLtIOsIhIlYi9UnXkm6WJtbeQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=efficios.com;
-Received: from YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:4e::11)
- by YT3PR01MB8195.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:9c::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Fri, 6 Jan
- 2023 19:12:08 +0000
-Received: from YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::eed5:b4fc:c863:b2a]) by YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::eed5:b4fc:c863:b2a%8]) with mapi id 15.20.5944.019; Fri, 6 Jan 2023
- 19:12:08 +0000
-Date:   Fri, 6 Jan 2023 14:12:07 -0500
-From:   =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau 
-        <jeremie.galarneau@efficios.com>
-To:     lttng-dev@lists.lttng.org
-Cc:     diamon-discuss <diamon-discuss@lists.linuxfoundation.org>,
-        linux-trace-users <linux-trace-users@vger.kernel.org>
-Subject: [RELEASE] LTTng-tools 2.12.13 - (Ta) Meilleure
-Message-ID: <Y7hyhz9SsRZidNbg@efficios.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-ClientProxiedBy: YQBPR0101CA0208.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:67::31) To YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:4e::11)
+        Mon, 9 Jan 2023 01:59:13 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D1C62FA
+        for <linux-trace-users@vger.kernel.org>; Sun,  8 Jan 2023 22:59:12 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id o7-20020a17090a0a0700b00226c9b82c3aso8427821pjo.3
+        for <linux-trace-users@vger.kernel.org>; Sun, 08 Jan 2023 22:59:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dE5wi48qt8kKQYEAvueNLeOuSdCw8IqVZ3HqRoLMG0c=;
+        b=ntngeHNlOGgNlfdrMtZFazB43pnM4yo1iDhRJ84RqJBk0Q2kNXQ2Ec+J7kp9vhns1Z
+         4Qg/X2/+20k4lBGFwSl1E9NNDLxNK5RLTcCyHz/kNSQDW4pfWJFCNFH8hZ/4tiZqqBrF
+         Crvdh3JhacV1e5kLEjOu6q59wbHGCpwOw6J768SzE89utYSdq90q/9RBhseGadl0OreT
+         jneJz2hqP84dIjJ9dp24PuV/VVVxzAxkoJvW0027ylnFVbpayD67VJ9GvZvLiD6BYS/N
+         uPWtMmWvgvKcxsRMtIHRYJdOx8mUgb8rnhg8F37FFzlayFBOB7fmv9BPIn2/YgyPej6I
+         cQbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dE5wi48qt8kKQYEAvueNLeOuSdCw8IqVZ3HqRoLMG0c=;
+        b=DuFsL5XCgnYxtQEYdiADXz0GCKT8OruC7iT1AmqrpSiQENl+dYPjCMfrfnrXBqahb7
+         d8pqC+eLsWN3N6m+4DtAkjKgurRngbvgOuvna5y6IUWyqlkRvq9GBrZKJOnOUNMTfGUo
+         /QKNf5K9wlmXxt5+fCtVo+SsGHPm8Rhotl8FamRcJS//+Ima8Jf+BFc4lPruFQyGRzHp
+         sLRf3Jd3V9iXpmWwpUk+P3BqRu0cr2gddsH3D3l8vIkSVfaWUwa1cwkogPMp64O9VDyR
+         eP+akpDO0dp//URJ654xkwMxCNqfdUuhq818yyUtQkwEwLAsVrZ9zweIyRXunxQhdBIg
+         VaxQ==
+X-Gm-Message-State: AFqh2kqq8GGfzsdoNnsydbUktIRk7VM04kn5ySl1xuDSD3IqRhSzesNY
+        XOIHF3CpaveJJOqOZxZDUuv256m7yeo=
+X-Google-Smtp-Source: AMrXdXtWVCf3mLd5qi5n4q1v4QfCORuUQliMFxy0lnN7mZnh74ppZS8YsNp8R/oXFVeo/ZHKcJ5oTw==
+X-Received: by 2002:a17:902:e884:b0:192:c014:f6ba with SMTP id w4-20020a170902e88400b00192c014f6bamr42244033plg.33.1673247551740;
+        Sun, 08 Jan 2023 22:59:11 -0800 (PST)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:ff0:1bb7:db28:d1e:f78c])
+        by smtp.gmail.com with ESMTPSA id z10-20020a170903018a00b001868981a18esm5314965plg.6.2023.01.08.22.59.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Jan 2023 22:59:11 -0800 (PST)
+From:   Namhyung Kim <namhyung@gmail.com>
+To:     uftrace@googlegroups.com
+Cc:     linux-trace-users@vger.kernel.org
+Subject: [ANNOUNCE] uftrace v0.13 is released!
+Date:   Sun,  8 Jan 2023 22:59:08 -0800
+Message-Id: <20230109065908.1993001-1-namhyung@gmail.com>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT2PR01MB5984:EE_|YT3PR01MB8195:EE_
-X-MS-Office365-Filtering-Correlation-Id: aa839cfe-bae2-4afd-adab-08daf019e819
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6AzOY3qX5/LrQHl4yxtDA5X2U79yXpzqMgGFvzjK+PtimsJgqGPwWnSNAotYROHnrbfUc+xn/4f/AFrJkYTiwd0mxgcPX43WuW1t0QR1raHNX5Xhehg0eqIJhFHs6B9E+09gvx0jMocxNxUnUfeHLPS8ZkrW2L26n/hCfeQDfPjOqUGMOnyznFS4yIb1UUww0IqVWD9FFNcqM54VCj5DVLEXBqAxfJBDRcgnqoFlQjr48X/jYxH6z/DMsEbnuyMwj0jM4Q5O6hoKqd46/ixUa3Dr2XAH7nAOSWIW0xrOfUzaCwWVNzSCYYi08XTXLyLaUHF1/OvYVM7o9j+sfYs4SIa4IVoHMq9aypxTzDcVFRTpmF+bx53kv33/H/T9SV+uVVmaMIJx/ySvTyzhDQDb44jzt5Owxa75Yt6vxTcWaJDfpwq83dLsTiVC3Mihryz4SNMmWqkkrsbSF+YxxxBJSohJwVpS7AzLtuDwV4C25espSfqVCDhoIyKSshDwpgh0QG66hyVS+WxHPFzv68f35Hd0xrRY2IltXE2tdNjqRq/fq7WhT47e3jx6KzqoIItEjgUthOM58wJJ/NicFJ/L6FziTLoqhu0Pz9qZH5wcdRHfxvsgXdKrWHZtcroUCHugwriQLFCBn6xwo0uYLLsHqU8PUy+DlCeRNMA5YofKaK0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(346002)(376002)(136003)(39830400003)(396003)(366004)(451199015)(316002)(4744005)(5660300002)(2906002)(41300700001)(54906003)(66556008)(6916009)(8676002)(66476007)(4326008)(8936002)(66946007)(83380400001)(478600001)(6506007)(36756003)(966005)(186003)(2616005)(6512007)(6486002)(26005)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lfWBI1OXGnrMxId40nEho6gw9fK2rQAuMoh9T4YV40YyfSwa8S5yhx2N9g1K?=
- =?us-ascii?Q?KNU87nSnoV25S3X//49xSRxy2Z7fJkVBrbInWn9sheeDe4QG6wKJGIBqgJkX?=
- =?us-ascii?Q?Us0TRHMGbY5AqxQGPBocHFBHbdnR5sMZ50FZn0wTdslj4y0TpVw+SwWOReLL?=
- =?us-ascii?Q?8p4HaEDOJcKt8xcCAUKNXGuX0yvNLgMkBmow1xYIWaucyf5kmr8fhXppqKS/?=
- =?us-ascii?Q?pNKuSaH1uaFA/UnjoD0xXuZX1wAF4Vhi6XSE0nG6uTx27pJ1hoo25vun/ND+?=
- =?us-ascii?Q?LskK9ZsToAiQUDUelG4UdoXGU/SHzMQU/cVEjD7zvjiqVmRrjUa8lchP4Wqb?=
- =?us-ascii?Q?r/bLuRW4jcxO+8Z4xtMLuZl7eEP1Zbc6a6fwkxAlVsAEJ7U2wB0lOTWqj8xW?=
- =?us-ascii?Q?E/gtAlGEywu13QOsb0X3iXOVJX58RM7PmZnX3/raL/H4W9zYGh2T5DExzX4s?=
- =?us-ascii?Q?ZzRrHltlRsGlMRkg/k95P8eCg/rN5SMy916JIg/dfv0RR6Iz0fP9Pd8S/etB?=
- =?us-ascii?Q?1sU0aZ2lkys0rFxsH2s3soySdGsIhMLY8Jn9Ck5wGh3wK7yuTSWLH+ls3il1?=
- =?us-ascii?Q?KY/YWuoNHDlop4f4LbiY1Adgwu+0UBc7WQ3DBXeZnigkUTqR/L0QeDaA2xPl?=
- =?us-ascii?Q?AvdP7qsxJ8BCzozsLnLmOZdPQQPD30t9lkp681ZcZ9cIozjyYqZ6bbB3ncbi?=
- =?us-ascii?Q?D0bQ+iNr8z0K9dMvNseOQUul7elwPVoyq0SzLadRY6Cub4h4MIDr1JkLY1Hg?=
- =?us-ascii?Q?y4qAJ8wBhrTcPeAeLA/x/0Dy8GJz5IgrlydTF8xSN17/nIRLjUlaPStSVNKG?=
- =?us-ascii?Q?RQwlLWAuJlnSQqmGTLkfxRd5XVN2g6faY4G1gfIgdLpFEOvIlX5lFTIhgwUK?=
- =?us-ascii?Q?EPM4m8h7/e5/7UthYOcs2/+xJJV4B3O2BVY6/S9eNOkOFIDGFo1Bk7Ru/lm/?=
- =?us-ascii?Q?x0HfnVbCih5srbXxZdZ4rgRveaHtF1iBjZD4BwgPh/f61/mfcyHaYZqz3LO6?=
- =?us-ascii?Q?jUusez1qPA3MyBAqCMLTr1I1Ly6jHdTApE0A+wlkasLzhpJ/awkf/C0IKk54?=
- =?us-ascii?Q?S9TrovS4UMCRGEd5YanDqzGzFfMbkaOXT1GwhQXizaJN8DF/5LUt4gcs8zlT?=
- =?us-ascii?Q?1QSlILE1W+uMBMmTdDROQvIBu5FIA2/AmKkGeVg3DuSKdzPCmSSUQ5cA2Uhb?=
- =?us-ascii?Q?WBHIQR/zazKInqi+yLVJlkJh16iiTzKIxOVDUz8SHfdodBTq+u2tb79oYIlK?=
- =?us-ascii?Q?rkjdaNPOaEUmyz/2mBCOMKDmBhSur9ZbAEUt+0IAOX2w0U7AfZ0rTzjJVIn7?=
- =?us-ascii?Q?o4v6pAgEjXzduSOTV3T/eQTEjU1ma5Q0HhhNFunsK+9LsSm7GsxE7W4gzITZ?=
- =?us-ascii?Q?YFyjV0xAaPhsF9E9uxdpvm6Rb82kDL4ZhA4DazOcj16TGoS5+H7zpPwJBrAI?=
- =?us-ascii?Q?X5c/KlSYtHPMtDN52jm8J2zL30Uwbz74DpWmA5v9UXfi52ZybCsTDEKx6e4d?=
- =?us-ascii?Q?iwPw7OnHtNIHGD3gdvdqy8iU2AlKLGH14iFUlUcqwudUpXWxjOaylt82u3tK?=
- =?us-ascii?Q?qFMkkUILAF7fpsPe2XZtwpha66b4KUhTxBZyoX4I?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa839cfe-bae2-4afd-adab-08daf019e819
-X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2023 19:12:08.5973
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rUbdfx6v3zDjV8/JWlZqJEPbw9x2T7JNpduDDtIb+6ImgGk3cTdjUvugxdQL6Hm3sVPoHKYuZmLKYfaRCJcKVQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB8195
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi all,
+Hello,
 
-We have just released the thirteenth bug-fix release of LTTng-tools 2.12 - (Ta)
-Meilleure. This release addresses a number of issues listed below.
+I'm happy to announce that uftrace v0.13 is released.
+You can get it from the below link:
 
-2023-01-05 lttng-tools 2.12.13 (National Whipped Cream Day)
-	* Fix: lttng: poptGetArg doesn't provide string ownership
-	* Fix: relayd: missing space in trace creation logging statement
-	* Fix: never use 'no' in a command variable
-	* Fix: consumer: snapshot: assertion on subsequent snapshot
-	* Fix: sessiond: instance uuid is not sufficiently unique
+  https://github.com/namhyung/uftrace/releases/tag/v0.13
 
-As always, please report any issue you may encounter to bugs.lttng.org
-or on this mailing list.
+As usual, this release contains new features and many bug fixes.
 
-Project website: https://lttng.org
+This release comes with a couple of new filtering options.  The first one
+is the location filter.  The -L or --loc-filter option can specify names
+of directory or file for the source code.  That means the binary should
+have the debug information (DWARF).  Since uftrace saves the (reduced
+form of) debug info separately, we can use this option at replay as well.
 
-Download link:
-https://lttng.org/files/lttng-tools/lttng-tools-2.12.13.tar.bz2
+    $ uftrace -L myfile.c  myprog
 
-GPG signature:
-https://lttng.org/files/lttng-tools/lttng-tools-2.12.13.tar.bz2.asc
-o
+The above will show functions only in the 'myfile.c' file.  You can also
+use directory names and mix the two.  When you use a directory name, it
+will match all files under the directory.  And the regex or the wildcard
+patterns can be used for more fine-grainded filtering.
+
+The next one is the size filter using -Z or --size-filter option.
+Actually this is not a new addition, we had it for the dynamic tracing.
+But now we can use it as a general filter regardless if you use the
+dynamic tracing or not.
+
+    $ uftrace -Z 100  myprog
+
+The above will show functions that their size is greater than equal to
+100 bytes.  At record (or in live command), it can read the size from
+the ELF symbol table directly.  When you use the option during replay
+(or report and so on), it determines the size from the symbol file in
+the uftrace data.
+
+But it can have a small difference than the original symbol size
+(usually bigger than the original).  This is because the symbol file
+doesn't actually save the size of functions.  It currently saves the
+symbol addresses only and function size is calculated as a difference
+between the two adjacent fucntions.  If your compiler added some
+paddings at the end of the function (to aligned the function start
+address), it'll have a different size.  Please be aware of that when
+using it from replay.
+
+To check the size in the symbol file, you can use 'size' field in the
+uftrace report output.
+
+    $ uftrace report -f size
+
+This will show the size of functions (saved in the uftrace data).
+
+The uftrace dump got `--mermaid` option to produce the mermaid format
+[1] for visualizing function call graphs.  Also it supports to change
+the base function of the graph interactively.
+
+The --no-sched-preempt option is to suppress schedule events only if
+it's pre-empted.  So the voluntary schedules will be shown.
+
+And we added many testing/CI infra changes thanks for Github actions.
+I appreciate Travis CI team for the works so far but decided to move.
+
+Finally, it added the preliminary support for running an agent in
+background.  It does nothing as of now, but it will talk to external
+uftrace processes via a unix socket to control the tracing behavior
+later.  The uftrace live got -p option to specify the pid of the
+original process with the agent.
+
+There are many more things. Thank you all for making uftrace more
+useful, efficient and portable!
+
+Namhyung
+
+
+[1] https://mermaid-js.github.io
