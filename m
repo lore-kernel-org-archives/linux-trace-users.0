@@ -2,127 +2,81 @@ Return-Path: <linux-trace-users-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E707C77B7A
-	for <linux-trace-users@archiver.kernel.org>; Wed,  7 Jun 2023 15:10:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E70DC7EE29
+	for <linux-trace-users@archiver.kernel.org>; Wed,  7 Jun 2023 23:25:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240518AbjFGPK0 (ORCPT
+        id S232953AbjFGXZq (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Wed, 7 Jun 2023 11:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
+        Wed, 7 Jun 2023 19:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239795AbjFGPKV (ORCPT
+        with ESMTP id S229683AbjFGXZp (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:10:21 -0400
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023101734;
-        Wed,  7 Jun 2023 08:10:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1686150616;
-        bh=EobN6Shy6YmwBECX8vJ30mW74AhlOJOLGmITM5vqgBQ=;
-        h=Date:To:From:Subject:From;
-        b=Yu9/VB3OLhLJzLk879e9NXBVbI4GZGtmSReAXb+vj5ZCxAssQ4q1InJ39WQN6KK/f
-         nagIFLqnMQECDD+4Vm5P37y0VEGl7fOhPU6kXscedr3VcYYW7hJo7TiuCgLGisZUDC
-         x1IPbZb7nxynMqKsnHDcQ3Vw1UxYvuZRIPZE0B4Gc5/XIix6JmzMCDfUcdbekXz0hq
-         YMc/ozVIBbmUU/g3MNq9/GVtfVM1i+v3U4pwFYhcGgK+FEwoLMoebhGFDBMhtSKUuW
-         bDxgdZk2z7CXa5P9smiknodxjCwfUhi8wzSz2u6Nwea8sBR6aB27521ekRGHZZLcCG
-         PBeBV6hepXIiA==
-Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QbrPN2ftJz16mt;
-        Wed,  7 Jun 2023 11:10:16 -0400 (EDT)
-Message-ID: <90f91bb9-e174-7e8e-6922-5a27cc0eede9@efficios.com>
-Date:   Wed, 7 Jun 2023 11:10:28 -0400
+        Wed, 7 Jun 2023 19:25:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AEA2111;
+        Wed,  7 Jun 2023 16:25:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2201B61F82;
+        Wed,  7 Jun 2023 23:25:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CFAEC4339B;
+        Wed,  7 Jun 2023 23:25:43 +0000 (UTC)
+Date:   Wed, 7 Jun 2023 19:25:41 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linux Trace Devel <linux-trace-devel@vger.kernel.org>,
+        "linux-trace-users@vger.kernel.org" 
+        <linux-trace-users@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Subject: [ANNOUNCE] trace-cmd v3.2 is released
+Message-ID: <20230607192541.25780fef@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     lttng-dev@lists.lttng.org,
-        diamon-discuss@lists.linuxfoundation.org,
-        linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng UST 2.12.8/2.13.6 and LTTng modules 2.12.14/2.13.10
- tracers
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi,
 
-This is a stable release announcement for the LTTng UST and LTTng modules tracer projects.
-Those contain mainly bug fixes and add support for recent distributions and upstream kernels.
+https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/tag/?h=trace-cmd-v3.2
 
-What's new in both LTTng-UST 2.12.8 and 2.13.6:
+trace-cmd: Version 3.2
 
-- Fix: use unaligned pointer accesses for lttng_inline_memcpy
-     
-   lttng_inline_memcpy receives pointers which can be unaligned. This
-   causes issues (traps) specifically on arm 32-bit with 8-byte strings
-   (including \0).
+Features and user visible updates since 3.1.6
 
-- Fix: trace events in C constructors/destructors
+ - Open coded the execvp() to not start tracing until the actual path of the
+   executable is found. The trace no longer contains the failed execs of
+   execvp() trying various paths.
 
-   Adding a priority (150) to the tracepoint and tracepoint provider
-   constructors/destructors ensures that we trace tracepoints located
-   within C constructors/destructors with a higher priority value,
-   including the default init priority of 65535, when the tracepoint vs
-   tracepoint definition vs tracepoint probe provider are in different
-   compile units (and in various link order one compared to another).
+ - Add global filter support to trace-cmd read. If the -F filter is placed
+   before any -i file, it will be applied to all files. Otherwise the -F filter
+   will only be applied to the last file specified.
 
-- Fix: Reevaluate LTTNG_UST_TRACEPOINT_DEFINE each time tracepoint.h is included
+ - Added new "attach" command that can take a trace.dat file created from the host
+   at the same time a trace.dat file was created on one of its guests, and be
+   able to set the meta data to hook them together like if it was done via
+   trace-cmd agent. This is useful for boot time tracing.
 
-   Fix issues with missing symbols in use-cases where tracef.h is included
-   before defining LTTNG_UST_TRACEPOINT_DEFINE
+Fixes since 3.1.6
 
-- Fix: segmentation fault on filter interpretation in "switch" mode
+ - Fix the way filters were applied to trace-cmd report with multiple trace.dat
+   files.
 
-   Fix a bytecode interpreter crash when building with INTERPRETER_USE_SWITCH
-   defined (used mainly for debugging purposes).
+ - Fixed trace-cmd extract to not extract the top level buffer unless
+   specifically asked to. That is, "trace-cmd extract -B foo" will only extract
+   the data from foo and not the top level buffer.
 
+ - Fixed record and extract to not destroy specified instances if they were not
+   created by the record or extract.
 
-What's new specifically in LTTng-UST 2.13.6:
+ - Add memory (valgrind) testing to utest.
 
-- Fix: `ip` context is expressed as a base-10 field
+ - Add meson build support (although it's not the default yet).
 
-   The base for UST context field `ip` was changed from 16 (hexadecimal) to
-   10 (decimal), most likely an unintentional copy&paste error in 4e48b5d.
+https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/
 
-- Various fixes to build with -std=c99.
+Enjoy!
 
-- Fix: trace events in C++ constructors/destructors
-
-   Wrap constructor and destructor functions to invoke them as functions with
-   the constructor/destructor GNU C attributes, which ensures that those
-   constructors/destructors are ordered before/after C++
-   constructors/destructors.
-
-
-What's new in LTTng modules 2.12.14 and 2.13.10:
-
-- fix: kallsyms wrapper on CONFIG_PPC64_ELF_ABI_V1
-
-   Work-around PPC64 ELF ABI v1 function descriptor issues when using kallsyms.
-
-- Add support for RHEL 9.0 and 9.1.
-
-
-What's new specifically in LTTng modules 2.12.14:
-
-- Various tracepoint instrumentation fixes to support kernel v5.18.
-
-
-What's new specifically in LTTng modules 2.13.10:
-
-- Various tracepoint instrumentation fixes to support kernel v6.3.
-
-
-Feedback is welcome!
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+-- Steve
