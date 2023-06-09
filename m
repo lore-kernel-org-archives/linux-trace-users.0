@@ -2,57 +2,99 @@ Return-Path: <linux-trace-users-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40090C7EE29
-	for <linux-trace-users@archiver.kernel.org>; Wed,  7 Jun 2023 23:30:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DE1DC7EE25
+	for <linux-trace-users@archiver.kernel.org>; Fri,  9 Jun 2023 17:21:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232721AbjFGXar (ORCPT
+        id S229778AbjFIRVK (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Wed, 7 Jun 2023 19:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42790 "EHLO
+        Fri, 9 Jun 2023 13:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231853AbjFGXaq (ORCPT
+        with ESMTP id S229599AbjFIRVJ (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Wed, 7 Jun 2023 19:30:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EED82680;
-        Wed,  7 Jun 2023 16:30:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D1A561E85;
-        Wed,  7 Jun 2023 23:30:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FFE6C433EF;
-        Wed,  7 Jun 2023 23:30:44 +0000 (UTC)
-Date:   Wed, 7 Jun 2023 19:30:42 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "linux-trace-users@vger.kernel.org" 
-        <linux-trace-users@vger.kernel.org>,
-        Linux Trace Devel <linux-trace-devel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Subject: [ANNOUNCE] libtraceevent 1.7.3 is released
-Message-ID: <20230607193042.0726b1c6@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 9 Jun 2023 13:21:09 -0400
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D163C22;
+        Fri,  9 Jun 2023 10:20:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1686331246;
+        bh=iGqU65SzcVMqTHxBRss8rWagx+IdyHWXV7rKC5hNv7Y=;
+        h=Date:To:From:Subject:From;
+        b=sw6eVekxbQXJuH5vYS17SVHh0CDz/gNbIZXZxueWj+jv8zXJAB4wmi0Hqs434ubPI
+         l4maqWAMQtek8D3gUkQm9dY/p79zceyCYmrigmujSqjUvKqG7pJHf4C9TdyrWbYeXA
+         Yc8dXp9ouorWe1wuelO1chIdnGJ/ceLv8iptOM5pTYbjVKFzot8Pv8W4bT21+f086g
+         WDlSSqTZUPowZ27qtYkNW0WPG/aMCQNaXd8QmDHo4FrNOpKdUZU2ul5XpWyv29kkt0
+         ZZqyONLqkArGU3lc+26qq6/06TtgnnEZJ7vDrTeI7lH1VpCdeO7ulzozqT4KYgj7mz
+         KY6+QKLABCvjQ==
+Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Qd7C25Hp3z173L;
+        Fri,  9 Jun 2023 13:20:46 -0400 (EDT)
+Message-ID: <ea7e251e-2514-8f81-28e5-3c78317581c6@efficios.com>
+Date:   Fri, 9 Jun 2023 13:20:59 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     tracecompass-dev@eclipse.org, lwn@lwn.net,
+        lttng-dev <lttng-dev@lists.lttng.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linuxtools-dev@eclipse.org,
+        Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
+        linux-trace-users <linux-trace-users@vger.kernel.org>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Tracing Summit - Last year's 2022 talk recordings are available
+ online!
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/tag/?h=libtraceevent-1.7.3
+Hello all,
 
-libtraceevent: 1.7.3
+The recordings for last year’s 2022 Tracing Summit talks were just
+posted to the DiaMon Workgroup channel!
 
-Changes since 1.7.2:
+2022 Tracing Summit Talks:
+https://www.youtube.com/playlist?list=PLuo4E47p5_7YbvyBpSHh-wO3KUVQ81BQR
 
-- Handle '%c' properly in the print fmt
+If you did not get the chance to attend last year, we invite you to take
+a look at the diverse tracing talks that included eBPF and Perfetto
+developments as well as updates for the core Linux kernel tracers.
 
-- Handle "%+d" case in print fmt
 
-- Added meson build support (but it's still not the default)
+This year, we’re looking forward to hearing about your new tracing
+developments and challenging use cases at the 2023 Tracing Summit! If
+you’re interested in exchanging ideas with experts in state-of-the-art
+tracing, we invite you to submit a talk proposal soon as the deadline is
+coming up next week (June 16th).
 
-https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/
+You can submit your 2023 Tracing Summit talk abstract here:
+https://cfp.tracingsummit.org/ts2023/cfp
 
-Enjoy!
+Best regards,
 
--- Steve
+Mathieu
+
+----
+
+The 2023 Tracing Summit will be held in Bilbao, Spain on September 17th
+and 18th, at the Euskalduna Conference Centre, co-located with Open
+Source Summit Europe.
+
+To register, you can include the Tracing Summit as an add-on to your
+Open Source Summit ticket or use these links to register solely for the
+Tracing Summit: https://cvent.me/Gn0nkR (in-person, 80$),
+https://cvent.me/xywylX (virtual).
+
+For more info: https://tracingsummit.org/
+
+The 2023 Tracing Summit is sponsored by EfficiOS and organized by Erica
+Bugden (EfficiOS), Olivier Dion (EfficiOS), and Mathieu Desnoyers
+(EfficiOS) on behalf of the Linux Foundation Diagnostic and Monitoring
+Workgroup.
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
