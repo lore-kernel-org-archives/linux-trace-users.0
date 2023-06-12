@@ -2,99 +2,88 @@ Return-Path: <linux-trace-users-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DE1DC7EE25
-	for <linux-trace-users@archiver.kernel.org>; Fri,  9 Jun 2023 17:21:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63CEAC7EE2E
+	for <linux-trace-users@archiver.kernel.org>; Mon, 12 Jun 2023 09:41:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjFIRVK (ORCPT
+        id S231418AbjFLJlB (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Fri, 9 Jun 2023 13:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
+        Mon, 12 Jun 2023 05:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjFIRVJ (ORCPT
+        with ESMTP id S232521AbjFLJj0 (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Fri, 9 Jun 2023 13:21:09 -0400
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D163C22;
-        Fri,  9 Jun 2023 10:20:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1686331246;
-        bh=iGqU65SzcVMqTHxBRss8rWagx+IdyHWXV7rKC5hNv7Y=;
-        h=Date:To:From:Subject:From;
-        b=sw6eVekxbQXJuH5vYS17SVHh0CDz/gNbIZXZxueWj+jv8zXJAB4wmi0Hqs434ubPI
-         l4maqWAMQtek8D3gUkQm9dY/p79zceyCYmrigmujSqjUvKqG7pJHf4C9TdyrWbYeXA
-         Yc8dXp9ouorWe1wuelO1chIdnGJ/ceLv8iptOM5pTYbjVKFzot8Pv8W4bT21+f086g
-         WDlSSqTZUPowZ27qtYkNW0WPG/aMCQNaXd8QmDHo4FrNOpKdUZU2ul5XpWyv29kkt0
-         ZZqyONLqkArGU3lc+26qq6/06TtgnnEZJ7vDrTeI7lH1VpCdeO7ulzozqT4KYgj7mz
-         KY6+QKLABCvjQ==
-Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Qd7C25Hp3z173L;
-        Fri,  9 Jun 2023 13:20:46 -0400 (EDT)
-Message-ID: <ea7e251e-2514-8f81-28e5-3c78317581c6@efficios.com>
-Date:   Fri, 9 Jun 2023 13:20:59 -0400
+        Mon, 12 Jun 2023 05:39:26 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2C36E91
+        for <linux-trace-users@vger.kernel.org>; Mon, 12 Jun 2023 02:29:33 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-75d518f6f74so306532485a.1
+        for <linux-trace-users@vger.kernel.org>; Mon, 12 Jun 2023 02:29:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686562172; x=1689154172;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=jECHAX8ux55gFq6BY4PEtl0VMGQd+dMkVRbTGjE1MnE=;
+        b=4eKUdYUgQKtVm5fk1MHolAgWyIhLfVARBjCb8CQPwMFVc0WTLAwQhm/Leddjv8O8at
+         M5MZRsb4uqXDLLXarhDIP4oaxLQ5fxnRFo00PEy8kAofXnkc1wa5zW6XvM9CuADYNccr
+         BvqVnYwKalY1csqWXfxbUgPkgV1CWgvZZTKiX+ol+n8coE7LspKVBftiXfVQh9lWQ52G
+         WuYpuWAZ/V63osIMs5gTnCiw/hvUcz+hDSexn4M4dH23b09/i3X2utgqyjLE4yN/2CN4
+         zqvMakvpekCr+I4eXFlmXfAv0BzR1msyD4Ld2d02wxU/x+dthM4AspisfLYdqWEeqT55
+         XJgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686562172; x=1689154172;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jECHAX8ux55gFq6BY4PEtl0VMGQd+dMkVRbTGjE1MnE=;
+        b=DOjxqSL49GtvjZahZ6jxWov4ekFrElKy20TccPAWgTraqKzsCtaNSLYzLVaeREjlJG
+         l+GppGSQFKTidDooNYIsWj1YErzrI0RB5h5ZOIpi9ouKpcxG4qhHMNHFgAhPpqbYp69n
+         NcZICeb8NW5JYNTZ2WAPNKK5wBRP+ZQN2CU8Z6nHhsMHXymVFZQ3V5ZA+7Hzyljt1IN7
+         aT76MM9jvm0YSeoUIC8WdWd0PA6u/Owm1SdVZpCTaok0ND4/HYeCtHAbb6Xf2/kcINRB
+         x4MjBf28XDr4r7QUpZKVOW+DPY2RX+QlyQx1uyv4Qn6Roml8+NuL0A/v+XrOBkele3yD
+         +oZw==
+X-Gm-Message-State: AC+VfDxFMI8T23rQKKdFTY6k0ZZQYzyk84RAnTf5H5j4UzLxY6qeXOlG
+        vPxrb+subZITEpML9obe83YSW3o5wJ+m34vVi9ApMeavK8f48xipQQE=
+X-Google-Smtp-Source: ACHHUZ6Q/55R741or1JZQbS5vwIorXc4SI1F58L54ziVSAOkdUtPF5anwQT8oFoDhzijTJ3fKcvKAphCb93Ga6K3/CM=
+X-Received: by 2002:a05:6214:2488:b0:616:58f1:2844 with SMTP id
+ gi8-20020a056214248800b0061658f12844mr9161739qvb.45.1686562172217; Mon, 12
+ Jun 2023 02:29:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     tracecompass-dev@eclipse.org, lwn@lwn.net,
-        lttng-dev <lttng-dev@lists.lttng.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linuxtools-dev@eclipse.org,
-        Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
-        linux-trace-users <linux-trace-users@vger.kernel.org>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Tracing Summit - Last year's 2022 talk recordings are available
- online!
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From:   Keiichi Watanabe <keiichiw@google.com>
+Date:   Mon, 12 Jun 2023 18:29:21 +0900
+Message-ID: <CANb2CJFG_evfZxHN8j_bEJeCEQB-BZoF7ox9t9Sv7=c8VykPrQ@mail.gmail.com>
+Subject: libtracecmd-rs: Rust wrapper for libtracecmd - now released!
+To:     linux-trace-users@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org
+Cc:     Takaya Saeki <takayas@google.com>,
+        Steven Rostedt <rostedt@google.com>,
+        Masami Hiramatsu <mhiramat@google.com>,
+        Federico Pareschi <morg@google.com>,
+        Hidenori Kobayashi <hidenorik@google.com>,
+        Junichi Uekawa <uekawa@google.com>,
+        Stevie Alvarez <steviea@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hello all,
+Hi trace-cmd users,
 
-The recordings for last year’s 2022 Tracing Summit talks were just
-posted to the DiaMon Workgroup channel!
+I'm excited to announce the release of a Rust wrapper for libtracecmd.
+This library allows you to write a program in Rust that iterates and
+aggregates trace.dat files produced by 'trace-cmd record'.
+* Repository: https://github.com/google/libtracecmd-rs
+* Documentation: https://docs.rs/libtracecmd/latest/libtracecmd/
 
-2022 Tracing Summit Talks:
-https://www.youtube.com/playlist?list=PLuo4E47p5_7YbvyBpSHh-wO3KUVQ81BQR
+I believe using this Rust library has several advantages over writing
+programs in C using libtracecmd directly:
+* Less boilerplate: You can use Rust's standard libraries and
+third-party libraries easily.
+* Safer code: Rust's type system and lifetimes prevents misuse of the library.
 
-If you did not get the chance to attend last year, we invite you to take
-a look at the diverse tracing talks that included eBPF and Perfetto
-developments as well as updates for the core Linux kernel tracers.
+Currently, our Rust wrapper doesn't support all of the features of
+libtracecmd. We welcome your contributions.
+To report bugs or submit patches, please use GitHub issues and pull requests.
 
+I hope you find this library useful!
 
-This year, we’re looking forward to hearing about your new tracing
-developments and challenging use cases at the 2023 Tracing Summit! If
-you’re interested in exchanging ideas with experts in state-of-the-art
-tracing, we invite you to submit a talk proposal soon as the deadline is
-coming up next week (June 16th).
-
-You can submit your 2023 Tracing Summit talk abstract here:
-https://cfp.tracingsummit.org/ts2023/cfp
-
-Best regards,
-
-Mathieu
-
-----
-
-The 2023 Tracing Summit will be held in Bilbao, Spain on September 17th
-and 18th, at the Euskalduna Conference Centre, co-located with Open
-Source Summit Europe.
-
-To register, you can include the Tracing Summit as an add-on to your
-Open Source Summit ticket or use these links to register solely for the
-Tracing Summit: https://cvent.me/Gn0nkR (in-person, 80$),
-https://cvent.me/xywylX (virtual).
-
-For more info: https://tracingsummit.org/
-
-The 2023 Tracing Summit is sponsored by EfficiOS and organized by Erica
-Bugden (EfficiOS), Olivier Dion (EfficiOS), and Mathieu Desnoyers
-(EfficiOS) on behalf of the Linux Foundation Diagnostic and Monitoring
-Workgroup.
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Best,
+Keiichi
