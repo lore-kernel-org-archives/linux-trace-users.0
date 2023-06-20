@@ -2,146 +2,143 @@ Return-Path: <linux-trace-users-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B10F5EB64D7
-	for <linux-trace-users@archiver.kernel.org>; Tue, 20 Jun 2023 06:35:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EDF6EB64D7
+	for <linux-trace-users@archiver.kernel.org>; Tue, 20 Jun 2023 20:52:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbjFTGf7 (ORCPT
+        id S229877AbjFTUwS (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Tue, 20 Jun 2023 02:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
+        Tue, 20 Jun 2023 16:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231184AbjFTGf6 (ORCPT
+        with ESMTP id S229836AbjFTUwR (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Tue, 20 Jun 2023 02:35:58 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8DF10DD
-        for <linux-trace-users@vger.kernel.org>; Mon, 19 Jun 2023 23:35:56 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-553b2979fceso913513a12.3
-        for <linux-trace-users@vger.kernel.org>; Mon, 19 Jun 2023 23:35:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687242956; x=1689834956;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=L/REP5a5NFZ2MTaJYC/YKIh24yj2BFbtPwBzBCheh18=;
-        b=L+roaaFyGqeTxI1cXXM1rjI+SynJydZfBnkBqaFo1tX47jdZ621Om5U6YCu2O6JjJR
-         ddJMMVQIBJ62DnluSLQKwKovGWg9HRvgKmvrPq1gZ7RPjfhf3JdK8hlKdaTXFtRdENeE
-         nXnoQaWClzg8Ohx/6V6IC4jUTZqpXh9PxW1sRtn3P0fPadZe5aVJRCpo+xDsvTrGZaDy
-         qmUJmrrKI9jrbIUsLCK1UcFmOzZOcBI5CO4R6lWPd2s5i3qbNQWN5D2itgy4lp1i4Jjs
-         b4BPNfuq8Du1lBeY+3UzSMBipCFwKyK3RCsESPq3uq/jpjvS4E0Ur37Zn9kTujnrKpor
-         6VuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687242956; x=1689834956;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L/REP5a5NFZ2MTaJYC/YKIh24yj2BFbtPwBzBCheh18=;
-        b=REI71SMnBOeVD6eVphWnUqNEzLgE0j6cbvolztaS/XkfFTHMW6A5RaEkY+yfwgeM3L
-         NAYTItjNjzymgNpdHXj7xKj83CMsJ/gKeXBpjGIgQDmb246a1XOrmmnzu2nLq5AIb2xe
-         mbrUhoKUs8ELGXsMO6outQnu6Y3BPS3tOSGtRiJ6XLdjRwUbVLfnO0qPuyvPBkJ3bD+F
-         aAzsT6KdCVxg7NBdAxkfh1Hf5fhVFEG7PINNDnMY+lbvgciezdgRn/uxIXm4HXY/5v8+
-         CCR0stfJ63ELGNPzra3zKF4/jvMhmrPGN5IAC5ilHMGxVajoPrI6fjWDG+q1BREx9eaM
-         Nv+g==
-X-Gm-Message-State: AC+VfDxfh4GCaZzbrWututkZSi0rdkreBzyrWsXlqWX6BtNVQmpd3FKt
-        5AVuJa2oeSYhQnxxKjMyE4ZdH6a//4g=
-X-Google-Smtp-Source: ACHHUZ6X9Ii/MxDyDIyoBLKiElW5bSRSIzCkIpAXMWoLWhG9jEVZz3YyDiTn2y9cBiE2ivZO5RKq+A==
-X-Received: by 2002:a05:6a21:114d:b0:107:10b6:4c8a with SMTP id oi13-20020a056a21114d00b0010710b64c8amr9492739pzb.24.1687242955918;
-        Mon, 19 Jun 2023 23:35:55 -0700 (PDT)
-Received: from bangji.hsd1.ca.comcast.net ([2601:647:6700:7f00:2e9c:90fb:9fe0:29f4])
-        by smtp.gmail.com with ESMTPSA id w15-20020a170902e88f00b001b01547d0e8sm818754plg.142.2023.06.19.23.35.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 23:35:55 -0700 (PDT)
-From:   Namhyung Kim <namhyung@gmail.com>
-To:     uftrace@googlegroups.com
-Cc:     linux-trace-users@vger.kernel.org
-Subject: [ANNOUNCE] uftrace v0.14 is out!
-Date:   Mon, 19 Jun 2023 23:35:53 -0700
-Message-ID: <20230620063553.1599371-1-namhyung@gmail.com>
-X-Mailer: git-send-email 2.41.0.185.g7c58973941-goog
-MIME-Version: 1.0
+        Tue, 20 Jun 2023 16:52:17 -0400
+Received: from CAN01-YT3-obe.outbound.protection.outlook.com (mail-yt3can01on2083.outbound.protection.outlook.com [40.107.115.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3964E6E
+        for <linux-trace-users@vger.kernel.org>; Tue, 20 Jun 2023 13:52:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FHORGHgsMIIEpGpDSrzP2XDmuhwyHDe9Sv3MdnMOBGe+Vwqi4OIWptuctiprDi6UbrTR1QJdLvGQmYe/WwY1cWnPyuAEi3Mf6ru5qeaancomYvxNR0aecLXIY7rGHOjWVqbW/3cN8P8xpIJB+EcUPpXdSUHzOkqDB93MVQKmq09eDx1gGgvefl+JZs+GW4U2XaSfRNwxAWyrfu44zI1hoFVH85QTbjD9RoqPluYDpV64jkpieh0eiL+sveLjWnSfGq8EdBODFUh5v1Gd47hP4Kzx33D5apN2rNDfH21uv3ya8Gt0Mg7MaCGUJaecTzhIktT0kC5HgGVZq+X6rkQ1AQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=U/IJxnNc5g/ogBrcniOVuUFTPdjs6HFRAC7X1IliTww=;
+ b=kgUe2UMzZA0ey4q+hk+el0Jj1dA9thGwkwn7YycmvwK8cj3/X5rExbnLXqEPAux9ehU31B11ikXeTrqmj5u71QQDmMgQ4wjtDi65frr8ohocp+k5m/WwLqTcAyLm1Vn7aoH/yXlzDF3u++zGqYO58k5uFz1nnBI+r5C/XrB/jMAZhpg8l6qOLXjXqFyozOSarrdjQy/TPhx22+nyCNWIZ9o/S+HIk3XX9EnfBF5eaidP/vahuw2AHZi2iFc4jHAVWsyEOJ/RGw4mqQSk9VwGrZ9dx/3p470sRvionI+7tnnYNCelzoUspuuyCtlRXZxreY2iLU8laVUgIlzpY3VG2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=U/IJxnNc5g/ogBrcniOVuUFTPdjs6HFRAC7X1IliTww=;
+ b=Npp28XXqbNn1hvvPICHgOaUC9xwZ0aIZoRRFPu/YQu4psJtRNFTQAJ0fNrV/bfUrPgwBvFfCDfpJQ2IIRmS5aAiutDtcLR7FPMUitReG5EVmTrWqFTxv6DYEw4fwYqZfi4M1ySEgCYQOizixaMmouFf9508vzlTRuFZe2v+jb4QqS9ChNP27utxB/hMeUsJoiIltbYeVnrrtkjiCt7OEzNK6qQhiUjzd3StQWMEJT+tdaehJc4f+7vEymwa9ozx1QSnN9NP/aywLPB6S4Pb7akP+3diHDF6XaMVIzVVPS5/7QXTbzQ1suBiO8sKrUgQpGAdLBJauTpJcCWrLpuicDA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:4e::11)
+ by YT3PR01MB8419.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:78::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Tue, 20 Jun
+ 2023 20:52:10 +0000
+Received: from YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::11ac:bd53:ce:1004]) by YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::11ac:bd53:ce:1004%7]) with mapi id 15.20.6500.036; Tue, 20 Jun 2023
+ 20:52:10 +0000
+Date:   Tue, 20 Jun 2023 16:52:09 -0400
+From:   =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau 
+        <jeremie.galarneau@efficios.com>
+To:     lttng-dev@lists.lttng.org
+Cc:     diamon-discuss <diamon-discuss@lists.linuxfoundation.org>,
+        linux-trace-users <linux-trace-users@vger.kernel.org>
+Subject: [RELEASE] LTTng-tools =?iso-8859-1?B?Mi4x?=
+ =?iso-8859-1?Q?3=2E10_-_Nordicit=E9?=
+Message-ID: <ZJIReRDDg-ULZDFJ@efficios.com>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YQZPR01CA0064.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:88::16) To YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:4e::11)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT2PR01MB5984:EE_|YT3PR01MB8419:EE_
+X-MS-Office365-Filtering-Correlation-Id: e324a6e2-302c-4173-6064-08db71d0379c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Nvh7XdoY+w7vphmAXC3xeJSVeBMMQxlhN1dq8Lt+JbP93AEbJcJuZA7IEZ3fJsuuISX2rWD/ArsarhyNX+zZ37z1LJp1ZM0w0X32+jFZkroniHbQgZVxmFf9T9XzggME6WfABlrBVqZM1ZxULjowVgd8VTrmkAsPzbtJSDcb0QoaWyJ9q9YZDJ1oiFXj0+wgMMYe9c2b3KHbp1nk9/rj3kCh7hTjaD48Yi56yMjx4v9+Oz9tRasdd43veKqemMcJB8+N/emNkhlJC8+7y5BtEfUhOrILDACI969UcqWjyCDrmmMAMDDhph/TcK/jUym81Y5UvjvrQL5mfr3FMZ5Y5f0eJ8IVF6VOlemKvOtfzzduMd0u+lKYSfD+t1oWZuYGXglII0PwtZ+96f+zNTMUH3aVrlMf/rqURMTyBI/ehI+/0Rmw3uqtYqBVdhgLQLspKqiQWonmpsV3MOod5/hKmRDi9L8hHZtFDjRHBgZuhwc/2mEjNASgfz48yz6pLLJeItNPMRXqcxza6Z7nOCmTLsNUgVOKJ1IWphGTeoRkqDdLbao6VywtuX1h5levHl+4+BqXBlv4oCqPZYZqma9f1Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(396003)(136003)(376002)(366004)(39830400003)(346002)(451199021)(478600001)(66476007)(66946007)(36756003)(6916009)(4326008)(41300700001)(66556008)(2616005)(38100700002)(83380400001)(6486002)(966005)(2906002)(5660300002)(54906003)(316002)(8936002)(224303003)(6512007)(26005)(186003)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?6J4ofyjaSArrHFDPZ3OzxmEol9AWif1DCpT402EdGyp8D2rvPQBoDsCvlh?=
+ =?iso-8859-1?Q?ThPAaRSBSDggu4+rEN3YFROBBbx7no+3KDXTC2ra8hh0e55tpDTtj0FCy6?=
+ =?iso-8859-1?Q?Q4yY5SFKaD0HYNyJ8F9vsd+ggnnWCPnNqBF68FPLIfiuQUzHNSGu/cIUl0?=
+ =?iso-8859-1?Q?40qLxrg9+zskNU1TcdJlcpZXSxYabrzYSBZRHCMuvLjvkTJi+uN2OR0aP3?=
+ =?iso-8859-1?Q?gPL//h/denoa4LCC3VYAD9+mgiUncPPJ8lgp0n+YYCXaG1jM6huiJ2QdA3?=
+ =?iso-8859-1?Q?w+jwHyhqDIMX93eJPn/1S2U41JNVIHkzgI9LKB4B0/Lt3n4Uc4Yg1Hw8DM?=
+ =?iso-8859-1?Q?bKuks2f5AsrHCqgb4gAwXgcrvt9joSI02XSsD7cUJwiQk1ZqrtDGIfX7d0?=
+ =?iso-8859-1?Q?/rBEbf+nWT0wuOlHS7D4G+G/3RLANWWYWkVyR54kB7uKa5OoVx5wHZcyIe?=
+ =?iso-8859-1?Q?C9cPU4qHK7R2YH3c9a5Z4ixxItJNDRhXoYtS4E/onvG2pbrvTPpUx/10n5?=
+ =?iso-8859-1?Q?7tine/OTJ+NoFlftCe/edGQmgrU/lE4WOzZkUIrujNtUOv6LOpt/ajZZRr?=
+ =?iso-8859-1?Q?euN7tOulO07gv06apoPpkk6ZG2IqnLL/AvSawM7l8D/HdqfrU8aYsIB7CS?=
+ =?iso-8859-1?Q?Fbrfb1X5xaQ+WMC2V1Rc9/9U/sFdvL8tNADW/TVwgCdy0ygu5cPjOM1V8H?=
+ =?iso-8859-1?Q?2JBJ1yeR5ZRNvTJyTiHaqNvG+EsL8C8BMvEejyLC20NuCjs/QRsnXkte3E?=
+ =?iso-8859-1?Q?6sthGemEwJoS+M6IQNn/fyyc6pzzxy4qQnA8QBWlRXqQFo8q3g8MTXGKpj?=
+ =?iso-8859-1?Q?o5Oj0EA4TrfwBel+NmWS5s9+yg5pGDWyw31XxIu7zO0ruSNGERX0RR3GOp?=
+ =?iso-8859-1?Q?bHgksfxbykq+mlPfNSeBAbz0TySvmZlvBi8LEpBItOy2HvrEpMAHJjsctG?=
+ =?iso-8859-1?Q?xlKr9jwtN3lZzwu4e24EulGJ8fm7hg6FK2Iw6Qd8bNWiuJKbXd0ScpNvRR?=
+ =?iso-8859-1?Q?BvJ+Bt6X8laYVF29HXKh6qbjBbLfHT4nCPu0anJ1KElYJQukxSFYnnNQQP?=
+ =?iso-8859-1?Q?eAuxdJFI9J77CdiQr40MwC1DnhKHY1bgHjep/p8acMlxTx/1CcfWZ/n8ti?=
+ =?iso-8859-1?Q?/fr9MFBmcVUeXO/eHIR7FULuWD6iG5kdp1gtHFQIuDzbFCG9c/cU/86L+z?=
+ =?iso-8859-1?Q?pB4c57US4M6Z52xPxPygn5O3/hvYy1jDVE6ivWIB3703YE48z42jgFIyJj?=
+ =?iso-8859-1?Q?5MSvuLQcN1ZgQktaSEJ9acXh38wmhncBUQP7BTqh+lqRY7Gf/cuWriL5QB?=
+ =?iso-8859-1?Q?QAATzOiUkOhfXJQuIHm+kB9ajiiqVb2ue81KKVppchIiosxfBqrYZUOc+h?=
+ =?iso-8859-1?Q?IxVy76fDjLOH/PjWaEjbCqDWBwU6w8unH7EPxfK31ONplTuKsaogLtAG/I?=
+ =?iso-8859-1?Q?yzMugr3B8xKAxjgkfvvup2uwV9lx4v4dftTTmijHi67TAqhZwEaez1Yhtk?=
+ =?iso-8859-1?Q?jhkI1brWpJmKzM2lmNlJDiYJn/xsMGRQXhTiwgv2Uiuo2zhyG3fMlvS7hP?=
+ =?iso-8859-1?Q?z+hOFRj0N8ICcX+Sl7UUAtk0DUqqEgoDi18jZZxJ290f7lO3k7ATYyQ6qe?=
+ =?iso-8859-1?Q?fe2Ltylr/Ple3KW2GmaMDUGMI7CITYsUTi?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e324a6e2-302c-4173-6064-08db71d0379c
+X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 20:52:10.4559
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: knzg0rAZUWnywrHerMIuh5RPso+5NO1ZU3lWITc8mL5YRWlcgw5WY511jc4FSqqXzXem0bxsBbHwcShsmmuwuA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB8419
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hello,
+Hi all,
 
-I'm excited to announce that uftrace v0.14 is just released.
-This release comes with new cool features and bug fixes.
-You can get it from the below link:
+We have just released the tenth bug-fix release of LTTng-tools 2.13 -
+Nordicité. This release addresses a number of issues listed below.
 
-  https://github.com/namhyung/uftrace/releases/tag/v0.14
+2023-06-20 lttng-tools 2.13.10 (National Ice Cream Soda Day)
+	* Fix: sessiond: incorrect use of exclusions array leads to crash
+	* Tests fix: test_callstack: output of addr2line incorrectly parsed
+	* Fix: sessiond: silent kernel notifier registration error
+	* Fix: sessiond: size-based notification occasionally not triggered
+	* Fix: adding a user space probe fails on thumb functions
+	* Fix: Tests that assume CPU 0 is present
+	* Fix: Wrong assumption about possible CPUs
+	* Tests: fix: parse-callback reports missing addr2line
+	* Fix: lttng remove-trigger -h fails
+	* Tests: snapshot tests complain that nothing is output
+	* Tests: Test snapshot maximum size correctly
+	* Tests: Add get_possible_cpus_count utility
+	* Fix: ini parser: truncation of value name
+	* Fix: truncated len in lttng_event_rule_user_tracepoint_serialize()
+	* Tests: remove leftover debug printing in test_add_trigger_cli
 
-The first thing is Python language support!  Now uftrace can trace python
-functions and methods like C/C++ functions.  Internally, it uses python's
-sys.setprofile() and pass the entry/exit info to the libmcount.
+As always, please report any issue you may encounter to bugs.lttng.org
+or on this mailing list.
 
-For example, it can trace the following python script (it needs to be a
-standalone executable - it should have #! line and executable permission).
+Project website: https://lttng.org
 
-    $ cat abc.py 
-    #! /usr/bin/python3
-    def a(): b()
-    def b(): c()
-    def c(): print("Hello")
-    if __name__ == '__main__':
-        a()
+Download link:
+https://lttng.org/files/lttng-tools/lttng-tools-2.13.10.tar.bz2
 
-    $ chmod +x abc.py
-
-Then uftrace can trace the functions like below:
-
-    $ uftrace abc.py 
-    Hello
-    # DURATION     TID     FUNCTION
-                [235209] | __main__.<module>() {
-                [235209] |   a() {
-                [235209] |     b() {
-                [235209] |       c() {
-      10.810 us [235209] |         builtins.print();
-      14.926 us [235209] |       } /* c */
-      16.628 us [235209] |     } /* b */
-      18.867 us [235209] |   } /* a */
-      22.000 us [235209] | } /* __main__.<module> */
-
-Not all features work well with python scripts, but filters by name (-F
-and -N), depth (-D), time (-t), location (-L) would work.  However you
-can use full features for analysis after recording the data.
-
-The next is the improved agent control.  The agent listens to a client
-connection in background when started with -g option.  Then users can
-connect to it with uftrace live using -p <PID> option.  The <PID> should
-be a process ID of the target, not the uftrace itself.
-
-Say we want to trace my program with a filter at first.  Please don't
-forget to start an agent.
-
-    $ uftrace record -g -F ^mycode -- myprog
-
-Later we don't want to use the function filter anymore, and decided to use
-a time filter instead.  Let's change the option for the uftrace record
-like below:
-
-    $ uftrace -p $(pidof myprog) -F ^mycode@clear -t 100us
-
-Note that the above command would not produce any data and just pass the
-new options to the existing uftrace record session (for myprog).
-
-One more big thing is Android build support.  While it's not officially
-supported, you can build uftrace as an external tool.  This needed various
-improvements in terms of portability like abstracting shmem access and
-better handling of the tmp directory and dynamic linker behaviors.
-
-It has been tested with Android 9+ on AArch64 and x86_64.  You probably
-want to use dynamic tracing due to issues with the Android runtime.
-Please see INSTALL.md for the details.
-
-The size filter at replay now works as same as record, since the symbol
-file format was changed to save the symbol size as well.
-
-Symbol demangling on Rust programs was improved to handle trait names in a
-more compact way.  The new demangling scheme (v0) is not supported yet.
-
-There are also more fixes and improvements.  Thank you all for making
-uftrace more useful, efficient and portable!
-
-Namhyung
+GPG signature:
+https://lttng.org/files/lttng-tools/lttng-tools-2.13.10.tar.bz2.asc
