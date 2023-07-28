@@ -2,39 +2,39 @@ Return-Path: <linux-trace-users-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69659EB64D9
-	for <linux-trace-users@archiver.kernel.org>; Mon, 10 Jul 2023 15:00:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FD7EEB64DD
+	for <linux-trace-users@archiver.kernel.org>; Fri, 28 Jul 2023 23:36:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbjGJPAi (ORCPT
+        id S229852AbjG1XgO (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Mon, 10 Jul 2023 11:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        Fri, 28 Jul 2023 19:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjGJPAi (ORCPT
+        with ESMTP id S229729AbjG1XgN (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Mon, 10 Jul 2023 11:00:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA10C7
-        for <linux-trace-users@vger.kernel.org>; Mon, 10 Jul 2023 08:00:37 -0700 (PDT)
+        Fri, 28 Jul 2023 19:36:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522893AB4;
+        Fri, 28 Jul 2023 16:36:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B8FE6102E
-        for <linux-trace-users@vger.kernel.org>; Mon, 10 Jul 2023 15:00:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44C3AC433C8;
-        Mon, 10 Jul 2023 15:00:36 +0000 (UTC)
-Date:   Mon, 10 Jul 2023 11:00:33 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CEF8A62207;
+        Fri, 28 Jul 2023 23:36:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED89EC433C7;
+        Fri, 28 Jul 2023 23:36:10 +0000 (UTC)
+Date:   Fri, 28 Jul 2023 19:36:09 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Sharon Gabay <Sharon.Gabay@mobileye.com>
-Cc:     "linux-trace-users@vger.kernel.org" 
+To:     Sang QianLong <hacksonsang@gmail.com>
+Cc:     Linux Trace Devel <linux-trace-devel@vger.kernel.org>,
+        "linux-trace-users@vger.kernel.org" 
         <linux-trace-users@vger.kernel.org>
-Subject: Re: cannot run trace-cmd split in parallel
-Message-ID: <20230710110033.7897fbde@gandalf.local.home>
-In-Reply-To: <VE1PR09MB3535FFA94A0481583EF7992CF230A@VE1PR09MB3535.eurprd09.prod.outlook.com>
-References: <VE1PR09MB3535122A0DA44242886307B9F233A@VE1PR09MB3535.eurprd09.prod.outlook.com>
-        <20230709151604.73725086@rorschach.local.home>
-        <VE1PR09MB3535FFA94A0481583EF7992CF230A@VE1PR09MB3535.eurprd09.prod.outlook.com>
+Subject: Re: [Issue of trace-cmd] undefined symbol when import ctracecmd.so
+ in python
+Message-ID: <20230728193609.79e91e44@rorschach.local.home>
+In-Reply-To: <CANF=BhZScysm9BchEFytPgOFR4Gx-jeeOV6VpbKnAHZ102onSQ@mail.gmail.com>
+References: <CANF=BhZScysm9BchEFytPgOFR4Gx-jeeOV6VpbKnAHZ102onSQ@mail.gmail.com>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -43,39 +43,65 @@ Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-On Mon, 10 Jul 2023 06:44:53 +0000
-Sharon Gabay <Sharon.Gabay@mobileye.com> wrote:
 
-> I think it would be useful to have two fixes:
-> - make trace-cmd create the temporary output ("tmp.0.0") using either a
-> uuid, or the name of the output file itself, or maybe add some suffix to
-> it. In short, avoid collisions.
+I'm Cc'ing the trace users and devel mailing list just to keep this
+archived.
 
-And the patch pretty much does the above ;-)
+On Fri, 28 Jul 2023 11:29:26 +0800
+Sang QianLong <hacksonsang@gmail.com> wrote:
 
-> - I'm not sure why but "trace-cmd split -o /tmp/a" will actually write to
-> /tmp/a.1, if possible it would be best to write to the exact name
-> specified by the user.
+> Dear rostedt,
+> 
+> I hope this email finds you well. My name is Hacksonsang, and I am reaching
+> out for your assistance regarding a persistent issue I am facing while
+> working with "ctracecmd.so" in Python.
+> 
 
-That was partially due to the default of the output file being the same as
-the input file, and the '.1' made sure that the two did not collide.
+I have to admit that I personally do not use python, and this code was
+added by others.
 
-But I can modify it to do the following:
+Note, there's patches to fix the python code, but as I'm not a python
+expert, I'm still holding off to applying them.
 
-diff --git a/tracecmd/trace-split.c b/tracecmd/trace-split.c
-index 1daa847d9775..59df1d02b345 100644
---- a/tracecmd/trace-split.c
-+++ b/tracecmd/trace-split.c
-@@ -545,7 +545,7 @@ void trace_split (int argc, char **argv)
- 	if (!output)
- 		output = strdup(input_file);
- 
--	if (!repeat) {
-+	if (!repeat && strcmp(output, input_file) == 0) {
- 		output = realloc(output, strlen(output) + 3);
- 		strcat(output, ".1");
- 	}
+Not sure if this helps you, but you may want to look at this:
 
-That is, only add the '.1' if the output file is the same as the input file.
+  https://patchwork.kernel.org/project/linux-trace-devel/patch/Y+w51nOhNd+PGo/k@slm.duckdns.org/
+
+Does the above help you?
 
 -- Steve
+
+
+> I am currently using Ubuntu 20.04 with GCC 9.4.0 and Python 3.8.8. The
+> problem arises when I try to import "ctracecmd.so" into my Python script. I
+> consistently encounter the error message: "Undefined symbol: uncompress."
+> 
+> To address this, I initially attempted to include the "-lz" flag in
+> LD_FLAGS, hoping to resolve the "uncompress" issue. However, this action
+> resulted in encountering more "undefined symbol" errors, such as
+> "tep_plugin_kvm_get_func."
+> Upon investigating further, I found that these symbols are defined in the
+> "trace-xxx.c" files within the "tracecmd" directory. Unfortunately, it
+> appears that the Python/Makefile only utilizes the ".c" files from the
+> "lib/trace-cmd" directory during the compilation of "ctracecmd.so." To
+> address this limitation, I tried compiling "ctracecmd.so" by including the
+> ".c" files from the "tracecmd" directory using "-fpic" compilation.
+> Despite these efforts, I am still facing the same issue, and the "undefined
+> symbol" errors persist.
+> 
+> Given the situation's complexity, I am seeking your expertise and guidance
+> in resolving this matter. I believe that resolving this problem is crucial
+> as the functionalities offered by trace-cmd are vital for the successful
+> execution of my project.
+> 
+> If there are any specific steps or configurations that I missed or any
+> other troubleshooting suggestions you could provide, I would greatly
+> appreciate it. Please let me know if you require any additional
+> information, logs, or code snippets to understand the issue better. I am
+> willing to provide whatever is necessary for a comprehensive analysis.
+> 
+> Thank you so much for your time and consideration. I am eagerly looking
+> forward to your valuable insights and assistance.
+> 
+> Best regards
+
