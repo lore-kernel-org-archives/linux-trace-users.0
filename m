@@ -2,70 +2,65 @@ Return-Path: <linux-trace-users-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CA62C001E0
-	for <linux-trace-users@archiver.kernel.org>; Wed,  2 Aug 2023 13:48:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E98E0C41513
+	for <linux-trace-users@archiver.kernel.org>; Fri,  4 Aug 2023 09:52:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234223AbjHBNsJ (ORCPT
+        id S229905AbjHDJwy (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Wed, 2 Aug 2023 09:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
+        Fri, 4 Aug 2023 05:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjHBNrz (ORCPT
+        with ESMTP id S231217AbjHDJwx (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Wed, 2 Aug 2023 09:47:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2AE26B7;
-        Wed,  2 Aug 2023 06:47:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3AD661935;
-        Wed,  2 Aug 2023 13:47:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5FC3C433C8;
-        Wed,  2 Aug 2023 13:47:52 +0000 (UTC)
-Date:   Wed, 2 Aug 2023 09:47:51 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Sang QianLong <hacksonsang@gmail.com>
-Cc:     Linux Trace Devel <linux-trace-devel@vger.kernel.org>,
-        "linux-trace-users@vger.kernel.org" 
-        <linux-trace-users@vger.kernel.org>
-Subject: Re: [Issue of trace-cmd] undefined symbol when import ctracecmd.so
- in python
-Message-ID: <20230802094751.49906f34@gandalf.local.home>
-In-Reply-To: <CANF=BhYAbU+sLYxpaRVA=m0_jgJFr0c+JAAx+HQ4FcTkuSnB7w@mail.gmail.com>
-References: <CANF=BhZScysm9BchEFytPgOFR4Gx-jeeOV6VpbKnAHZ102onSQ@mail.gmail.com>
-        <20230728193609.79e91e44@rorschach.local.home>
-        <CANF=BhYAbU+sLYxpaRVA=m0_jgJFr0c+JAAx+HQ4FcTkuSnB7w@mail.gmail.com>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 4 Aug 2023 05:52:53 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9332118;
+        Fri,  4 Aug 2023 02:52:52 -0700 (PDT)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RHLb44L5MzrS8n;
+        Fri,  4 Aug 2023 17:51:44 +0800 (CST)
+Received: from [10.174.176.219] (10.174.176.219) by
+ kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 4 Aug 2023 17:52:49 +0800
+To:     <linux-trace-users@vger.kernel.org>,
+        <linux-trace-devel@vger.kernel.org>
+From:   Lv Ying <lvying6@huawei.com>
+Subject: How to solve the coupling between libtraceevent and kernel trace?
+CC:     "Fangxiuning (Jack, EulerOS)" <fangxiuning@huawei.com>
+Message-ID: <4767bcf3-589a-9dfb-5b45-9ac9279f08e6@huawei.com>
+Date:   Fri, 4 Aug 2023 17:52:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.176.219]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500015.china.huawei.com (7.221.188.92)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-On Wed, 2 Aug 2023 16:13:20 +0800
-Sang QianLong <hacksonsang@gmail.com> wrote:
+Hi, all:
 
-> Hi Steven,
-> Thanks for reaching out to me. I appreciate your effort in helping me with
-> my persistent issue while working with "ctracecmd.so" in Python.
-> 
-> I understand that you personally do not use Python, and the code was added
-> by others. I also appreciate your honesty in not applying the patches yet
-> since you are not a Python expert. I have used the patch from
-> https://patchwork.kernel.org/project/linux-trace-devel/patch/Y+w51nOhNd+PGo/k@slm.duckdns.org/
-> and it works!
-> 
-> Once again, thank you for your help.
-> 
+I am a rasdaemon developer which depeneds on libtraceevent to parse 
+kernel trace events. There is coupling between libtraceevnt and kernel 
+trace, if something in libtraceevent and kernel does not match, which 
+will cause libtraceevent parse wrong thing. e.g 
+https://github.com/mchehab/rasdaemon/pull/98
 
-I could add it with a:
+We also encounter similar problem:
+* libtrace(old) KBUFFER_TYPE_TIME_STAMP size = 12
+* kernel(new) KBUFFER_TYPE_TIME_STAMP size = 8
+Such mismatch will cause strange behavior when parsing trace events.
 
-Tested-by: Sang QianLong <hacksonsang@gmail.com>
+So if libtraceevent is released out of(independent) kernel, how does 
+libtraceevnt to keep compatible with the running kernel(maybe not the 
+newest)?
 
-if you are fine with that.
-
--- Steve
-
+-- 
+Thanks!
+Lv Ying
