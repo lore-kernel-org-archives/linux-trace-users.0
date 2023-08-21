@@ -2,123 +2,139 @@ Return-Path: <linux-trace-users-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 367A5EB64DD
-	for <linux-trace-users@archiver.kernel.org>; Tue,  8 Aug 2023 02:36:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CD83EE49A0
+	for <linux-trace-users@archiver.kernel.org>; Mon, 21 Aug 2023 20:24:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbjHHCgW (ORCPT
+        id S230467AbjHUUYG (ORCPT
         <rfc822;linux-trace-users@archiver.kernel.org>);
-        Mon, 7 Aug 2023 22:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54828 "EHLO
+        Mon, 21 Aug 2023 16:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjHHCgW (ORCPT
+        with ESMTP id S230461AbjHUUYF (ORCPT
         <rfc822;linux-trace-users@vger.kernel.org>);
-        Mon, 7 Aug 2023 22:36:22 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0150DB8;
-        Mon,  7 Aug 2023 19:36:19 -0700 (PDT)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RKcgY0pQgz1Z1cH;
-        Tue,  8 Aug 2023 10:33:29 +0800 (CST)
-Received: from [10.174.176.219] (10.174.176.219) by
- kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 8 Aug 2023 10:36:17 +0800
-Subject: Re: How to solve the coupling between libtraceevent and kernel trace?
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     <mchehab@kernel.org>, <linux-trace-users@vger.kernel.org>,
-        <linux-trace-devel@vger.kernel.org>,
-        "Fangxiuning (Jack, EulerOS)" <fangxiuning@huawei.com>
-References: <4767bcf3-589a-9dfb-5b45-9ac9279f08e6@huawei.com>
- <20230804121531.06f7bf0e@gandalf.local.home>
- <47475eaa-229e-f1bd-dcc7-31427f130ca3@huawei.com>
- <20230807210937.3ece4d63@gandalf.local.home>
-From:   Lv Ying <lvying6@huawei.com>
-Message-ID: <03d598ef-864d-c6d7-2c6f-65744b32eb2d@huawei.com>
-Date:   Tue, 8 Aug 2023 10:36:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Mon, 21 Aug 2023 16:24:05 -0400
+Received: from CAN01-YT3-obe.outbound.protection.outlook.com (mail-yt3can01on2062.outbound.protection.outlook.com [40.107.115.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087D210D
+        for <linux-trace-users@vger.kernel.org>; Mon, 21 Aug 2023 13:24:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FOPzR4cebgZ8cDyYiob3uhYvJyVq+RTLJ/8Kc+Qxex9Z1OzvX/HrwYZkf288gSKdmxopdoSDfhqnJdKYDERlcQJ4w4KEQJW+HTKHIzihuzXLOdgy/oPaJHKncGnjVGMTEXlXW0RRoLDLDK01OPrV+URtSyeHL8ulEifrdC0toTU2KvWqeZHQ2rKE7lVmm03/DUF7VDyxcT3ixxYfOZG6Zwvvfe9q84YFI9j93w5+9CgepldKBqWEQ29Jgh/FVO0W6+ElOwsRASx7Ac+m+cI8JDiFuMFu+3wWW2Z/jRcCGUaQfkgi3VvTond9hW51b4q8TgLubGbBud/dstkof3d2DA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rmb/NA+um0Tck1Zk0Xn5a6d7Kvfhml7rq4xnQqBQbnM=;
+ b=Jt7aSS7XQgV+Is9qggZukNw+noQ62sUrAOnI+QncMzxTED5NNCiI4kT1CNDhfhf3Ysjna8IB8ebnSJuajPD854WcmGB0105JcmdTkWMvuWtHUgs1fN8m49SQr3jp4gxLH/OGDSOoPc4ZgRoJXZohAEJd9yIN4+nU+SHgjoPIAl8Cu9i0eD6eyNUbYqyNGVpBUTkKBot0o2/oEh0Ro3MXgNCb+FBclOXYzYgGWcN13BTPkOcMmH3KJEzCueUsZMv43nAcJycFn9kJoc72IMYscnd2GFe5zulA0APJVrcyKjfqurzdCM4Dco690CX5S71xzz+kqpWBCtssa++qPsU7PA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rmb/NA+um0Tck1Zk0Xn5a6d7Kvfhml7rq4xnQqBQbnM=;
+ b=aezmakd/JHXpt7h2N4VVN+GVvAuwziVOelFsdaiaimyfpucKPyHStyj9BvQ4AkBAdbf0uCTcXhp5WPKCjjYHcqBjd8zomsapMyqDOYnGpO+//xSErgq90Cttw21rP3l0WOutHEBdx4m88W72UUuBqbm3PRkTikU4XT2UzQXSAwnh/TzvScga8w+URzFzTT8/30z3nTXtSLR40MoLA9x54U0yEYTMR8DbuhSny0r9n+342hoNsPlCrOJA+kea5n8B/dXMaWKEgTQZ0HNhx0MBg/aLIrBPCsfYU8Z1yu7McRbhsXFkp0YrDZT7kZkwQFMejXWp8nBeGphrTpZ4+aoLTg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:4e::11)
+ by YT2PR01MB9125.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:bc::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.24; Mon, 21 Aug
+ 2023 20:23:51 +0000
+Received: from YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::aea6:d61f:5d6c:5f09]) by YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::aea6:d61f:5d6c:5f09%3]) with mapi id 15.20.6699.022; Mon, 21 Aug 2023
+ 20:23:51 +0000
+Date:   Mon, 21 Aug 2023 16:23:50 -0400
+From:   =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau 
+        <jeremie.galarneau@efficios.com>
+To:     lttng-dev@lists.lttng.org
+Cc:     diamon-discuss@lists.linuxfoundation.org,
+        linux-trace-users@vger.kernel.org
+Subject: [RELEASE] LTTng-tools =?iso-8859-1?B?Mi4x?=
+ =?iso-8859-1?Q?3=2E11_-_Nordicit=E9?=
+Message-ID: <ZOPH1uWsClZATvok@efficios.com>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YQBPR01CA0117.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:1::17) To YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:4e::11)
 MIME-Version: 1.0
-In-Reply-To: <20230807210937.3ece4d63@gandalf.local.home>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.176.219]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500015.china.huawei.com (7.221.188.92)
-X-CFilter-Loop: Reflected
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT2PR01MB5984:EE_|YT2PR01MB9125:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1cb3b3f9-62a8-4909-d51a-08dba2848883
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mK9ExdiwsrdM90glOybWm4xtJrl11+hlUyMQY/lslYUHZB/bbqNo/CZC16+cM7lkDWr8img4zFfKCA2UUXeqMugHULy3LHD20UVwzk5aKPJVyICH8fzJKv0K52078eUbRkLVbRE3KvZEhyV9N+VGK2nuLn2MkYaumGNfBoMtR98FOQX9MjRar/CcLTydysZr4BzGCK7VAhOzg18Z+fG9qkMH/HKeEh5l7VWUCUqqH+H1W44MonCl9rVmnrO1OCVrs+gtnJh2r/U+kbWJfFFS6sHo194X4Z4May8rCX+gXRFlgpfxQG/MbXkP5vj5+KdHGxfDjxMW3hfZgavfF+7wJdsoTWX+Tds/cFx6noT+T4htMzPxnCriYE0g9irgNCZiRz+TXm40IfcQGqdpTdDV/2ji3BAhdAViSXuSEeklJWM7eUz8Lfj57gPmpCK2i0xyZ3qftGwIYXgIvYuOjDwv8BMQ2eAyr2EVEflTRvsLbL3TIPFwLGluF+TEJsBGhkGmBho2DcQnYMd2Yqll3YZhH79KpQW8+U1XOZ1Yj1Qxxz/Mq97feVFHeuvjhC2EXLYsknQb5PHJ4Qshm5KB5dk1kw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(396003)(376002)(136003)(39830400003)(346002)(366004)(186009)(1800799009)(451199024)(6916009)(66476007)(66556008)(224303003)(316002)(66946007)(6512007)(8936002)(2616005)(4326008)(36756003)(41300700001)(966005)(478600001)(38100700002)(6506007)(6486002)(83380400001)(2906002)(5660300002)(26005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?Q4ZD6kxBLly4uzWi06ayEGiIqqUusoUPIVpwWv4kZobDVh2/QG8bxXOt+I?=
+ =?iso-8859-1?Q?Ls92dU4wlRB+namwDSHE0VmHWj2OwOgIuKnxOPtt+0pvY352guOvm7Ngw9?=
+ =?iso-8859-1?Q?ZjEuzuHnCKyUwnSpsIbs56LxEmHEokWfZg8+jkhqiLgRPGwNfwZBjlmH/Z?=
+ =?iso-8859-1?Q?RIOswVMkimOTrLf02Pok8SfTvwWKzHOkAKucY1NG/Y0p5dpLOw3QiTRukR?=
+ =?iso-8859-1?Q?eKOJt1Kr2KwlKcQdbXJGs256Qpcz2ar7cWoJEtP8BU2VNhVBbeIHCnWHqI?=
+ =?iso-8859-1?Q?2wy4aCXL3e0/qzqWohDQBl1PNRAppTmaYVbbYKCNbNy/LSPkSbfPeBRAAc?=
+ =?iso-8859-1?Q?SXoyYY3KSdB+m6DWkuUNtR3jWqfuH7JtEP+dXJN2kNDY/Lg3I3ZDjSkjyn?=
+ =?iso-8859-1?Q?+khGwrQuXDUeTMt/JmUSodPELR06A7dDLjBn3y/oKElw5IdXAWkbeDp5e+?=
+ =?iso-8859-1?Q?GgK+J4SWyiEZADgLsWwZtKGOAK3F+Hw1/IfguL182jqI71nD0V3XygPQN7?=
+ =?iso-8859-1?Q?zwXY/+GAQyD93QHuLUKs+wyIqaEVwxpw8PYYnjZmYpLZPrbdPsYs7X1axn?=
+ =?iso-8859-1?Q?o/Gy542In5liiW1M8bNqUkopdodauZiOLyYm3bugD9GHQ3ko+WOgEuMQmS?=
+ =?iso-8859-1?Q?+FpeDAPoCdDSUp5Sqp9q/xRHD4PlMY5oi9Feua2aeBuN/GQMB/we+YiwDZ?=
+ =?iso-8859-1?Q?YcLAL6MuQrF8l8pKSzy6/Qjx3t0OhyreXhVdGnPSVhqmInLJUfJw+TJr9b?=
+ =?iso-8859-1?Q?v9GJAQ7Sl+h6JJFjgE4bavaqNhrm2EOK9wqT5oAMf5FB6DIQ2Kr1gml47/?=
+ =?iso-8859-1?Q?moooryQ48TaP6VMedx3cyI0JWNS73y4WgHixB0VCTKqbCeqnBiN/ns1arh?=
+ =?iso-8859-1?Q?BnnzkQjmN/nRwAhwGvZS7QROkHvjIbw9RkoIJgAacnri10i6mI1KuDs0Lm?=
+ =?iso-8859-1?Q?iNQP4izi6sJi6ZSY9JYe4gwwk0ppCJVep62KYHD0MAKz2Vj1FDIf0J+JrB?=
+ =?iso-8859-1?Q?3hUS0vqd9Kr1uY0TMcm1SD7dANWtkd7xUxJ/MAPBLcZIHpwrrJ9BLV6q2T?=
+ =?iso-8859-1?Q?R8H3HliNmeeTX//m4AZNJnIakCSlgs2TElqSIehabf+thK8QCJXzOKtd9R?=
+ =?iso-8859-1?Q?rfODoPCYjKvOJi3ZJEPUfBehX03INvxEjMsY7P7JJw0evU79J+qv6OetaK?=
+ =?iso-8859-1?Q?yjGeVReH9NSSXnuybmy6aFrtWLdqxtHPhdKBGqAs56JytM0xjxuxmPjvM0?=
+ =?iso-8859-1?Q?L+a+HD1SOPRkUD37syNxzYOags9aQ0KrKjjEJ3Hxh/hDR0q322E4cf5emN?=
+ =?iso-8859-1?Q?N5/3j3ta51CBBjlwsEZF9rCrAsYSpveLcwQ6kqEVqmqzTWfBuPvsVNDZas?=
+ =?iso-8859-1?Q?X6YBD+mrRR5yGv+uZDYtyGjOKSUVifET3nGh48bnfTPfkO/+F83wCKVYV9?=
+ =?iso-8859-1?Q?L/lmg8pabrQJZnzJKbNUeE1sc+W3jxFWlwc2H6VC19lOgoSHX+l02ZT8OS?=
+ =?iso-8859-1?Q?eC/ajdVC0TYfU5/E7+HSmIGcsX7xVsTLSep9vpHw7hLPstiDNOQSiLYqMd?=
+ =?iso-8859-1?Q?kGsfn1epWSYj2LTRCGY0Quo6aJiXifXkCss16ht5jjKKmaHSMeERXOgG1/?=
+ =?iso-8859-1?Q?0bPskzbNfYuVSbzvPP/HGLU0tSM0yfCVmQ?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1cb3b3f9-62a8-4909-d51a-08dba2848883
+X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2023 20:23:51.4124
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NXB+VpZOvaZ4UVzIIMjVlGyEk7DNOTj+JlGYprI9GP//jjY/2/5yPVQg62LK4T9z5h7eo4HmaX+zWQLfL3rx6Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB9125
 Precedence: bulk
 List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
 
-Hi Steven:
+Hi all,
 
-On 2023/8/8 9:09, Steven Rostedt wrote:
-> On Sat, 5 Aug 2023 11:57:48 +0800
-> Lv Ying<lvying6@huawei.com>  wrote:
-> 
->> I find this kernel
->> patch(https://lore.kernel.org/all/477b362dba1ce7fab9889a1a8e885a62c472f041.1516069914.git.tom.zanussi@linux.intel.com/T/#u)
->> change TIME_STAMP to 8 bytes. Maybe this commit is the first time
->> RINGBUF_TYPE_TIME_STAMP is really implemented in the kernel.
-> Yes, I know what caused the breakage.
-> 
->> When rasdaemon use old libtrace(12 byte version of TIME_STAMP) on newer
->> kernel(8 bytes version of RINGBUF_TYPE_TIME_STAMP). Libtrace takes too
->> long to parse timestamp events and appends the first 4 bytes of the next
->> trace event as the last 4 bytes of the timestamp event. Such wrong
->> parsing will lead to completely wrong parsing of the adjacent trace
->> event field. For example, in rasdaemon we have a situation like this,
->> libtrace parse devlink_health_report trace event next timestamp trace
->> event as block_rq_complete trace event, which will cause coredump in
->> block_rq_complete rasdaemon handler.
->>>> So if libtraceevent is released out of(independent) kernel, how does
->>>> libtraceevnt to keep compatible with the running kernel(maybe not the
->>>> newest)?
->>>>   
->>> Now that it has been implemented, it's not going to change. 8 bytes is now
->>> an API. Any more updates should not cause a problem with libtraceevent as
->>> there's many more tools that depend on it working. And the fact that it is
->>> no longer in the kernel, guarantees more that the interface will remain
->>> stable.
->>>    
->> I am worried similar libtraceevent-kernel compatibility problem. I think
->> it's a good way to sort out the interfaces that libtraceevent depends on
->> the kernel and add test cases to determine whether libtraceevent can run
->> on the current kernel, or to know which interfaces do not match.
->>
->>> rasdaemon should be using the external libtraceevent library because it
->>> will be able to get more information out of any new data. Newer kernels
->>> should not break existing libtracevent, but it may just skip over new
->>> features.
->>>
->>> -- Steve
->>>
->>> .
->>>    
->> rasdaemon now use the external libtraceevent, but rasdaemon will be
->> shipped in many version OS by OSV, so how to ensure that rasdaemon runs
->> correctly on various kernel versions using external libtraceevent needs
->> to be considered.
->>
+We have just released the eleventh bug-fix release of LTTng-tools 2.13 -
+Nordicité. This release addresses a number of issues listed below.
 
-> The latest libtraceevent and libtracefs should work with all previous
-> versions of the kernel. TIMESTAMP was not implemented in the kernel when
-> kbuffer.c added it. That was my mistake and it will not happen again.
-> 
-> trace-cmd uses the latest libtracevent and libtracefs, and it works on
-> kernels back to 2.6.32 (when tracing was added). Using the latest
-> libtraceevent will work on all older kernels.
-> 
-> All should be good. What exactly are you worried about?
+2023-08-21 lttng-tools 2.13.11 (National Spumoni Day)
+	* Tests: use CPU ids from online ranges
+	* docs: fix: Match stated automake requirement
+	* Docs: Fix broken reference in lttng-add-trigger
+	* Docs: Fix broken reference to lttng-concepts(7) man page
+	* Tests: Preemptively fail infinite blocking tests when low on disk space
+	* Fix: lttng-add-context: leak of application context parameters
+	* Fix: sessiond: bad fd used while rotating exiting app's buffers
+	* Fix: consumerd: slow metadata push slows down application registration
+	* event-rule: set event rule loglevel to domain specific value when unset
+	* Fix: sessiond: preserve jul/log4j domain loglevels
+	* Fix: sessiond: crash enabling event rules that differ only by loglevel type
 
+As always, please report any issue you may encounter to bugs.lttng.org
+or on this mailing list.
 
-I didn't know much about kernel tracefs before, so I thought there was a 
-compatibility problem like timestamp. After your answer, I know that 
-timestamp is an exception. I can now happily use libtraceevent directly 
-on different versions of the kernel.
+Project website: https://lttng.org
 
-Thanks again for your answer :)
+Download link:
+https://lttng.org/files/lttng-tools/lttng-tools-2.13.11.tar.bz2
 
--- 
-Thanks!
-Lv Ying
+GPG signature:
+https://lttng.org/files/lttng-tools/lttng-tools-2.13.11.tar.bz2.asc
