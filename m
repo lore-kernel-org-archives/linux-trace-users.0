@@ -1,140 +1,81 @@
-Return-Path: <linux-trace-users-owner@vger.kernel.org>
+Return-Path: <linux-trace-users+bounces-1-linux-trace-users=archiver.kernel.org@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CD83EE49A0
-	for <linux-trace-users@archiver.kernel.org>; Mon, 21 Aug 2023 20:24:06 +0000 (UTC)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbjHUUYG (ORCPT
-        <rfc822;linux-trace-users@archiver.kernel.org>);
-        Mon, 21 Aug 2023 16:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbjHUUYF (ORCPT
-        <rfc822;linux-trace-users@vger.kernel.org>);
-        Mon, 21 Aug 2023 16:24:05 -0400
-Received: from CAN01-YT3-obe.outbound.protection.outlook.com (mail-yt3can01on2062.outbound.protection.outlook.com [40.107.115.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087D210D
-        for <linux-trace-users@vger.kernel.org>; Mon, 21 Aug 2023 13:24:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FOPzR4cebgZ8cDyYiob3uhYvJyVq+RTLJ/8Kc+Qxex9Z1OzvX/HrwYZkf288gSKdmxopdoSDfhqnJdKYDERlcQJ4w4KEQJW+HTKHIzihuzXLOdgy/oPaJHKncGnjVGMTEXlXW0RRoLDLDK01OPrV+URtSyeHL8ulEifrdC0toTU2KvWqeZHQ2rKE7lVmm03/DUF7VDyxcT3ixxYfOZG6Zwvvfe9q84YFI9j93w5+9CgepldKBqWEQ29Jgh/FVO0W6+ElOwsRASx7Ac+m+cI8JDiFuMFu+3wWW2Z/jRcCGUaQfkgi3VvTond9hW51b4q8TgLubGbBud/dstkof3d2DA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rmb/NA+um0Tck1Zk0Xn5a6d7Kvfhml7rq4xnQqBQbnM=;
- b=Jt7aSS7XQgV+Is9qggZukNw+noQ62sUrAOnI+QncMzxTED5NNCiI4kT1CNDhfhf3Ysjna8IB8ebnSJuajPD854WcmGB0105JcmdTkWMvuWtHUgs1fN8m49SQr3jp4gxLH/OGDSOoPc4ZgRoJXZohAEJd9yIN4+nU+SHgjoPIAl8Cu9i0eD6eyNUbYqyNGVpBUTkKBot0o2/oEh0Ro3MXgNCb+FBclOXYzYgGWcN13BTPkOcMmH3KJEzCueUsZMv43nAcJycFn9kJoc72IMYscnd2GFe5zulA0APJVrcyKjfqurzdCM4Dco690CX5S71xzz+kqpWBCtssa++qPsU7PA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rmb/NA+um0Tck1Zk0Xn5a6d7Kvfhml7rq4xnQqBQbnM=;
- b=aezmakd/JHXpt7h2N4VVN+GVvAuwziVOelFsdaiaimyfpucKPyHStyj9BvQ4AkBAdbf0uCTcXhp5WPKCjjYHcqBjd8zomsapMyqDOYnGpO+//xSErgq90Cttw21rP3l0WOutHEBdx4m88W72UUuBqbm3PRkTikU4XT2UzQXSAwnh/TzvScga8w+URzFzTT8/30z3nTXtSLR40MoLA9x54U0yEYTMR8DbuhSny0r9n+342hoNsPlCrOJA+kea5n8B/dXMaWKEgTQZ0HNhx0MBg/aLIrBPCsfYU8Z1yu7McRbhsXFkp0YrDZT7kZkwQFMejXWp8nBeGphrTpZ4+aoLTg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=efficios.com;
-Received: from YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:4e::11)
- by YT2PR01MB9125.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:bc::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.24; Mon, 21 Aug
- 2023 20:23:51 +0000
-Received: from YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::aea6:d61f:5d6c:5f09]) by YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::aea6:d61f:5d6c:5f09%3]) with mapi id 15.20.6699.022; Mon, 21 Aug 2023
- 20:23:51 +0000
-Date:   Mon, 21 Aug 2023 16:23:50 -0400
-From:   =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau 
-        <jeremie.galarneau@efficios.com>
-To:     lttng-dev@lists.lttng.org
-Cc:     diamon-discuss@lists.linuxfoundation.org,
-        linux-trace-users@vger.kernel.org
-Subject: [RELEASE] LTTng-tools =?iso-8859-1?B?Mi4x?=
- =?iso-8859-1?Q?3=2E11_-_Nordicit=E9?=
-Message-ID: <ZOPH1uWsClZATvok@efficios.com>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQBPR01CA0117.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:1::17) To YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:4e::11)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT2PR01MB5984:EE_|YT2PR01MB9125:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1cb3b3f9-62a8-4909-d51a-08dba2848883
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mK9ExdiwsrdM90glOybWm4xtJrl11+hlUyMQY/lslYUHZB/bbqNo/CZC16+cM7lkDWr8img4zFfKCA2UUXeqMugHULy3LHD20UVwzk5aKPJVyICH8fzJKv0K52078eUbRkLVbRE3KvZEhyV9N+VGK2nuLn2MkYaumGNfBoMtR98FOQX9MjRar/CcLTydysZr4BzGCK7VAhOzg18Z+fG9qkMH/HKeEh5l7VWUCUqqH+H1W44MonCl9rVmnrO1OCVrs+gtnJh2r/U+kbWJfFFS6sHo194X4Z4May8rCX+gXRFlgpfxQG/MbXkP5vj5+KdHGxfDjxMW3hfZgavfF+7wJdsoTWX+Tds/cFx6noT+T4htMzPxnCriYE0g9irgNCZiRz+TXm40IfcQGqdpTdDV/2ji3BAhdAViSXuSEeklJWM7eUz8Lfj57gPmpCK2i0xyZ3qftGwIYXgIvYuOjDwv8BMQ2eAyr2EVEflTRvsLbL3TIPFwLGluF+TEJsBGhkGmBho2DcQnYMd2Yqll3YZhH79KpQW8+U1XOZ1Yj1Qxxz/Mq97feVFHeuvjhC2EXLYsknQb5PHJ4Qshm5KB5dk1kw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(396003)(376002)(136003)(39830400003)(346002)(366004)(186009)(1800799009)(451199024)(6916009)(66476007)(66556008)(224303003)(316002)(66946007)(6512007)(8936002)(2616005)(4326008)(36756003)(41300700001)(966005)(478600001)(38100700002)(6506007)(6486002)(83380400001)(2906002)(5660300002)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?Q4ZD6kxBLly4uzWi06ayEGiIqqUusoUPIVpwWv4kZobDVh2/QG8bxXOt+I?=
- =?iso-8859-1?Q?Ls92dU4wlRB+namwDSHE0VmHWj2OwOgIuKnxOPtt+0pvY352guOvm7Ngw9?=
- =?iso-8859-1?Q?ZjEuzuHnCKyUwnSpsIbs56LxEmHEokWfZg8+jkhqiLgRPGwNfwZBjlmH/Z?=
- =?iso-8859-1?Q?RIOswVMkimOTrLf02Pok8SfTvwWKzHOkAKucY1NG/Y0p5dpLOw3QiTRukR?=
- =?iso-8859-1?Q?eKOJt1Kr2KwlKcQdbXJGs256Qpcz2ar7cWoJEtP8BU2VNhVBbeIHCnWHqI?=
- =?iso-8859-1?Q?2wy4aCXL3e0/qzqWohDQBl1PNRAppTmaYVbbYKCNbNy/LSPkSbfPeBRAAc?=
- =?iso-8859-1?Q?SXoyYY3KSdB+m6DWkuUNtR3jWqfuH7JtEP+dXJN2kNDY/Lg3I3ZDjSkjyn?=
- =?iso-8859-1?Q?+khGwrQuXDUeTMt/JmUSodPELR06A7dDLjBn3y/oKElw5IdXAWkbeDp5e+?=
- =?iso-8859-1?Q?GgK+J4SWyiEZADgLsWwZtKGOAK3F+Hw1/IfguL182jqI71nD0V3XygPQN7?=
- =?iso-8859-1?Q?zwXY/+GAQyD93QHuLUKs+wyIqaEVwxpw8PYYnjZmYpLZPrbdPsYs7X1axn?=
- =?iso-8859-1?Q?o/Gy542In5liiW1M8bNqUkopdodauZiOLyYm3bugD9GHQ3ko+WOgEuMQmS?=
- =?iso-8859-1?Q?+FpeDAPoCdDSUp5Sqp9q/xRHD4PlMY5oi9Feua2aeBuN/GQMB/we+YiwDZ?=
- =?iso-8859-1?Q?YcLAL6MuQrF8l8pKSzy6/Qjx3t0OhyreXhVdGnPSVhqmInLJUfJw+TJr9b?=
- =?iso-8859-1?Q?v9GJAQ7Sl+h6JJFjgE4bavaqNhrm2EOK9wqT5oAMf5FB6DIQ2Kr1gml47/?=
- =?iso-8859-1?Q?moooryQ48TaP6VMedx3cyI0JWNS73y4WgHixB0VCTKqbCeqnBiN/ns1arh?=
- =?iso-8859-1?Q?BnnzkQjmN/nRwAhwGvZS7QROkHvjIbw9RkoIJgAacnri10i6mI1KuDs0Lm?=
- =?iso-8859-1?Q?iNQP4izi6sJi6ZSY9JYe4gwwk0ppCJVep62KYHD0MAKz2Vj1FDIf0J+JrB?=
- =?iso-8859-1?Q?3hUS0vqd9Kr1uY0TMcm1SD7dANWtkd7xUxJ/MAPBLcZIHpwrrJ9BLV6q2T?=
- =?iso-8859-1?Q?R8H3HliNmeeTX//m4AZNJnIakCSlgs2TElqSIehabf+thK8QCJXzOKtd9R?=
- =?iso-8859-1?Q?rfODoPCYjKvOJi3ZJEPUfBehX03INvxEjMsY7P7JJw0evU79J+qv6OetaK?=
- =?iso-8859-1?Q?yjGeVReH9NSSXnuybmy6aFrtWLdqxtHPhdKBGqAs56JytM0xjxuxmPjvM0?=
- =?iso-8859-1?Q?L+a+HD1SOPRkUD37syNxzYOags9aQ0KrKjjEJ3Hxh/hDR0q322E4cf5emN?=
- =?iso-8859-1?Q?N5/3j3ta51CBBjlwsEZF9rCrAsYSpveLcwQ6kqEVqmqzTWfBuPvsVNDZas?=
- =?iso-8859-1?Q?X6YBD+mrRR5yGv+uZDYtyGjOKSUVifET3nGh48bnfTPfkO/+F83wCKVYV9?=
- =?iso-8859-1?Q?L/lmg8pabrQJZnzJKbNUeE1sc+W3jxFWlwc2H6VC19lOgoSHX+l02ZT8OS?=
- =?iso-8859-1?Q?eC/ajdVC0TYfU5/E7+HSmIGcsX7xVsTLSep9vpHw7hLPstiDNOQSiLYqMd?=
- =?iso-8859-1?Q?kGsfn1epWSYj2LTRCGY0Quo6aJiXifXkCss16ht5jjKKmaHSMeERXOgG1/?=
- =?iso-8859-1?Q?0bPskzbNfYuVSbzvPP/HGLU0tSM0yfCVmQ?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1cb3b3f9-62a8-4909-d51a-08dba2848883
-X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2023 20:23:51.4124
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NXB+VpZOvaZ4UVzIIMjVlGyEk7DNOTj+JlGYprI9GP//jjY/2/5yPVQg62LK4T9z5h7eo4HmaX+zWQLfL3rx6Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB9125
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5258EC05024
+	for <linux-trace-users@archiver.kernel.org>; Wed, 20 Sep 2023 20:58:15 +0000 (UTC)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2157E1C20B06
+	for <linux-trace-users@archiver.kernel.org>; Wed, 20 Sep 2023 20:58:14 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B49A31A58E;
+	Wed, 20 Sep 2023 20:58:07 +0000 (UTC)
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1462041ABD
+	for <linux-trace-users@vger.kernel.org>; Wed, 20 Sep 2023 20:58:06 +0000 (UTC)
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10D2B9
+	for <linux-trace-users@vger.kernel.org>; Wed, 20 Sep 2023 13:58:04 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id a1e0cc1a2514c-7a8c41bd59aso103357241.3
+        for <linux-trace-users@vger.kernel.org>; Wed, 20 Sep 2023 13:58:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1695243484; x=1695848284; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i6XY8wIMD7LjGNpegRcCUKrZA0w1gq5GxQRY7mj2AIc=;
+        b=QPmVK81PVEimFgfdJqI8H3ySPujchnU5Yq11OMwF+kKLfA5hlYHDLJfL6kTVUGq1sP
+         A2srml2SbmcLA4Yyup/LQRFbfW6Z4fXYfyk29m8Syle/F4WMAtCbts+1gpxEx9DDqzx3
+         4qKSRHtusrfETFYDIpuMz5rtglgdJ2sXsrvx4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695243484; x=1695848284;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i6XY8wIMD7LjGNpegRcCUKrZA0w1gq5GxQRY7mj2AIc=;
+        b=rf7BWMgcxGDFUV5fqXm5OO1wFgpMur0C3Yxwe6B9GGHk1aUW8ebh/uvDf8SWCrT1I5
+         tofFvzWW/mG0NbhPpjo3vs+iKkk1EPH1pEfp0kM7JU401BrXFZNlBpJLFdC5hGSqP/hL
+         WwINJQmrXYmXyNT3eGEo3hIRh9CZsK7toSBhpn9oF4LVnF5ZAi65C+7tIh83OnPpJoJp
+         jrGtkwhsXL+O14hRIuJcSyke3RVv9+jcZpl+/z/4dXhluc5pGtLyTfmj/Zk7almG8+2K
+         +8Fywdd+KLrqUdLL+bRE16X/r+T6v24mCX9rMxe9Iv1Q6GfI62TpsJSUGrfa2Ac4GsmA
+         6QqQ==
+X-Gm-Message-State: AOJu0YxXbzmbcvYO7xSLyvVguMEwj2Iw8dtNcnzp9SyxJYkwtE0WHXnL
+	8Ch1GTFkLwgSlUcVp9WrJ+bibE7Sxfsp7GnHNyI=
+X-Google-Smtp-Source: AGHT+IF4BKIHvs4JP5411acloPV1TnkYzh2Xvv7RvhZgFRQbSP9QWhzuaCEtHe12WsD13bhK5DhFUw==
+X-Received: by 2002:a05:6102:2743:b0:443:6deb:2b4 with SMTP id p3-20020a056102274300b004436deb02b4mr3862833vsu.2.1695243483831;
+        Wed, 20 Sep 2023 13:58:03 -0700 (PDT)
+Received: from meerkat.local (bras-base-mtrlpq5031w-grc-30-209-226-106-110.dsl.bell.ca. [209.226.106.110])
+        by smtp.gmail.com with ESMTPSA id h16-20020a0cf210000000b0064f4258184csm2599qvk.53.2023.09.20.13.58.03
+        for <linux-trace-users@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Sep 2023 13:58:03 -0700 (PDT)
+Date: Wed, 20 Sep 2023 16:58:01 -0400
+From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To: linux-trace-users@vger.kernel.org
+Subject: This list is being migrated to new infrastructure
+Message-ID: <20230920-attain-batboy-e7323a@meerkat>
 Precedence: bulk
-List-ID: <linux-trace-users.vger.kernel.org>
 X-Mailing-List: linux-trace-users@vger.kernel.org
+List-Id: <linux-trace-users.vger.kernel.org>
+List-Subscribe: <mailto:linux-trace-users+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Hi all,
+Hello, all:
 
-We have just released the eleventh bug-fix release of LTTng-tools 2.13 -
-Nordicité. This release addresses a number of issues listed below.
+This list is being migrated to the new vger infrastructure. This should be a
+fully transparent process and you don't need to change anything about how you
+participate with the list or how you receive mail.
 
-2023-08-21 lttng-tools 2.13.11 (National Spumoni Day)
-	* Tests: use CPU ids from online ranges
-	* docs: fix: Match stated automake requirement
-	* Docs: Fix broken reference in lttng-add-trigger
-	* Docs: Fix broken reference to lttng-concepts(7) man page
-	* Tests: Preemptively fail infinite blocking tests when low on disk space
-	* Fix: lttng-add-context: leak of application context parameters
-	* Fix: sessiond: bad fd used while rotating exiting app's buffers
-	* Fix: consumerd: slow metadata push slows down application registration
-	* event-rule: set event rule loglevel to domain specific value when unset
-	* Fix: sessiond: preserve jul/log4j domain loglevels
-	* Fix: sessiond: crash enabling event rules that differ only by loglevel type
+There will be a brief 20-minute delay with archives on lore.kernel.org. I will
+follow up once the archive migration has been completed.
 
-As always, please report any issue you may encounter to bugs.lttng.org
-or on this mailing list.
+Best regards,
+Konstantin
 
-Project website: https://lttng.org
-
-Download link:
-https://lttng.org/files/lttng-tools/lttng-tools-2.13.11.tar.bz2
-
-GPG signature:
-https://lttng.org/files/lttng-tools/lttng-tools-2.13.11.tar.bz2.asc
