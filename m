@@ -1,79 +1,96 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 147EF41A98
-	for <linux-trace-users@vger.kernel.org>; Wed, 20 Sep 2023 21:06:48 +0000 (UTC)
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212CFBB
-	for <linux-trace-users@vger.kernel.org>; Wed, 20 Sep 2023 14:06:47 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id 6a1803df08f44-656307a52e8so1312926d6.1
-        for <linux-trace-users@vger.kernel.org>; Wed, 20 Sep 2023 14:06:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1695244006; x=1695848806; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nhh/PmrssBgtQOJ9oTmXJl68S5sfA7NIJBY3X9g0oMU=;
-        b=HYfzYbL4r3tiB/WlgAP8HCssvKGxJ7KttvuK2lvdsoEeAg6xArwVag47AmCbSUWc8H
-         ncFQIi1P2MblXBSpnK1KVLm4YkZ7t8BXOph6jT2iR3Jow6pNZcwmkramhR6aMeCGVj7Z
-         TELA1ru0yY7n7xhDSLQyCRvjeG8s2fwDb2OMQ=
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88EED66;
+	Tue, 28 Nov 2023 11:24:47 -0800 (PST)
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-67a4405c5d5so14090866d6.1;
+        Tue, 28 Nov 2023 11:24:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695244006; x=1695848806;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nhh/PmrssBgtQOJ9oTmXJl68S5sfA7NIJBY3X9g0oMU=;
-        b=FFxyC3ridYq3r1fgY8rztjzaQDqTgQART59j6fdkIBxrfoqwCDtZY2q3Hatj7Ul5NM
-         cgw70Ez4lIQzTXkt8t1/kRn/h7jY85eqVNx9qeq+V3ZnMU5gU+tO2Mzp4lj51ZCPQrpz
-         CFMgMeqnxM3P0yTuGcO2U5XCai0hl5nQ06DpXdmKe1EIYC8pet5Nk4hIgu7O10w688b6
-         kV4MpWQ5fMeQ3A4JGw4Gs3mWYUYwxDBnzponQz1sWd+graVKbjSdVFfZ6O87ZJdVmS++
-         WUlea1Eab4SDGplZplY9i7novcHDvSqptssKoXNjMHC5Q8rOFBEK9appp+PVUSWD1awI
-         teuA==
-X-Gm-Message-State: AOJu0YzzPKMwZS3az18VtU3u6d94fCyefIwqBmBTKLv8IbGnhFGs3kCa
-	zSE/BvzT0+WyCkKlpEDS41cj9+TJB1tcti83HVM=
-X-Google-Smtp-Source: AGHT+IH1/GEMIpKMbgirPwSBIiHvAm+A6F7yNhbj4w7qlLV4O4AL3hd/ja0uN29zOquaCcneFb1C2w==
-X-Received: by 2002:a0c:f083:0:b0:656:4107:c458 with SMTP id g3-20020a0cf083000000b006564107c458mr3794811qvk.6.1695244006078;
-        Wed, 20 Sep 2023 14:06:46 -0700 (PDT)
-Received: from meerkat.local (bras-base-mtrlpq5031w-grc-30-209-226-106-110.dsl.bell.ca. [209.226.106.110])
-        by smtp.gmail.com with ESMTPSA id x20-20020a0ce0d4000000b0064f732aa463sm2735qvk.105.2023.09.20.14.06.45
-        for <linux-trace-users@vger.kernel.org>
+        d=1e100.net; s=20230601; t=1701199486; x=1701804286;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pS8AM0GRPJNZya3U1nEdnkoY2lKxS69IuJjwqW9TK3g=;
+        b=ZMwZy+wD0szSnMjeAuPfH/tNm/bTpzvhMh8c5nI/ebPSKDKD8KW7YkIgvw//vg/wtX
+         Z8l4tki6Mj+Osit1P9qBBXPyd+VURNALrW7ll7loKO7or/GfkeVvGO0epsXc6lmjzyEi
+         rK4Cb06uTKF85aDTIWlDhTH0C7J0tHxLoVNUpAdoGyfakDloLRN8nh3Od/uXoni2KqdV
+         8E8MU/N9newHTZkT8dB7uuyjRlpoEgc9TOLKBOwysMm2koL+kSdrthslbih8bWLJcJH1
+         Ab42tmKWwsjVqVfQsNh2geobjVt50ipYY9zcw+RSVuufS5zPDdqgZ1FdFkdK9B+Oj6sq
+         V62w==
+X-Gm-Message-State: AOJu0YwFWxp1E0zoFp7u6YGgEL6/cH426WE4YartyQ+8FPl1syiXqqA6
+	Nu7ymzmobV0YigxpLQP1HrL0DF8au1g85Xq1
+X-Google-Smtp-Source: AGHT+IF+7Ua/UlK3YN12Y4VhvSs9oURkXDZ8+S30CKsU5l2Vd75ZyUfAUVn7NVt32xyeDKH1RGQ/Zg==
+X-Received: by 2002:a0c:ecd0:0:b0:67a:3757:880c with SMTP id o16-20020a0cecd0000000b0067a3757880cmr10426739qvq.40.1701199486438;
+        Tue, 28 Nov 2023 11:24:46 -0800 (PST)
+Received: from localhost (c-24-1-27-177.hsd1.il.comcast.net. [24.1.27.177])
+        by smtp.gmail.com with ESMTPSA id m5-20020ad45045000000b0067835abc38bsm4157014qvq.129.2023.11.28.11.24.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Sep 2023 14:06:45 -0700 (PDT)
-Date: Wed, 20 Sep 2023 17:06:44 -0400
-From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To: linux-trace-users@vger.kernel.org
-Subject: Re: This list is being migrated to new infrastructure
-Message-ID: <20230920-pauper-jugular-587366@meerkat>
-References: <20230920-attain-batboy-e7323a@meerkat>
+        Tue, 28 Nov 2023 11:24:46 -0800 (PST)
+From: David Vernet <void@manifault.com>
+To: linux-trace-devel@vger.kernel.org
+Cc: linux-trace-users@vger.kernel.org,
+	rostedt@goodmis.org,
+	kernel-team@meta.com,
+	julia.lawall@inria.fr,
+	himadrispandya@gmail.com
+Subject: [PATCH] trace-cmd record: Reset PATH variable after strtok search
+Date: Tue, 28 Nov 2023 13:24:35 -0600
+Message-ID: <20231128192435.36507-1-void@manifault.com>
+X-Mailer: git-send-email 2.42.1
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
 List-Id: <linux-trace-users.vger.kernel.org>
 List-Subscribe: <mailto:linux-trace-users+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230920-attain-batboy-e7323a@meerkat>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 20, 2023 at 04:58:01PM -0400, Konstantin Ryabitsev wrote:
-> Hello, all:
-> 
-> This list is being migrated to the new vger infrastructure. This should be a
-> fully transparent process and you don't need to change anything about how you
-> participate with the list or how you receive mail.
-> 
-> There will be a brief 20-minute delay with archives on lore.kernel.org. I will
-> follow up once the archive migration has been completed.
+execute_program(), in the trace-cmd record subcommand, searches for a
+command in PATH to create an absolute path to pass to execve. The
+implementation uses strtok_r, which mutates the underlying string in
+place by replacing ':' tokens with NULL bytes. This can and does cause
+the PATH that's passed to execve to only contain the first entry to
+PATH, which can cause issues such as the following:
 
-This work is now completed. I will monitor the performance to make
-sure that the new infrastructure is still successfully coping with the
-email traffic.
+[root@maniforge linus]# trace-cmd record -e sched -v -e sched_stat_runtime make clean
+/bin/sh: line 1: uname: command not found
+/bin/sh: line 1: sed: command not found
+/bin/sh: line 1: head: command not found
+/bin/sh: line 1: grep: command not found
+/bin/sh: line 1: mkdir: command not found
+...
+/bin/sh: line 1: mkdir: command not found
+/bin/sh: line 1: mkdir: command not found
+Makefile:681: arch//Makefile: No such file or directory
+make: *** No rule to make target 'arch//Makefile'.  Stop.
 
-If you notice any problems, please report them to helpdesk at kernel.org.
+We should be resetting the PATH variable to the string stored in the
+saveptr argument to strtok_r.
 
--K
+Fixes: edf9424029cc ("trace-cmd: Open code execvp routine to avoid multiple execve syscalls")
+Signed-off-by: David Vernet <void@manifault.com>
+---
+ tracecmd/trace-record.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/tracecmd/trace-record.c b/tracecmd/trace-record.c
+index bced80406816..63af11ecaa80 100644
+--- a/tracecmd/trace-record.c
++++ b/tracecmd/trace-record.c
+@@ -1708,6 +1708,14 @@ static void execute_program(int argc, char **argv)
+ 				break;
+ 
+ 		}
++
++		/*
++		 * reset PATH to saveptr, as strtok_r overwrites the string
++		 * returned by getenv() which backs the PATH environment
++		 * variable.
++		 */
++		if (setenv("PATH", saveptr, 1))
++			die("Failed to reset PATH to %s (%s)", saveptr, strerror(errno));
+ 	} else {
+ 		strncpy(buf, argv[0], sizeof(buf));
+ 	}
+-- 
+2.42.1
+
