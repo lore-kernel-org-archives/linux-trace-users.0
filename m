@@ -1,72 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF843D0DC;
-	Tue, 28 Nov 2023 20:28:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C357EC433C8;
-	Tue, 28 Nov 2023 20:28:16 +0000 (UTC)
-Date: Tue, 28 Nov 2023 15:28:38 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: David Vernet <void@manifault.com>, linux-trace-devel@vger.kernel.org,
- linux-trace-users@vger.kernel.org, kernel-team@meta.com,
- julia.lawall@inria.fr, himadrispandya@gmail.com
-Subject: Re: [PATCH] trace-cmd record: Reset PATH variable after strtok
- search
-Message-ID: <20231128152838.5a7ed1ff@gandalf.local.home>
-In-Reply-To: <7be74990-505d-44c3-9d62-5c4147778877@efficios.com>
-References: <20231128192435.36507-1-void@manifault.com>
-	<20231128143044.72f0925e@gandalf.local.home>
-	<20231128200856.GA431764@maniforge>
-	<20231128201302.GB431764@maniforge>
-	<20231128151823.185839b8@gandalf.local.home>
-	<7be74990-505d-44c3-9d62-5c4147778877@efficios.com>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8868F59
+	for <linux-trace-users@vger.kernel.org>; Mon,  8 Jan 2024 04:16:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ac/wmE08"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1d420aaa2abso4400765ad.3
+        for <linux-trace-users@vger.kernel.org>; Sun, 07 Jan 2024 20:16:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704687410; x=1705292210; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fkCNQZHhr0pnME3mEb10LmyBtROJh7URDWkTEIcpb50=;
+        b=Ac/wmE08u6jcPJQpGmeI1DX7FGFm3RZ5oEQv8zAD3aj709JeIhK04AmQ+LAeE4+pho
+         c4mOYHRRmVA6k+HrBtcun5wgcFXzBt/zMpcaB5zRXvH+yvjU1PQ042W8w6mREOjuxfo8
+         TxNa7Wf0zMQZZksOPp83rxP+b/ddZ5RvDdvBRxb/O/NoIVDmoFjYXYpjU4xAop8OoqIF
+         T+BPgV+4Xsg9JCpfK1AJbteFdchENFoNH9q/jinfvW8r4sZx4xsXt0ZXUvrIKBQ4QQ7n
+         q/uX1CWQoI3EgdKM8O1CX+T3IbBoKfiDOK5ztFfNkWrV2KsAj5EqgvvTrObdNoATkgWP
+         8cZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704687410; x=1705292210;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fkCNQZHhr0pnME3mEb10LmyBtROJh7URDWkTEIcpb50=;
+        b=ortoJ52U34xoaVGi5b8AKRd7t86sdbeC5WT4+aJlnHt1edivZ+ce9lBmVBvtBtmq1l
+         KxVak8Hw6L1AuHvIQfd25p833g65UUx2yr4mIpdw9b4t//r88HVue1y580kHNw2S0Kk1
+         pJc8RXpvmWiARmQoqMVnqdoy8hGqk/Hall2aN7Mdw58ik0Vd9JAUTsQkjQRo+7xX6JoV
+         u0GGHqG22nhd42jkrxDa0QyTHqFufHjWXGBPvYChmGroluLzbPi6I3udCL+H2UMXuRto
+         7myhi390NPzMK20cM8n4vNdDXM+Aubiao2Gd8dZeX+heBbAu2beLKLe3XHvVcdfn6av7
+         ccrQ==
+X-Gm-Message-State: AOJu0YyA+SilpeRXDow/glFmNo8e+Q0HKC976pVgNQmi/kpe6ymW+cbb
+	wQVOZyW4w8eZX6kg+4SXz24=
+X-Google-Smtp-Source: AGHT+IHGZhv1yiQXkO1Pmg/lNicpzZ1O3ClPUYoSl6vYjBgiOSDPIgXtYj0gQw0Cg0Hlwu00m1nxtQ==
+X-Received: by 2002:a17:902:aa87:b0:1d4:bd4a:df44 with SMTP id d7-20020a170902aa8700b001d4bd4adf44mr847823plr.14.1704687409627;
+        Sun, 07 Jan 2024 20:16:49 -0800 (PST)
+Received: from archlinux.. (c-98-210-194-148.hsd1.ca.comcast.net. [98.210.194.148])
+        by smtp.gmail.com with ESMTPSA id m4-20020a170902bb8400b001d492055303sm5107351pls.279.2024.01.07.20.16.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Jan 2024 20:16:49 -0800 (PST)
+From: Namhyung Kim <namhyung@gmail.com>
+To: uftrace@googlegroups.com,
+	linux-trace-users@vger.kernel.org
+Subject: [ANNOUNCE] uftrace v0.15 is released!
+Date: Sun,  7 Jan 2024 20:16:47 -0800
+Message-ID: <20240108041647.273711-1-namhyung@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
 List-Id: <linux-trace-users.vger.kernel.org>
 List-Subscribe: <mailto:linux-trace-users+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Tue, 28 Nov 2023 15:22:19 -0500
-Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+Hello,
 
-> On 2023-11-28 15:18, Steven Rostedt wrote:
-> > On Tue, 28 Nov 2023 14:13:02 -0600
-> > David Vernet <void@manifault.com> wrote:  
-> 
-> [...]
-> 
-> >>> That would work too, though I don't think strtok_r() is doing anything
-> >>> useful at that point. IMO it's better to either do the setenv() with
-> >>> saveptr, or change that strtok_r() to a regular strtok().  
-> > 
-> > I always use strtok_r() over strtok() just because it's "safer"!
-> > 
-> > I know it's not necessary, but the number of times I had to switch it to
-> > make the code thread safe, I just decided to always use it. Just my personal
-> > preference.  
-> 
-> And if you want to make your code thread-safe, you should favor working 
-> on a strdup() copy rather than modifying the argv or env content.
+I'm pleased to announce a new release of uftrace v0.15.
+You can get it from the below link:
 
-Yes, the fix was to use strdup(). It wasn't even a thread issue, nor a
-library issue, as the code in question is part of the trace-cmd executable
-and not the libraries. The problem was that it modified the environment
-variable and then reused that same environment variable in the exec()
-operation :-p
+  https://github.com/namhyung/uftrace/releases/tag/v0.15
 
+This version adds experimental RISC-V (64 bit) archirecture support
+as well as many bug fixes and improvements.
 
-> 
-> Also, modifying global state prevents code from being eventually re-used 
-> in libraries.
+From now on, uftrace can trace functions of RV64G binaries compiled by
+gcc/clang with appropriate options (-pg or -finstrument-functions).
+Library functions are also traced and you can see the arguments and
+return values too.  There are issues in argument handling, but library
+functions should be fine.
 
-That's why I now always use strtok_r() by default. It is thread (and
-library) safe. I avoid using strtok() even when it's perfectly fine to do
-so.
+For example, the following command shows library calls longer than 3
+usec (with arguments and return values) in the `uname` command.
 
--- Steve
+    $ uftrace --force -a -t 3us -- uname -m
+    riscv64
+    # DURATION     TID     FUNCTION
+     263.004 us [138960] | strrchr("uname", '/') = "NULL";
+      87.751 us [138960] | setlocale(LC_ALL, "") = "NULL";
+       5.000 us [138960] | bindtextdomain("coreutils", "/usr/share/locale");
+       4.000 us [138960] | getopt_long(2, 0x3fecdcf328, "asnrvmpio") = 109;
+       4.000 us [138960] | uname();
+       8.250 us [138960] | fputs_unlocked();
+     443.257 us [138960] | __overflow();
+       3.250 us [138960] | __fpending();
+       4.500 us [138960] | fclose(&_IO_2_1_stdout_) = 0;
+
+However dynamic tracing is not supported yet.  (It will come later!)
+
+Another important change is in the kernel tracing.  As libtraceevent is
+available on recent distros, the kernel tracing uses the system installed
+library and drops the old copy in the uftrace source.  This should help
+resolving possible future kernel issues and reduce the maintenance burden.
+
+Also some distros build binaries without PLT and it can confuse uftrace
+about the library call tracing.  It now detects the case by verifying
+PLT entries not to miss library calls without it.
+
+And of course, there are many more things.  Please refer to the github
+page for details.  Thank you all for making uftrace more useful,
+efficient and portable!
+
+Namhyung
