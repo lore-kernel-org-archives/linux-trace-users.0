@@ -1,27 +1,27 @@
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845554EB3A;
-	Wed, 10 Jan 2024 20:38:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F227D4E1C6;
+	Wed, 10 Jan 2024 20:53:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="GLJjG5We"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="YjtzUWxR"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1704918567;
-	bh=T6deM4osMEepfQzRoS3xgD+glMc0CV0CFBWLsF6m4ww=;
+	s=smtpout1; t=1704920027;
+	bh=rBlGuLxYhPO4Q5+DuTMP3udTcgw/RgKOGGYRl4n1514=;
 	h=Date:To:From:Subject:From;
-	b=GLJjG5WeO8X3W70jsA/NyJwIMiZqEYR3b/Eosv2lOP/oNagY/WNBO4tRmYcQ5GzHV
-	 T3BsYKTSKJfXMUvYwmFZj4UtCNxMLKvJihjipy4iBSxE/tc7GwtiOtWnhkmMjosiqP
-	 IUw6pKst1LF2F/5KLQ8TTdMX19wJle3Ku+aptuJjwkH1wwppGIKjgBVRcEDRT3IPD1
-	 9Wco83Nfb/5XPcLwBdcZqGcUcIGEOjdltjNWqSQJjdOQ7HccW/vFsD1LrYYD5gZNcC
-	 mhuyJW/26Ox/5Is/4kuVTMnLXhNl1qmBIlpyPBaNbD6dG+VBkiadVz0hy6ovyinaxO
-	 JLKAZBRaD7Wuw==
+	b=YjtzUWxRRez+XoxmspiC3XRAaDzLmC/z22Ev4zgL2hJzydWRpAnPOyPE9l6K3jKk3
+	 7LUeEpSUKCLv+7I/NCHET8BkXn63497FAFjJHLjD7guQXBFqwiwEnZBbrbez6Rs/OF
+	 +3E3O44ilNeox6QUTv8BM9h3EujC3ysEAo/Jj1k6cLkJT0aob7vKDzSBi/ZoQD8gEF
+	 mpzEg/fnx7Sxk4S5cpvlS9e+5JYQdqlatzzG7AxU/vHyfIoQ9xtTEJAo8ceo2kkavJ
+	 2cipI7vblDq2bsGD5DB4tDPYrl9bReryYFTadtTMJA4qCjM++0cECelgFm+bPcqDAJ
+	 AhjYFHcARmMnw==
 Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4T9KCW6Cj9zKL0;
-	Wed, 10 Jan 2024 15:29:27 -0500 (EST)
-Message-ID: <26640415-9822-45d3-a713-060726de2166@efficios.com>
-Date: Wed, 10 Jan 2024 15:29:27 -0500
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4T9Klb5fFTzKc8;
+	Wed, 10 Jan 2024 15:53:47 -0500 (EST)
+Message-ID: <3c38a8f7-8323-46b2-a29a-2ca06bc60448@efficios.com>
+Date: Wed, 10 Jan 2024 15:53:47 -0500
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
 List-Id: <linux-trace-users.vger.kernel.org>
@@ -35,48 +35,60 @@ To: lttng-dev <lttng-dev@lists.lttng.org>,
  linux-trace-users <linux-trace-users@vger.kernel.org>,
  linux-kernel <linux-kernel@vger.kernel.org>
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.12.9 and 2.13.7 (Linux user-space tracer)
+Subject: [RELEASE] LTTng-modules 2.12.15 and 2.13.11 (Linux kernel tracer)
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer,
-is a low-overhead application tracer. The library "liblttng-ust" enables
-tracing of applications and libraries.
+The LTTng modules provide Linux kernel tracing capability to the LTTng
+tracer toolset.
 
 * New and noteworthy in these releases:
 
-Specific to 2.13.7, a fix for misaligned urcu reader accesses was
-introduced. It only applies to the lttng-ust 2.13 branch because
-it implements its own "lttng-ust-urcu" flavor.
+Newer Linux kernels (v6.6 and v6.7) are now supported by LTTng modules
+2.13.11. If you need support for recent kernels (v5.18+), you will
+need to upgrade to a recent LTTng-modules 2.13.x.
 
-Also specific to 2.13.7, "sync" vs "unsync" enablers are introduced
-to eliminate an O(n*m) algorithm:
+The "prio" context has been fixed in 2.13.11 to eliminate a crash
+triggered by calling a NULL pointer address when using the "prio"
+context (lttng add-context -k -t prio). This issue was introduced
+when refactoring the prio context code during the 2.13 development.
+The missing initialization was re-introduced, and the use of the kernel
+"task_prio()" symbol was entirely replaced by inlining a copy of this
+trivial function into lttng-modules instead.
 
-     Eliminate iteration over unmodified enablers when synchronizing the
-     enablers vs event state.
+The "built-in.sh" script which can be used to add a link to lttng-modules
+within a kernel source tree to built LTTng into a Linux kernel image
+has been updated to adapt to changes introduced in Linux v6.1.
 
-     The intent is to turn a O(m*n) algorithm (m = number of enablers, n =
-     number of event probes) into a O(n) when enabling many additional events
-     when tracing is active.
+A work-around to ensure that LTTng-modules works fine on CPUs and kernels
+with IBT support enabled has been integrated:
 
-Specifically in 2.12.9, the rfork() wrapper is fixed: it was not
-passing the flags arguments. This was fixed in a larger commit
-in the master and stable-2.13 branches.
+     When the Intel IBT feature is enabled, a CPU supporting this feature
+     validates that all indirect jumps/calls land on an ENDBR64 instruction.
+     
+     The kernel seals functions which are not meant to be called indirectly,
+     which means that calling functions indirectly from their address fetched
+     using kallsyms or kprobes trigger a crash.
+     
+     Use the MSR_IA32_S_CET CET_ENDBR_EN MSR bit to temporarily disable ENDBR
+     validation around indirect calls to kernel functions. Considering that
+     the main purpose of this feature is to prevent ROP-style attacks,
+     disabling the ENDBR validation temporarily around the call from a kernel
+     module does not affect the ROP protection.
 
-Both stable branches include:
 
-- a build system fix for documentation examples with old autoconf when
-   used with a relative path.
+Both 2.13.11 and 2.12.15:
 
-- a clang warning fix around volatile qualifier on function pointers.
+- Fix an issue with importing VFS namespace for Android kernels.
 
-- Python agent uplift to adapt to modern python (>= 3.10),
+- Fix build for RHEL 8.8 with linux 4.18.0-477.10.1+
 
-- a possible race condition in the ustfork helper.
+- Fix a hardening OOPS during validation of immediate strings in the bytecode
+   validator when CONFIG_UBSAN_BOUNDS and/or CONFIG_FORTIFY_SOURCE are
+   configured. It boils down to changing 0-len arrays to flexible arrays
+   to let the toolchain know about our intent.
 
-Enjoy!
-
-Mathieu
+- Add Ubuntu Kinetic kernel ranges for jbd2 instrumentation.
 
 Project website: https://lttng.org
 Documentation: https://lttng.org/docs
@@ -84,31 +96,29 @@ Download link: https://lttng.org/download
 
 Detailed change logs:
 
-2024-01-10 (National Houseplant Appreciation Day) lttng-ust 2.13.7
-         * fix: invoke MKDIR_P before changing directories
-         * fix: -Wsingle-bit-bitfield-constant-conversion with clang16
-         * fix: clean java inner class files in examples
-         * Introduce sync vs unsync enablers
-         * Fix: misaligned urcu reader accesses
-         * ustfork: Fix warning about volatile qualifier
-         * ustfork: Fix possible race conditions
-         * Fix: tracepoint: Remove trailing \ at the end of macro
-         * fix: python agent: use stdlib distutils when setuptools is installed
-         * fix: python agent: install on Debian python >= 3.10
-         * fix: python agent: Add a dependency on generated files
-         * python: use setuptools with python >= 3.12
+2024-01-10 (National Houseplant Appreciation Day) LTTng modules 2.13.11
+         * Fix: Include linux/sched/rt.h for kernels v3.9 to v3.14
+         * Fix: Disable IBT around indirect function calls
+         * Inline implementation of task_prio()
+         * Fix: prio context NULL pointer exception
+         * Fix: MODULE_IMPORT_NS is introduced in kernel 5.4
+         * Android: Import VFS namespace for android common kernel
+         * Fix: get_file_rcu is missing in kernels < 4.1
+         * fix: lookup_fd_rcu replaced by lookup_fdget_rcu in linux 6.7.0-rc1
+         * fix: mm, vmscan signatures changed in linux 6.7.0-rc1
+         * fix: phys_proc_id and cpu_core_id moved in linux 6.7.0-rc1
+         * Fix build for RHEL 8.8 with linux 4.18.0-477.10.1+
+         * Fix: bytecode validator: oops during validation of immediate string
+         * fix: lttng-probe-kvm-x86-mmu build with linux 6.6
+         * fix: built-in lttng with kernel >= v6.1
+         * fix: ubuntu kinetic kernel range for jdb2
 
-2024-01-10 (National Houseplant Appreciation Day) lttng-ust 2.12.9
-         * fix: invoke MKDIR_P before changing directories
-         * fix: clean java inner class files in examples
-         * ustfork: Fix warning about volatile qualifier
-         * ustfork: Fix possible race conditions
-         * Fix: FreeBSD: Pass flags arguments to rfork wrapper
-         * fix: python agent: use stdlib distutils when setuptools is installed
-         * fix: python agent: install on Debian python >= 3.10
-         * fix: python agent: Add a dependency on generated files
-         * python: use setuptools with python >= 3.12
-
+2024-01-10 (National Houseplant Appreciation Day) 2.12.15
+         * Fix: MODULE_IMPORT_NS is introduced in kernel 5.4
+         * Android: Import VFS namespace for android common kernel
+         * Fix build for RHEL 8.8 with linux 4.18.0-477.10.1+
+         * Fix: bytecode validator: oops during validation of immediate string
+         * fix: ubuntu kinetic kernel range for jdb2
 
 -- 
 Mathieu Desnoyers
