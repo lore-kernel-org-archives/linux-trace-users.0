@@ -1,126 +1,72 @@
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F227D4E1C6;
-	Wed, 10 Jan 2024 20:53:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB9025541
+	for <linux-trace-users@vger.kernel.org>; Thu, 18 Jan 2024 13:32:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705584737; cv=none; b=hQrULlBllVxO6UaTvIVYW+9+8G31FTLFHhCMxe76Pa0THWATkQVPMhA8dGe7/5IN4y2C92L4PJC3Oq94VdrLVBzQ2Ty3wHpL3PE8c3nvbLqpv+GSO8nVZhxID0neaG5Au2ctovotLZNKV6hdA+lETAB6hl/MrT9Aj1+9E/FFcKQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705584737; c=relaxed/simple;
+	bh=ZHk8uFJXRRuVJnIzDFLaEXy2X2nj3MPJwQrd41zWxvc=;
+	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:MIME-Version:
+	 From:Date:Message-ID:Subject:To:Content-Type; b=qE4mmsPTv2zSVWT9u4eAGkGLqSB7sWKmOkQE87S7fYOblObriR2IS+EHoCaZ0aNCjnLii9xtNBkgdw6vSft1idW31ZJpFQYQ9FYJBPGl+r6IYn6CLlTS7KhSMUogU7wbrVOuUMHk6OMmtgEL6q8XCaA9xGSaMU8xvinfqRsEqxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=sidebranch.com; spf=fail smtp.mailfrom=sidebranch.com; dkim=pass (2048-bit key) header.d=sidebranch-com.20230601.gappssmtp.com header.i=@sidebranch-com.20230601.gappssmtp.com header.b=ShoCLsiC; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=sidebranch.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=sidebranch.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="YjtzUWxR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1704920027;
-	bh=rBlGuLxYhPO4Q5+DuTMP3udTcgw/RgKOGGYRl4n1514=;
-	h=Date:To:From:Subject:From;
-	b=YjtzUWxRRez+XoxmspiC3XRAaDzLmC/z22Ev4zgL2hJzydWRpAnPOyPE9l6K3jKk3
-	 7LUeEpSUKCLv+7I/NCHET8BkXn63497FAFjJHLjD7guQXBFqwiwEnZBbrbez6Rs/OF
-	 +3E3O44ilNeox6QUTv8BM9h3EujC3ysEAo/Jj1k6cLkJT0aob7vKDzSBi/ZoQD8gEF
-	 mpzEg/fnx7Sxk4S5cpvlS9e+5JYQdqlatzzG7AxU/vHyfIoQ9xtTEJAo8ceo2kkavJ
-	 2cipI7vblDq2bsGD5DB4tDPYrl9bReryYFTadtTMJA4qCjM++0cECelgFm+bPcqDAJ
-	 AhjYFHcARmMnw==
-Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4T9Klb5fFTzKc8;
-	Wed, 10 Jan 2024 15:53:47 -0500 (EST)
-Message-ID: <3c38a8f7-8323-46b2-a29a-2ca06bc60448@efficios.com>
-Date: Wed, 10 Jan 2024 15:53:47 -0500
+	dkim=pass (2048-bit key) header.d=sidebranch-com.20230601.gappssmtp.com header.i=@sidebranch-com.20230601.gappssmtp.com header.b="ShoCLsiC"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-53fbf2c42bfso8751341a12.3
+        for <linux-trace-users@vger.kernel.org>; Thu, 18 Jan 2024 05:32:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sidebranch-com.20230601.gappssmtp.com; s=20230601; t=1705584732; x=1706189532; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZHk8uFJXRRuVJnIzDFLaEXy2X2nj3MPJwQrd41zWxvc=;
+        b=ShoCLsiCXG9ywx0JXJzL6/Lj7IgtUYdwkSuDwqk7RGKcUFAUKYwLW6qEuu/EjxK0lE
+         x7Ky3FPDdrF4SQ1T8KyeeBHcUcM2vsmEpWjYc7xJmRCFRbysTHPCsVP3hC/BrtV1aE26
+         NKEZCIfsQeDELCPZrymJ3e5eRRaYayH5XFmngz+OqVI4cj2W6t1WbTPvEr9BR8y0UrR/
+         u7ElNn67yqCcDV9tKdJoEp4MPCadq5P0iAWSU6JfvyPyL55ZpVWOmbgEr8Dh7WCX+lsp
+         yLPJNTE6frTqeoxSeNLg6HlLhTQmci/mr/8eSiq/pCIz/hVs//OcR/ivegkwFe7WKpgs
+         tQ7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705584732; x=1706189532;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZHk8uFJXRRuVJnIzDFLaEXy2X2nj3MPJwQrd41zWxvc=;
+        b=cCY6jt1Ywo1dEBXZMgGTTYPHOQCbF7xcrmrYj6va+kyDTHo9ZA8nn/zaX9PeToyo9y
+         D8UsE+YSSfHu5RD6mMYz8pivnoJn5aqbjdRc/H9scxkTkOAeUbR74ywPwi9uuzIPX7Jd
+         qfaoodwxMBlo5Nmm8gQ9BO37gQKDh7pAeuqry955JINJDmJPOH0nTdgW+KHWVHCvKlHd
+         vm+55VawDyBG7HstAHWilplJ2mDX/jmZAXhZgXZlaDYfszJ+Rqe99E0vY3+0z6B7V7ao
+         ZAplkR4J9eF3veRhGbXUAtdA54Xjzxt3/ocnvmnW9WACudn7jEq/s3LXeasA3tluXiiw
+         SzTQ==
+X-Gm-Message-State: AOJu0Yxi9LJEWcb5cDDCQ87LipyxbS7xFoalb4uFVNforsyYNl4seuHT
+	YrmBDst3ebXxuiyrmtVSYV44kWwaToMbYER0NLHCriHmyAG7qKnDShlb08xm2OizqqUwaxfxRRL
+	CpKsd6NXtAjMJ+vBoC5HokbQaKkAClZiZe25buxrDl9ROZizKODlUeg==
+X-Google-Smtp-Source: AGHT+IFBHe7lB0TWsCCocD7NieEBYcubJpoarZqnKca5+Hgz+LqVt8/AWqHT+rmEJSdvZXvmCiKP8kJkTxWwfMSeVH0=
+X-Received: by 2002:a05:6a20:158d:b0:19b:4435:e425 with SMTP id
+ h13-20020a056a20158d00b0019b4435e425mr944103pzj.30.1705584732744; Thu, 18 Jan
+ 2024 05:32:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
 List-Id: <linux-trace-users.vger.kernel.org>
 List-Subscribe: <mailto:linux-trace-users+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: lttng-dev <lttng-dev@lists.lttng.org>,
- Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
- linux-trace-users <linux-trace-users@vger.kernel.org>,
- linux-kernel <linux-kernel@vger.kernel.org>
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-modules 2.12.15 and 2.13.11 (Linux kernel tracer)
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: Leon Woestenberg <leon@sidebranch.com>
+Date: Thu, 18 Jan 2024 14:32:01 +0100
+Message-ID: <CAMjhiJi9dMoUb5XUbPDm1LLVMidbaRaVws-K0hPCwCftgXOZMQ@mail.gmail.com>
+Subject: user-space rtla vs kernel tracing dependency?
+To: linux-trace-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The LTTng modules provide Linux kernel tracing capability to the LTTng
-tracer toolset.
+Hello all,
 
-* New and noteworthy in these releases:
+To what extent can we run the latest version of the kernel source tree
+user-space tool(set) tools/trace/rtla against an older (say 6.1 LTS)
+kernel version?
 
-Newer Linux kernels (v6.6 and v6.7) are now supported by LTTng modules
-2.13.11. If you need support for recent kernels (v5.18+), you will
-need to upgrade to a recent LTTng-modules 2.13.x.
+Regards,
 
-The "prio" context has been fixed in 2.13.11 to eliminate a crash
-triggered by calling a NULL pointer address when using the "prio"
-context (lttng add-context -k -t prio). This issue was introduced
-when refactoring the prio context code during the 2.13 development.
-The missing initialization was re-introduced, and the use of the kernel
-"task_prio()" symbol was entirely replaced by inlining a copy of this
-trivial function into lttng-modules instead.
-
-The "built-in.sh" script which can be used to add a link to lttng-modules
-within a kernel source tree to built LTTng into a Linux kernel image
-has been updated to adapt to changes introduced in Linux v6.1.
-
-A work-around to ensure that LTTng-modules works fine on CPUs and kernels
-with IBT support enabled has been integrated:
-
-     When the Intel IBT feature is enabled, a CPU supporting this feature
-     validates that all indirect jumps/calls land on an ENDBR64 instruction.
-     
-     The kernel seals functions which are not meant to be called indirectly,
-     which means that calling functions indirectly from their address fetched
-     using kallsyms or kprobes trigger a crash.
-     
-     Use the MSR_IA32_S_CET CET_ENDBR_EN MSR bit to temporarily disable ENDBR
-     validation around indirect calls to kernel functions. Considering that
-     the main purpose of this feature is to prevent ROP-style attacks,
-     disabling the ENDBR validation temporarily around the call from a kernel
-     module does not affect the ROP protection.
-
-
-Both 2.13.11 and 2.12.15:
-
-- Fix an issue with importing VFS namespace for Android kernels.
-
-- Fix build for RHEL 8.8 with linux 4.18.0-477.10.1+
-
-- Fix a hardening OOPS during validation of immediate strings in the bytecode
-   validator when CONFIG_UBSAN_BOUNDS and/or CONFIG_FORTIFY_SOURCE are
-   configured. It boils down to changing 0-len arrays to flexible arrays
-   to let the toolchain know about our intent.
-
-- Add Ubuntu Kinetic kernel ranges for jbd2 instrumentation.
-
-Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
-
-Detailed change logs:
-
-2024-01-10 (National Houseplant Appreciation Day) LTTng modules 2.13.11
-         * Fix: Include linux/sched/rt.h for kernels v3.9 to v3.14
-         * Fix: Disable IBT around indirect function calls
-         * Inline implementation of task_prio()
-         * Fix: prio context NULL pointer exception
-         * Fix: MODULE_IMPORT_NS is introduced in kernel 5.4
-         * Android: Import VFS namespace for android common kernel
-         * Fix: get_file_rcu is missing in kernels < 4.1
-         * fix: lookup_fd_rcu replaced by lookup_fdget_rcu in linux 6.7.0-rc1
-         * fix: mm, vmscan signatures changed in linux 6.7.0-rc1
-         * fix: phys_proc_id and cpu_core_id moved in linux 6.7.0-rc1
-         * Fix build for RHEL 8.8 with linux 4.18.0-477.10.1+
-         * Fix: bytecode validator: oops during validation of immediate string
-         * fix: lttng-probe-kvm-x86-mmu build with linux 6.6
-         * fix: built-in lttng with kernel >= v6.1
-         * fix: ubuntu kinetic kernel range for jdb2
-
-2024-01-10 (National Houseplant Appreciation Day) 2.12.15
-         * Fix: MODULE_IMPORT_NS is introduced in kernel 5.4
-         * Android: Import VFS namespace for android common kernel
-         * Fix build for RHEL 8.8 with linux 4.18.0-477.10.1+
-         * Fix: bytecode validator: oops during validation of immediate string
-         * fix: ubuntu kinetic kernel range for jdb2
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Leon.
