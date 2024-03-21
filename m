@@ -1,72 +1,102 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB9025541
-	for <linux-trace-users@vger.kernel.org>; Thu, 18 Jan 2024 13:32:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64403134422;
+	Thu, 21 Mar 2024 19:58:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705584737; cv=none; b=hQrULlBllVxO6UaTvIVYW+9+8G31FTLFHhCMxe76Pa0THWATkQVPMhA8dGe7/5IN4y2C92L4PJC3Oq94VdrLVBzQ2Ty3wHpL3PE8c3nvbLqpv+GSO8nVZhxID0neaG5Au2ctovotLZNKV6hdA+lETAB6hl/MrT9Aj1+9E/FFcKQ=
+	t=1711051092; cv=none; b=HI0RkLwtuJcgn4SByP6wMD1P1cJ25lCV6+gauRWRWYf7TyifY9bUD2uRqk7YC7S2/neIwg3Z4lo9sTrRM7Sf5ipZRFQmrnYx1+uqPRrXNMOF88aqhj2YkTMwyKWryeZk7qjQr5Nt1VDRpLCK2eB3BUpYrD0VTMQKFAWJ8Q41bcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705584737; c=relaxed/simple;
-	bh=ZHk8uFJXRRuVJnIzDFLaEXy2X2nj3MPJwQrd41zWxvc=;
-	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:MIME-Version:
-	 From:Date:Message-ID:Subject:To:Content-Type; b=qE4mmsPTv2zSVWT9u4eAGkGLqSB7sWKmOkQE87S7fYOblObriR2IS+EHoCaZ0aNCjnLii9xtNBkgdw6vSft1idW31ZJpFQYQ9FYJBPGl+r6IYn6CLlTS7KhSMUogU7wbrVOuUMHk6OMmtgEL6q8XCaA9xGSaMU8xvinfqRsEqxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=sidebranch.com; spf=fail smtp.mailfrom=sidebranch.com; dkim=pass (2048-bit key) header.d=sidebranch-com.20230601.gappssmtp.com header.i=@sidebranch-com.20230601.gappssmtp.com header.b=ShoCLsiC; arc=none smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=sidebranch.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=sidebranch.com
+	s=arc-20240116; t=1711051092; c=relaxed/simple;
+	bh=wIJ+KoMAFPGnOWz5mM3Dq9a7rmOXRTwxGoBU1sVmoL4=;
+	h=Message-ID:Date:MIME-Version:From:To:Subject:Content-Type; b=aK+SZF6qnZXffVS8N1nezyr0HSTC2yKir2G4c+9MO1q6M3JPxcfWdrl54+jvJsU/yKP2zHBgD9RyjSlhZA5zxSQBf/YzlKRlI+EODsgUGoUVFH+2hROmE/znu5Ecmz3pp4WFzWtLbIYceYPCsMdmJBTWULS2Y5/Rpj3Bc4S3CjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=WK54Qvh1; arc=none smtp.client-ip=167.114.26.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sidebranch-com.20230601.gappssmtp.com header.i=@sidebranch-com.20230601.gappssmtp.com header.b="ShoCLsiC"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-53fbf2c42bfso8751341a12.3
-        for <linux-trace-users@vger.kernel.org>; Thu, 18 Jan 2024 05:32:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sidebranch-com.20230601.gappssmtp.com; s=20230601; t=1705584732; x=1706189532; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ZHk8uFJXRRuVJnIzDFLaEXy2X2nj3MPJwQrd41zWxvc=;
-        b=ShoCLsiCXG9ywx0JXJzL6/Lj7IgtUYdwkSuDwqk7RGKcUFAUKYwLW6qEuu/EjxK0lE
-         x7Ky3FPDdrF4SQ1T8KyeeBHcUcM2vsmEpWjYc7xJmRCFRbysTHPCsVP3hC/BrtV1aE26
-         NKEZCIfsQeDELCPZrymJ3e5eRRaYayH5XFmngz+OqVI4cj2W6t1WbTPvEr9BR8y0UrR/
-         u7ElNn67yqCcDV9tKdJoEp4MPCadq5P0iAWSU6JfvyPyL55ZpVWOmbgEr8Dh7WCX+lsp
-         yLPJNTE6frTqeoxSeNLg6HlLhTQmci/mr/8eSiq/pCIz/hVs//OcR/ivegkwFe7WKpgs
-         tQ7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705584732; x=1706189532;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZHk8uFJXRRuVJnIzDFLaEXy2X2nj3MPJwQrd41zWxvc=;
-        b=cCY6jt1Ywo1dEBXZMgGTTYPHOQCbF7xcrmrYj6va+kyDTHo9ZA8nn/zaX9PeToyo9y
-         D8UsE+YSSfHu5RD6mMYz8pivnoJn5aqbjdRc/H9scxkTkOAeUbR74ywPwi9uuzIPX7Jd
-         qfaoodwxMBlo5Nmm8gQ9BO37gQKDh7pAeuqry955JINJDmJPOH0nTdgW+KHWVHCvKlHd
-         vm+55VawDyBG7HstAHWilplJ2mDX/jmZAXhZgXZlaDYfszJ+Rqe99E0vY3+0z6B7V7ao
-         ZAplkR4J9eF3veRhGbXUAtdA54Xjzxt3/ocnvmnW9WACudn7jEq/s3LXeasA3tluXiiw
-         SzTQ==
-X-Gm-Message-State: AOJu0Yxi9LJEWcb5cDDCQ87LipyxbS7xFoalb4uFVNforsyYNl4seuHT
-	YrmBDst3ebXxuiyrmtVSYV44kWwaToMbYER0NLHCriHmyAG7qKnDShlb08xm2OizqqUwaxfxRRL
-	CpKsd6NXtAjMJ+vBoC5HokbQaKkAClZiZe25buxrDl9ROZizKODlUeg==
-X-Google-Smtp-Source: AGHT+IFBHe7lB0TWsCCocD7NieEBYcubJpoarZqnKca5+Hgz+LqVt8/AWqHT+rmEJSdvZXvmCiKP8kJkTxWwfMSeVH0=
-X-Received: by 2002:a05:6a20:158d:b0:19b:4435:e425 with SMTP id
- h13-20020a056a20158d00b0019b4435e425mr944103pzj.30.1705584732744; Thu, 18 Jan
- 2024 05:32:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="WK54Qvh1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1711051082;
+	bh=wIJ+KoMAFPGnOWz5mM3Dq9a7rmOXRTwxGoBU1sVmoL4=;
+	h=Date:From:To:Subject:From;
+	b=WK54Qvh1bgK7dT+NGgBXVvwdpHWgQ/wyYWqJ3k6KU2r8dbrWB8L4wVDHZ6ah6Sz/2
+	 WPqojASp201H8wu40iEmI1DnHEbrIAlQIZJ4OtxokQpw7EpHTIRjR2Mp0ryEOWrlvR
+	 3Hd3bGK6RCgoB4CcHa8gpsTeRseussEa2PZuQScZtRhHCvBmRltPy/rTU0/5Ci/3yU
+	 TfOWALeQ0OHezT9OIc7Wn613GQVILk3U6a9wgPG5bE3eHBCv3zNpo14KW4PSpgKOM6
+	 sf9kFti6bEp34H0A1oZWJemci+RSWxxKcKoDlkRlyhSa03ei5pzcZbPLrE6vSt2e/p
+	 3j4PvfSkWV9oQ==
+Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4V0x8V1C3tzlr8;
+	Thu, 21 Mar 2024 15:58:02 -0400 (EDT)
+Message-ID: <b0c3b8ec-90fe-4813-8df5-92168f621808@efficios.com>
+Date: Thu, 21 Mar 2024 15:58:22 -0400
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
 List-Id: <linux-trace-users.vger.kernel.org>
 List-Subscribe: <mailto:linux-trace-users+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Leon Woestenberg <leon@sidebranch.com>
-Date: Thu, 18 Jan 2024 14:32:01 +0100
-Message-ID: <CAMjhiJi9dMoUb5XUbPDm1LLVMidbaRaVws-K0hPCwCftgXOZMQ@mail.gmail.com>
-Subject: user-space rtla vs kernel tracing dependency?
-To: linux-trace-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: lttng-dev <lttng-dev@lists.lttng.org>,
+ Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
+ linux-trace-users <linux-trace-users@vger.kernel.org>,
+ linux-kernel <linux-kernel@vger.kernel.org>
+Subject: [RELEASE] LTTng-modules 2.12.16 and 2.13.12 (Linux kernel tracer)
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello all,
+Hi,
 
-To what extent can we run the latest version of the kernel source tree
-user-space tool(set) tools/trace/rtla against an older (say 6.1 LTS)
-kernel version?
+This is a release announcement for the currently maintained
+LTTng-modules Linux kernel tracer stables branches.
 
-Regards,
+* New and noteworthy in these releases:
 
-Leon.
+Linux kernel v6.8 is now supported by LTTng modules 2.13.12. If you need
+support for recent kernels (v5.18+), you will need to upgrade to a
+recent LTTng-modules 2.13.x.
+
+Both releases correct issues with SLE kernel version ranges detection.
+
+A compilation fix for RHEL 9.3 kernel is present in v2.13.12.
+
+Feedback is welcome!
+
+Thanks,
+
+Mathieu
+
+Project website: https://lttng.org
+Documentation: https://lttng.org/docs
+Download link: https://lttng.org/download
+
+Detailed change logs:
+
+2024-03-21 (National Common Courtesy Day) LTTng modules 2.13.12
+         * docs: Add supported versions and fix-backport policy
+         * docs: Add links to project resources
+         * Fix: Correct minimum version in jbd2 SLE kernel range
+         * Fix: Handle recent SLE major version codes
+         * Fix: build on sles15sp4
+         * Compile fixes for RHEL 9.3 kernels
+         * Fix: ext4_discard_preallocations changed in linux 6.8.0-rc3
+         * Fix: btrfs_get_extent flags and compress_type changed in linux 6.8.0-rc1
+         * Fix: btrfs_chunk tracepoints changed in linux 6.8.0-rc1
+         * Fix: strlcpy removed in linux 6.8.0-rc1
+         * Fix: timer_start changed in linux 6.8.0-rc1
+         * Fix: sched_stat_runtime changed in linux 6.8.0-rc1
+
+2024-03-21 (National Common Courtesy Day) 2.12.16
+         * fix: lttng-probe-kvm-x86-mmu build with linux 6.6
+         * docs: Add supported versions and fix-backport policy
+         * docs: Add links to project resources
+         * Fix: Correct minimum version in jbd2 SLE kernel range
+         * Fix: Handle recent SLE major version codes
+         * Fix: build on sles15sp4
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
