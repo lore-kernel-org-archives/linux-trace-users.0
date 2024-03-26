@@ -1,35 +1,36 @@
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64403134422;
-	Thu, 21 Mar 2024 19:58:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C743366;
+	Tue, 26 Mar 2024 19:09:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711051092; cv=none; b=HI0RkLwtuJcgn4SByP6wMD1P1cJ25lCV6+gauRWRWYf7TyifY9bUD2uRqk7YC7S2/neIwg3Z4lo9sTrRM7Sf5ipZRFQmrnYx1+uqPRrXNMOF88aqhj2YkTMwyKWryeZk7qjQr5Nt1VDRpLCK2eB3BUpYrD0VTMQKFAWJ8Q41bcA=
+	t=1711480183; cv=none; b=ns8bb0Bza+dB1cSxYSS+oNtWChdvf4ZeKiNBnvDtUM8BfhxC4bAmiiq/H6jODwyJ/8wu8c8/zDgRB/UGoc1DYE0GbzDYmAm+WdIaJ6ndU7egukuw8+sttqq1JyywC5bcfqtDs9Gr84ipAFV2p1GU8g4m86p1wPhTiAXOcGZJgRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711051092; c=relaxed/simple;
-	bh=wIJ+KoMAFPGnOWz5mM3Dq9a7rmOXRTwxGoBU1sVmoL4=;
-	h=Message-ID:Date:MIME-Version:From:To:Subject:Content-Type; b=aK+SZF6qnZXffVS8N1nezyr0HSTC2yKir2G4c+9MO1q6M3JPxcfWdrl54+jvJsU/yKP2zHBgD9RyjSlhZA5zxSQBf/YzlKRlI+EODsgUGoUVFH+2hROmE/znu5Ecmz3pp4WFzWtLbIYceYPCsMdmJBTWULS2Y5/Rpj3Bc4S3CjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=WK54Qvh1; arc=none smtp.client-ip=167.114.26.122
+	s=arc-20240116; t=1711480183; c=relaxed/simple;
+	bh=FdJC7YspfBOLHkhVsu57qLrSG0id2LBh2qeggMHfgnc=;
+	h=Message-ID:Date:MIME-Version:Subject:References:From:To:
+	 In-Reply-To:Content-Type; b=hq3cl35xmJNZzuPE/7JyYP2CNWvgbjhYcDMcHCcmiGAIv1NFPEFQsKsIZyrwla/HCBd8mIaYmk9Imsier/qqEUsAh8LMzbIzUAACcRQWsk4v387w97KHlnAxOmg3nb2EF1nb06P5ZsaHqOnXE6kzIbUBFVwBIgg/N+fVeiMhVoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=jijyd92X; arc=none smtp.client-ip=167.114.26.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="WK54Qvh1"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="jijyd92X"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1711051082;
-	bh=wIJ+KoMAFPGnOWz5mM3Dq9a7rmOXRTwxGoBU1sVmoL4=;
-	h=Date:From:To:Subject:From;
-	b=WK54Qvh1bgK7dT+NGgBXVvwdpHWgQ/wyYWqJ3k6KU2r8dbrWB8L4wVDHZ6ah6Sz/2
-	 WPqojASp201H8wu40iEmI1DnHEbrIAlQIZJ4OtxokQpw7EpHTIRjR2Mp0ryEOWrlvR
-	 3Hd3bGK6RCgoB4CcHa8gpsTeRseussEa2PZuQScZtRhHCvBmRltPy/rTU0/5Ci/3yU
-	 TfOWALeQ0OHezT9OIc7Wn613GQVILk3U6a9wgPG5bE3eHBCv3zNpo14KW4PSpgKOM6
-	 sf9kFti6bEp34H0A1oZWJemci+RSWxxKcKoDlkRlyhSa03ei5pzcZbPLrE6vSt2e/p
-	 3j4PvfSkWV9oQ==
+	s=smtpout1; t=1711480172;
+	bh=FdJC7YspfBOLHkhVsu57qLrSG0id2LBh2qeggMHfgnc=;
+	h=Date:Subject:References:From:To:In-Reply-To:From;
+	b=jijyd92XzfuMeh3rFQ5xWbHtO4bWMEYafM4dcuJtgfd6Tyzm1eCBvN/1VSgSdjaL6
+	 t/wwKX2u+AKHsuY/uPXSev4p2Y54wUrxmZMexlqDG2X4762kDIIgpp03FMT8jVCs1z
+	 y9fdvhrBPfBOen3nXOIYm8AF4tAORZG/E+wMJdyCyJBFjhEw+0oGIr6eByRNYuRRiQ
+	 oYKgRoHhKcFuLT6wV462ZiEsPeI5vnvR4rPIZsfXyap8dSnEYyBU5N2kR2AuM7n5yX
+	 BDjfiXtlf+7Df8cng6vqXs/fNXm606DTWIme1N36df3kWWxAd0uSAMBYX5IZI1Pmx9
+	 PYS9VVize5upA==
 Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4V0x8V1C3tzlr8;
-	Thu, 21 Mar 2024 15:58:02 -0400 (EDT)
-Message-ID: <b0c3b8ec-90fe-4813-8df5-92168f621808@efficios.com>
-Date: Thu, 21 Mar 2024 15:58:22 -0400
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4V3zrD4yX6zmyL;
+	Tue, 26 Mar 2024 15:09:32 -0400 (EDT)
+Message-ID: <bfc08896-dbc2-4b20-9aa2-4b173300a5fc@efficios.com>
+Date: Tue, 26 Mar 2024 15:09:58 -0400
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
 List-Id: <linux-trace-users.vger.kernel.org>
@@ -37,66 +38,286 @@ List-Subscribe: <mailto:linux-trace-users+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+Subject: Fwd: [lttng-dev] [CTF2-SPEC-2.0] Announcing CTF 2, the next
+ generation of the Common Trace Format
 Content-Language: en-US
+References: <YT3PR01MB9723DF471DF04203FC8FF2DFD3352@YT3PR01MB9723.CANPRD01.PROD.OUTLOOK.COM>
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: lttng-dev <lttng-dev@lists.lttng.org>,
- Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
- linux-trace-users <linux-trace-users@vger.kernel.org>,
+To: lwn@lwn.net, linux-trace-users <linux-trace-users@vger.kernel.org>,
  linux-kernel <linux-kernel@vger.kernel.org>
-Subject: [RELEASE] LTTng-modules 2.12.16 and 2.13.12 (Linux kernel tracer)
+In-Reply-To: <YT3PR01MB9723DF471DF04203FC8FF2DFD3352@YT3PR01MB9723.CANPRD01.PROD.OUTLOOK.COM>
+X-Forwarded-Message-Id: <YT3PR01MB9723DF471DF04203FC8FF2DFD3352@YT3PR01MB9723.CANPRD01.PROD.OUTLOOK.COM>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 Hi,
 
-This is a release announcement for the currently maintained
-LTTng-modules Linux kernel tracer stables branches.
-
-* New and noteworthy in these releases:
-
-Linux kernel v6.8 is now supported by LTTng modules 2.13.12. If you need
-support for recent kernels (v5.18+), you will need to upgrade to a
-recent LTTng-modules 2.13.x.
-
-Both releases correct issues with SLE kernel version ranges detection.
-
-A compilation fix for RHEL 9.3 kernel is present in v2.13.12.
+After 8 years of proposals and RC iterations, here is the final version
+of the Common Trace Format specification version 2.
 
 Feedback is welcome!
 
-Thanks,
-
 Mathieu
 
-Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
+-------- Forwarded Message --------
+Subject: [lttng-dev] [CTF2-SPEC-2.0] Announcing CTF 2, the next 
+generation of the Common Trace Format
+Date: Tue, 26 Mar 2024 19:00:37 +0000
+From: Philippe Proulx via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Philippe Proulx <pproulx@efficios.com>
+To: diamon-discuss@lists.linuxfoundation.org 
+<diamon-discuss@lists.linuxfoundation.org>
+CC: lttng-dev@lists.lttng.org <lttng-dev@lists.lttng.org>, 
+tracecompass-dev@eclipse.org <tracecompass-dev@eclipse.org>
 
-Detailed change logs:
+To all tracing enthusiasts,
 
-2024-03-21 (National Common Courtesy Day) LTTng modules 2.13.12
-         * docs: Add supported versions and fix-backport policy
-         * docs: Add links to project resources
-         * Fix: Correct minimum version in jbd2 SLE kernel range
-         * Fix: Handle recent SLE major version codes
-         * Fix: build on sles15sp4
-         * Compile fixes for RHEL 9.3 kernels
-         * Fix: ext4_discard_preallocations changed in linux 6.8.0-rc3
-         * Fix: btrfs_get_extent flags and compress_type changed in linux 6.8.0-rc1
-         * Fix: btrfs_chunk tracepoints changed in linux 6.8.0-rc1
-         * Fix: strlcpy removed in linux 6.8.0-rc1
-         * Fix: timer_start changed in linux 6.8.0-rc1
-         * Fix: sched_stat_runtime changed in linux 6.8.0-rc1
+The Diagnostic and Monitoring Workgroup (DiaMon) is thrilled to announce
+the launch of version 2 of the Common Trace Format (CTF), a binary trace
+format designed to be fast to write without compromising great
+flexibility.
 
-2024-03-21 (National Common Courtesy Day) 2.12.16
-         * fix: lttng-probe-kvm-x86-mmu build with linux 6.6
-         * docs: Add supported versions and fix-backport policy
-         * docs: Add links to project resources
-         * Fix: Correct minimum version in jbd2 SLE kernel range
-         * Fix: Handle recent SLE major version codes
-         * Fix: build on sles15sp4
+The first version of CTF [1] has been widely used and tested in the
+industry for almost fifteen years now, by different producers and
+consumers.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+CTF 2 is a major revision of CTF 1, bringing many improvements, such as:
+
+‣ Using JSON text sequences [2] for the metadata stream.
+
+‣ Simplifying the metadata stream.
+
+‣ Adding new field classes (bit array, bit map, boolean, LEB128, BLOB,
+   and optional) and improving existing ones.
+
+‣ Supporting UTF-16 and UTF-32 string fields.
+
+‣ Using roles instead of reserved structure member names to identify
+   meaningful fields.
+
+‣ Adding the attribute and extension features to extend and customize
+   the format.
+
+SPECIFICATION LINKS
+━━━━━━━━━━━━━━━━━━━
+The initial revision of CTF2-SPEC-2.0 is available here:
+
+     <https://diamon.org/ctf/CTF2-SPEC-2.0.html>
+
+Its AsciiDoc source is <https://diamon.org/ctf/CTF2-SPEC-2.0.adoc>.
+
+The latest revision of CTF 2 is always <https://diamon.org/ctf/>.
+
+The latest revision of CTF 1 is <https://diamon.org/ctf/v1.8.3/>.
+
+FROM LEGACY TO FUTURE
+━━━━━━━━━━━━━━━━━━━━━
+The initial version of CTF [1] has been in widespread use and undergone
+rigorous testing across various sectors by a range of users for close to
+fifteen years.
+
+Today, CTF 2 comes to existence to address significant limitations of
+CTF 1 that make it challenging to implement a consumer and nearly
+impossible to extend.
+
+Developed over the course of eight years, CTF 2 is the culmination of
+two initial proposals and nine release candidates, each one adding what
+we now consider precious features that have incrementally shaped it into
+the robust and versatile tracing format it is today.
+
+We're confident that CTF 2 meets our important original design goals,
+namely:
+
+‣ CTF 2 data streams must be backward compatible with CTF 1 [1] data
+   streams.
+
+   CTF 2 only specifies metadata stream changes.
+
+‣ The CTF 2 data streams must be highly efficient for a tracer to
+   produce.
+
+   The addition of features such as the configurable bit order of a
+   fixed-length bit array field, variable-length integer fields, UTF-16
+   and UTF-32 string field encodings, and BLOB fields makes this truer
+   than ever.
+
+‣ A CTF 2 metadata stream must be extensible by users of the
+   specification.
+
+   The namespaced attribute and extension mechanisms of CTF 2 metadata
+   streams enable limitless extensibility.
+
+‣ A CTF 2 trace should be easy to consume.
+
+   A CTF 2 metadata stream is a JSON text sequence [2], removing all the
+   complexity of parsing the custom DSL brought by CTF 1.
+
+FEATURE HIGHLIGHTS
+━━━━━━━━━━━━━━━━━━
+CTF 2 brings many improvements over CTF 1, the most notable ones being:
+
+JSON text sequence metadata stream:
+     Whereas a CTF 1 [1] metadata stream is written in TSDL, a somewhat
+     complex DSL inspired by the C language, a CTF 2 metadata stream is a
+     JSON text sequence [2].
+
+     A JSON text sequence simply is a sequence of JSON values, each one
+     beginning with the "record separator (RS)" (U+001E) codepoint and
+     ending with a "new line (NL)" (U+000A) codepoint.
+
+     Using a JSON text sequence instead of a JSON array, for example,
+     makes it easier to stream the objects of a CTF 2 metadata stream and
+     allows the tracer to add metadata information while tracing occurs.
+
+Attributes:
+     Any trace producer may use attributes to add information to specific
+     metadata stream objects, for example:
+
+         {
+           "type": "null-terminated-string",
+           "encoding": "utf-16le",
+           "attributes": {
+             "meow-tracer": {
+               "confidentiality-level": 4
+             }
+           }
+         }
+
+     A tracer may add namespaced attributes to trace class, data stream
+     class, clock class, event record class, and field class objects.
+
+     A general trace consumer may safely ignore attributes: you don't
+     need them to decode a data stream.
+
+Extensions:
+     The purpose of an extension is to add core features to CTF 2 or to
+     modify existing core features. In other words, an extension may
+     alter the format itself. For example:
+
+         {
+           "type": "preamble",
+           "version": 2,
+           "extensions": {
+             "meow-tracer": {
+               "variable-clock-frequency": true
+             }
+           }
+         }
+
+     While a general trace consumer may safely ignore attributes, it must
+     not ignore extensions.
+
+Field roles:
+     The name of a structure field member is now decoupled from any
+     special meaning of said field.
+
+     For example, you may name a packet header integer field `myosotis`
+     and make it contain the current data stream ID:
+
+         {
+           "name": "myosotis",
+           "field-class": {
+             "type": "fixed-length-unsigned-integer",
+             "byte-order: "little-endian",
+             "length": 16,
+             "roles": ["data-stream-id"]
+           }
+         }
+
+New field classes:
+     CTF 2 brings new field classes to fill some important gaps of CTF 1:
+
+     Fixed-length bit array field:
+         A compact sequence of bits without integral semantics.
+
+         Any fixed-length scalar field conceptually is a fixed-length bit
+         array field.
+
+     Fixed-length bit map field:
+         A fixed-length bit array field with flags associating bit index
+         ranges to names.
+
+     Fixed-length boolean field:
+         A fixed-length bit array field of which the decoded value is
+         either true or false.
+
+     Variable-length integer field:
+         An integral value encoded with the LEB128 [3] format.
+
+     BLOB field:
+         A compact, byte-aligned sequence of bytes with an associated
+         media type:
+
+             {
+               "type": "static-length-blob",
+               "length": 511267,
+               "media-type": "image/tiff"
+             }
+
+         The length (number of bytes) of a BLOB field may be static or
+         dynamic (provided by an anterior integer field).
+
+     Optional field:
+         A field which is either another field or nothing (zero bits):
+
+             {
+               "type": "optional",
+               "selector-field-location": {
+                 "path": ["config", "has-debug-info"]
+               },
+               "selector-field-ranges": [[1, 255]],
+               "field-class": {
+                 "type": "null-terminated-string"
+               }
+             }
+
+         This is similar to what you could achieve with a variant field
+         having an empty option in CTF 1.
+
+All UTF string field encodings:
+     A null-terminated, static-length, or dynamic-length string field may
+     have the UTF-8, UTF-16BE, UTF-16LE, UTF-32BE, or UTF-32LE encoding:
+
+         {
+           "type": "static-length-string",
+           "length": 32,
+           "encoding": "utf32-be"
+         }
+
+JOIN THE MOVEMENT
+━━━━━━━━━━━━━━━━━
+We invite you to explore the CTF 2 specification and see firsthand the
+impact it can have on your tracing projects.
+
+Even though the CTF 2 specification is now published, your feedback
+remains incredibly important to us so that we can be confident that the
+document is flawless and as easy to understand as possible.
+
+As far as DiaMon projects are concerned, what we know today about CTF 2
+adoption is:
+
+Babeltrace 2 [4]:
+     Planned in the next minor release, Babeltrace 2.1.
+
+LTTng [5]:
+     Planned in LTTng 2.15.
+
+Trace Compass [6]:
+     Partial support currently; awaiting more CTF 2 trace samples to
+     complete the development.
+
+If you're considering adopting CTF 2 for your own project, please share
+the news with us!
+
+REFERENCES
+━━━━━━━━━━
+[1]: https://diamon.org/ctf/v1.8.3/
+[2]: https://datatracker.ietf.org/doc/html/rfc7464
+[3]: https://en.wikipedia.org/wiki/LEB128
+[4]: https://babeltrace.org/
+[5]: https://lttng.org/
+[6]: https://eclipse.dev/tracecompass/
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
