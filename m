@@ -1,74 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94ECF42AA5
-	for <linux-trace-users@vger.kernel.org>; Tue, 30 Apr 2024 13:35:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E647E1F171
+	for <linux-trace-users@vger.kernel.org>; Tue, 30 Apr 2024 13:41:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714484114; cv=none; b=rRjOEV28sKtPgQxiG9tt8ECekqxKolHDkXb17iMogyupoIY9+BNSpDz2ULbtXaqYnsN7SdDnqzwSN4oxdjKwFppItQOiQcBpS8ydGPM8cD6KoMb2sL4ESClawW4p2dOtTY5U1bUV42mggJ0a3mOEDsWxBmSviSOsyqIaZ/Xn1oE=
+	t=1714484512; cv=none; b=nqF3yvL3eu+wbHyUG7zFBTx7dbzcqfpyK29wMpLwlzMh9pgnr3lqmgCIxNwDgl+NU42I89PZo72lNJNRfm4tJGd72Z59tfA1WSr6fApXRswJA2g2diy0WNGpAwHRtDLk+0QzmizYtpQY9y9YgciyaBmRb+tRmIZA2l+pSE8eYcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714484114; c=relaxed/simple;
-	bh=qWEkJlbLibL3qpSMp2LE9PEG4KtstHifxBIaFTHZmyw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dxqTMVe3XlKLsZNhYRAyhG37MLWVZnmV09wPFdKEmcZfSSyEDIEsf6675OQpftPV9SbaAV75mf60k1FetzWtIVAjuDkMCw28ZrQljybM0GKJAY39McmMn3rOqFYuKz3hjADxhwbIdy4/bJWrAoWbK7olYbWq/NPjF6rxU/PqPGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0AF9C2BBFC;
-	Tue, 30 Apr 2024 13:35:13 +0000 (UTC)
-Date: Tue, 30 Apr 2024 09:35:54 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: David Aldrich <david.aldrich.ntml@gmail.com>
-Cc: linux-trace-users@vger.kernel.org
-Subject: Re: Beginner question about KernelShark
-Message-ID: <20240430093554.245330e8@gandalf.local.home>
-In-Reply-To: <CAJK_ieh173hRECvw_hCzr4u2Qhq936S83mJv2YEnggZfN4dPgQ@mail.gmail.com>
-References: <CAJK_ieg+yxDf9o=uGHPS-LoKr0B+XJ6UBrdMz5WinAzx3K-jDQ@mail.gmail.com>
-	<CAJK_ieh173hRECvw_hCzr4u2Qhq936S83mJv2YEnggZfN4dPgQ@mail.gmail.com>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1714484512; c=relaxed/simple;
+	bh=FH54Fy0OMce1xkNPgdmVJYsiyCBhEw/lanuTEVfRg1A=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=cH5t45k9GIfeB5suL5iNHpLmKE4YR9QrfTPVoteYicggdZn/dXbK+tTMVuUAbZ7txC6Wf51541H5Yp0gfwknkZVwau3MLGIs9PmsLlowu/YdkUbH95OYjEjY9dMOwUX87bqQJUw36a4Cwo5kBQ88QNzWhCv9VkjRBT+/KuN5LxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kWlCuAbv; arc=none smtp.client-ip=209.85.161.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kWlCuAbv"
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5ac90ad396dso3101154eaf.3
+        for <linux-trace-users@vger.kernel.org>; Tue, 30 Apr 2024 06:41:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714484510; x=1715089310; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vUZTZ/02Lxat+FVbTqHeQrDEZzYLJJrYIJLWI61Q2mo=;
+        b=kWlCuAbvOzz9AAG18u2c5bFZz7wuc9hFTWetz94Ag/tfhQTrEhiKTtCReBrEr6c9Ya
+         fLQZjxFLtvrJSBe+W1YZ2VlujtR7VIaOPe0HQVJvb5kKYOwzhw6qcPuxOuJ3iQyV9DBZ
+         WHy9lq04MOsDL3JesoozDqI5hw2RvYRMWCHcT6W2ekre06gPw52/do20F8YAd9vYZKKa
+         7FsdqBazopk8oCFjEEvXMw/P9mB40B+vaF4Mbpcg3Sp50H/NYUwE92DWRGUaREQCLDKN
+         bEpgLPRvPZMbC9H50DrvFtcUeE3IpJ8aVBVA+VKLrJKmuazwRWU8eYNpHJNGXvz9bK3h
+         L0LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714484510; x=1715089310;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vUZTZ/02Lxat+FVbTqHeQrDEZzYLJJrYIJLWI61Q2mo=;
+        b=k6gcR2tiIvn6GlMLBiRtpjDjw3aSuADopRpnL1BW4jpYFAzPMBM2E/7h2Pc3kX7QiJ
+         tK1BlssHLtzYIXPdlaU4N+cQLCbyrRu/0vKZ0Gd9Te1UUnJ5Kshcd2bG0ieGonEDk3GB
+         2VI72nCu0OMVMf75l9BVJMMoyN349FDX6G1QI5wqtsOd5joaK8oiePYG1GqfFG7U49Jy
+         jAllQ5/Bn0XxNSS7bcXv5n/ri0VPMbA216gGrZk2S2hqgSfJXGCOI9R4CBiv3w0AXCQ8
+         rm5hZxR/VBpz7PkzQrrE89Aon0MUEKR1TXociUfcujzpJDubstp+2U/5xMOUX+Hvv0/i
+         94Tw==
+X-Gm-Message-State: AOJu0Ywt9qFBpIOc2kB/n1M3/UBrPIm5qPDMsZc5P0g3inrBJvGEKIVV
+	Hwxk9Pf/T1mwQBlSK2JAbekT8a+q3UE1hrqg8P99JEsCCS4M0S3ggHYLDKfbMkJ63TNMQyGFUz6
+	KYGGYP7nQyfFGFjrSNunsx8XbHiPiyiZS
+X-Google-Smtp-Source: AGHT+IEgU+ydLE76vKp3/R0WThjJweu3hAhZl1sulJfoJ7vpWBjwLNJHNwiwwiFsHLUBqPPS7xFqjRsc6qoDLyaibjc=
+X-Received: by 2002:a4a:ae8d:0:b0:5ac:9f37:3ef4 with SMTP id
+ u13-20020a4aae8d000000b005ac9f373ef4mr16686214oon.4.1714484509884; Tue, 30
+ Apr 2024 06:41:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
 List-Id: <linux-trace-users.vger.kernel.org>
 List-Subscribe: <mailto:linux-trace-users+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+From: David Aldrich <david.aldrich.ntml@gmail.com>
+Date: Tue, 30 Apr 2024 14:41:39 +0100
+Message-ID: <CAJK_ieiBK5OSxAfXK=wuDpiuEBA0Oj++oRSW29SrrUkPpt6TtQ@mail.gmail.com>
+Subject: Cannot build KernelShark on Ubuntu 22.04
+To: linux-trace-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 30 Apr 2024 13:01:47 +0100
-David Aldrich <david.aldrich.ntml@gmail.com> wrote:
+Hi
 
-> Hi, I am new to trace and KernelShark. We are developing a real-time
-> application on Ubuntu 22.04. We see some jitter in some tasks and we
-> need a tool to help us analyse what tasks are being scheduled on a
-> specific cpu. I assume that trace and KernelShark can help us with
-> this. Am I correct?
+Working on WSL with Ubuntu 22.04 LTS, I am unable to build
+KernelShark. I will try installing it as a package, but perhaps my
+experience below will be useful for the project.
 
-For jitter, I don't usually use kernelshark but just trace-cmd itself.
-Although, if the jitter is caused by many applications, then kernelshark
-can be useful.
+I cloned KernelShark:
 
-> 
-> A complication is that we are running the application on a server, not
-> a desktop system. In fact we have no desktop Linux systems available.
-> I am wondering if we could capture the trace data on the server and
-> then analyse it offline using KernelShark running on Windows Subsystem
-> for Linux (WSL) on a Windows laptop? Do you think that is feasible?
+git clone git://git.kernel.org/pub/scm/utils/trace-cmd/kernel-shark.git
 
-Yes, kernelshark reads the trace-cmd "trace.dat" file that it creates, and
-if you have a Linux system (VM on Windows) then you can read that trace.dat
-file from kernelshark there.
+I followed the instructions at:
 
-> 
-> Is KernelShark available as a package, or must it be built by the user?
+https://kernelshark.org/build.html
 
-Yes, it's available as a package on Ubuntu (and other distros).
+which requires:
 
-> 
-> Any tips on how to capture the trace data and analyse it with
-> KernelShark would be appreciated.
+sudo apt-get install qtbase5-dev -y
 
-Well, I usually use just trace-cmd. I gave a talk about analyzing
-cyclictest jitter with using trace-cmd as well as the libtracefs libraries.
+When I attempt to build KernelShark with:
 
- https://www.youtube.com/watch?v=m1IS3-l_22Y
+cmake ../
 
--- Steve
+I see:
+
+CMake Warning at CMakeLists.txt:76 (find_package):
+  Could not find a configuration file for package "Qt6Widgets" that is
+  compatible with requested version "6.3.0".
+
+  The following configuration files were considered but not accepted:
+
+    /usr/lib/x86_64-linux-gnu/cmake/Qt6Widgets/Qt6WidgetsConfig.cmake,
+version: 6.2.4
+    /lib/x86_64-linux-gnu/cmake/Qt6Widgets/Qt6WidgetsConfig.cmake,
+version: 6.2.4
+
+-- Could NOT find XKB (missing: XKB_LIBRARY XKB_INCLUDE_DIR) (Required
+is at least version "0.5.0")
+-- Could NOT find Qt6StateMachine (missing: Qt6StateMachine_DIR)
+CMake Error at CMakeLists.txt:77 (find_package):
+  Found package configuration file:
+
+    /usr/lib/x86_64-linux-gnu/cmake/Qt6/Qt6Config.cmake
+
+  but it set Qt6_FOUND to FALSE so package "Qt6" is considered to be NOT
+  FOUND.  Reason given by package:
+
+  Failed to find Qt component "StateMachine".
+
+  Expected Config file at
+  "/usr/lib/x86_64-linux-gnu/cmake/Qt6StateMachine/Qt6StateMachineConfig.cmake"
+  does NOT exist
+
+This was despite installing:
+
+apt install qt6-base-dev
