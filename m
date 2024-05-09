@@ -1,217 +1,100 @@
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.239])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4469152799
-	for <linux-trace-users@vger.kernel.org>; Tue, 30 Apr 2024 15:19:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0952213B7BD
+	for <linux-trace-users@vger.kernel.org>; Thu,  9 May 2024 12:44:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.126.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714490391; cv=none; b=c9p2Vw31M9+jViO8zURXG/1H25EUqEc/JPHFC2xgrrgO2fOLpGEb3N9g3z2FxuUAkEsNqrGkHj+9bY4BQBP5vNor1j8uCHdJrTxFZMpx5T6DT42kJVNbqxYyROR1KkA7U+1F5OnUeeF27GHNoinCVtiglr9rwD8bC1QcFftGcdY=
+	t=1715258674; cv=none; b=H3VgItuh0a8oM+DxtlzOp85YrWFH+WRc0hJIrvpGWLDUm6vriolzkYFjRtG0qTR1B4FQyxzgGdccidbHufKHyQAbVX/i634BGjbKSdTmsjl14uF8dgeTsTA5gyO5m7HNJzO8/3AUwk62bXuG0ibNaP3oUi5mItaqZ/Qdkwa2LM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714490391; c=relaxed/simple;
-	bh=Lh+bXA6ul2CNDZ+6Im+o4V4mjo0P8L2XL+/uTm7gWhs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZyfFd0X/eR/fqQ8pTDql4K8RLcqgUzGJa/TK89AaT+Q/geILWI7198ZMAyei72U4OYEz21Ywt16wmPI4ThIvnYObTVGAw/iA5hpG8zU8Jq6yvd/32hPmz10Dt7Ttd8oyy+7AI7V9Ba4eAKxb6xor6FttWI4TKokWXZg4e014Q7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OgVz4kOD; arc=none smtp.client-ip=209.85.161.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1715258674; c=relaxed/simple;
+	bh=fr9glBXoTjXbmo4r8+WkgKgJcW6uK9xVuYzboNLENEg=;
+	h=From:Message-ID:Date:MIME-Version:To:Subject:Content-Type; b=Iy+vmciCJA7U9BApbrKKu50DEg3SN+vuqQ37Hr6EtQHK38uXKJuX4pEalj955ki6/X67u2xo02USlxe1URlQnLCMlfBGaAPgto4KUzE0NmSh1JPxK2CgWapEShknD7Fr1F61yKe7IlGSc/oxMw6mdB37v6Zb1z/3Vm4M/k3KVfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=orange.com; spf=pass smtp.mailfrom=orange.com; dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com header.b=mSTV7JgB; arc=none smtp.client-ip=80.12.126.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=orange.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=orange.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OgVz4kOD"
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5aa2551d33dso3942771eaf.0
-        for <linux-trace-users@vger.kernel.org>; Tue, 30 Apr 2024 08:19:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com header.b="mSTV7JgB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714490389; x=1715095189; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CLaIB8HfCbsoFRr+yFDKuCHb3XB37PcvL4c8wzc0BIc=;
-        b=OgVz4kODr73a92cGzRupc2H34UNJiQ91vFNP3zoCXjobe5p6Zas8QP20w+DkDWE66W
-         ps4ux1A6e/NcYGYmaCqGntNtO0EwcykTMpVPxgPT+eMKC9x7DEg9s+tLHkvyS40I7LuQ
-         KBJ9dKk7qLWOt+z9RL+vyVR+n2qDqwsf9dXAZaUbfhfbh8K0dvobUjIdSHR3L8t4D/9/
-         qtFHq2eqkmTxt3F1h9DJyDfQdp23FmZjfC7hfSw3sueEzuoPNYQpuzdabKaAdT9SOioy
-         izrFgOzU5HgJcPTN6RpW7QPdGa/YHep5I6siLMvg9PehRBsp7i+L8ME3Dl/qED1qMXIk
-         8QAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714490389; x=1715095189;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CLaIB8HfCbsoFRr+yFDKuCHb3XB37PcvL4c8wzc0BIc=;
-        b=omglUXpMg3wvCL6AFXual1SZ2CS01FJ3OAa6V1QIn4zYAEx24j2DvU1HSy+7cGATUI
-         H4PpDZYegjQSX7o6PBzQeppkx79kO94YXVzzI4Kh4wrPw4ZIkSx3ngcBBOnuyhkt+ill
-         oxMzmrDutij3tjYbGLQAI0YHB+r4n2fRbwB57zWwS7Qb7yPBd3euiNySRRuDUaAjnTsQ
-         4evFwCnZxYMER0CdRAnb9/jn1kjjY3kOV+nuEz0NfvPuhpDjYlk56foKT6MpOy/KbY8Y
-         PYm1aM5Q72HNAdRUZrYMfUMnYeOQNy5ohFqQPRi4arzZALApI4OoW8hcgA/Tg/v4N3rU
-         l90g==
-X-Gm-Message-State: AOJu0YyAEZSuq6axlugLUBLt40colowh5gWD9DkoDtQoYVTMjr0W446T
-	KkwSA47ElckRjdtO8/lMy7+T4iHD0WImSdAbKbPYXA5T+4YS3Zf2uMnmtjnP4EIgigGBqEiXqDD
-	S5tU0Ci0bNYs4yR4P/Dg6HPkFTh18Tlx1
-X-Google-Smtp-Source: AGHT+IGnit2TYPhlEwmKKu9YpI1eX7qAnjUsobqkwDv8H+IlswTHhNqO6pl7hPDMdeu7ghL17dPUOQr/Glgidm70BAY=
-X-Received: by 2002:a4a:cb05:0:b0:5af:73b5:eb4c with SMTP id
- r5-20020a4acb05000000b005af73b5eb4cmr16413032ooq.0.1714490388518; Tue, 30 Apr
- 2024 08:19:48 -0700 (PDT)
+  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+  t=1715258672; x=1746794672;
+  h=message-id:date:mime-version:to:subject:
+   content-transfer-encoding:from;
+  bh=fr9glBXoTjXbmo4r8+WkgKgJcW6uK9xVuYzboNLENEg=;
+  b=mSTV7JgB0ElDHzD7JjKSdF8r1vMA83ThUieocodDqXq0fqAxrrZztsDf
+   /+JwmmVPYN8HszpQlX1ffococwu3YXplFAmor7wnlCTw0EWgI76ZH5QtV
+   5qAXSLP19tT+YdY35ystdfeFlBXyBUaZxkxNN51eQRHlcpHsycEsDu4Sf
+   eRhuySfxabqtGPTwmNkSxxBNS7sjDaJVDWKORmDn4YLsqzSZauBw0RTgH
+   w/nomG6OfskRX0Y5TEDnCvSrAXxYyHkfU01j7nsv4wOudKJj3NlV8tWrA
+   PNZ0pk1OX4XeSbbKk4k7QMBGlN82VLi4e5Tw1UjNX3KQkbP/HgN0TLg00
+   A==;
+Received: from unknown (HELO opfedv1rlp0f.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 09 May 2024 14:44:29 +0200
+Received: from unknown (HELO OPE16NORMBX104.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv1rlp0f.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 May 2024 14:44:29 +0200
+Received: from [x.x.x.x] [x.x.x.x] by OPE16NORMBX104.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37;
+ Thu, 9 May 2024 14:44:29 +0200
+From: alexandre.ferrieux@orange.com
+X-IronPort-AV: E=Sophos;i="6.08,147,1712613600"; 
+   d="scan'208";a="138125701"
+Message-ID: <b3a8fb9f-7746-421e-81c7-c890d676a871@orange.com>
+Date: Thu, 9 May 2024 14:44:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
 List-Id: <linux-trace-users.vger.kernel.org>
 List-Subscribe: <mailto:linux-trace-users+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAJK_ieiBK5OSxAfXK=wuDpiuEBA0Oj++oRSW29SrrUkPpt6TtQ@mail.gmail.com>
- <cbe25526-254b-b7b6-4ff2-26d4289cbfc3@gmail.com> <CAJK_ieinnyDq3_jW+T7OPWWYf3rHaVB-PzPH-A0OcJbYmW6+kg@mail.gmail.com>
- <a4390fe3-1442-0e1a-a6e9-26b96840b7bc@gmail.com>
-In-Reply-To: <a4390fe3-1442-0e1a-a6e9-26b96840b7bc@gmail.com>
-From: David Aldrich <david.aldrich.ntml@gmail.com>
-Date: Tue, 30 Apr 2024 16:19:37 +0100
-Message-ID: <CAJK_ieiFtN8o7h08WvB4UziKK=rbV1LeOBqStn26DA9BHF5jBA@mail.gmail.com>
-Subject: Re: Cannot build KernelShark on Ubuntu 22.04
-To: Yordan Karadzhov <y.karadz@gmail.com>
-Cc: linux-trace-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Betterbird (Linux)
+To: <linux-trace-users@vger.kernel.org>
+Content-Language: fr, en-US
+Subject: Ftrace, KASLR and gdb
+X-ClientProxiedBy: OPE16NORMBX408.corporate.adroot.infra.ftgroup
+ (10.115.27.17) To OPE16NORMBX104.corporate.adroot.infra.ftgroup (10.115.26.5)
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Transfer-Encoding: base64
 
-Hi Yordan
+SGksCgpGdHJhY2UgaXMgYSBqZXdlbCB0byBkaWcgaW50byB0aGUga2VybmVsLCBiZSBpdCBmb3Ig
+dHJvdWJsZXNob290aW5nLCBwZXJmIHR1bmluZyAKb3IganVzdCB1bmRlcnN0YW5kaW5nLgpCdXQg
+d2hlbiBvbmUgbmVlZHMgdG8gZGlzYXNzZW1ibGUgdGhlIHJ1bm5pbmcga2VybmVsIChlZyB0byBt
+b3ZlIGtwcm9iZXMgYXJvdW5kIAppbiBhIGZ1bmN0aW9uLCBpbiBvcmRlciB0byB1bmRlcnN0YW5k
+IGEgZ2l2ZW4gY29kZSBwYXRoKSwgS0FTTFIgbWFrZXMgaXQgCmltcG9zc2libGUgZm9yIGdkYiB0
+byBnZXQgdXNlZnVsIHN5bWJvbCBhZGRyZXNzZXMsIGV2ZW4gd2l0aCBhIGRlYnVnIGltYWdlLgpU
+aGF0IHNhaWQsIC9wcm9jL2thbGxzeW1zIGFsd2F5cyBnaXZlcyB0aGUgYWNjdXJhdGUsIHByZXNl
+bnQgc3ltYm9sIGFkZHJlc3Nlcy4gCkJ1dCwgdG8gbXkga25vd2xlZGdlLCBnZGIgaXNuJ3QgYWJs
+ZSB0byBpbXBvcnQgL3Byb2Mva2FsbHN5bXMgYXMgYSBzeW1ib2wgdGFibGUuClRvIGNpcmN1bXZl
+bnQgdGhpcywgSSd2ZSB3cml0dGVuIGEgc21hbGwgdXNlcmxhbmQgdG9vbCwgdXNsaW5nIGxpYmJm
+ZCwgdGhhdCAKY3JlYXRlcyBhbiBFTEYgZmlsZSBvdXQgb2YgL3Byb2Mva2FsbHN5bXMuIFBhc3Np
+bmcgdGhpcyBFTEYgZmlsZSB0byBnZGIgaW5zdGVhZCAKb2YgInZtbGludXgiLCBhbmQgL3Byb2Mv
+a2NvcmUgYXMgY29yZSwgdGhlbiBhbGxvd3MgZm9yIGEgcGVyZmVjdCBnZGIgc2Vzc2lvbiBvbiAK
+dGhlIHJ1bm5pbmcga2VybmVsLiBPZiBjb3Vyc2UgdGhpcyBFTEYgZmlsZSBpcyBvbmx5IHZhbGlk
+IHVudGlsIHRoZSBuZXh0IHJlYm9vdCwgCmJ1dCB0aGF0J3Mgb2theSBhcyBpdHMgY3JlYXRpb24g
+aXMgZmFzdC4KCk5vdywgbXkgcXVlc3Rpb246IGRpZCBJIG1pc3MgYW4gYWx0ZXJuYXRpdmUgPwoK
+SW4gb3RoZXIgd29yZHMsIGlzIHRoZXJlIHNvbWUga2luZCBvZiAia2FsbHN5bXMgcGx1Zy1pbiIg
+Zm9yIGdkYiBzb21ld2hlcmUgPwpPciwgdGFraW5nIHRoZSBwcm9ibGVtIGZyb20gdGhlIG90aGVy
+IHNpZGUsIHNvbWUga2VybmVsIG1vZHVsZSBleHBvc2luZyBhIAoiL3Byb2Mva2FsbHN5bXMuZWxm
+IiBvciBzaW1pbGFyLCBmb3IgZGlyZWN0IGNvbnN1bXB0aW9uIGJ5IGdkYiA/Ck9yIGFub3RoZXIg
+bWV0aG9kLCB0aGF0IHBlb3BsZSByb3V0aW5lbHkgdXNlIGZvciB0aGUgc2FtZSBwdXJwb3NlID8K
+ClRoYW5rcyBpbiBhZHZhbmNlLAoKLUFsZXgKCgoKCl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXw0KQ2UgbWVzc2FnZSBldCBzZXMgcGllY2VzIGpvaW50
+ZXMgcGV1dmVudCBjb250ZW5pciBkZXMgaW5mb3JtYXRpb25zIGNvbmZpZGVudGllbGxlcyBvdSBw
+cml2aWxlZ2llZXMgZXQgbmUgZG9pdmVudCBkb25jDQpwYXMgZXRyZSBkaWZmdXNlcywgZXhwbG9p
+dGVzIG91IGNvcGllcyBzYW5zIGF1dG9yaXNhdGlvbi4gU2kgdm91cyBhdmV6IHJlY3UgY2UgbWVz
+c2FnZSBwYXIgZXJyZXVyLCB2ZXVpbGxleiBsZSBzaWduYWxlcg0KYSBsJ2V4cGVkaXRldXIgZXQg
+bGUgZGV0cnVpcmUgYWluc2kgcXVlIGxlcyBwaWVjZXMgam9pbnRlcy4gTGVzIG1lc3NhZ2VzIGVs
+ZWN0cm9uaXF1ZXMgZXRhbnQgc3VzY2VwdGlibGVzIGQnYWx0ZXJhdGlvbiwNCk9yYW5nZSBkZWNs
+aW5lIHRvdXRlIHJlc3BvbnNhYmlsaXRlIHNpIGNlIG1lc3NhZ2UgYSBldGUgYWx0ZXJlLCBkZWZv
+cm1lIG91IGZhbHNpZmllLiBNZXJjaS4NCg0KVGhpcyBtZXNzYWdlIGFuZCBpdHMgYXR0YWNobWVu
+dHMgbWF5IGNvbnRhaW4gY29uZmlkZW50aWFsIG9yIHByaXZpbGVnZWQgaW5mb3JtYXRpb24gdGhh
+dCBtYXkgYmUgcHJvdGVjdGVkIGJ5IGxhdzsNCnRoZXkgc2hvdWxkIG5vdCBiZSBkaXN0cmlidXRl
+ZCwgdXNlZCBvciBjb3BpZWQgd2l0aG91dCBhdXRob3Jpc2F0aW9uLg0KSWYgeW91IGhhdmUgcmVj
+ZWl2ZWQgdGhpcyBlbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlmeSB0aGUgc2VuZGVyIGFuZCBk
+ZWxldGUgdGhpcyBtZXNzYWdlIGFuZCBpdHMgYXR0YWNobWVudHMuDQpBcyBlbWFpbHMgbWF5IGJl
+IGFsdGVyZWQsIE9yYW5nZSBpcyBub3QgbGlhYmxlIGZvciBtZXNzYWdlcyB0aGF0IGhhdmUgYmVl
+biBtb2RpZmllZCwgY2hhbmdlZCBvciBmYWxzaWZpZWQuDQpUaGFuayB5b3UuCg==
 
-Thanks for your patience. I did a fresh clone and all built fine.
-However, I have a runtime problem:
-
-~/kernelshark_test/kernel-shark$ bin/kernelshark
-bin/kernelshark: error while loading shared libraries:
-libQt6Core.so.6: cannot open shared object file: No such file or
-directory
-
-Is that a LD_LIBRARY_PATH problem?
-
-On Tue, Apr 30, 2024 at 3:59=E2=80=AFPM Yordan Karadzhov <y.karadz@gmail.co=
-m> wrote:
->
-> Hi,
->
-> I just tested building on Ubuntu 22.04 and everything was fine. My guess
-> would be that in the build instructions you haven't done the first step,
-> namely:
->
-> cd kernel-shark/build
->
-> Note that it is important that you are in the 'build' directory before
-> doing the following steps.
->
-> Thanks!
-> Yordan
->
-> On 4/30/24 17:08, David Aldrich wrote:
-> > Thanks Yordan
-> >
-> > I am now using the instructions at GitHub:
-> >
-> > https://github.com/yordan-karadzhov/kernel-shark/tree/kernelshark
-> >
-> > I installed:
-> >
-> > sudo apt-get install qt6-base-dev qt6-scxml-dev
-> > sudo apt-get install libtraceevent-dev libtracefs-dev libtracecmd-dev t=
-race-cmd
-> >
-> > but I see:
-> >
-> > $ cmake ../
-> >
-> >   project: Kernel Shark: (version: 2.3.1)
-> >
-> > CMake Error at CMakeLists.txt:48 (find_package):
-> >    By not providing "FindTraceEvent.cmake" in CMAKE_MODULE_PATH this pr=
-oject
-> >    has asked CMake to find a package configuration file provided by
-> >    "TraceEvent", but CMake did not find one.
-> >
-> >    Could not find a package configuration file provided by "TraceEvent"=
- with
-> >    any of the following names:
-> >
-> >      TraceEventConfig.cmake
-> >      traceevent-config.cmake
-> >
-> >    Add the installation prefix of "TraceEvent" to CMAKE_PREFIX_PATH or =
-set
-> >    "TraceEvent_DIR" to a directory containing one of the above files.  =
-If
-> >    "TraceEvent" provides a separate development package or SDK, be sure=
- it has
-> >    been installed.
-> >
-> > On Tue, Apr 30, 2024 at 2:53=E2=80=AFPM Yordan Karadzhov <y.karadz@gmai=
-l.com> wrote:
-> >>
-> >> Hi
-> >>
-> >> Please try to build KernelShark following the instructions given in th=
-e
-> >> README file in the git repository and let me know if you still run int=
-o
-> >> issues.
-> >>
-> >> Thanks!
-> >> Yordan
-> >>
-> >> On 4/30/24 16:41, David Aldrich wrote:
-> >>> Hi
-> >>>
-> >>> Working on WSL with Ubuntu 22.04 LTS, I am unable to build
-> >>> KernelShark. I will try installing it as a package, but perhaps my
-> >>> experience below will be useful for the project.
-> >>>
-> >>> I cloned KernelShark:
-> >>>
-> >>> git clone git://git.kernel.org/pub/scm/utils/trace-cmd/kernel-shark.g=
-it
-> >>>
-> >>> I followed the instructions at:
-> >>>
-> >>> https://kernelshark.org/build.html
-> >>>
-> >>> which requires:
-> >>>
-> >>> sudo apt-get install qtbase5-dev -y
-> >>>
-> >>> When I attempt to build KernelShark with:
-> >>>
-> >>> cmake ../
-> >>>
-> >>> I see:
-> >>>
-> >>> CMake Warning at CMakeLists.txt:76 (find_package):
-> >>>     Could not find a configuration file for package "Qt6Widgets" that=
- is
-> >>>     compatible with requested version "6.3.0".
-> >>>
-> >>>     The following configuration files were considered but not accepte=
-d:
-> >>>
-> >>>       /usr/lib/x86_64-linux-gnu/cmake/Qt6Widgets/Qt6WidgetsConfig.cma=
-ke,
-> >>> version: 6.2.4
-> >>>       /lib/x86_64-linux-gnu/cmake/Qt6Widgets/Qt6WidgetsConfig.cmake,
-> >>> version: 6.2.4
-> >>>
-> >>> -- Could NOT find XKB (missing: XKB_LIBRARY XKB_INCLUDE_DIR) (Require=
-d
-> >>> is at least version "0.5.0")
-> >>> -- Could NOT find Qt6StateMachine (missing: Qt6StateMachine_DIR)
-> >>> CMake Error at CMakeLists.txt:77 (find_package):
-> >>>     Found package configuration file:
-> >>>
-> >>>       /usr/lib/x86_64-linux-gnu/cmake/Qt6/Qt6Config.cmake
-> >>>
-> >>>     but it set Qt6_FOUND to FALSE so package "Qt6" is considered to b=
-e NOT
-> >>>     FOUND.  Reason given by package:
-> >>>
-> >>>     Failed to find Qt component "StateMachine".
-> >>>
-> >>>     Expected Config file at
-> >>>     "/usr/lib/x86_64-linux-gnu/cmake/Qt6StateMachine/Qt6StateMachineC=
-onfig.cmake"
-> >>>     does NOT exist
-> >>>
-> >>> This was despite installing:
-> >>>
-> >>> apt install qt6-base-dev
-> >>>
