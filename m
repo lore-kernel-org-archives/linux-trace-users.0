@@ -1,35 +1,35 @@
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC80757FB;
-	Mon, 13 May 2024 19:34:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E0A360
+	for <linux-trace-users@vger.kernel.org>; Thu, 27 Jun 2024 19:36:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715628861; cv=none; b=ic0KIjN2lonL599WKf/gHk4MohxEfnlEn2frSH59ZAAuLawRBPoCTQfdJj+TE2dn9BRroW3wXZjUsEv16He7D/ikngaeDPEH2k6GwcXriCGcq+md011GzXWL7ZiroRH+8Sh6MLIFLiJxnDulPsyI1LnzV0Hkl0gAgGmV+ogaA6o=
+	t=1719517005; cv=none; b=Lq/t+tgAjfuK7Do6Q2vfHRMZWx1p7WADjfsYnMs8+u7Gwns5ZsdFJSQQ2ukIkoQWufkt1HmnmUXxNQvmhwBE31wuFGozprUjGFTBeTyHWwf8PRCOfnj4+Y1aC92/5+5P/Yer7ok5rpA2YaocuDZ2vYpIlzu0jmn1NlFctQK2qTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715628861; c=relaxed/simple;
-	bh=dJoqXVo0Q7zv+qowijfqNrjP7/+VXrBVxDoC8oO2fvQ=;
-	h=Message-ID:Date:MIME-Version:From:To:Subject:Content-Type; b=noPaNyx2c9J8qi86GhmudcBrvoM5ohcRFvnlwAAguw5w3h/zJtyWwNor2NFe9DKS38RrxE183w5h+HbdAkXGXO8jSkZikZTVuw55/5vXsBu8ZvhbOB3+788YSWUx+oN8VR9JHHNYLf7MTZY3S1zzMABOrep+2CvBQpxA/lXoNnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=fCRZUQ5W; arc=none smtp.client-ip=167.114.26.122
+	s=arc-20240116; t=1719517005; c=relaxed/simple;
+	bh=Cd4YfZeNOPoWKHDS3QMYA0R/F9JHxG1QYUuf2VpgTPo=;
+	h=Message-ID:Date:MIME-Version:From:To:Cc:Subject:Content-Type; b=eMONpair6BI3OCn9LZWhg+fehgPRtJ3LnWOfxjVqUfE9eKP1QFZmpbT0gBIQ78NMui6w4FZdc8T+ruoes01I82n631S5YVGyk+FhQKEVEt+IcJrT+IBOQ0cJHXlZuPhS8E79dhqvu3QXNFtgLUCc+GkSrk3QGDiruUmaSxdXDIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=mSqUR7v3; arc=none smtp.client-ip=167.114.26.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="fCRZUQ5W"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="mSqUR7v3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1715628850;
-	bh=dJoqXVo0Q7zv+qowijfqNrjP7/+VXrBVxDoC8oO2fvQ=;
-	h=Date:From:To:Subject:From;
-	b=fCRZUQ5WEAZkpJz/zb3JRy4mJtYCeOjh9Shw4NN/hVzV3UalMy3qYdR6Tq5n7fgJS
-	 K/ewV60dIJhut9kIrR+j1vPsI0O0g9OyTr+ftmGUgVooc8MbyXo5UaJfjk0QJjuo8S
-	 9gPPzyP3RY9D4BJBdNTbf5ZagvMmmAh6YG1cn8v07l41AdC7UfUcxLK0GoJ0LDNXAw
-	 YBsgImy/M+4Z8NBFVGYrtEZMpnfwtLd5/B93p3sewovnFuBWdrSqbi0cqf7zispQxV
-	 VlWQs6iSYye+BPt8d0UA4SjcN+O+Mfky5FDgsyRu79L5rVzzlhaUtoCvgCF5FlKDzX
-	 TpqFUpsL5/vrQ==
+	s=smtpout1; t=1719516996;
+	bh=Cd4YfZeNOPoWKHDS3QMYA0R/F9JHxG1QYUuf2VpgTPo=;
+	h=Date:From:To:Cc:Subject:From;
+	b=mSqUR7v37f2wLpPPgCkbwcZx4yIBM18+qCsjjLeyLxiPcl8Aa2LBodzXmA+cnaDCp
+	 3//KI2SkWUe4rhsHLUqGrQWjoL7y/T52WY0YbziGRoLCGXd54kCCmAwBf9Zu+rCt+L
+	 Sm8bTsJxMayrM3ZBrWSyJg5efU9bPDAGqzu5JmPLY7//Y0STtC5B/pkLvjRAt7eJl1
+	 e9DSuIT09mm4Ec2381tJFoSCUutdh87f1Cl+AhDl+PVj11JvuSjqjN9LV6kjrMMESw
+	 os1bQmNuwhc+vSDx/IPIdTA3lJJenMmKIWVlSRIxXXBpIxCOSw6K5KqGoObK0/NNZ4
+	 78ZyMSrBesu9w==
 Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4VdV6V5dydz109Z;
-	Mon, 13 May 2024 15:34:10 -0400 (EDT)
-Message-ID: <5c0e0cc3-b849-400c-90eb-2b7d115d2f66@efficios.com>
-Date: Mon, 13 May 2024 15:34:36 -0400
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4W982X1wtpz180c;
+	Thu, 27 Jun 2024 15:36:36 -0400 (EDT)
+Message-ID: <13eebb98-ddec-404d-81e6-452915b1b819@efficios.com>
+Date: Thu, 27 Jun 2024 15:37:09 -0400
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
 List-Id: <linux-trace-users.vger.kernel.org>
@@ -37,97 +37,71 @@ List-Subscribe: <mailto:linux-trace-users+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Content-Language: en-US
-To: lttng-dev <lttng-dev@lists.lttng.org>,
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Beau Belgrave <beaub@linux.microsoft.com>
+Cc: Philippe Proulx <pproulx@efficios.com>,
+ Doug Cook <dcook@linux.microsoft.com>,
  Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
+ lttng-dev <lttng-dev@lists.lttng.org>,
+ Matthew Khouzam <matthew.khouzam@ericsson.com>,
  linux-trace-users <linux-trace-users@vger.kernel.org>,
- linux-kernel <linux-kernel@vger.kernel.org>
-Subject: [RELEASE] LTTng-modules 2.13.13 and 2.12.17 (Linux kernel tracer)
+ tracecompass-dev@eclipse.org
+Subject: Common Trace Format 2 (CTF2) specification and sub-specs
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 Hi,
 
-This is a stable release announcement for the LTTng kernel tracer,
-an out-of-tree kernel tracer for the Linux kernel.
+Here is the status of the specification and sub-specifications:
 
-The LTTng project provides low-overhead, correlated userspace and
-kernel tracing on Linux. Its use of the Common Trace Format and a
-flexible control interface allows it to fulfill various workloads.
+- "CTF2‑SPEC‑2.0: Common Trace Format version 2"
+   https://diamon.org/ctf/files/CTF2-SPEC-2.0.html
 
-* New in these releases:
+This is the official CTF 2.0 spec. The URL https://diamon.org/ctf
+points to the latest version of the Common Trace Format spec.
 
-- LTTng-modules 2.13.13:
+- "CTF2‑DOCID‑2.0: CTF 2 document identifier format"
+   https://diamon.org/ctf/files/CTF2-DOCID-2.0.html
 
-   - Introduce support for Linux v6.9.
+The CTF 2 specification refers to it.
 
-   - Removed unused duplicated code, add missing static to
-     function definitions, and add missing includes for function
-     declarations which were observed when building against recent
-     kernels with newer toolchains.
-     We plan to adapt our CI to add jobs that will report warnings
-     as errors when building lttng-modules against recent kernels
-     with a recent tool chain so we can catch and fix those warnings
-     earlier in the future.
+- "CTF2-FS-1.0: Layout of a CTF 2 trace stored on a file system"
+   https://diamon.org/ctf/files/CTF2-FS-1.0.html
 
-- In both LTTng-modules 2.12.17 and 2.13.13:
+This document covers how Babeltrace and Trace Compass
+will expect the CTF2 files on the filesystem, and how
+Babeltrace and LTTng plan to produce them. This is by
+all means an "optional" specification, which means it
+is up to the implementation to decide whether they want
+to abide by it or not.
 
-   - Fix incorrect get_pfnblock_flags_mask prototype which did not match
-     upstream after upstream commit 535b81e209219 (v5.9). Fix the prototype
-     mismatch detection code as well. This affects the event
-     mm_page_alloc_extfrag which uses get_pageblock_migratetype(). Note that
-     because the kernel macro get_pageblock_migratetype was also updated
-     to pass 3 parameters to get_pfnblock_flags_mask as its kernel prototype
-     was updated to expect three parameters, it does not matter that the
-     lttng-modules wrapper expects 4 parameters and provides those 4 parameters
-     to the kernel function. This issue should therefore not affect the
-     runtime behavior.
+Philippe plans to soon release a CTF2-FS-2.0 document with
+pretty much the same content as version 1.0, but formatted
+following the CTF2‑DOCID‑2.0 specification.
 
-   - Instrumentation updates to support EL 8.4+.
+We are planning to add an index of those relevant "optional"
+specifications within the CTF2 specification so they can easily
+be found.
 
-   - Instrumentation updates for RHEL kernels.
+If we end up having a new storage pattern that end up being
+commonly used by implementations, e.g. storing a CTF2 trace
+within a binary blob in OpenTelemetry [1], we can always create
+a new sub-specification similar to CTF2-FS to cover this.
 
-   - Instrumentation updates to the timer subsystem to adapt to
-     changes backported in the 4.19 stable kernels.
+The following specification files were deprecated by the
+time the CTF2 specification was finalized:
 
+- https://diamon.org/ctf/files/CTF2-BASICATTRS-1.0.html
+- https://diamon.org/ctf/files/CTF2-PMETA-1.0.html
 
-* Detailed change logs:
+As always, feedback is welcome!
 
-2024-05-13 (National Leprechaun Day) LTTng modules 2.13.13
-         * splice wrapper: Fix missing declaration
-         * page alloc wrapper: Fix get_pfnblock_flags_mask prototype
-         * lttng probe: include events-internal.h
-         * syscalls: Remove unused duplicated code
-         * statedump: Add missing events-internal.h include
-         * lttng-events: Add missing static
-         * event notifier: Add missing static
-         * context callstack: Add missing static
-         * lttng-clock: Add missing lttng/events-internal.h include
-         * lttng-calibrate: Add missing static and include
-         * lttng-bytecode: Remove dead code
-         * lttng-abi: Add missing static to function definitions
-         * ring buffer: Add missing static to function definitions
-         * blkdev wrapper: Fix constness warning
-         * Fix: timer_expire_entry changed in 4.19.312
-         * Fix: dev_base_lock removed in linux 6.9-rc1
-         * Fix: mm_compaction_migratepages changed in linux 6.9-rc1
-         * Fix: ASoC add component to set_bias_level events in linux 6.9-rc1
-         * Fix: ASoC snd_doc_dapm on linux 6.9-rc1
-         * Fix: build kvm probe on EL 8.4+
-         * Fix: support ext4_journal_start on EL 8.4+
-         * Fix: correct RHEL range for kmem_cache_free define
+Thanks,
 
-2024-05-13 (National Leprechaun Day) 2.12.17
-         * page alloc wrapper: Fix get_pfnblock_flags_mask prototype
-         * Fix: timer_expire_entry changed in 4.19.312
-         * Fix: build kvm probe on EL 8.4+
-         * Fix: support ext4_journal_start on EL 8.4+
-         * Fix: correct RHEL range for kmem_cache_free define
+Mathieu
 
-Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
+[1] https://github.com/open-telemetry/opentelemetry-specification/issues/3979
 
 -- 
 Mathieu Desnoyers
