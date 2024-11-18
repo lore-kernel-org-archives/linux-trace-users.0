@@ -1,35 +1,35 @@
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE43F58210;
-	Sat, 28 Sep 2024 15:01:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92D91AA1CF;
+	Mon, 18 Nov 2024 16:01:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727535685; cv=none; b=GD6BAv9C2MBBS4fB+GsOxmgGTVDTaUqGNeYIubVV8u/JVjaofgqzs/JiizmBpRhJ4JXX3hjehtzASE3p9Md/gqwQNWY5+pnZVhFnuH7z2vi6YwAf9FiRKmCuiWdSmCwDHYxalLn87DBGYLqcGq3SpeoNYMyQjH/S3mCFCQuNA2M=
+	t=1731945673; cv=none; b=ESkPfogVxfC4r65vWpFlWtluI4J67aZSy1IcQHX35a/jImlqBWuIB7EyENTHEUqhJeMjFxtE3Rrgg7hvqzd09JyTjXnKP/ywHi8ipMQ055E4CawlnXgw1hZnN1Y7joy8PYlYmvJ4+tIhLzxwt6nPiSQYVIt8d8S12ysp8Rcgoco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727535685; c=relaxed/simple;
-	bh=9lLVuvIbeyrvV/2rHADtuhi7iK9i5+lub1PZCJM46HQ=;
-	h=Message-ID:Date:MIME-Version:From:To:Subject:Content-Type; b=FRLSr3E8rmnxQTP0kiTUQTDgPljFzXViqkzshIOmCYdMbYHgrIxltOTUVJsrkLfiNgo76bJbsVmC4MugB6jkVkjRHJjwvU87hV9drJqyO9GVzgAIlhAW3hQ7Mv/2q13jrUlcky/oQCAitzfPw2osoqgTVOTA10yM1JWCdM2r2bg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=svyDSdjj; arc=none smtp.client-ip=167.114.26.122
+	s=arc-20240116; t=1731945673; c=relaxed/simple;
+	bh=0SMGPScg1OjGEEbWukEQ6UEnHRdruCh0flCAnhLlwm4=;
+	h=Message-ID:Date:MIME-Version:From:To:Subject:Content-Type; b=WAe9MoFKCOLw8DoU63aqO0OADAhR9/Ctv6ObBahXp5F3lbMWKKFVRhSUOdDS3HeYxdrsLULfQwGPyiXCH/7fSH1MlSaBlwen6KLCkbgSEId6DOC2mLzMYCmYPhyO+MZwcpD8Leb885uRXXt2ozcD4neltUUPitFP3w/ML2Is5lc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=SZmHrNSA; arc=none smtp.client-ip=167.114.26.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="svyDSdjj"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="SZmHrNSA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1727535680;
-	bh=9lLVuvIbeyrvV/2rHADtuhi7iK9i5+lub1PZCJM46HQ=;
+	s=smtpout1; t=1731945656;
+	bh=0SMGPScg1OjGEEbWukEQ6UEnHRdruCh0flCAnhLlwm4=;
 	h=Date:From:To:Subject:From;
-	b=svyDSdjj99lc2cfgyvWRkpN1b0Mb75TDI0Qm+2ev/VyoQtXStfvLhGHmE4/HBnzQX
-	 NloZy6yycdgwMgSsWyqW19ekfYBTUt15qb/HoOkg+NxcAZekCFUpLzRO9as/N63iB0
-	 Sg8qHuoIHOid2fm4++46SH4CYuGPqY5NjDDdQmmfv6t2ua/34HJ8UyTiiJL2fkh7tq
-	 hub6lwOLw3Vt/U+JdVAbPR6VIbPmjmvtNC/74oVjpXw7rykCfc5KHsWcIv14GdPmRr
-	 JWjdmjRvCHEykzRrea48ypY0ra/3hFJFm5R8raYWLG09miWhf/mzHCCmOUrBbJXQz3
-	 oTtaxA08OcxFg==
-Received: from [IPV6:2606:6d00:100:4000:cacb:9855:de1f:ded2] (unknown [IPv6:2606:6d00:100:4000:cacb:9855:de1f:ded2])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XG9X0517Cz1cPx;
-	Sat, 28 Sep 2024 11:01:20 -0400 (EDT)
-Message-ID: <e367cf33-e113-4fb8-9f48-94bb7a531604@efficios.com>
-Date: Sat, 28 Sep 2024 10:59:17 -0400
+	b=SZmHrNSAOq7GV74u+Cs1i88M/1ilJ/6mR48UMHfOiLMQ9KJ6ChgSzjPRNB2MSVv4G
+	 HWjuL3ywCsRkxUMlE1H9LJypsuCqY1pdG2TKe0KqmkislM549gGtvpBY+XDWVeFlDk
+	 2OFsdZ9xkuGxXfEabNWyGjn6kbxpRYU7IPOFhTMThC+nCdLYkccmZ7yaH5b66ad51d
+	 sp8bclvYZBmgGSLKmNlhm67K+6bH5YcHIcsAFPwqMKWDTfyK4WD8rdRnfp0X9aApTg
+	 1nloaPXQYovhttmk/nl8+HxLO0XHeBP0yHUWdXBYt2yinjqw7KjIHstdCC20v8smSJ
+	 lUWyLyA43ulwQ==
+Received: from [172.16.0.134] (96-127-217-162.qc.cable.ebox.net [96.127.217.162])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XsXRD3tntzLkV;
+	Mon, 18 Nov 2024 11:00:56 -0500 (EST)
+Message-ID: <577d4fa9-4d0c-4ff1-ab2c-d4cc088e21b9@efficios.com>
+Date: Mon, 18 Nov 2024 11:00:56 -0500
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
 List-Id: <linux-trace-users.vger.kernel.org>
@@ -37,35 +37,36 @@ List-Subscribe: <mailto:linux-trace-users+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Content-Language: en-US
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Language: en-US
 To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org,
  linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RELEASE] LTTng-modules 2.13.15 (Linux kernel tracer)
+Subject: [RELEASE] LTTng-modules 2.12.19 and 2.13.16 (Linux kernel tracer)
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 Hi,
 
 This is a stable release announcement for the LTTng kernel tracer,
-an out-of-tree kernel tracer for the Linux kernel.
+a kernel tracer for the Linux kernel.
 
-The LTTng project provides low-overhead, correlated userspace and
-kernel tracing on Linux. Its use of the Common Trace Format and a
-flexible control interface allows it to fulfill various workloads.
+The most relevant news about those releases is added support for
+the Linux kernel v6.12 by LTTng-modules v2.13.16.
 
-* New in this release: Introduce support for Linux v6.11.
+Detailed change logs:
 
-Detailed change log:
+2024-11-18 (Odd Socks Day) LTTng Modules 2.13.16
+         * fix: mm/page_alloc: fix tracepoint mm_page_alloc_zone_locked() (v5.15.171)
+         * Fix: uprobes: make uprobe_register() return struct uprobe * (v6.12)
+         * Fix: silence 'non-consumed' message for non-started sessions
+         * fix: writeback: Refine the show_inode_state() macro definition (v6.12)
 
-2024-09-28 (Ask a Stupid Question Day) LTTng modules 2.13.15
-         * Fix: scsi: sd: Atomic write support added in 6.11-rc1
-         * Fix: block_start removed from btrfs_get_extent in 6.11-rc1
-         * Fix: block_len removed frmo btrfs_get_extent in 6.11-rc1
-         * Fix: orig_start removed from btrfs_get_extent in 6.11-rc1
-         * Fix: ext4_da_reserve_space changed in 6.11-rc1
-         * Fix: kfree_skb changed in 6.11-rc1
-         * Fix: event notifier: set eval_capture to false for kprobe and uprobe
+2024-11-18 (Odd Socks Day) LTTng Modules 2.12.19
+         * fix: mm/page_alloc: fix tracepoint mm_page_alloc_zone_locked() (v5.15.171)
+
+Thanks,
+
+Mathieu
 
 Project website: https://lttng.org
 Documentation: https://lttng.org/docs
