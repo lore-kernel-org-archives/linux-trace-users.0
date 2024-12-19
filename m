@@ -1,142 +1,202 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from YT3PR01CU008.outbound.protection.outlook.com (mail-canadacentralazon11020142.outbound.protection.outlook.com [52.101.189.142])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6850B1E0493
-	for <linux-trace-users@vger.kernel.org>; Tue, 17 Dec 2024 06:45:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734417926; cv=none; b=rV1GCio2EfbCAudJx4mbmWm8Whngt/LlUpXmjel8jR2GB7lsjt/DZ22HXKe/+f+bHtjkfPaxxLpAbCAu88pbMytjaqWaFyGAgnFUj/sxSlPGUqIEybNnCan33RtCzOVUfa4Efwftidf6k14U9HcwUyFTG/YNJVil8K2mRXJfjoQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734417926; c=relaxed/simple;
-	bh=00bWWcycGrAS8onLrsu/vtkfqW9/2cxZ0E/HMcl5dOk=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=Ru3NsedhSyWNBNfJsNFa2mLbCtoQXTb/bQXn05KrrNjOkuFvtZdVZoV+CR7P7gD/jSkL1A8SoZL2+OxzlVqzq5iaX/KpOJeiU/XDHlizoibzjTagcCffZG0WwtSN4vZ759sTwY75QCNQsFV+c/jai6QMXghQidf71vksAUJFz6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GnpwprXq; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4087F1BC9E2
+	for <linux-trace-users@vger.kernel.org>; Thu, 19 Dec 2024 23:25:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.189.142
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734650733; cv=fail; b=F1VU/vh9Z3YC4cqkz5XxbaKEVjNYFs0LhblUrBBaRQw9sDrxnkTpSOpUCIo+qBbhgyxKVTVulkNrLvB2xezQ3WOm9aSKDeiHJiwRaZo7NQAXBMMXDyPlrz3rgZjH6z+0//q7nfNBwUEaS62T4GULl5WorlmcswM+2Xf2iEuA+a8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734650733; c=relaxed/simple;
+	bh=h9IRhhXL/Y3tneY7bO/2D1JWnj1HPrZ4CFjQi/u4N/o=;
+	h=Date:From:To:Cc:Subject:Message-ID:Content-Type:
+	 Content-Disposition:MIME-Version; b=jXfkJZLaSMsZWGPOURxLRvHdrjbZXv+M2XVCD6rUn6drV7NBpWY9RqTfB8Dpu+6i4kI2ynJfB2fkTQ6EWh4ORBkqHCQVyM8IGlDtyBcvHf+L0KzK8CLU2c2cuU/yEXv5g1crNeu2x6m/kCfPJ9MQY64Uu23vJuk/P/FX8LLRGLA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=GS82jf1i; arc=fail smtp.client-ip=52.101.189.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GnpwprXq"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-21644aca3a0so58156575ad.3
-        for <linux-trace-users@vger.kernel.org>; Mon, 16 Dec 2024 22:45:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734417923; x=1735022723; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jaZF1glgFX0ZBKTHQJi79G9lbWZGzwa7YpOhtJh5u5Q=;
-        b=GnpwprXqZyL0lC1d/IidzsnjfsAKiXfYJO+zsjuyVRyBttincgkbg7VmZBiAk82Cyu
-         tLIF5nMGYGTpzYXxlUZ+Dfxt8sGABLa3YkbfJUzC6eTPyJj7oqi8hW0Ih0GAQB89ozcj
-         66tQd/CBE4TpXXCdHvwBjFZgB8SJdcG6PyJLKCViWRf8FO5Iw/WW44dyzH9iM3r2CWZt
-         aCEjOo4U9tXVsa024jDMsoew/4sqkCEjK8eBGdZV4pmHGN9gVfTkPFML8TyZtv9zgpMT
-         QV2+PI7cMyBvdlpzdo6YPkySWPLAA0B6VyiFsjd6XGnYgWMw4BPLrDC9upz97t2e1yfF
-         d2UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734417923; x=1735022723;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jaZF1glgFX0ZBKTHQJi79G9lbWZGzwa7YpOhtJh5u5Q=;
-        b=hAi7aFG94vZ9Y9GZgfmhT5ba1PmeB/l0IA1/y/vfBxUHxLO6oVSMvLuFQqAnD5KPrU
-         HDAqRbBJjDX9IY5GDxykf6iZBYjiJuI/axMzeFIENTKXGPt2mGo7/yShYS66iVKiKxZf
-         gFdOyi5Kb09uCkRiDOEqwoDPL84aOcSOx3IFDyHMYHB4+I56KeuV9Soc+VYrCK95taSY
-         BS+fK5+JyIdWq9m7S4IFLxFFpxEFaEu59D7n57EoOCsUMwjQaXJ5LQLF3j5wkERiVLA6
-         tQTkdDLbbv/um41gCqg9ncmCf3GSf1FqXmYYMIo5uUtOeQvWTm/OpTtu0ZgcmurUiiwT
-         bxMg==
-X-Forwarded-Encrypted: i=1; AJvYcCUCgFMCV5t9pGCU+kveTaB5J9VySb68lP58kmQZZEnT307S9HX635cuuma4MeogHgMHXIl4fwuEWRHqZ7euXNCD5w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSflKUZnEnxpqCtWP4eYOUYpv5N021cVp3aSZD+mNA7NFgkuKz
-	jTH2hTvXOHDElw7luBRFe2rmI13mk+KzfBHoyqyMoDgNY7UxpLH+x6JXug==
-X-Gm-Gg: ASbGncvBWjAbpZ60LIXBis690yFZ9zvUnICAbD1BEv8MLiRywJ2nF4sIgiDrl62eou1
-	+RrlwjxzXK89N20gWXA6gKnakSSPKiMPp8EXHDSM30yGygMML7yukD1lVYkosgAprarHMWP0uKx
-	x2rOxEVTBSilTwNdfTCX/DxfZKhLYszxOClt0Sh5yKEi2Xiz/8Hl09lpz5zN4nEv3Kvkn9fwF5O
-	5Xs249I+AAdesjIfAkY45isWG7n7EPrHeNOGDINIwEXciIXG8SBr7hjGMfqGEKfSXZCdQHWTFSZ
-	Qg==
-X-Google-Smtp-Source: AGHT+IHPmll+Z8CRBty+HmjuXNlv00XJJi9G8OuJ2WjkIih1hSwT/DyDof8V0IH6udeey+QQhlMDwA==
-X-Received: by 2002:a17:902:f690:b0:215:8695:ef91 with SMTP id d9443c01a7336-21892981749mr203462295ad.6.1734417923420;
-        Mon, 16 Dec 2024 22:45:23 -0800 (PST)
-Received: from bangji.hsd1.ca.comcast.net ([2601:647:4401:2cb0:5035:16c1:909a:945d])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-218a1e5424bsm52584715ad.138.2024.12.16.22.45.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2024 22:45:22 -0800 (PST)
-From: Namhyung Kim <namhyung@gmail.com>
-To: uftrace@googlegroups.com,
-	linux-trace-users@vger.kernel.org
-Subject: [ANNOUNCE] uftrace v0.17 is released
-Date: Mon, 16 Dec 2024 22:45:21 -0800
-Message-ID: <20241217064521.2742124-1-namhyung@gmail.com>
-X-Mailer: git-send-email 2.47.1.613.gc27f4b7a9f-goog
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="GS82jf1i"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hD2nkL17bcEwCE9pEbsSm1V0IsbyRlvQGigZ6woFx5dl5FgGlV9tfGH7fvQzxv0KV5i6leu8oqibDPPrmD0hlB36tB0ji1B56X9YWuajxE8GlrSY13Glc2TE1g0CRRc8dcheU6eipnZHuL4/1pCRhLpiCPDk1Ig3n3kB7C/6//uDDrg7nvXNGr+eJq7XeTWS0MydpY62VhLUZQZgHncPmXWIhVZRiLsdiK2WrqizMcLTNNLnpjpMX9tt1VS6EfO16U2mlVo5JRV9Qiz+A1oa8LRP+x6GH2uQRLvamANzOXlWf0plDj+c0k5a2qlz5GqC3gzCMmwk5lwSEszzcnHCbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QQok9niPEbBRCiok4uTXgO8YDhtxxp0fi4Bw8OsZNJg=;
+ b=Z2FBmt4cDdBHGVqt+e9gCAHDiOTE8672bbSq4w7WYh/BXu7uCL3yTZWLtpUGSChYERoq1cqQU8Za/x8dn97Le0fxV9smhwdT292ICucS+Q2QbqJcm5GSScMsaZ2FeFUgbrMOqHf3telbr/wCgsV1QW1S1S4Lc+v7Hn3mB3Av8t8b/avmw69M7OfPPsOG7qQCY+qywGtEqmCaCT8PN88K5AFM7wyS1BCTeuuGNxiFKTaMktQ+sdYB6erKcJrthAjqVgKcBCV+Lw0uT6zHmqoDUOKfbXkTrre9vBGSO4h1lLf9ry8Te0Z7po47vlrtjUAAU4plF9g+Yxm7FVSXa+cajA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QQok9niPEbBRCiok4uTXgO8YDhtxxp0fi4Bw8OsZNJg=;
+ b=GS82jf1i3RewgzhhtZ4EUsij9IKePxWyH6cwKEm6858ZPLlRUIxceupeOGEtxDoR0c6NflIqdoL82wxcbKLGkvzMEiJA+q4dEgYWBbOUEle82skxvLcfb06pl82shLdqFobblSVOwNq90D/uijt9VeHSyQlbWdQiwtVrAFOCIYQ00M8Clx+KKVVV4ei9QpK8dmlipJesWJ5obNSEggh1rEaFhSMeG7s4Rk9u74b7Y9o/KarwL+pTzfGI0Xqbj1I6Pe/KuYdd5XxwWUqBJWve4f5LGDAreuh8oLCZYcdl1HJ/aP+2/k5QlMVOzRoldWDD5HOV9m4RWUALZDMV2xGK1w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT4PR01MB10709.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:104::10) by YQBPR0101MB5990.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:35::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8272.16; Thu, 19 Dec
+ 2024 23:25:28 +0000
+Received: from YT4PR01MB10709.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::5de4:ebdb:2bf6:ee1]) by YT4PR01MB10709.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::5de4:ebdb:2bf6:ee1%4]) with mapi id 15.20.8272.013; Thu, 19 Dec 2024
+ 23:25:28 +0000
+Date: Thu, 19 Dec 2024 18:25:27 -0500
+From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+To: lttng-dev@lists.lttng.org
+Cc: diamon-discuss@lists.linuxfoundation.org,
+	linux-trace-users@vger.kernel.org, lwn@lwn.net
+Subject: [RELEASE] Babeltrace 2.1.0-rc1
+Message-ID: <Z2SrZ9ciEYNtKCdr@efficios.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YQZPR01CA0045.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:86::17) To YT4PR01MB10709.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:104::10)
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
 List-Id: <linux-trace-users.vger.kernel.org>
 List-Subscribe: <mailto:linux-trace-users+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT4PR01MB10709:EE_|YQBPR0101MB5990:EE_
+X-MS-Office365-Filtering-Correlation-Id: d67e3826-3230-42db-cfd1-08dd20846c95
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?YW14dG5YcG9UdHEraURURW9sOW5MNGhCdzg3cll3ZWhnK21FaERKMDNvVjIv?=
+ =?utf-8?B?c2ZLQ1QzcnJyUzJTdGxPRld5ZUk3M1hmaFlTV20zNDgzQkJOT2hIbTJJUHg5?=
+ =?utf-8?B?SzZkeEQwN24xWXhOclVqNnF3L0ZPL2owZnFpQTRscWc2Rzd5WjhJbDlYc3BZ?=
+ =?utf-8?B?Q05ySDM5SWt4ZmxWUUNrL1F2T3hlZ2V1QmIyM3I2QTgvY3VuWFdjWmZSY3Vm?=
+ =?utf-8?B?bXBHQWIwcGJpSTZSMjl4a3ROZXRWN01zeXN1bWhLdTRjS3VBQWphQ1dSL1Ux?=
+ =?utf-8?B?dElyRHlveTlXQk5DMUpFZTRxQ1pvSWNtb1NCbVpOSGp6ZldYaXpLY0FOL3ht?=
+ =?utf-8?B?c0NNOURWWHVGUTlsK2xlMG9nZ0ExSVlnT3Yxalo5NUFxa2dUNUd5eURzSnNR?=
+ =?utf-8?B?WlNQeVNjaUhYczBKZTlNRmNSK0xhUEdMYXZTeEthazExVC8xNmRZQXV0V3dF?=
+ =?utf-8?B?TUQxbmVRd250MElkRTJBWm9xY0Z6Zk93aW81S0hhbnlUR3h6Vld0SzdyemxE?=
+ =?utf-8?B?RGpNYmFjNUV2c09nUkMvRVZYUkNpVVhjU3piWVAvRllxUlJyWHdpOTA3WElx?=
+ =?utf-8?B?TExhcWhvcGdsRkJuMnBSbVFvZnVGYll2a29qdlN5WmJPeENid2h2SW5DZk1I?=
+ =?utf-8?B?UW9KL0pjRFBiZkk0TTFSYk1waVpMRTF4U1pKZ0hyWm1qaTRJaVhwcEZnc1ha?=
+ =?utf-8?B?SVUrVDZyWXJWSVFqMnpsZ3A4M2RpTDZhcHd0d0ZxR1dmN0pGdk9WOFYybTRl?=
+ =?utf-8?B?ZTRFUE5aTUxlc3ZvcXJLR1E5UVpFTjU1N3lMZkJ6dVpENCtYUWtJMVdsNW5l?=
+ =?utf-8?B?UXZoUVpIdFZkalNReHdreVU5Y2JCSVM1RFR5OTdzM3RXUEdzZWQxalhsQTVR?=
+ =?utf-8?B?eWduRXg4Kyt3TnBuZmw5ZlRoREtqYTdRaTVCVEsvTFpEcmNnUzRLRmhSQk9x?=
+ =?utf-8?B?clVudUcxMzJhbG9ncmpKa1QvSkdLTExnZUd4RWdKLzhFTFFtZ1VJczkxY0hU?=
+ =?utf-8?B?S01zNFp3QmR4OWhNZ28vRmtkVklZdnpCdE1LV2tXOWVjQlRIbk5DRUdLZDdq?=
+ =?utf-8?B?NFNCSFBQRGh3ZEdGcmJ5R1FwUFFnUUxhZWx3STg5eFJ1ZzcvREdPeFE4TG9W?=
+ =?utf-8?B?L1hUcG1UY1E0VlVtSG5GMXpWeWlYY2JvMDFGdDBLMDQreDhZc3FFV2F0S2Y5?=
+ =?utf-8?B?b3JtSTd6ZmwzQ2NYWjNnNE84SXlYWmRsNjUrTVJ2VDJXVXdEOCt3Q0tDRkgw?=
+ =?utf-8?B?R3hVVGM1Wnd6SUM5MzB6TjZrbUpmc042V3RoOU1IWElxQVZnZU10c2h5djds?=
+ =?utf-8?B?alJGeWNmOW1TZ3RCbm9UY2NVMUt4Q0Q2LzBQZGw3KzZ5ajU1QTVPcHhKTW5H?=
+ =?utf-8?B?V3o5Y0ZlVTh3ZTNzVCtIQzlxbVl2VU9uZjgzK2hKQ2d4K0dPRG95cWlZMTdQ?=
+ =?utf-8?B?NHFqZVhVRzRIUFF2RVdycUdHUmc1d3VUN2hlMW5BNWIzNisvNFdtZDlMR1hj?=
+ =?utf-8?B?WldTT1JDV2lXZjNsWXhDRk1mMHY2U05YM0Y5QitJeUg0dWZWZ1YzT2kxTko4?=
+ =?utf-8?B?NXpjb2hRTU9XMTBEUTVYMUlvRENwd25SL0N0enVTZWtOSlJwOGM5SjlhOUM5?=
+ =?utf-8?B?R1ZTRncxdnhETnFBcm1hZnNmRjY3U0lPVXB2WFVnck0rdTV6MDNBekpiTWx4?=
+ =?utf-8?B?QkFWUEFEOFdid3JmUWlsOU5DN0p1bXRydVBZTlRUL0krSlZJZHI3VnlKcWZJ?=
+ =?utf-8?Q?cMsaAWl3K0/VlzmUTXts5Dyfw3zLie6fsBsGF24?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT4PR01MB10709.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Yi8wSG1pS2taekEycG83amtzVWg0d3R2V1lyTUxnQ3FBNUdsYmtJL3F5Wk9i?=
+ =?utf-8?B?ajcvN3Q0K3BKb1NjeUN4aVZWWW5aS3BCcjg5V0dQT29rNDN2bDVkN0dhZ2dl?=
+ =?utf-8?B?VUpTMHhteWFsdlpkeisvYlgwbXMxY0MyUTBzUTBUSWtQdXl5T1ZvN2ZrTjNC?=
+ =?utf-8?B?b3I3bXFqT0RZS09OSys1Zk9Ec3RwRW1LU2dFMTFMU0VoM2Jka3RXeUo5VC9S?=
+ =?utf-8?B?eXNwVWQyYXAzSktqbTlyVXpNUWgxYmtXK0ZNenpmYjhnTlVDOE1TeXZ4WFZQ?=
+ =?utf-8?B?NTJka2tUSE5hbUdNZ0gxbDNlN1FoZzh0bXRxYXpYd0FYcFd0dzFqdkdkQkRQ?=
+ =?utf-8?B?VFI3SDQvbXpPSGYxVlVKUmVmb1RRWThaakd2ZzNHdWJDTGREQnlvNllMWDlJ?=
+ =?utf-8?B?VnBlcW4reGxYM2FZNStHWkh5WUJZeTBZNHlPNi9kdlAzTWdLTlVQMGRRRGdo?=
+ =?utf-8?B?N0VXOXVsSUkwbVk2ZnFjWjdmY29SQ1d1TWs4amhod0RpbWdabHJwclBMcTd0?=
+ =?utf-8?B?bW5IUmRMQmpwaDVjamhQekpYZHc3aG5RQjg4VEVkYlJWbG5UQmRhQTl2TEVx?=
+ =?utf-8?B?S28vN3RSaWxNeU43M3R3bTlhekZoZnp2cW9lNVFMSkJGT09LTFFXYXUwbUEw?=
+ =?utf-8?B?ZXp0WVVFbFN6aVdqaG1SeFl4emtPamhiM2RGSEJNdi9pNmJPKyt0aHJta2hZ?=
+ =?utf-8?B?Qkg0ak1KR3owTXVEY2Z1MFMwMkpkdmVRbEhHNlh5TzNCTC9RNmdRT2tuMU8w?=
+ =?utf-8?B?Rmc3cFRaSi92NXczYzFTeGpwSU9IWXhLZmRtTEdHekExVEp0SkRmdG9aWmV1?=
+ =?utf-8?B?WW4yeTl0b3lIeEtQRGs4dnZ0VnJJc0xSVTN0UzloUjlCNFlKWEdnS3hsZzRI?=
+ =?utf-8?B?UHphRXlhbnM4Umw5a1lld1VwcWg5S3JJTElqK1lmRlBWRTF1VW5heWs0WEI5?=
+ =?utf-8?B?YkdXN1U4UXN0WkZ2VWNNWWZ1Zk8yUUwzZUJWbHJuRTQ0aVNhZFU0M3dQQWp0?=
+ =?utf-8?B?ZzdENUVIelhROUQvcFk3QktuODZabEpGMlZFR0NoRklMZDBENSt3cGNJVExO?=
+ =?utf-8?B?eDNpd1QyWlFtcytaY1Raa3pRRzQ1Y0tWOCtqMFNrNEUwSUdwK3dWL2lqcHZO?=
+ =?utf-8?B?eWl2bzJudGZmNDc3V1ZlTEY1dXV3WkdGZll3MmFLaHpScjVRMnYrLzl3cFU1?=
+ =?utf-8?B?b25Kcm1ROWo3OFpLLzZ3SUU2eW1xQndFSndzVVRzWjExQ1E2L2drNkdPZmg1?=
+ =?utf-8?B?QkF0MEY3STgyWEFGTzJpNEhMbTF6RCtQZ1JrUGNrdFRQcFk0bVlsZDdLbkt3?=
+ =?utf-8?B?b1FVdGdBdHNkNDl5VE9TMXgrSnpqVkEvTnlkYXNEOE1BY05qOFdiQUlJNEUx?=
+ =?utf-8?B?RTFwNUxrTEhrOGRjWVdqSXlWR00wS012RkF4Z0RwVzVFOHY3NnczN3h1c3FI?=
+ =?utf-8?B?cGh5cXg3UGQ4a0R1OWFRclE0aTJGUXAyaUY3ZlZqQWVFOHIvZlY5cGdxcTFL?=
+ =?utf-8?B?OVk0aHIzVUVqM2QwNmc4bi9DYVF6VWJHVGVBWG5OSmNRU0Y0QUY3VFYzZzhh?=
+ =?utf-8?B?RWZlSVV2Ym9KbjhHU3Exc0R6REV6dTBIL1p3TGtyYzcwRGxkS3F4cEw4VW1I?=
+ =?utf-8?B?ZDRlZEx3QlhPOFN3bWZkQ2tZd056cnc5RUtmUEc0S1VlVDhtK21wc2gwRWU2?=
+ =?utf-8?B?Y2p1SmtxTmdhWklRLzlKZVRrWlo3ZkRFSXVUL3IwWDFTcm9HTTZIWTdVd1NO?=
+ =?utf-8?B?RW5oNTk2UVVQeFl2RDZwZm1kNUF2VlNNSWJjdWZqQ0tvY1MxSjRVTHhTVGxw?=
+ =?utf-8?B?ZUx2K1JkUVZZRmFOVk8wZFZ4OEVmUE1Cdm84aWFLWldHMjBsQXlBWmIzR0Ez?=
+ =?utf-8?B?K1BuVDdiRjBQSmFKaGh4ZTlwRlA4aXdIU0JjRHE4eE1RSjZ6MWZRTTFsbWRB?=
+ =?utf-8?B?Z2E1alFHeXN1eWE2TDNieDMvamNZd0pKV093NDBVTmx2d1N0eEkyNEZmNlps?=
+ =?utf-8?B?REg3OGR3NWVIdnZFcC9lSmFJRjhaN1dSU2lrelBpY0dXeGp1SmpIZncyRjBX?=
+ =?utf-8?B?Y1ZNOHQ1U3QzbE4wcmFUalpObXF4V1ZRZnMyem1kUmxkRjVwZTFsN1RGdDhM?=
+ =?utf-8?Q?FiRUjs8mZL/IytJ1LHrLhGl/k?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d67e3826-3230-42db-cfd1-08dd20846c95
+X-MS-Exchange-CrossTenant-AuthSource: YT4PR01MB10709.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2024 23:25:28.7082
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vLPawoSX8FrTdeL4iDLShC+zrlnQAwP/GEhpPj9BZ0hbvnRRBWbIALr0W2KuggEZ39OxxcT3tTu8EqfMQw0QAQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQBPR0101MB5990
 
-Hello,
+Hi there!
 
-I'm excited to announce that uftrace v0.17 is just released.
-This release comes with many bug fixes and a few new features.
-You can get it from the below link:
+It's been a long journey, but here we are: today we're announcing the
+first release candidate of Babeltrace 2.1 “Brossard”! 🥳
 
-  https://github.com/namhyung/uftrace/releases/tag/v0.17
+┃ Brossard (/ˈbrɒsɑːr/) is a city in southwestern Québec, Canada, on
+┃ the South Shore of the Fleuve Saint-Laurent, near Montréal.
+┃
+┃ Home to the Quartier DIX30 lifestyle complex and the Canadiens'
+┃ practice facility, Brossard is defined by its suburban sprawl and
+┃ stroads like boulevard Taschereau, seamlessly blending commercial
+┃ hubs with car-dependent design.
 
-One notable change is the watchpoint support for global variables.
-This is still very limited but users can track changes of the given
-variable at the entry and the exit of each function.  Please keep in
-mind that it doesn't use hardware debug registers and checks the value
-in softwawre.  Currently it can only handle integer types.
+Our main focus for Babeltrace 2.1 was to bring CTF 2
+<https://diamon.org/ctf/> support to the project. This required major
+changes across the C API, the Python API, all the official plugins, the
+command-line interface, the documentation, as well as several internal
+aspects, including the tests. This is because CTF 2 introduces new
+concepts which are incompatible with the libbabeltrace 2.0 API, and then
+this library is the foundation of all the other parts of the project.
 
-This is an example output of trivial test program called 'watchy'
-which changes a variable called 'global' multiple times.
+Rest assured, however: Babeltrace 2.1 can still read CTF 1.8 traces and
+will continue to.
 
-    $ uftrace -W var:global ./watchy
-    # DURATION     TID      FUNCTION
-                [2736290] | main() {
-                [2736290] |   /* watch:var (global=1) */
-                [2736290] |   foo() {
-                [2736290] |     /* watch:var (global=2) */
-                [2736290] |     bar() {
-                [2736290] |       /* watch:var (global=3) */
-       0.142 us [2736290] |     } /* bar */
-                [2736290] |     /* watch:var (global=4) */
-       3.523 us [2736290] |   } /* foo */
-                [2736290] |   /* watch:var (global=5) */
-      24.555 us [2736290] | } /* main */
+We published CTF2‑SPEC‑2.0, the CTF 2 specification, last March.
+Therefore, as far as we know, there are currently no tracers producing
+CTF 2 traces. As for LTTng, we plan to add CTF 2 support in version 2.15
+(we're currently wrapping up work on version 2.14).
 
-Another important improvement is the dlopen support.  From now on, it
-can capture arguments and return values as well as other debug info such
-as srcline.
+For you the users, this means there isn't much to try out immediately.
+However, it was important for us to release Babeltrace 2.1 well ahead of
+LTTng 2.15 to ensure that both will be available together in
+distributions, and so that a CTF 2 producer author has a stable reader
+available for testing.
 
-The below test program opens two libraries with dlopen(3) and calls
-functions in them.  The lib_[abc] and foo are from the libraries and you
-can see the arguments the source code information.
+NOTE: We'll publish the full release notes as well as the online
+documentation (manual pages and C API) when releasing Babeltrace 2.1.0,
+most probably next month.
 
-    $ uftrace -a --srcline ./t-dlopen 
-    # DURATION     TID      FUNCTION [SOURCE]
-       0.747 us [2737082] | __monstartup();
-       0.374 us [2737082] | __cxa_atexit();
-                [2737082] | main(1, 0x7ffed8abe788) { /* s-dlopen.c:5 */
-                [2737082] |   dlopen("./libabc_test_lib.so", RTLD_LAZY) {
-       1.000  s [2737082] |     /* linux:schedule */
-       1.004  s [2737082] |   } = 0x55eb7cb474c0; /* dlopen */
-      11.505 us [2737082] |   dlsym(0x55eb7cb474c0, "lib_a") = &lib_a;
-                [2737082] |   lib_a(1) { /* s-lib.c:10 */
-                [2737082] |     lib_b(2) { /* s-lib.c:15 */
-       4.867 us [2737082] |       lib_c(1) = 0; /* s-lib.c:20 */
-       6.624 us [2737082] |     } = 1; /* lib_b */
-       7.875 us [2737082] |   } = 0; /* lib_a */
-      98.767 us [2737082] |   dlclose(0x55eb7cb474c0) = 0;
-                [2737082] |   dlopen("./libfoo.so", RTLD_LAZY) {
-       1.000  s [2737082] |     /* linux:schedule */
-       1.015  s [2737082] |   } = 0x55eb7cb474c0; /* dlopen */
-       9.467 us [2737082] |   dlsym(0x55eb7cb474c0, "foo") = &foo;
-                [2737082] |   foo(1) { /* s-libfoo.cpp:12 */
-       0.285 us [2737082] |     AAA::bar(1);
-       5.261 us [2737082] |   } /* foo */
-      95.406 us [2737082] |   dlclose(0x55eb7cb474c0) = 0;
-       2.020  s [2737082] | } = 0; /* main */
+Feel free to reach out if you have any questions or comments.
 
-But this also comes with a cost.  Now it needs to exchange the internal
-data structure to track arguments and others when dlopen is called.  For
-now it needs to wait for 1 second before releasing the old one.
+                                                   — The Babeltrace team
 
-Thank you all for making uftrace more useful, efficient and portable!
+LINKS
+=====
+Project website:
+    https://babeltrace.org/
 
-Namhyung
+Download link:
+    https://www.efficios.com/files/babeltrace/babeltrace2-2.1.0-rc1.tar.bz2
