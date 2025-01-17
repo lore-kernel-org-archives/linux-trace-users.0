@@ -1,66 +1,65 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6128198845;
-	Fri, 17 Jan 2025 15:19:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E869C18B495;
+	Fri, 17 Jan 2025 15:28:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737127166; cv=none; b=Axw7+920qVtdNSlRl58r4Ug2aGmGURfsHnwF69XznSEr4aVlPDroYQrFXJ5ySjhFwKHOl9nPf+laCDdeeN1KajkFPANhhMT9q/UXH+qaBCDnHIoyWjR99n4+EqFJRybEHWXGmx+ByJwq7i6Pid+4oZLTtPhFOPmd3SZWLJjozdY=
+	t=1737127717; cv=none; b=FIhopJe8/Q4beIOaYuIs3T7YjL6CAeg0ntHQ4Np+AGMleYZI4toNKjJXw3K3H6/imNtOnn1/hChrNpVnKrvnh6ohxBrkkQD2C0JuAV1Rm9Pd5XviVt7/pzwif7E6l7NxNWNCoHMQtznL5KsMLVYQa08B8ddoNpkKeIk/DLMf/Hw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737127166; c=relaxed/simple;
-	bh=ggM+hBMMSH9ancFlHxvfjF9iFI/etxT38WdCRQ8mXOk=;
+	s=arc-20240116; t=1737127717; c=relaxed/simple;
+	bh=YYJ01nJ/fXzL9VBpQSaiEba0hCgRS3UaaERDZE64ufM=;
 	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=XwVMUQ9aSa0yjItK8gjM7U94Pyh/0pncn7UFjU3SZJfLT9h4LU63RJub58wGdIVw+qCL+AifX3rR3Su2Qka6ibMzs2k6mE+5LGntUglze5BBxXeJWdZiOeVkYhWsYmWKrDWnPOwpygGjL7gSTfcI/GRtgLYPEC67OJiJEchCS2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CgbvRlmY; arc=none smtp.client-ip=209.85.208.44
+	 In-Reply-To:Content-Type; b=UY0UepQZ0Rq/FXI9lyA1bU6EkiSTuqMmIJ/r7e8Yl8j8I02PScvVwuIXBtm6AoKqzOKSpGJUY7NtciJjWI80ePtw8dfFf49lpw7Pni7/PJcUwVIG8Mf1YzCHVuBE2s9Vmhzgmyvkp9cQG2X4cg+dOf64ZucP3s6lL7ddjCIuHDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VuOm7vY2; arc=none smtp.client-ip=209.85.218.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CgbvRlmY"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5d3e9a88793so3723388a12.1;
-        Fri, 17 Jan 2025 07:19:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VuOm7vY2"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-aaf60d85238so378376366b.0;
+        Fri, 17 Jan 2025 07:28:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737127163; x=1737731963; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1737127714; x=1737732514; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=b2Iyh5CkCJ/iMDR9UC1Tk3RYBAf9B7HyAwuM83UZHao=;
-        b=CgbvRlmYieUjsh7oUH/ePoCf7z5Ro1HfHupSZAxdhjZbyktWPp3sN9qMVtLStmmRok
-         zL/m0/zyV3Fhp/t46hPgVNHFt/EsYv1Zxpt8ubQSsQdrmoAf4IC92dhpx4uSJ4AijgBA
-         cYsKGZsGBnASeci53hQvm+pm/oiH5pgBFLo2kerL4d4HLmLU38B8CjkDNL2+xVK2AFIW
-         dtu3HTb0u1n40YGjlKw/nhSpLxNjT7fdaOTZnwDiyEZduNrBerOsdV+rbwrO1RhUin2a
-         KQBF3Y8njP2fyjUg/H8cLotBJMLhN7o76DOKR0LaYb67loRHirCkSr29xdrmntTgwhz4
-         OR0A==
+        bh=iefpm1tWscYznjmxr/TrjFDcJponHmThuJ5fxeIBtQ4=;
+        b=VuOm7vY21GkHl6+88LRYbZEr0Yean54HJpb37hKGhZjcCm1vqGszdj4lTC48OotVTT
+         HqN/c5wp8dpWs6ZxQJQzPm1iIT29dk1r/SWwzn/ZbJeoEna3u3mGhp/B8XZFL+2AiEKL
+         f/QQ8URoGo3KvxuroeI21u3q6Hn4gtt++PP7Cy0ySwmmQphth3C5cRCFEaR8I9wuuLnX
+         Gk84cBFYMNEszM8JtH7jLp6Z1OsMsL3D4g7lGm9Zx92rKqr3D5Mkd7e8sXZsQAQgEHiw
+         dvomPwEi5cYULs6mjgAhlO4nlhuJDfKjK0RF18ztgZpq8N4CttkU1QSpVkkdnLphixkI
+         XJUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737127163; x=1737731963;
+        d=1e100.net; s=20230601; t=1737127714; x=1737732514;
         h=content-transfer-encoding:in-reply-to:organization:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b2Iyh5CkCJ/iMDR9UC1Tk3RYBAf9B7HyAwuM83UZHao=;
-        b=R7CPGm6nmhrRLw7FTDdwSXfS4zGWoAhrBVDkKVO0YX+MleWK8ZfWCRSe1g4N9g9t82
-         /BJ3ldiiuOlZ3oBdG7cbEmzAQawolw3JF/Bj4+X+M0cGqsDYe42gfURTg0+x+vbYj3oF
-         Kf4H2V2tbKNX5WfXod/pev7TDxfJOLhP0qt0nml1/yTQANendcyGHPIWZW1dZYA5TMvC
-         e7zUe1WF31AZBpdGq4sHAtxJ6sP5xTTkelDiCCKV7+piKcSTUr1Mw+LTt5UH7LbGNbSh
-         0KEVU5cStWkszwS9/k83Ju0I65Gz5i3lT3IRfKrW+sWXMms4mvaHehPVWcCCpYZL+zJe
-         Rwow==
-X-Forwarded-Encrypted: i=1; AJvYcCVVR/9tJ86K581ajQizBUntNgGmx1SpMK/XG0xg/+B0AH9tu3tRtO6QDZ9t7NgIm7Fxp/qQhn4EjOWPJpmbsM4jNBE=@vger.kernel.org, AJvYcCWACgGcbrG6ybH0oHBfuYm8CcH8+y4oHnvj+QeDF7rkz53tDDaDPJW31tRdGoifDgufQy3qeQcJ1khf1Uk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxd0KkAb1dKPeWyBXU7RWjjckDIxJRn/YwH2fBGlSgR5dH0TC95
-	HIe2+67HwQ71VlhaH8YoseY6vkgk2WpUiLtRtft+ACa3ZQYzWJyV
-X-Gm-Gg: ASbGncs8jCNo32BavveLWh5bhhDUJ8Qpy5mB7C0VhXlOe2jXh9S3eYKQMnxG4bweZPH
-	axMVX6sLzDMy+b7gbpQJgRLiftWOeyPp9aIZ1ld947za25mMbo1z0ccX4d1jRKdeSQe80oFo0Xl
-	zMWiyG4rXvwgyJnJikoXkFDcpu4KyqlSmLJ/sLTD1OAZ7gghEUX1Zn17zqz7KbfPX9J0UYjcKIy
-	tMKEzM5eTATQjPX3Ixl8EpMrAjf6WOJsQut42Awno3wSy7BebAxznq5l+CHlrtb9DD278ST8c0t
-	RI5tTA==
-X-Google-Smtp-Source: AGHT+IEp+hR1eFHuS1J921on24IXVij12VpkwyiNGDzOQet38LODlcpk+R4Y/VOPH8aWsPkOaUMCFQ==
-X-Received: by 2002:a05:6402:4308:b0:5d3:d917:dd90 with SMTP id 4fb4d7f45d1cf-5db7d2ec11fmr3337794a12.6.1737127162772;
-        Fri, 17 Jan 2025 07:19:22 -0800 (PST)
+        bh=iefpm1tWscYznjmxr/TrjFDcJponHmThuJ5fxeIBtQ4=;
+        b=q59P5StH372Q1HH0c7Iq4tFUh1K+s7kmFENbgnDkj7rL+9+KKErTTZENxVbPwjptcg
+         HmMoCBGin2rdeWHPTsTV1Mh7YACiyKlAWcBtDrOeYAzW4ZWWcDgZDxdThPaC2Wx01Og0
+         ZXStfhyp2AMJb3F0l2Ur7i8RPPugD8GlIug/1XeSgC8vpS+orzUP5kQvWBGo2OZqwUd/
+         NOPQkzruZW7KZGK9WWmwwQPir1xVtUkoOs3UaYUSBJkEPkyko5R2w8TK203qH62ArkA9
+         F1ijxwx/4hjrKLagLlYa9H3P8/rvq0sJQUB1Yvf1zQYwn5VZiciFBX2NT2MlrKEzoN1E
+         9GUg==
+X-Forwarded-Encrypted: i=1; AJvYcCU3P23gwulbaiBn6cJm6C0Krhx8F5ojAarJtg5ZpSAlGEFriHneh9hfmAhatIrMnhRdq5UDrwQMTi/tJG4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxw9IB3xAQbVLGDkssveMaptxzNe2lomsIdA8+OjzqZLI3Hw7ac
+	SvKZHA10FkManyLgkbYpC/PjLI12vYCdRkPskWTTtxBA6KPyI3BS
+X-Gm-Gg: ASbGncuslt5HgSG4E1/G61MUD2zSOe3ZirDTTOvyeUMV0dLvn5gwOLvGhC4DiLlMydI
+	D8Xka/9eUiXMxEHtcAulbtlFoRQ/Rftx+c5CivY3GUu/NITJbfdEw6imiWZH0z7439/2voZVS3i
+	anp4pj+W1GsKcmui8vMuGbKbd1gYxIUJPHg0LD0oE75/biHHAYe6+CRQ9ucBDk9qW0ZvayxXZzc
+	ta5nFV3KzvRrwr1STShBXNGXKeCwwSXlSU5ixw/Mdvzu7JLAb+7sPm0wUTXFDuLt3yW
+X-Google-Smtp-Source: AGHT+IFvDqQ3MnMlQU4wRKoEsDKrZcCgzf7yFd94JCm7WM557HmLRON2auih42IkHmPLGrBOu6M4TA==
+X-Received: by 2002:a17:906:f58d:b0:aa6:79fa:b486 with SMTP id a640c23a62f3a-ab38b4c6ae5mr352886966b.49.1737127713967;
+        Fri, 17 Jan 2025 07:28:33 -0800 (PST)
 Received: from [127.0.0.1] ([193.252.113.11])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5db736716d6sm1631091a12.31.2025.01.17.07.19.19
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab384c60772sm187435166b.33.2025.01.17.07.28.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jan 2025 07:19:21 -0800 (PST)
+        Fri, 17 Jan 2025 07:28:33 -0800 (PST)
 From: Alexandre Ferrieux <alexandre.ferrieux@gmail.com>
 X-Google-Original-From: Alexandre Ferrieux <alexandre.ferrieux@orange.com>
-Message-ID: <789848f7-680c-41a0-8edd-64e8af1f2f4b@orange.com>
-Date: Fri, 17 Jan 2025 16:19:19 +0100
+Message-ID: <ef3f7784-7129-436a-a5f7-1630b278b101@orange.com>
+Date: Fri, 17 Jan 2025 16:28:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
 List-Id: <linux-trace-users.vger.kernel.org>
@@ -69,90 +68,49 @@ List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: Bug: broken /proc/kcore in 6.13
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+To: Alexandre Ferrieux <alexandre.ferrieux@gmail.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
  Steven Rostedt <rostedt@goodmis.org>
-Cc: Alexandre Ferrieux <alexandre.ferrieux@gmail.com>,
- linux-trace-users@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+Cc: linux-trace-users@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
  linux-mm@kvack.org
 References: <05ea473e-d7e9-4ca5-ad91-ba8c00618fb4@orange.com>
  <20250117084038.79f40307@gandalf.local.home>
  <4fd7e1a3-f7ff-4b9d-9a53-fb73795b5b3d@lucifer.local>
+ <789848f7-680c-41a0-8edd-64e8af1f2f4b@orange.com>
 Content-Language: fr, en-US
 Organization: Orange
-In-Reply-To: <4fd7e1a3-f7ff-4b9d-9a53-fb73795b5b3d@lucifer.local>
+In-Reply-To: <789848f7-680c-41a0-8edd-64e8af1f2f4b@orange.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
 
-On 17/01/2025 15:44, Lorenzo Stoakes wrote:
-> 
->> Alexandre Ferrieux <alexandre.ferrieux@gmail.com> wrote:
+On 17/01/2025 16:19, Alexandre Ferrieux wrote:
+> On 17/01/2025 15:44, Lorenzo Stoakes wrote:
+>>> Alexandre Ferrieux <alexandre.ferrieux@gmail.com> wrote:
+>>>
+>>>> Hi,
+>>>>
+>>>> Somewhere in the 6.13 branch (not bisected yet, sorry), it stopped being
+>>>> possible to disassemble the running kernel from gdb through /proc/kcore.
+>> Thanks for the report! Much appreciated.
 >>
->> > Hi,
->> >
->> > Somewhere in the 6.13 branch (not bisected yet, sorry), it stopped being
->> > possible to disassemble the running kernel from gdb through /proc/kcore.
-> 
-> Thanks for the report! Much appreciated.
-> 
-> I may try to bisect here also unless you're close to finding the commit that
-> broke this?
+>> I may try to bisect here also unless you're close to finding the commit that
+>> broke this?
+>
+> I'm currently homing in on copy_page_to_iter_nofault(), will report shortly :)
 
-I'm currently homing in on copy_page_to_iter_nofault(), will report shortly :)
+Hmm, actually, that baby ain't cooperative:
 
-> Yikes, this is my fault. Sorry about that!
+  [Fri Jan 17 15:23:05 2025] trace_kprobe: Could not probe notrace function
+  copy_page_to_iter_nofault
 
-Wow. I'm so happy we connected, no problem :)
+... if I cannot insert kprobes to sniff around, I'm a bit stuck :}
+So I think you'll reach the goal faster than me !
 
-> There was some discussion at the time about the infinite loop, obviously with
-> the understanding that vread_iter() should never return 0 in this scenario
-> (where we had identified the _category_ of kernel memory being accessed), which
-> is obviously now rendered false.
-> 
-> The fact that it can is (obviously) rather problematic... obviously we need to
-> patch this, if this were possible in real scenarios in the past we would
-> probably also want to backport a fix.
-> 
-> In any case I think we need an explicit check here no matter the cause so we can
-> never loop like this. This was just an oversight at the time given this is a
-> documented behaviour.
-> 
-> My instinct is to error out if this returns 0, because that would indicate that
-> the address is not part of the vmalloc area.
+PS: For your bisection: the last working kernel I know of is Debian's 6.12 final:
 
-Yes, I did the naive patch below; it does the job, breaking out of the loop, but
-does not cure the access problem, so gdb just sees zeroes :(
+  ii  linux-image-6.12.9-amd64         6.12.9-1                         amd64
+    Linux 6.12 for 64-bit PCs (signed)
 
-diff --git a/fs/proc/kcore.c b/fs/proc/kcore.c
-index e376f48c4b8b..8c5f29240542 100644
---- a/fs/proc/kcore.c
-+++ b/fs/proc/kcore.c
-@@ -531,7 +531,13 @@ static ssize_t read_kcore_iter(struct kiocb *iocb, struct
-iov_iter *iter)
-                         * again until we are done.
-                         */
-                        while (true) {
--                               read += vread_iter(iter, src, left);
-+                               long res;
-+                               res = vread_iter(iter, src, left);
-+                               if (!res) {
-+                                       ret = -EFAULT;
-+                                       goto out;
-+                               }
-+                               read += res;
-                                if (read == tsz)
-                                        break;
 
-> But then it seems add_modules_range() is just adding the module range under
-> category KCORE_VMALLOC despite it not being in the vmalloc range :/ which is
-> really odd. This was added a long time ago so clearly not what triggered this
-> but odd.
-> 
-> In any case, let me go have a look at this...
-
-Ok, staying eagerly tuned !
-
-Best regards,
-
--Alex
