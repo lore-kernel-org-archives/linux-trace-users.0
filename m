@@ -1,202 +1,172 @@
-Received: from YT3PR01CU008.outbound.protection.outlook.com (mail-canadacentralazon11020142.outbound.protection.outlook.com [52.101.189.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4087F1BC9E2
-	for <linux-trace-users@vger.kernel.org>; Thu, 19 Dec 2024 23:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.189.142
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734650733; cv=fail; b=F1VU/vh9Z3YC4cqkz5XxbaKEVjNYFs0LhblUrBBaRQw9sDrxnkTpSOpUCIo+qBbhgyxKVTVulkNrLvB2xezQ3WOm9aSKDeiHJiwRaZo7NQAXBMMXDyPlrz3rgZjH6z+0//q7nfNBwUEaS62T4GULl5WorlmcswM+2Xf2iEuA+a8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734650733; c=relaxed/simple;
-	bh=h9IRhhXL/Y3tneY7bO/2D1JWnj1HPrZ4CFjQi/u4N/o=;
-	h=Date:From:To:Cc:Subject:Message-ID:Content-Type:
-	 Content-Disposition:MIME-Version; b=jXfkJZLaSMsZWGPOURxLRvHdrjbZXv+M2XVCD6rUn6drV7NBpWY9RqTfB8Dpu+6i4kI2ynJfB2fkTQ6EWh4ORBkqHCQVyM8IGlDtyBcvHf+L0KzK8CLU2c2cuU/yEXv5g1crNeu2x6m/kCfPJ9MQY64Uu23vJuk/P/FX8LLRGLA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=GS82jf1i; arc=fail smtp.client-ip=52.101.189.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7941F9F72
+	for <linux-trace-users@vger.kernel.org>; Fri, 17 Jan 2025 10:36:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737110183; cv=none; b=uS+SPdiAxjUfmAN/3v8bRR1wOB0IURSz93jvPWWkvkPu6uqeTI8sNqGIa3WAH2x7s1sZ9OE7E76Tb1T8zE8OHmk3wt3lQY8ZLyJHis9eiaXGJSTFU/ruaU2CQj07cZo8MnTXVsa/bQK0sBlq9Fsa6i3Oo3XJOutglHUDtM5PM2U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737110183; c=relaxed/simple;
+	bh=55vMtvGlqBStv/co4PmKNeaqZv04UHZz2LDrR/Ong+s=;
+	h=From:Message-ID:Date:MIME-Version:To:Subject:Content-Type; b=pj/yHpKqBHg1yCcUy96zxqDTrAXJow1DJ48WR2gVWMeILrWGYDYJLUK/8RXK2e3mq6Ty5Rs9H0N6z0UI8yIV0KbgumFQMaZqN033fp4XSZy7qjUKeK71isRZX5bPDcLCy7OYX8luZzASxpPVyeu6xyFIEnqvlxRL0cCngPOXypo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qr4QD01Y; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="GS82jf1i"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hD2nkL17bcEwCE9pEbsSm1V0IsbyRlvQGigZ6woFx5dl5FgGlV9tfGH7fvQzxv0KV5i6leu8oqibDPPrmD0hlB36tB0ji1B56X9YWuajxE8GlrSY13Glc2TE1g0CRRc8dcheU6eipnZHuL4/1pCRhLpiCPDk1Ig3n3kB7C/6//uDDrg7nvXNGr+eJq7XeTWS0MydpY62VhLUZQZgHncPmXWIhVZRiLsdiK2WrqizMcLTNNLnpjpMX9tt1VS6EfO16U2mlVo5JRV9Qiz+A1oa8LRP+x6GH2uQRLvamANzOXlWf0plDj+c0k5a2qlz5GqC3gzCMmwk5lwSEszzcnHCbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QQok9niPEbBRCiok4uTXgO8YDhtxxp0fi4Bw8OsZNJg=;
- b=Z2FBmt4cDdBHGVqt+e9gCAHDiOTE8672bbSq4w7WYh/BXu7uCL3yTZWLtpUGSChYERoq1cqQU8Za/x8dn97Le0fxV9smhwdT292ICucS+Q2QbqJcm5GSScMsaZ2FeFUgbrMOqHf3telbr/wCgsV1QW1S1S4Lc+v7Hn3mB3Av8t8b/avmw69M7OfPPsOG7qQCY+qywGtEqmCaCT8PN88K5AFM7wyS1BCTeuuGNxiFKTaMktQ+sdYB6erKcJrthAjqVgKcBCV+Lw0uT6zHmqoDUOKfbXkTrre9vBGSO4h1lLf9ry8Te0Z7po47vlrtjUAAU4plF9g+Yxm7FVSXa+cajA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QQok9niPEbBRCiok4uTXgO8YDhtxxp0fi4Bw8OsZNJg=;
- b=GS82jf1i3RewgzhhtZ4EUsij9IKePxWyH6cwKEm6858ZPLlRUIxceupeOGEtxDoR0c6NflIqdoL82wxcbKLGkvzMEiJA+q4dEgYWBbOUEle82skxvLcfb06pl82shLdqFobblSVOwNq90D/uijt9VeHSyQlbWdQiwtVrAFOCIYQ00M8Clx+KKVVV4ei9QpK8dmlipJesWJ5obNSEggh1rEaFhSMeG7s4Rk9u74b7Y9o/KarwL+pTzfGI0Xqbj1I6Pe/KuYdd5XxwWUqBJWve4f5LGDAreuh8oLCZYcdl1HJ/aP+2/k5QlMVOzRoldWDD5HOV9m4RWUALZDMV2xGK1w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=efficios.com;
-Received: from YT4PR01MB10709.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:104::10) by YQBPR0101MB5990.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:35::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8272.16; Thu, 19 Dec
- 2024 23:25:28 +0000
-Received: from YT4PR01MB10709.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::5de4:ebdb:2bf6:ee1]) by YT4PR01MB10709.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::5de4:ebdb:2bf6:ee1%4]) with mapi id 15.20.8272.013; Thu, 19 Dec 2024
- 23:25:28 +0000
-Date: Thu, 19 Dec 2024 18:25:27 -0500
-From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-To: lttng-dev@lists.lttng.org
-Cc: diamon-discuss@lists.linuxfoundation.org,
-	linux-trace-users@vger.kernel.org, lwn@lwn.net
-Subject: [RELEASE] Babeltrace 2.1.0-rc1
-Message-ID: <Z2SrZ9ciEYNtKCdr@efficios.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQZPR01CA0045.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:86::17) To YT4PR01MB10709.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:104::10)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qr4QD01Y"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5da12292b67so3296075a12.3
+        for <linux-trace-users@vger.kernel.org>; Fri, 17 Jan 2025 02:36:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737110179; x=1737714979; darn=vger.kernel.org;
+        h=content-transfer-encoding:organization:subject:to:content-language
+         :user-agent:mime-version:date:message-id:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=3vcUGC5FDmFwCdvVpy3586vz21z9mJiYJHaD31yGWck=;
+        b=Qr4QD01YnZYs6DNRuV6DoLTGmpFxzdJRgv4BiMR7XOmf9DR/MPQj2W90wHYt1luJNe
+         NewY1dSpueOW7vGH2Zu2L+l39Ac7rAPZWblAjCdXVYb/+NqZQZm92UczHnPWa3oOVEsK
+         WycjztaILuRnelXMVKdj04BkSDoWrS/vBSJzfYr4EZVzQDu6JZaVRV7HASLBVElH+Xt1
+         01VIOybt64NqXstrHheALQDtGqmsDmtnlF1Fxft7fJm5Fj6ujhZUzsWORUYVlAVCfPXZ
+         BdHYeYQyVlw/2efAes/+WQ7dLXKkNubO7XeeNqrBHgWGf3u0gHTaOGWg/Q7n2ozMZbaC
+         dUDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737110179; x=1737714979;
+        h=content-transfer-encoding:organization:subject:to:content-language
+         :user-agent:mime-version:date:message-id:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3vcUGC5FDmFwCdvVpy3586vz21z9mJiYJHaD31yGWck=;
+        b=QPGgpCh1Ma1EWRDU1AElpVczdbh2l+BJr/yxtdGsXvoo5Zpwmt7w1R5fRvP1lnbpe0
+         j6JZuhbQTl3xzcRzxMHNOu/oo1N4njeB3QzgqUcYq/QdDg57OEIId8DiSSurqwmj+yRX
+         AUWdqYEIQ1sIVzMIqlXFkSu/1aeERf69e096PKrAO1M15aKn6JqxwEqpPuu2ZkBNljoH
+         kMWbi05PQ7Br5ZgRWApKZ7isyV4l4XsoM92q72Z+K9T1v/+b3kaWymahtZebuvNvcVm3
+         qZCP6u9V9/tTgYtA7+B9ZNy1TWRhifEgw/4MjEDJwAS0iM6JGVYvhVGENUXJ0zXgr9M0
+         OYjA==
+X-Gm-Message-State: AOJu0YxYk8Wt38N+w+nRKgB2sOw9kXfSyI07cMvbg7lb05NzHkcMAsli
+	5IYY3xj2g1Aqqnvus2pLu3+h1UzwdHN38X3iebLAEoZCjgxS1liJR1u87g==
+X-Gm-Gg: ASbGncsU/UXdU2+uR59fp0xZQ4jsvGWwGS5fCQNE/QsLunoAVg4qCQh2sOE9hfyaNTr
+	y4r/VTfBgIPwPxOGfvkuNdn+zBx3pwXOWIxxLJOF8OiKAn//2CMUjBohb1LFCy6OXB168Coh+KS
+	8hyboNzUL2yrExtGp+h8UGA7QOw2xtvAUYNBlIcJuX1OPvah7MJX0ZyiU3APOAzb1zBAMZNYzlq
+	Yqez+bdA9+WDG1QR7MgWMHbqOPImlVHopGcXXIm/m3Nt+U4Rfkf+cBvhLMWE9nk2F54kN+hq9sQ
+	FTLBrg==
+X-Google-Smtp-Source: AGHT+IFx6AckOGiamO6C1fRZ2/xk2DBQSesP1Wo6kszfj9PCpFRfjcPots28NTbUN4BqJWigmqGoCg==
+X-Received: by 2002:a05:6402:2101:b0:5d1:2377:5af3 with SMTP id 4fb4d7f45d1cf-5db7d2dc12amr4725160a12.5.1737110179228;
+        Fri, 17 Jan 2025 02:36:19 -0800 (PST)
+Received: from [127.0.0.1] ([193.252.113.11])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5db73642597sm1272270a12.11.2025.01.17.02.36.17
+        for <linux-trace-users@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jan 2025 02:36:17 -0800 (PST)
+From: Alexandre Ferrieux <alexandre.ferrieux@gmail.com>
+X-Google-Original-From: Alexandre Ferrieux <alexandre.ferrieux@orange.com>
+Message-ID: <05ea473e-d7e9-4ca5-ad91-ba8c00618fb4@orange.com>
+Date: Fri, 17 Jan 2025 11:36:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
 List-Id: <linux-trace-users.vger.kernel.org>
 List-Subscribe: <mailto:linux-trace-users+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT4PR01MB10709:EE_|YQBPR0101MB5990:EE_
-X-MS-Office365-Filtering-Correlation-Id: d67e3826-3230-42db-cfd1-08dd20846c95
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?YW14dG5YcG9UdHEraURURW9sOW5MNGhCdzg3cll3ZWhnK21FaERKMDNvVjIv?=
- =?utf-8?B?c2ZLQ1QzcnJyUzJTdGxPRld5ZUk3M1hmaFlTV20zNDgzQkJOT2hIbTJJUHg5?=
- =?utf-8?B?SzZkeEQwN24xWXhOclVqNnF3L0ZPL2owZnFpQTRscWc2Rzd5WjhJbDlYc3BZ?=
- =?utf-8?B?Q05ySDM5SWt4ZmxWUUNrL1F2T3hlZ2V1QmIyM3I2QTgvY3VuWFdjWmZSY3Vm?=
- =?utf-8?B?bXBHQWIwcGJpSTZSMjl4a3ROZXRWN01zeXN1bWhLdTRjS3VBQWphQ1dSL1Ux?=
- =?utf-8?B?dElyRHlveTlXQk5DMUpFZTRxQ1pvSWNtb1NCbVpOSGp6ZldYaXpLY0FOL3ht?=
- =?utf-8?B?c0NNOURWWHVGUTlsK2xlMG9nZ0ExSVlnT3Yxalo5NUFxa2dUNUd5eURzSnNR?=
- =?utf-8?B?WlNQeVNjaUhYczBKZTlNRmNSK0xhUEdMYXZTeEthazExVC8xNmRZQXV0V3dF?=
- =?utf-8?B?TUQxbmVRd250MElkRTJBWm9xY0Z6Zk93aW81S0hhbnlUR3h6Vld0SzdyemxE?=
- =?utf-8?B?RGpNYmFjNUV2c09nUkMvRVZYUkNpVVhjU3piWVAvRllxUlJyWHdpOTA3WElx?=
- =?utf-8?B?TExhcWhvcGdsRkJuMnBSbVFvZnVGYll2a29qdlN5WmJPeENid2h2SW5DZk1I?=
- =?utf-8?B?UW9KL0pjRFBiZkk0TTFSYk1waVpMRTF4U1pKZ0hyWm1qaTRJaVhwcEZnc1ha?=
- =?utf-8?B?SVUrVDZyWXJWSVFqMnpsZ3A4M2RpTDZhcHd0d0ZxR1dmN0pGdk9WOFYybTRl?=
- =?utf-8?B?ZTRFUE5aTUxlc3ZvcXJLR1E5UVpFTjU1N3lMZkJ6dVpENCtYUWtJMVdsNW5l?=
- =?utf-8?B?UXZoUVpIdFZkalNReHdreVU5Y2JCSVM1RFR5OTdzM3RXUEdzZWQxalhsQTVR?=
- =?utf-8?B?eWduRXg4Kyt3TnBuZmw5ZlRoREtqYTdRaTVCVEsvTFpEcmNnUzRLRmhSQk9x?=
- =?utf-8?B?clVudUcxMzJhbG9ncmpKa1QvSkdLTExnZUd4RWdKLzhFTFFtZ1VJczkxY0hU?=
- =?utf-8?B?S01zNFp3QmR4OWhNZ28vRmtkVklZdnpCdE1LV2tXOWVjQlRIbk5DRUdLZDdq?=
- =?utf-8?B?NFNCSFBQRGh3ZEdGcmJ5R1FwUFFnUUxhZWx3STg5eFJ1ZzcvREdPeFE4TG9W?=
- =?utf-8?B?L1hUcG1UY1E0VlVtSG5GMXpWeWlYY2JvMDFGdDBLMDQreDhZc3FFV2F0S2Y5?=
- =?utf-8?B?b3JtSTd6ZmwzQ2NYWjNnNE84SXlYWmRsNjUrTVJ2VDJXVXdEOCt3Q0tDRkgw?=
- =?utf-8?B?R3hVVGM1Wnd6SUM5MzB6TjZrbUpmc042V3RoOU1IWElxQVZnZU10c2h5djds?=
- =?utf-8?B?alJGeWNmOW1TZ3RCbm9UY2NVMUt4Q0Q2LzBQZGw3KzZ5ajU1QTVPcHhKTW5H?=
- =?utf-8?B?V3o5Y0ZlVTh3ZTNzVCtIQzlxbVl2VU9uZjgzK2hKQ2d4K0dPRG95cWlZMTdQ?=
- =?utf-8?B?NHFqZVhVRzRIUFF2RVdycUdHUmc1d3VUN2hlMW5BNWIzNisvNFdtZDlMR1hj?=
- =?utf-8?B?WldTT1JDV2lXZjNsWXhDRk1mMHY2U05YM0Y5QitJeUg0dWZWZ1YzT2kxTko4?=
- =?utf-8?B?NXpjb2hRTU9XMTBEUTVYMUlvRENwd25SL0N0enVTZWtOSlJwOGM5SjlhOUM5?=
- =?utf-8?B?R1ZTRncxdnhETnFBcm1hZnNmRjY3U0lPVXB2WFVnck0rdTV6MDNBekpiTWx4?=
- =?utf-8?B?QkFWUEFEOFdid3JmUWlsOU5DN0p1bXRydVBZTlRUL0krSlZJZHI3VnlKcWZJ?=
- =?utf-8?Q?cMsaAWl3K0/VlzmUTXts5Dyfw3zLie6fsBsGF24?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT4PR01MB10709.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Yi8wSG1pS2taekEycG83amtzVWg0d3R2V1lyTUxnQ3FBNUdsYmtJL3F5Wk9i?=
- =?utf-8?B?ajcvN3Q0K3BKb1NjeUN4aVZWWW5aS3BCcjg5V0dQT29rNDN2bDVkN0dhZ2dl?=
- =?utf-8?B?VUpTMHhteWFsdlpkeisvYlgwbXMxY0MyUTBzUTBUSWtQdXl5T1ZvN2ZrTjNC?=
- =?utf-8?B?b3I3bXFqT0RZS09OSys1Zk9Ec3RwRW1LU2dFMTFMU0VoM2Jka3RXeUo5VC9S?=
- =?utf-8?B?eXNwVWQyYXAzSktqbTlyVXpNUWgxYmtXK0ZNenpmYjhnTlVDOE1TeXZ4WFZQ?=
- =?utf-8?B?NTJka2tUSE5hbUdNZ0gxbDNlN1FoZzh0bXRxYXpYd0FYcFd0dzFqdkdkQkRQ?=
- =?utf-8?B?VFI3SDQvbXpPSGYxVlVKUmVmb1RRWThaakd2ZzNHdWJDTGREQnlvNllMWDlJ?=
- =?utf-8?B?VnBlcW4reGxYM2FZNStHWkh5WUJZeTBZNHlPNi9kdlAzTWdLTlVQMGRRRGdo?=
- =?utf-8?B?N0VXOXVsSUkwbVk2ZnFjWjdmY29SQ1d1TWs4amhod0RpbWdabHJwclBMcTd0?=
- =?utf-8?B?bW5IUmRMQmpwaDVjamhQekpYZHc3aG5RQjg4VEVkYlJWbG5UQmRhQTl2TEVx?=
- =?utf-8?B?S28vN3RSaWxNeU43M3R3bTlhekZoZnp2cW9lNVFMSkJGT09LTFFXYXUwbUEw?=
- =?utf-8?B?ZXp0WVVFbFN6aVdqaG1SeFl4emtPamhiM2RGSEJNdi9pNmJPKyt0aHJta2hZ?=
- =?utf-8?B?Qkg0ak1KR3owTXVEY2Z1MFMwMkpkdmVRbEhHNlh5TzNCTC9RNmdRT2tuMU8w?=
- =?utf-8?B?Rmc3cFRaSi92NXczYzFTeGpwSU9IWXhLZmRtTEdHekExVEp0SkRmdG9aWmV1?=
- =?utf-8?B?WW4yeTl0b3lIeEtQRGs4dnZ0VnJJc0xSVTN0UzloUjlCNFlKWEdnS3hsZzRI?=
- =?utf-8?B?UHphRXlhbnM4Umw5a1lld1VwcWg5S3JJTElqK1lmRlBWRTF1VW5heWs0WEI5?=
- =?utf-8?B?YkdXN1U4UXN0WkZ2VWNNWWZ1Zk8yUUwzZUJWbHJuRTQ0aVNhZFU0M3dQQWp0?=
- =?utf-8?B?ZzdENUVIelhROUQvcFk3QktuODZabEpGMlZFR0NoRklMZDBENSt3cGNJVExO?=
- =?utf-8?B?eDNpd1QyWlFtcytaY1Raa3pRRzQ1Y0tWOCtqMFNrNEUwSUdwK3dWL2lqcHZO?=
- =?utf-8?B?eWl2bzJudGZmNDc3V1ZlTEY1dXV3WkdGZll3MmFLaHpScjVRMnYrLzl3cFU1?=
- =?utf-8?B?b25Kcm1ROWo3OFpLLzZ3SUU2eW1xQndFSndzVVRzWjExQ1E2L2drNkdPZmg1?=
- =?utf-8?B?QkF0MEY3STgyWEFGTzJpNEhMbTF6RCtQZ1JrUGNrdFRQcFk0bVlsZDdLbkt3?=
- =?utf-8?B?b1FVdGdBdHNkNDl5VE9TMXgrSnpqVkEvTnlkYXNEOE1BY05qOFdiQUlJNEUx?=
- =?utf-8?B?RTFwNUxrTEhrOGRjWVdqSXlWR00wS012RkF4Z0RwVzVFOHY3NnczN3h1c3FI?=
- =?utf-8?B?cGh5cXg3UGQ4a0R1OWFRclE0aTJGUXAyaUY3ZlZqQWVFOHIvZlY5cGdxcTFL?=
- =?utf-8?B?OVk0aHIzVUVqM2QwNmc4bi9DYVF6VWJHVGVBWG5OSmNRU0Y0QUY3VFYzZzhh?=
- =?utf-8?B?RWZlSVV2Ym9KbjhHU3Exc0R6REV6dTBIL1p3TGtyYzcwRGxkS3F4cEw4VW1I?=
- =?utf-8?B?ZDRlZEx3QlhPOFN3bWZkQ2tZd056cnc5RUtmUEc0S1VlVDhtK21wc2gwRWU2?=
- =?utf-8?B?Y2p1SmtxTmdhWklRLzlKZVRrWlo3ZkRFSXVUL3IwWDFTcm9HTTZIWTdVd1NO?=
- =?utf-8?B?RW5oNTk2UVVQeFl2RDZwZm1kNUF2VlNNSWJjdWZqQ0tvY1MxSjRVTHhTVGxw?=
- =?utf-8?B?ZUx2K1JkUVZZRmFOVk8wZFZ4OEVmUE1Cdm84aWFLWldHMjBsQXlBWmIzR0Ez?=
- =?utf-8?B?K1BuVDdiRjBQSmFKaGh4ZTlwRlA4aXdIU0JjRHE4eE1RSjZ6MWZRTTFsbWRB?=
- =?utf-8?B?Z2E1alFHeXN1eWE2TDNieDMvamNZd0pKV093NDBVTmx2d1N0eEkyNEZmNlps?=
- =?utf-8?B?REg3OGR3NWVIdnZFcC9lSmFJRjhaN1dSU2lrelBpY0dXeGp1SmpIZncyRjBX?=
- =?utf-8?B?Y1ZNOHQ1U3QzbE4wcmFUalpObXF4V1ZRZnMyem1kUmxkRjVwZTFsN1RGdDhM?=
- =?utf-8?Q?FiRUjs8mZL/IytJ1LHrLhGl/k?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d67e3826-3230-42db-cfd1-08dd20846c95
-X-MS-Exchange-CrossTenant-AuthSource: YT4PR01MB10709.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2024 23:25:28.7082
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vLPawoSX8FrTdeL4iDLShC+zrlnQAwP/GEhpPj9BZ0hbvnRRBWbIALr0W2KuggEZ39OxxcT3tTu8EqfMQw0QAQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQBPR0101MB5990
+User-Agent: Mozilla Thunderbird
+X-Mozilla-News-Host: news://127.0.0.1:1119
+Content-Language: fr, en-US
+To: linux-trace-users@vger.kernel.org
+Subject: Bug: broken /proc/kcore in 6.13
+Organization: Orange
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi there!
+Hi,
 
-It's been a long journey, but here we are: today we're announcing the
-first release candidate of Babeltrace 2.1 “Brossard”! 🥳
+Somewhere in the 6.13 branch (not bisected yet, sorry), it stopped being
+possible to disassemble the running kernel from gdb through /proc/kcore.
 
-┃ Brossard (/ˈbrɒsɑːr/) is a city in southwestern Québec, Canada, on
-┃ the South Shore of the Fleuve Saint-Laurent, near Montréal.
-┃
-┃ Home to the Quartier DIX30 lifestyle complex and the Canadiens'
-┃ practice facility, Brossard is defined by its suburban sprawl and
-┃ stroads like boulevard Taschereau, seamlessly blending commercial
-┃ hubs with car-dependent design.
+More precisely:
 
-Our main focus for Babeltrace 2.1 was to bring CTF 2
-<https://diamon.org/ctf/> support to the project. This required major
-changes across the C API, the Python API, all the official plugins, the
-command-line interface, the documentation, as well as several internal
-aspects, including the tests. This is because CTF 2 introduces new
-concepts which are incompatible with the libbabeltrace 2.0 API, and then
-this library is the foundation of all the other parts of the project.
+ - look up a function in /proc/kallsyms => 0xADDRESS
+ - tell gdb to "core /proc/kcore"
+ - tell gdb to "disass 0xADDRESS,+LENGTH" (no need for a symbol table)
 
-Rest assured, however: Babeltrace 2.1 can still read CTF 1.8 traces and
-will continue to.
+ * if the function is within the main kernel text, it is okay
+ * if the function is within a module's text, an infinite loop happens:
 
-We published CTF2‑SPEC‑2.0, the CTF 2 specification, last March.
-Therefore, as far as we know, there are currently no tracers producing
-CTF 2 traces. As for LTTng, we plan to add CTF 2 support in version 2.15
-(we're currently wrapping up work on version 2.14).
 
-For you the users, this means there isn't much to try out immediately.
-However, it was important for us to release Babeltrace 2.1 well ahead of
-LTTng 2.15 to ensure that both will be available together in
-distributions, and so that a CTF 2 producer author has a stable reader
-available for testing.
+Example:
 
-NOTE: We'll publish the full release notes as well as the online
-documentation (manual pages and C API) when releasing Babeltrace 2.1.0,
-most probably next month.
+ # egrep -w ice_process_skb_fields\|ksys_write /proc/kallsyms
+ ffffffffaf296c80 T ksys_write
+ ffffffffc0b67180 t ice_process_skb_fields       [ice]
 
-Feel free to reach out if you have any questions or comments.
+ # gdb -ex "core /proc/kcore" -ex "disass 0xffffffffaf296c80,+256" -ex quit
+ ...
+ Dump of assembler code from 0xffffffffaf296c80 to 0xffffffffaf296d80:
+   ...
+ End of assembler dump.
 
-                                                   — The Babeltrace team
+ # gdb -ex "core /proc/kcore" -ex "disass 0xffffffffc0b67180,+256" -ex quit
+ ...
+ Dump of assembler code from 0xffffffffc0b67180 to 0xffffffffc0b67280:
+ (***NOTHING***)
+ ^C <= inefficient, need kill -9
 
-LINKS
-=====
-Project website:
-    https://babeltrace.org/
 
-Download link:
-    https://www.efficios.com/files/babeltrace/babeltrace2-2.1.0-rc1.tar.bz2
+Ftrace (see below) shows in this case read_kcore_iter() calls vread_iter() in an
+infinite loop:
+
+        while (true) {
+                read += vread_iter(iter, src, left);
+                if (read == tsz)
+                        break;
+
+                src += read;
+                left -= read;
+
+                if (fault_in_iov_iter_writeable(iter, left)) {
+                        ret = -EFAULT;
+                        goto out;
+                }
+        }
+
+As it turns out, in the offending situation, vread_iter() keeps returning 0,
+with "read" staying at its initial value of 0, and "tsz" nonzero. As a
+consequence, "src" stays stuck in a place where vread_iter() fails.
+
+A cursory "git blame" shows that this interplay (vread_iter() legitimately
+returning zero, and read_kcore_iter() *not* testing it) has been there from
+quite some time. So, while this is arguably fragile, possibly the new situation
+lies in the actual memory layout that triggers the failing path.
+
+Thanks for any insight, as this completely breaks debugging the running kernel
+in 6.13.
+
+-Alex
+
+
+------------
+# tracer: nop
+#
+# entries-in-buffer/entries-written: 0/0   #P:48
+#
+#           TASK-PID     CPU#     TIMESTAMP  FUNCTION
+#              | |         |         |         |
+           <...>-3304    [045]    487.295283: kprobe_read_kcore_iter:
+(read_kcore_iter+0x4/0xae0) pos=0x7fffc0b6b000
+           <...>-3304    [045]    487.295298: kprobe_vread_iter:
+(vread_iter+0x4/0x4e0) addr=0xffffffffc0b67000 len=384
+           <...>-3304    [045]    487.295326: kretprobe_vread_iter:
+(read_kcore_iter+0x3e6/0xae0 <- vread_iter) arg1=0
+           <...>-3304    [045]    487.295329: kprobe_vread_iter:
+(vread_iter+0x4/0x4e0) addr=0xffffffffc0b67000 len=384
+           <...>-3304    [045]    487.295338: kretprobe_vread_iter:
+(read_kcore_iter+0x3e6/0xae0 <- vread_iter) arg1=0
+           <...>-3304    [045]    487.295339: kprobe_vread_iter:
+(vread_iter+0x4/0x4e0) addr=0xffffffffc0b67000 len=384
+           <...>-3304    [045]    487.295345: kretprobe_vread_iter:
+(read_kcore_iter+0x3e6/0xae0 <- vread_iter) arg1=0
+           <...>-3304    [045]    487.295347: kprobe_vread_iter:
+(vread_iter+0x4/0x4e0) addr=0xffffffffc0b67000 len=384
+           <...>-3304    [045]    487.295352: kretprobe_vread_iter:
+(read_kcore_iter+0x3e6/0xae0 <- vread_iter) arg1=0
+           <...>-3304    [045]    487.295353: kprobe_vread_iter:
+(vread_iter+0x4/0x4e0) addr=0xffffffffc0b67000 len=384
+...
+
