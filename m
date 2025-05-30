@@ -1,197 +1,145 @@
-Received: from YT5PR01CU002.outbound.protection.outlook.com (mail-canadacentralazon11021096.outbound.protection.outlook.com [40.107.192.96])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D3E293732;
-	Wed, 14 May 2025 19:54:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.192.96
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747252443; cv=fail; b=KrVHYO8/ducs049juvg9J5+KhucbaQJjSwd1iYCV1tGK8jiAhFwWa0rP7HoEHtSv6BomYnSUta53XiYuof5RJ/Euo68PwBJdszYGSgnDTxC1nfCEULBUf3znV6VxO/IVFy1qGjcsyWDlLpdYeUGtbSsU25ii7AW809r9X5kGLJA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747252443; c=relaxed/simple;
-	bh=QlNuEhH4F/X+aV7e9RZAeYjqz8x7JpKIhWa/vtPrQXA=;
-	h=Message-ID:Date:From:To:Subject:Content-Type:MIME-Version; b=Q99lgGzJjDmjICfTosh4yJcZiCXj9uKi1l1WCtwULRusAzkEzQb3gtcerRxJZ+vZybB4340dl93HkP50O2XQlr59umxA0FNFzYZVFrSCgpmcQ4imEDjuJtwmpEtDiMdGO4rb56ZXuNiXuFphxdXdDhD6BVfF7aF8QbvmUEicGBo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=hNub8KB1; arc=fail smtp.client-ip=40.107.192.96
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="hNub8KB1"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RS2iPoWZlREq9SA5FZ4idrxZGmkEH3aJnmJEUaowbF3TmI1fc8NwLxvpAVw4TZCpt+v3uj4wT3epAhyDgTKaVSEKCDtENCb8jDvzV6ZDVEscvQv3fOuH2m3xkef/8LYnNQcjxP+33zM+qfC5mzlTfvkchcr6jCnwrWeAOKezZTYQGyUZFfGRn4pEJd4t40muJPmUAyLbYqAKYZzxXMSnssLeuhmMshQMf14zMCWAmIDk6sZc5A4hzBW8mI+VVSYEPQ2dORNFYPPz1IS0Gx3UR2KLOSfohVBdNkTYK58CzkNXT+3P7k8x87VOxCsGHtA+A/pwVvxUYZwCiQXpPSuoWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4QDJnMAJKPADZ9DGRqG4FnB0RmD6nD3t914DrzJhjCA=;
- b=cGpl4TSeG40oG5ma0NoPaNhHbu0l8cgchPXFBiEB5OsXWAnv0JBdZOZdgq1mKoAdE0MxJ+M41B2P05sDxbmEcnn0wESLs1x479EZPmBnq3NCp/pUt42iDLsJ7m1De9hsbjRcvDV0w/XfSeVOwue0qTpSOhlepn9EfmJrTCwPebcPsvD/3gU339nvm2u0mSAL7LxV4eFGUoAudXFNkrLdYeU8BgaXWHSLblEp502cLcmYpEeSHuWDR75n8QEv3nbocFhu88l6cw6PyU/M2fYvAJdgAah8aL81qTFUv6Awsn2K+XqyiXEB7xkqYWXZSqZ6pSmKBKHiuABxC2nG6GsSNA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4QDJnMAJKPADZ9DGRqG4FnB0RmD6nD3t914DrzJhjCA=;
- b=hNub8KB1l4QhJUIM4saaSLUa86MKUYbmV1hrQnOgEy/8896bN2XzeHR6226MAUQpJmXuCXPGr3SBfcPUKbNI4wU5Spx+iCTeUi/0eybga4ttoflipMHU1+cxGFVX2Vcpd2Y9ca9i6dQ7TQorcn/tI7ZCdefQ97dPkvBo6c7a7QKwqGmvyHIJ3NgAlYhLCTJnN+1969qrDvKgYLglWWIRrI2s4nd46PAW2lCdWATBgx0B/A/9UAR+kU7fqPDWEGkrYeN+sVhz4E1gS20L/pEQ6tJOyw2fpKlqLphZLfkPRPTV9IcqiSnKyT5LeUneDxh+/XK3ylGB5SOGB3eFTtt6jg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=efficios.com;
-Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
- by YT3PR01MB9171.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:a0::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.32; Wed, 14 May
- 2025 19:53:56 +0000
-Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::50f1:2e3f:a5dd:5b4]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::50f1:2e3f:a5dd:5b4%4]) with mapi id 15.20.8722.031; Wed, 14 May 2025
- 19:53:56 +0000
-Message-ID: <cd6c769f-8d56-475a-b12a-f47426348b95@efficios.com>
-Date: Wed, 14 May 2025 15:53:55 -0400
-User-Agent: Mozilla Thunderbird
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Language: en-US
-To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org,
- linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RELEASE] LTTng-modules 2.14.0-rc2 (Linux kernel tracer)
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR0101CA0338.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:6b::6) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:be::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07DA61E7C27;
+	Fri, 30 May 2025 18:27:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748629632; cv=none; b=Q+MATNo2P25Ty94TeIT4+wriAwLjwWN0pDb7WGSEkGIaE8Z31w8Qpf1+iH0I3QWY7TTm7rbeC3CDKuGuzRNte5wgo/9zuZ81oQpHNgOAGJId/xA3W2k+gDGM9IkjmYS95d2gWq53fACwXeMHnEB8Rws3ggqsL+Kmh+uuR5ejXQ4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748629632; c=relaxed/simple;
+	bh=HJrIVdxXH0QN2+7IG91kwMY8uwI6LygH+NfAvUPRByo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=t+O2USe3HghB4m0gFNTMb7cpzaM47x1jXMpCbTxZUiqNTyq3Je19al1PO6bKNc8QkqXPNnEE3LttNHq4zc4WkokFyNaE7JEf1os2rE/aovMF4eG3OQhxi9FZ04DoCF1gYNoOoeFONtW167mpQU6aOQFoKsOGqyJY7yMZrF7F49A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC067C4CEE9;
+	Fri, 30 May 2025 18:27:09 +0000 (UTC)
+Date: Fri, 30 May 2025 14:28:14 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "linux-trace-users@vger.kernel.org" <linux-trace-users@vger.kernel.org>,
+ Linux Trace Devel <linux-trace-devel@vger.kernel.org>
+Cc: Alexander Aring <aahringo@redhat.com>, Douglas Raillard
+ <douglas.raillard@arm.com>, Ian Rogers <irogers@google.com>, Arnaldo
+ Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+ primiano@google.com, Joel Fernandes <agnel.joel@gmail.com>, Beau Belgrave
+ <beaub@linux.microsoft.com>, Jiri Olsa <jolsa@kernel.org>, Indu Bhagat
+ <indu.bhagat@oracle.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>
+Subject: Fw: Tracing Summit 2025 - Call for Proposals  reminder
+Message-ID: <20250530142814.67ca7497@gandalf.local.home>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
 List-Id: <linux-trace-users.vger.kernel.org>
 List-Subscribe: <mailto:linux-trace-users+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT3PR01MB9171:EE_
-X-MS-Office365-Filtering-Correlation-Id: 330e43e5-faa0-480f-d6f0-08dd93210f79
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?bzBJZW96dEt5WkF0N3pIUGE4Mk1CZlpxcm1DZFU2NmZpcWdOdWZhN1N6ZHlP?=
- =?utf-8?B?R1dtcVJYRVhPZzQ5T2J6RU5TYjR2K3Roa0lHK09UUnZGZUYwQXZNUWFiUHFp?=
- =?utf-8?B?Zm5mWncrNGxtbE0wQkdPQ2lncVlPMWJSaCtNSHJNUVU1cHJST3UrVEpmc010?=
- =?utf-8?B?Q2hVVkcxVGJQOXlmTldxUHE3WmdEdndQMklwMHM5Z3lwYmRpT2V5M3BOMkFq?=
- =?utf-8?B?OWtJTGhLZ21QbklGcUFEOG9xQjZYd01qdnpKRmJmVkRSTVNVRXFWdHc2b3cr?=
- =?utf-8?B?OTcxSHNrZTQ0cE9nTHEyQzNRZVo3aGtTTGxNN1NWK00vYlduYSt1UXhhb05T?=
- =?utf-8?B?MjZrVlZCdTF5cDhhMG5wbXVvcERQNEErR3VOVkQwS2laVExnditIRVAwWU1H?=
- =?utf-8?B?U0hGVFdKSitYdWlFZXlaSXdJNzkwMUNEY084blN5bTljdVovTHY1QTNmWG5J?=
- =?utf-8?B?SCttMWVrOTBBa0NtdXpVQ0l4b0VoUWxUYXNqQVV2cjZKRzdQWTYrY3djeUFJ?=
- =?utf-8?B?ZUVxK0cxdU5VQUk5Q2c0VzFwMVBoN25SMDgvazZJeEtlR1Y3R0JlVGJZZy9h?=
- =?utf-8?B?czN1SlQ1T2htN01oT2RHMFg4dGlvQzdkN24ramhLQ2RpUmJ5QzZLT3hZMTJm?=
- =?utf-8?B?eFhBa1hQT3VkelVoeTErWkxMQll2NU1Wa1UrelNyNWVLc3dRaWYrWjdQdkNY?=
- =?utf-8?B?RWlMU2plK1BveUVUTU16QWVhWFNDVndseWd3M0RBVGJXaUltZ0VxakRBcU45?=
- =?utf-8?B?RE1NcEF4cE96UUttMFdYM2hjUndPSGwrNlhjakxmUkQ4VzNZUHZta2ZYb2Rn?=
- =?utf-8?B?TzBoS1RRcXZGU21xTkhrRnFIMHg1bVBjczViWDlRQmhpMWg3TTRreHhscDJO?=
- =?utf-8?B?d2Zyd0llQVpxU0MzNUEyWC95OXpHUHBqYWZBR1ZRR0Y2ZlBDcWVrdm5vb2Fn?=
- =?utf-8?B?MlpXVTdOTmJDaVR6Y2N5WDA3THdIMkE1U2EvbWJLUXowTnhBb0FYNkk1VElu?=
- =?utf-8?B?T0Q0d1pkL1BkbzlSR1I3cmZaVEw0bHhnbzlUMExZZTkvY2FGZFJocURidlpU?=
- =?utf-8?B?Rm5KU0dDdTNCV1ZOR3FyckIxeTRKNW1nTFdvUlRKeUY3S1dWdmhIbDhyUXYy?=
- =?utf-8?B?blhhMzcvcjBiK3VuNksyZS95clFxV3RQWVRuaW9GeE83TFYxRENTQnd2VDlE?=
- =?utf-8?B?QW9LN00wRGhJU2dEb3lZUW1MZU4xbDczZTY1SG80L2d4Q3NXQVhjeFV5R0Rs?=
- =?utf-8?B?RzNxaUU0NndYdTJQdVM5Z0NaSkVZbENodGVNUTRLT2Z6aG5rMEQ4amF0MThB?=
- =?utf-8?B?aHFVYUFiYStScndSS2J3VWF1Mmc3OGpVR2M3TUhSNStCd01DNkFweitDdk5N?=
- =?utf-8?B?MDFxTmJVRUJxNHIvOVUzbHdtZ2VicTYzTGxXNzhDTmxoWDRIcG9tWXlzTDFl?=
- =?utf-8?B?c0dETWRyWFlybnF5RHFweVk4ZlZaK2tQOXB2azFJV0Mvcjlrd0dVV1lET1VT?=
- =?utf-8?B?U1NTY1E0V0lYNFZhZkhCWEF0d1JTVWQ3TS94MU1ndkgrdmhIdTRsYmlxSW9K?=
- =?utf-8?B?cmJFeFUyYWtLdHoyaWlwRHN2dStTcmx0NDVXMmFOa2h3bGFpdk1jQXQxYzJh?=
- =?utf-8?B?ajBzeE9lWFBqSVBiUnZHN1lReWtIU043Q0h5bE9zQ3Q4MU9rUFBtd2xrN2ZE?=
- =?utf-8?B?YzN4UXU2cnhVSnFaVmJsTmNxT1c4RVJYNVZDc2p1MXo0Z3BQdDliMmhwQTRw?=
- =?utf-8?B?NWUyZklKUGhKMzFpYVpMSDg1eWNwOVU5S3dINzdUSzZiTWsyU1ZZYVV1MW1s?=
- =?utf-8?Q?ioYu80wPu/lPYr8wYjBErrzC+eFDIgSMXnp/w=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SjU2TnJJOU5lVGZGYmgxbjhMQzRaZ0RuSjVEekRqalF5RUI3ek9vODNPNW5H?=
- =?utf-8?B?anhFVDROTEhHQm02TlpBcFd2Q0gvMnJ4aHUwY0ZZV2pMMm9HWm9ETSs5ZEQ3?=
- =?utf-8?B?bnU3OWRIUVJUQWNuWkJxemMyUEEydndTdTczUERUSERReGY2SVlmR0pmclFB?=
- =?utf-8?B?dVg1V1lncFBTZ05vVUZmVWdwc2dReDlPQlIwZDJDRkUyTDJ2ek9aTTJRRkQ3?=
- =?utf-8?B?VU1FR2hPbU5GMHVwYzkzY1F3SVFjTE4ya3o0YUhCVDRheUlGWHo4RVlka1hQ?=
- =?utf-8?B?YTl2dVNULzF0Vk5ZMmFIRFU5bTVTQ1V5NisvV2NPRVNmTmR2SGxLTjRCYnlZ?=
- =?utf-8?B?NEFXdWttMUVDazJjb3RqeEZHR3h6L0c1MjlpbkdGc3J2enkvSjJPVndpQUZD?=
- =?utf-8?B?NTdMQ29zRzB5eUZsNWdzYUF1eUl5a0JYNGxmL1RqdG9ESVhCZFpsb0RwQk52?=
- =?utf-8?B?UHdYVmlKeEZJVG94eDVIVHRzbGc0MFNDZTlBZEt1L2MwdE5wVjhweTZkeUx1?=
- =?utf-8?B?bUFuL0RmRUJlU2IvZHV6dnVJYzBSbFhzQmk5V21ZZlJZL2ZpV0VBanJ3S29L?=
- =?utf-8?B?QmdhWmxIN01SMUZGcGp4VkE2WjhsUkE2RlkrNzNCVzIvMDdDZlAxS0V4VnpM?=
- =?utf-8?B?WkIyMzJuNnFPYVZhQVJtb2xaV0NKWnpaejcwK1JKTDVRSWpRczUxZmFmSlh6?=
- =?utf-8?B?ZnpwTFlSdmhqcUdUdFhKSnAwR3RtMzJad1hhQU9SbXhGZXlDNnpzaVJqYzA0?=
- =?utf-8?B?N2Q0NVlGbmxCd0hJTnA0THVETGJ1b1FsKzQ1TkRSZ0QxTzVZeXBqRXFnQllZ?=
- =?utf-8?B?cjJNSU5YWjc4RHZ1ZEIwSE1VdXVURGhoUEp0L3Nha3ZHcUduRGlMNEprbDNm?=
- =?utf-8?B?ZVlocndydE5MT2RMNlJLZXZucXIvRlkzcWt1OXBjMGhOOG1nWVk1SWxndXha?=
- =?utf-8?B?OVRRY0p3MEx1KzVZaTUxOElIeUZjSE1vSTMzdzRxWWMwNlhwcVdHZE5hNkt6?=
- =?utf-8?B?dUd3ZmU4WTMvNEFQaGhIdDdzcDhoMkZHcnYydTArQmc4bmk2aWtPZG1iSWlx?=
- =?utf-8?B?cERpa0I4YnpuU2tBU3VyQkh2OXI0VnNSSEd3b29DaC9FOTJ6M2FxcFJhYllP?=
- =?utf-8?B?NngwSjdqRE5qc1hPZzZtdHZ3ZDF4c3dqeGNTR3NDbFlsMW1EUS9WOE5QMzZo?=
- =?utf-8?B?QVdOVGpCWS9sYkVsbFFXenNmR29UNU16aTdLRWw5WW8vYlFJeWxud00wL3g2?=
- =?utf-8?B?NG9WbG03cXhORW84NGhwdm04dHZZSVZEVGtKMW9GYVFQWTEzZVNSamJuSEJo?=
- =?utf-8?B?dzA5NlBKNHJVVm5yNUN5YkZtbnY1V0RVSE16VUdlUmVnaTg1c2ZEZWJVbUlG?=
- =?utf-8?B?YlZ5VWxmT2cwMDgrV0FZQ283M2JsdzVsTWg3d1llaHpiQnJlUEt4OTFFc0xw?=
- =?utf-8?B?S2EwQ3MzbXhwYjUrcnhaOWNYMmhINmRqbS9XQVh4WitqZ2NWUFYwZmZjb2Rr?=
- =?utf-8?B?K24xZmxRckpvWU5GelArTmR5R0NSdE1ZN29KSFVpU1RPalZIZjlrTjFpai96?=
- =?utf-8?B?V1l4OGR2bnlVMWdVdEF5bTlrVFdDaG9oREt3K1hnZldhcHJlTDExN2hzOVRP?=
- =?utf-8?B?VW8ra1BvTjFQMG83Y0MzeU5Rb2IvY0pQdUNEdTN2UmlUTHN3dXI2VWo1MDRp?=
- =?utf-8?B?ZXZmRTRjbjQ0UnIvakdjU3ErQVNlVUxUOEMxRlo5cXo3d0FtUFpTYTlMTEc3?=
- =?utf-8?B?WGwrdzJpZDNXaFJ3MlFNUnFRbWl0N3RFUVZWanVnbEd0RW1EZ1A1UjdydEkx?=
- =?utf-8?B?aDdqR0pkMlhNZm51TGRtbXlUem02MkJiMlhvVlZ2R1NnR1NPamtJNnF5RWRs?=
- =?utf-8?B?dUg0b0UyekdUNngrcTRzbUpiQm5CYkFUWWpNOWtlZnkwKy94ZlNYQTJBZGQ0?=
- =?utf-8?B?RzV6b3QydFFQVGtsVzZXSEdvTmkyRElaN1QvS3pCM05TYXlYZk5XYUhIN1Nu?=
- =?utf-8?B?Z1k4dU9NRHFuVW0rOURKNWVnc2R5K0h5UEpvRDNiUk9ibCttdnY5a3pPczlI?=
- =?utf-8?B?TEkwYWROUEFuWXdseGU0VHpjV1ZaR25PL3BPaUZTRG5JbmM1T2RjUHExNEZX?=
- =?utf-8?B?Mm1CZ2l1U2JHa3hacEFFZW9iTm9HbFhBVEQwcisyZVBtcS9rdHZHT0NONE9I?=
- =?utf-8?Q?73xh8zYeWBNvKYJCxPOSIyQ=3D?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 330e43e5-faa0-480f-d6f0-08dd93210f79
-X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2025 19:53:56.1267
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: o53OVx11Onq/8QjKJyYRhy1t/xQ9led83e9kznvEtOagQTDZai14ZzYjlLqBiHDScBM9tEyQHT5rx5pPu+gRQWCX9q9o9ETqPSkPQ/G1w9c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB9171
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
 
-This is a stable release announcement for the LTTng kernel tracer,
-an out-of-tree kernel tracer for the Linux kernel.
+The Tracing Summit is happening in September. If you have anything you
+would like to present, the CFP ends June 13th.
 
-The LTTng project provides low-overhead, correlated userspace and
-kernel tracing on Linux. Its use of the Common Trace Format and a
-flexible control interface allows it to fulfill various workloads.
+Please forward this to anyone you may know that might want to present as we=
+ll.
 
-* New in this release
+-- Steve
 
-This 2.14.0-rc2 release is a bug fix release in preparation for the
-final 2.14 release. The most notable changes are a fix to the
-new ring_buffer_flush_or_populate_packet which did not affect x86-64,
-but does affect other architecture, causing a snapshot test to fail.
 
-A "nonseekable_open" is introduced to fix python use of the /proc/lttng
-file, which affects lttng-modules built against Linux kernels older than
-v6.0.
+Begin forwarded message:
 
-There is an uninitialized variable fix for the experimental CTF2 support,
-which only triggers when building against kernels that do not have
-CONFIG_INIT_STACK_ALL_ZERO=y, which appears in kernel v5.9.
+Date: Fri, 30 May 2025 18:00:12 +0000
+From: Tracing Summit <info@tracingsummit.org>
+To:   <rostedt@goodmis.org>
+Subject: Tracing Summit 2025 - Call for Proposals  reminder
 
-* Detailed change log:
 
-2025-05-14 LTTng modules 2.14.0-rc2
-         * Fix channel_backend lookup during `ring_buffer_flush_or_populate_packet`
-         * Fix: Use `nonseekable_open` for proc files
-         * Fix: metadata-ctf2: enum mappings are not serialized
+Hello all! =C2=A0
 
-Feedback is welcome!
+This is a reminder that the Call for Proposals for the Tracing Summit 2025 =
+[0] will close soon (June 13). Please make sure to submit a proposal [1] in=
+ time if you want to present.
 
-Mathieu
 
-Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
+- Event dates: Tuesday, September 2, 2025 - Wednesday, September 3, 2025
+- Location: Montr=C3=A9al, Qu=C3=A9bec, Canada and virtually
+- Registration cost
+    - In person & Virtual: Free
+- Call for proposals link: [1]
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+ =C2=A0
+Important dates:
+- Call for proposals close: Friday, June 13, 2025 at 11:59PM EDT
+- Call for proposals notifications: Friday, June 20, 2025
+- Schedule announcement: Tuesday, June 25, 2025
+- Event dates: Tuesday, September 2, 2025 - Wednesday, September 3, 2025
 
+You can follow this link [2] to register to attend (free of charge). You ca=
+n subscribe to the mailing list to get the latest information on the event:=
+ [3]
+ =C2=A0
+
+The 2025 Tracing Summit is a two-day, single-track conference on the topic =
+of tracing. The event focuses on software and hardware tracing, gathering d=
+evelopers and end-users of tracing and trace analysis tools. The main goal =
+of the Tracing Summit is to provide space for discussion between people of =
+the various areas that benefit from tracing, namely parallel, distributed a=
+nd/or real-time systems, as well as kernel development.
+
+We are welcoming 30 minute presentations from both end users and developers=
+, on topics covering, but not limited to:
+
+- Investigation workflow of real-time, latency, and throughput issues,
+- Trace collection and extraction,
+- Trace filtering,
+- Trace aggregation,
+- Trace formats,
+- Tracing multi-core systems,
+- Trace abstraction,
+- Trace modeling,
+- Automated trace analysis (e.g. dependency analysis),
+- Tracing large clusters and distributed systems,
+- Hardware-level tracing (e.g. DSP, GPU, bare-metal),
+- Trace visualization,
+- Interaction between debugging and tracing,
+- Tracing remote control,
+- Analysis of large trace datasets,
+- Cloud trace collection and analysis,
+- Integration between trace tools,
+- Live tracing & monitoring,
+- Dynamic instrumentation,
+- Programmable tracing (e.g. eBPF).
+
+Talks can cover recently available technologies, ongoing work, and yet non-=
+existing technologies (that are compelling to end-users). Talks covering in=
+teresting or challenging tracing use cases are also welcome as they can rev=
+eal future directions or tooling needs.
+
+Please understand that this open forum is not the proper place to present s=
+ales or marketing pitches, nor technologies which are prevented from being =
+freely used in open source.
+
+Please send any questions about this conference to <info@tracingsummit.org>.
+
+This event is organized by EfficiOS [4] on behalf of the Linux Foundation D=
+iagnostic and Monitoring Workgroup [5].
+
+
+[0]: https://tracingsummit.org
+[1]: https://cfp.tracingsummit.org/ts2025/cfp
+[2]: https://pretix.eu/diamon/ts2025/
+[3]: https://eepurl.com/goakfv
+[4]: https://www.efficios.com/
+[5]: https://diamon.org/
+
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Copyright =C2=A9 2025 EfficiOS, All rights reserved.
+You are receiving this email because you showed interest about Tracing Summ=
+it.
+
+Unsubscribe rostedt@goodmis.org from this list:
+https://efficios.us18.list-manage.com/unsubscribe?u=3D2d3e5eb6de64590a1f22c=
+c9d3&id=3D4e5381866f&t=3Db&e=3D8769f0bbf1&c=3D8c90866c32
