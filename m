@@ -1,24 +1,24 @@
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23162A95C;
-	Tue, 22 Jul 2025 20:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2436F156677;
+	Tue, 22 Jul 2025 21:08:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753217219; cv=none; b=pP9aLFWcqlTKtrVGdD7XPvvh0noCL8Z1/73ltKcfR3mScrkQSJOhR86J+gYppuY5Sc53/wRKOS17FUY/1VcZV+FroBOMxI21h9JsjeoudkGQHb/FpVKpPpwUkph0UN8Z/KfFYTPSXfKZgvbesrGktKldIrRT8//b48VJ3cAXorg=
+	t=1753218497; cv=none; b=rkUits87dkZ9b8TbCIVK+oKINSaewtkgAKmXiI+66y7UH7EcvAAZKb+7KyTeTStwIVsrMmC0LRImG+L2lftFlmVlvTqgdCkajRfHTpiJfiEQ7A7jNSiX7QITr2c4SViFZRkEHqdjKaz3shsfDxtpF9kwIFzIlYzxrHFbP83xu0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753217219; c=relaxed/simple;
-	bh=ByEva/ORtVcV2K5KGudMa3fmsyE/PS6W1+DwRMbKYM0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=tMNWdK2AJOoD0MwvCFzn3An7OoT//HumjT0jL8qcCHDzNB6c9XMgaHz4LaZLpOSfroavFaoZAAUnQK73TiMueT4y8kVB8SE7bA4X3bogTHo3Ruy89HtcRMSGMz0Xp5350Xfp3OE3l7k7JryJ0tR6TqoE0Wqy7l4K/sxqEZNaxDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
+	s=arc-20240116; t=1753218497; c=relaxed/simple;
+	bh=0QiBRgGwvjCuCX8kb0kVm0xQWdttx6I/T7Itq+8XYgA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=d26yFifyED2Ppopc2vudX/K5uhNa0jNaIy/lWNspApR5t8lCrEa1FHuDC8/UH4bFY+MKLWIREap4V7inwVFrQ9XToZoOXhFNW1Xl3qr1rWNr8xMO8DNSKpNQ/U4bV1bB/xtl227V65L7rujjrw8cwvwz4rD+gcZNOhNd2u7FF/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay05.hostedemail.com (Postfix) with ESMTP id 6B5D959393;
-	Tue, 22 Jul 2025 20:46:47 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf09.hostedemail.com (Postfix) with ESMTPA id 7554F20024;
-	Tue, 22 Jul 2025 20:46:43 +0000 (UTC)
-Date: Tue, 22 Jul 2025 16:46:42 -0400
+Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay06.hostedemail.com (Postfix) with ESMTP id 6B0C8112D11;
+	Tue, 22 Jul 2025 21:08:11 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf18.hostedemail.com (Postfix) with ESMTPA id B58E731;
+	Tue, 22 Jul 2025 21:08:07 +0000 (UTC)
+Date: Tue, 22 Jul 2025 17:08:06 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: LKML <linux-kernel@vger.kernel.org>, Linux trace kernel
  <linux-trace-kernel@vger.kernel.org>, "linux-trace-users@vger.kernel.org"
@@ -32,11 +32,12 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Al Viro
  <viro@ZenIV.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara
  <jack@suse.cz>, Arnaldo Carvalho de Melo <acme@kernel.org>, Frederic
- Weisbecker <fweisbec@gmail.com>, Jiri Olsa <jolsa@redhat.com>, Ian Rogers
+ Weisbecker <fweisbec@gmail.com>, Jiri Olsa <jolsa@kernel.org>, Ian Rogers
  <irogers@google.com>
-Subject: [PATCH v3] tracing: Deprecate auto-mounting tracefs in debugfs
-Message-ID: <20250722164642.6dea3b6a@batman.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Subject: [RESEND][PATCH v3] tracing: Deprecate auto-mounting tracefs in
+ debugfs
+Message-ID: <20250722170806.40c068c6@gandalf.local.home>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
 List-Id: <linux-trace-users.vger.kernel.org>
@@ -45,13 +46,13 @@ List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 7554F20024
-X-Stat-Signature: thukgar3ecsk9oa9okbzmb33pd3xekt5
-X-Rspamd-Server: rspamout06
+X-Stat-Signature: f5b1gffxfp433okad4njjbxpjxf88ub9
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: B58E731
 X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+sH7BdvC7gdIj3jM3EZzIG59d6KFcUFvY=
-X-HE-Tag: 1753217203-481086
-X-HE-Meta: U2FsdGVkX1+CivnFynhGQ/TBrncJZoCedcE0MtV0X1p6MlZpr70kllYt3cjFpFekb7j4DRcx8tKf1Dtz8YMFXRdlVDdZmy1gTjrXtY0Z7kSEwO4E7mJyPf/TBoPOTiiuuOiL1OBehgwSnZM0YKt+x86V2gH4zV6G9HmzqqXKkvIQthJHReDVF5C6XJfp5QR9dpO+TNLSH5YmIKt36W7VNq/Ca42GmK4+dyZssQH6/QvZASqv5gIkMFTJS7E8fAc4FPanPJNdPXxK/5AZYWxLpHTFkM/pDDoJSiFs8VbBZQw6hVbaBpMvbkowYYuQDnjty70IeSJjgnOL5AKjMuwhN9nFGnKr83PU5iOfdq35aMF3wnsEXxNPyGHBJEfCLOp5GHNFlzJochqIZkh8YAemqg==
+X-Session-ID: U2FsdGVkX1+0rDTvL5ctrPISeOmyVD1ODfdNFO0Mvw4=
+X-HE-Tag: 1753218487-586842
+X-HE-Meta: U2FsdGVkX18pxv3p7s3sTPJP1pPeiaLUvO/CmMUtfuD0IHQDMK9HG0cVd5GuMaNBMk4BQYlCkN0XiPt+zYhFxF+Xe26CAbOJEg1NINgvr5OlO/UBedyy8XzyuNOddg3D2wQka3jvWPGCOkMTkaowYaXdtjRcxsuTyKKea4CLs/4PkEIWNYncJSpmdMUeo7Y+OST7mRkx/hVn7SOLyC4vFVMxkMEtn9Gx344HrPVS4KNGsVVgiU+J0FVF16GuRR00FdmDBzIgu3yqndgHm3icSDng7RJq0FB+nVS97vCstdiQSMEsIEzwUufR8iu6TSqQrHWCprbnQ5sqW/QaQgd73FJSCRBq2EPK9mXH3GYK4Pnx3BFRIqINRXCBnHt3BSz8GJvuRq8A/eXdLBNB06PQPg==
 
 From: Steven Rostedt <rostedt@goodmis.org>
 
@@ -79,6 +80,9 @@ Expect to remove this feature in 5 years (2030).
 
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
+
+[ RESEND due to using old address for Jiri Olsa that was on my laptop ]
+
 Changes since v2: https://lore.kernel.org/20250617162625.1d44862b@gandalf.local.home
 
 - Change the time to remove it from 2 to 5 years, as that should
