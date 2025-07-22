@@ -1,221 +1,210 @@
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+Received: from CAN01-YQB-obe.outbound.protection.outlook.com (mail-yqbcan01on2119.outbound.protection.outlook.com [40.107.116.119])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2436F156677;
-	Tue, 22 Jul 2025 21:08:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753218497; cv=none; b=rkUits87dkZ9b8TbCIVK+oKINSaewtkgAKmXiI+66y7UH7EcvAAZKb+7KyTeTStwIVsrMmC0LRImG+L2lftFlmVlvTqgdCkajRfHTpiJfiEQ7A7jNSiX7QITr2c4SViFZRkEHqdjKaz3shsfDxtpF9kwIFzIlYzxrHFbP83xu0o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753218497; c=relaxed/simple;
-	bh=0QiBRgGwvjCuCX8kb0kVm0xQWdttx6I/T7Itq+8XYgA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=d26yFifyED2Ppopc2vudX/K5uhNa0jNaIy/lWNspApR5t8lCrEa1FHuDC8/UH4bFY+MKLWIREap4V7inwVFrQ9XToZoOXhFNW1Xl3qr1rWNr8xMO8DNSKpNQ/U4bV1bB/xtl227V65L7rujjrw8cwvwz4rD+gcZNOhNd2u7FF/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay06.hostedemail.com (Postfix) with ESMTP id 6B0C8112D11;
-	Tue, 22 Jul 2025 21:08:11 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf18.hostedemail.com (Postfix) with ESMTPA id B58E731;
-	Tue, 22 Jul 2025 21:08:07 +0000 (UTC)
-Date: Tue, 22 Jul 2025 17:08:06 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: LKML <linux-kernel@vger.kernel.org>, Linux trace kernel
- <linux-trace-kernel@vger.kernel.org>, "linux-trace-users@vger.kernel.org"
- <linux-trace-users@vger.kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Mark Rutland <mark.rutland@arm.com>,
- Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner
- <tglx@linutronix.de>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Namhyung Kim <namhyung@kernel.org>, Linus Torvalds
- <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Al Viro
- <viro@ZenIV.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara
- <jack@suse.cz>, Arnaldo Carvalho de Melo <acme@kernel.org>, Frederic
- Weisbecker <fweisbec@gmail.com>, Jiri Olsa <jolsa@kernel.org>, Ian Rogers
- <irogers@google.com>
-Subject: [RESEND][PATCH v3] tracing: Deprecate auto-mounting tracefs in
- debugfs
-Message-ID: <20250722170806.40c068c6@gandalf.local.home>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C08D27EC7C
+	for <linux-trace-users@vger.kernel.org>; Tue, 22 Jul 2025 21:38:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.116.119
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753220339; cv=fail; b=nU76rRhp3G/4wUVkHhzoEfGA5bBva9pOOftE3hFS7SjVI+5exLwMNNyGWerr0iHNibDI/qYSgciCf8qcdsKYEUPGHpu92fUxS6lEOka/KrWiEg7oT5IFk0vxGX1JVNj29CrPoLsYb6TYG301RrYEgIgiEi4CVunqxODq57ZjRKc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753220339; c=relaxed/simple;
+	bh=ThnqI4/4jDqdCD0h4F4tLtA/dczZmGxmr6YVnR15WWQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:Content-Type:
+	 Content-Disposition:MIME-Version; b=tBFvOJO1BP307ezH50isJ+jINMefNYM5NyU1riUHI3N2hZ8f1rbcknE4H2MBQ83/YVZ+kuHvAwc9AgqS1bMw3b5Uz39v0GnLAaSeeb2JfNwNH1+kMym8ZojGD81SUcbx6WKZZfO3OOke5u5PkGwYSbOH5foESmCcM/ESUt7DqBc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=Uef7Alab; arc=fail smtp.client-ip=40.107.116.119
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="Uef7Alab"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=aOWhstyvUrLvZbMrqxC8FLO/Dh+L9494qsA2/jta2ygYscb0UBa40ZosMJZyty17hx2ovS6H5dI9s2p9RFeJ+UDhcJ6OA8v/YkDlXJ6woExHJbHNgMJOAClktlvmb8cqEPqua/2lDSJ278HtMUXr24hgaM1QIQdl4br8CePvBjCfhrPp5l0KOIAmlPlyF1EKiJ8NkEvZiYCnaXfRs7tgq6SQZ8zQ0UMj/LgV0EbNzqtTNOrOxp3vFDY/fgzVcuXyICLImUzeWMDfWUGkxSO8m+d+Euk+oLrnQQsyq6HpMiKApZ5HMz1UkWfz6Q2VDTIlFlkPxpKUeK/wDpvfAFvDNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=viC9RTtgULR6ZixZaoJlLP9h28Xv9GkvoXCEsWa5imc=;
+ b=gRBtP4+/omZL01fxPaBEd1FRNReDDZmQh9q8ooXXXsOas5MOTY6TT2/8BDQD6uxsd64a9VzOIEuCItwu9LAZYMgS0TjfsbZQof8SOHDPxy484v0vIiAI0BCUqMRI0lEjcwK0e8MdAe6nyNhHTTJ1NNsmYgdgaNEmPhvKrSEXowv9oqskWg77WfTHRH6JPpZazg1a6aMqYcsvPBa1Lc8XPtWOEAPuxMJOD9lsPxb4so65CXXwCfdWlY7NoB/hBwiRcKf7Qn7o2/+ytxHgtJ2cspG7LjiYddP3v/sYaiYqpTW4s04e0tlH2cl/rMgGOCNxG0hmIwdQRuDi8BZWR8VcQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=viC9RTtgULR6ZixZaoJlLP9h28Xv9GkvoXCEsWa5imc=;
+ b=Uef7AlabCV5X9n033/TZjGOm+2XFv6OQD7gIZkoIJaLoa8qf94rNLTO/YDyMdoGCJoEeRz2aiHdJCtcFQyJ4mb2tvB4OrcItEapTg5CBAuM4iT4krmD0OdaP0tkEkVNHM07IupTluHSEx69H6cAWe73/yWp+NIGu+ALlK6tiqxsesNjYeXjTP/Hrog75flFYu6VxK1cAgu1OHNCccb1Tp+o0pPZqs8Mm12XX3J0ymj791TAToRbEn2bdDE8fQIVBVyh5nbFd4alR4iruO099d2I0q1/4bJym6y0GRVfIWmBzvxuwBOf1gFX666wJE8wQjrZJ5vCoHyjZprnZ5GsJvQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT4PR01MB10709.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:104::10) by YT2PR01MB9585.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:af::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8943.30; Tue, 22 Jul
+ 2025 21:38:50 +0000
+Received: from YT4PR01MB10709.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::5de4:ebdb:2bf6:ee1]) by YT4PR01MB10709.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::5de4:ebdb:2bf6:ee1%2]) with mapi id 15.20.8943.029; Tue, 22 Jul 2025
+ 21:38:50 +0000
+Date: Tue, 22 Jul 2025 17:38:48 -0400
+From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+To: lttng-dev@lists.lttng.org
+Cc: diamon-discuss@lists.linuxfoundation.org,
+	linux-trace-users@vger.kernel.org
+Subject: [RELEASE] Babeltrace 2.1.2 - Brossard
+Message-ID: <aIAE6K9uksn8l1jf@efficios.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: QB1P288CA0005.CANP288.PROD.OUTLOOK.COM
+ (2603:10b6:c00:2d::18) To YT4PR01MB10709.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:104::10)
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
 List-Id: <linux-trace-users.vger.kernel.org>
 List-Subscribe: <mailto:linux-trace-users+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: f5b1gffxfp433okad4njjbxpjxf88ub9
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: B58E731
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+0rDTvL5ctrPISeOmyVD1ODfdNFO0Mvw4=
-X-HE-Tag: 1753218487-586842
-X-HE-Meta: U2FsdGVkX18pxv3p7s3sTPJP1pPeiaLUvO/CmMUtfuD0IHQDMK9HG0cVd5GuMaNBMk4BQYlCkN0XiPt+zYhFxF+Xe26CAbOJEg1NINgvr5OlO/UBedyy8XzyuNOddg3D2wQka3jvWPGCOkMTkaowYaXdtjRcxsuTyKKea4CLs/4PkEIWNYncJSpmdMUeo7Y+OST7mRkx/hVn7SOLyC4vFVMxkMEtn9Gx344HrPVS4KNGsVVgiU+J0FVF16GuRR00FdmDBzIgu3yqndgHm3icSDng7RJq0FB+nVS97vCstdiQSMEsIEzwUufR8iu6TSqQrHWCprbnQ5sqW/QaQgd73FJSCRBq2EPK9mXH3GYK4Pnx3BFRIqINRXCBnHt3BSz8GJvuRq8A/eXdLBNB06PQPg==
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT4PR01MB10709:EE_|YT2PR01MB9585:EE_
+X-MS-Office365-Filtering-Correlation-Id: 99a6a573-bc18-4059-d9e8-08ddc96825a1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?KzdSeGdHQlpsRzNGZ090MXl1dHJaZTBGL2dWRXlnNzJ5dldmVlpWczl0L3Bh?=
+ =?utf-8?B?T214bWxIbUxYS2dlTUJtMnVYK2I0RHVVSzRGUnpTZmZyT2sxbnNLRllQT3pi?=
+ =?utf-8?B?ZC9Ud2hFcVFnWGRtajNNdktSTEVlUTVyOUFuSU1Da3laQzFRdWthZGxPd1JE?=
+ =?utf-8?B?eG0ydU1EclR2Q1V1WGRTYzVORGtNZ0RwK3NkbktlVUVRc0diejdpWGg0MG1n?=
+ =?utf-8?B?VUNrZ3QxZ1hZNFhYT2RnUFJrOEJRdFRldlJSUUZrS0Q0Wmxnd1RzVlVIS3Ro?=
+ =?utf-8?B?VS91Ym9wNWR5OUEyMjBLQjlWb213ekwyWENldTQ5Tm93STJYbXF0UTFiRE0x?=
+ =?utf-8?B?Vlg0alFNL2lXaFQ4MHh4NXdscm80ZGx4cUJTMkYvU2d3WEpTVjZWQkhXRnBi?=
+ =?utf-8?B?L1dndk0vU0cxSWxqZk90K2pkNi9pK2RUK2hVYmdkZ3dPa2hVWUxUV1FrazZ3?=
+ =?utf-8?B?QlJtLzQzT1lFSHp2dmNWcG5WVmxnZTVRSkQ2TmNLRjg3T3RFV0VNdDJneklj?=
+ =?utf-8?B?VytkYUIrZzZMYWRYVEdhTjR1WnJDbmkxTzlneDlWYzY0L2ozaWlDNUk0VFU4?=
+ =?utf-8?B?K2pReFgycVdoZjlTVkFqYysrQWNubWJ6UGplbVhRNHNRTnZhZkZPaG9HUUVP?=
+ =?utf-8?B?SmRKV2VpUVU3Q3B2Y2VZeERJaGFNeGhaNmgvaWYyRy95SFRxZWpSbnRRSkxo?=
+ =?utf-8?B?R0lWVk1JeEtoSzVuVEtvZ1BuaWZIQmloalNiNUVKU1lwNENqS1JIRVdnZUZG?=
+ =?utf-8?B?NmxHaFdoekVwYkNBODREZ2p4V0FQODJSTzAvcFc4a0ZiV2hhZWdDaUpLdC9F?=
+ =?utf-8?B?Z3JZbzQ0dW9kdHB6c1oxdTVLcEQ5YnRlZU9BOUhaR2Q5NjYyQmNVY0pWcERW?=
+ =?utf-8?B?aTVMRUt2VmE1c3RSTTdCQkxqVzBYclFKVGt3ZzJoM1ZOanNrRDh2OVV3dG9W?=
+ =?utf-8?B?WUdkT1RWZ3BYOEE5a1U2a1BTdisxbURIbW5xcklzQ2FnaGkwWEFlWmZNSTBr?=
+ =?utf-8?B?ZjljSTYyU3QyMEd1TEdaMXowTlA4TmRxZnNOek5VdHZob3VpR0NZN1l0a1Zs?=
+ =?utf-8?B?TDlPcmJ0dTM2cURnd0JDTUt4REZ0QTdjaVl3M0FWN0VJc2VtRmNYQ2c1ZSt6?=
+ =?utf-8?B?QXJHNTZRbTlIb0YxNFJ2NFp2QnpIb0pTMTV4QitTMmc2eXBaOGFER2RuTGxI?=
+ =?utf-8?B?T3FGUjIrc016SXdOOUxkUXVsKy9sL2NYVWVUWkY4OFFCZDZGM3BHdGlqR1di?=
+ =?utf-8?B?T3ByNEtzSXE3QXBLVnkxRDhKRjNlQUc2K3R1UlFKV0NwNjY1c1dNc3JMZ0V2?=
+ =?utf-8?B?Y01NdXF1akMwN0oxQmFIdVZCc1JieEpqN1Q4TlVZaUI0ZGRhMzB5RTY5VldV?=
+ =?utf-8?B?TW5OeHNzWTllaVVUNXFjSzFzb0NDaDhWdXhsaVk3MSt2Y1FRTndVRHdZdFYw?=
+ =?utf-8?B?dW9VKzNLOVI5UG92U3NIanpoMEdlUWlJbzhGK3pvTFl6eGdNQlY3ZHNncDdY?=
+ =?utf-8?B?Q01ENWZSUmVXMFZTYWtyOE44SmNNbVBOczJqdmFTcUVQa0NKUTh6Z2lDbG14?=
+ =?utf-8?B?RHRkMmhsZXN0aXpXMkVwMmJIVG5DMDlpajMyT1RTNTZyc1k4MVl5THlJb0JB?=
+ =?utf-8?B?QU82NjVsMi9ZY0V0T3VCM0lGc3UxdERCUjl2S281UnF0VjMwSVE1NGVTQVVS?=
+ =?utf-8?B?WkVyWEM0T1JYUWlDTHZ4VzNDZXI4ckhlUGVQYVQ4ZDBqSXZ6QXlQcGtGcFhw?=
+ =?utf-8?B?OUdleEdpcG92RnB2Q1loaDgya0FSZVMxd2lBVnhrZUI2aXlnWFRyWU5yRHkz?=
+ =?utf-8?Q?0TpzSO3pmJZ3v4Oxqr3nEjFnwJH3QzxoSI/9I=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT4PR01MB10709.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?cXlWSE9pQlNlc2Rnc21wRUxRdk41K1pRWlRvcmx5RE9Vc0ZzcnBOS3ZnNW1B?=
+ =?utf-8?B?U2RhSlVNWGNjUlpJeFh2cjFCY2FkL2lZZmFjUXF3WGwvd0xKOUQxVzFXc3B0?=
+ =?utf-8?B?Z210WlhtYm80QjYralpFN2pVMTRXTUlmUldUeTZKeFVpbFA0eXpTNWluRlZ2?=
+ =?utf-8?B?VXhLbFd6aytmcHNZYVdUWEltMTQ0R29LSkJqU3pHNlhYTm5GTHZGOVdFQjF1?=
+ =?utf-8?B?RG4xSmlJbGxNajJVOHNvYm9talFRN0hPelpKVFRMQVZEZVZWR09nRXFtbmpU?=
+ =?utf-8?B?V3JLTkFlM1NpUVlybGRJQXl1YWFmbG4wOHdtUWdrakt0MDQwOUdTT2ZMTzJI?=
+ =?utf-8?B?cFdKd2xtTjFObVRTOGMxNEtzd0NibGFUeEE2WGJVQ2MxRUpKOFRJaUJ2ZlRR?=
+ =?utf-8?B?MFNZS3F1bnVubFRhdkZQMjBnLzM2dkVUUlZrNHY3WWhGQVFpWDIvTHdCMEFL?=
+ =?utf-8?B?bmhDT0lKZlJTNVFTTUJWc3RFUEdSSm9qQ0k5OE1hb0FLdWNNWHZlYTFEb3hF?=
+ =?utf-8?B?WTFNTjVpZzhsenRiRzZsV3JSRmJseW5IeG12NWd4STdCcmVydVJwK25tcHVH?=
+ =?utf-8?B?NnlOekIvaEp4U0h4WHhhZ3Q1ckU4OG5jdzNhcFdvekcyZ2pnYUtBckVGYTcz?=
+ =?utf-8?B?ZzRtcUpaNmREME5uZWxjRUh0eGVlNDduUWxiK0plS1E5ZE9VeVhTQTBuTG1C?=
+ =?utf-8?B?MmlBOTBMTjcreERxTkVPbi9WSGxmZGNKcTFNZGRxeXRteWY4cGhWYW1FYVlj?=
+ =?utf-8?B?eVNtTGpCbjV2UXhOZW92TVVVMmYxU1JkWnQ0YVRZTWg5VDJkcXZUelhqYU5M?=
+ =?utf-8?B?amkzdVJHVmYxbi9tejFHa1NuNmtDQkhOZHUxNlc1SG5FY2RRN0RwS2Mzb0hj?=
+ =?utf-8?B?VC9kdjJMK3BMMTNOR2w1VVdGOEZ1eG1RNGtYem90ZXdyRTZQeE1Fb3M1T3hR?=
+ =?utf-8?B?ZHpKL2svaitVSStvZzVGNDkyTlp6TmU5MXpCWnBxUWFkeFd0Um11cVhBOUhv?=
+ =?utf-8?B?cGtPanFEa1pZSTIvbnB1RmhQVE9MaEZxWXA3a3JPelo1TjFpVkEwKy9obEJo?=
+ =?utf-8?B?MXhaQ0NCNFpmQzZwbmEvSnBIVW9IS2Vod1dycyt3OUJnWi9nVjE1cGkxd2hP?=
+ =?utf-8?B?dlRqUkgrT0kvL1RMS0dkaUt0OTVpd3cxZnhWUXFJMEUyOXRsY1RoY0lhTTVm?=
+ =?utf-8?B?aS95V0lXbTlOcm5zQ2NZUVRwWjAwQ1dtNkJQRVN2ajNTMzdJWnhEOG4wcm00?=
+ =?utf-8?B?Ui83ekNLekVjUEsvWmd2aVVnMjcyenIxYkYrL25kY0p1aFZqcWtTSWg0cEZr?=
+ =?utf-8?B?MFhBYW5EZ1lJbjEzdTBGUWVNb0tOYXhwQjNWRW9qSERrVG1PVTN2R0JPM3dP?=
+ =?utf-8?B?UUVPZTBtdUNnL1FJaWZTVU51Q3NDZ2txZW5QWmFMWHBGNlh1cXJRQld5ejJu?=
+ =?utf-8?B?Z0xDZEtCc1IzZnE5eTVhTnRXM0IzSlJ3dkIxdy80VEp5ZlQzMEM4czRzRmEr?=
+ =?utf-8?B?aXY3dTNka3p5WXFuQlFEQ2M1N1JhRzkxU0pmQVhkVnZYSlFNaThrckJTdTdw?=
+ =?utf-8?B?Tkd3dkRmQzlwSmREQi8yTkl6Q2Q1YnF0RDY4V2V5Y0UzZmx6d3pVU3Urcnlw?=
+ =?utf-8?B?L29QTUpzMCs5VUJBd1VuMHQ5WVdOdmZDQ1o5ak9Nd1U0cGtoZklYd0RTdzI1?=
+ =?utf-8?B?dk14NEtzSDdkdHJYUy9xRDB5RnZiaEJPSFZPbUYrVHE5T0tqYTdRSVlWZWhW?=
+ =?utf-8?B?K2JVU2g0RmNkSEduU1N5N0VRejREcnBGdG1NbVVDZUllem55SHBCSm40ZDNV?=
+ =?utf-8?B?MXZNUVpXTWtnTGdkK1lPYXdteXRHUU9sb1VRdFN0QWtudlNhWXVJM2IwTi9I?=
+ =?utf-8?B?OE9OTHY1ckxTUzZxbEY4d2EreHF1a0YwQzN6a0k3V08yYzEzUjJWSkl0TXlY?=
+ =?utf-8?B?MGlvWGJYbE9HQVlNRC9URTJJbFdxY05IQjRzbUNIUFVxTEVrM2c4dFhrVzlP?=
+ =?utf-8?B?a3pKaHB2RFMyRGc0TEM5blFjdElWb3E3VDZQTjA1SXE1dTlsOXhBT2pHMEhm?=
+ =?utf-8?B?STZTUjM5dWhraWNkT0h6L2tabXFqZ2t5QjVZL3R6VVV6UWEvazhYdUNaNjZV?=
+ =?utf-8?Q?qAMMF2ZKpay+oLcqa8snEgJF1?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 99a6a573-bc18-4059-d9e8-08ddc96825a1
+X-MS-Exchange-CrossTenant-AuthSource: YT4PR01MB10709.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2025 21:38:50.4606
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 930qtCYe0mmZ/Hj1I/y7gDJ1h7w9Y9SDviCbIifrqWwoLPX5oTXYEfr4tikd1a8s5GCqcGah63obANS1DCCeLw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB9585
 
-From: Steven Rostedt <rostedt@goodmis.org>
+Hi everyone!
 
-In January 2015, tracefs was created to allow access to the tracing
-infrastructure without needing to compile in debugfs. When tracefs is
-configured, the directory /sys/kernel/tracing will exist and tooling is
-expected to use that path to access the tracing infrastructure.
+Today marks the release of Babeltrace 2.1.2, coinciding with
+"National Hammock Day" – the perfect excuse to kick back and relax while
+this new release builds.
 
-To allow backward compatibility, when debugfs is mounted, it would
-automount tracefs in its "tracing" directory so that tooling that had hard
-coded /sys/kernel/debug/tracing would still work.
+What's new since Babeltrace 2.1.1?
+==================================
 
-It has been over 10 years since the new interface was introduced, and all
-tooling should now be using it. Start the process of deprecating the old
-path so that it doesn't need to be maintained anymore.
+Below is the full list of changes in this update:
 
-A new config is added to allow distributions to disable automounting of
-tracefs on debugfs.
+2025-07-22 Babeltrace 2.1.2 (National Hammock Day)
+    * src.ctf.fs: be less strict when encountering trailing byte at the end of packetized CTF 1.8 metadata
+    * tests: add bt_test_cli
+    * tests: make bt_cli accept non-positional options
+    * tests: bt_diff_cli: don't pass unexpected extra args to bt_diff
+    * tests: remove unnecessary nonlocal keywords
+    * Fix: Python: set local `typing` version to that of 3.5.2
+    * Fix: Python: missing __contains__ method for _PluginComponentClasses
+    * Fix: tests: Add explicit items method for Mapping compatibility
+    * Tests: sync normand.py with upstream
+    * Fix: tests: Add explicit __iter__ method for Iterator compatibility
+    * Fix: Use local_typing with Python < 3.5.3
+    * Update working version to Babeltrace v2.1.2
 
-If /sys/kernel/debug/tracing is accessed, a pr_warn() will trigger stating:
+We've worked hard to address issues and enhance the Babeltrace project, and we
+appreciate the community's feedback and contributions. As always, we look
+forward to hearing about your experiences with this release and how we can
+continue to improve Babeltrace!
 
-"NOTICE: Automounting of tracing to debugfs is deprecated and will be removed in 2030"
+Happy coding, and treat yourself to something pecan-related today!
 
-Expect to remove this feature in 5 years (2030).
+Important links
+===============
+Babeltrace 2.1.2 tarball:
+    https://www.efficios.com/files/babeltrace/babeltrace2-2.1.2.tar.bz2
 
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
+Babeltrace website:
+    https://babeltrace.org
 
-[ RESEND due to using old address for Jiri Olsa that was on my laptop ]
+Mailing list (for support and development):
+    `lttng-dev at lists.lttng.org`
 
-Changes since v2: https://lore.kernel.org/20250617162625.1d44862b@gandalf.local.home
+IRC channel:
+    `#lttng` on `irc.oftc.net`
 
-- Change the time to remove it from 2 to 5 years, as that should
-  hopefully be plenty enough.
+Git repository:
+    https://bugs.lttng.org/projects/babeltrace
 
+GitHub project:
+    https://github.com/efficios/babeltrace
 
- .../ABI/obsolete/automount-tracefs-debugfs    | 20 +++++++++++++++++++
- kernel/trace/Kconfig                          | 13 ++++++++++++
- kernel/trace/trace.c                          | 14 +++++++++----
- 3 files changed, 43 insertions(+), 4 deletions(-)
- create mode 100644 Documentation/ABI/obsolete/automount-tracefs-debugfs
+Continuous integration:
+    https://ci.lttng.org/view/Babeltrace/
 
-diff --git a/Documentation/ABI/obsolete/automount-tracefs-debugfs b/Documentation/ABI/obsolete/automount-tracefs-debugfs
-new file mode 100644
-index 000000000000..8d03cf9e579f
---- /dev/null
-+++ b/Documentation/ABI/obsolete/automount-tracefs-debugfs
-@@ -0,0 +1,20 @@
-+What:		/sys/kernel/debug/tracing
-+Date:		May 2008
-+KernelVersion:	2.6.27
-+Contact:	linux-trace-kernel@vger.kernel.org
-+Description:
-+
-+	The ftrace was first added to the kernel, its interface was placed
-+	into the debugfs file system under the "tracing" directory. Access
-+	to the files were in /sys/kernel/debug/tracing. As systems wanted
-+	access to the tracing interface without having to enable debugfs, a
-+	new interface was created called "tracefs". This was a stand alone
-+	file system and was usually mounted in /sys/kernel/tracing.
-+
-+	To allow older tooling to continue to operate, when mounting
-+	debugfs, the tracefs file system would automatically get mounted in
-+	the "tracing" directory of debugfs. The tracefs interface was added
-+	in January 2015 in the v4.1 kernel.
-+
-+	All tooling should now be using tracefs directly and the "tracing"
-+	directory in debugfs should be removed by January 2030.
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index c2ce834313a9..a3ae11beafb2 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -194,6 +194,19 @@ menuconfig FTRACE
- 
- if FTRACE
- 
-+config TRACEFS_AUTOMOUNT_DEPRECATED
-+	bool "Automount tracefs on debugfs [DEPRECATED]"
-+	depends on TRACING
-+	default y
-+	help
-+	  The tracing interface was moved from /sys/kernel/debug/tracing
-+	  to /sys/kernel/tracing in 2015, but the tracing file system
-+	  was still automounted in /sys/kernel/debug for backward
-+	  compatibility with tooling.
-+
-+	  The new interface has been around for more than 10 years and
-+	  the old debug mount will soon be removed.
-+
- config BOOTTIME_TRACING
- 	bool "Boot-time Tracing support"
- 	depends on TRACING
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 95ae7c4e5835..2dafe2748b16 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -6303,7 +6303,7 @@ static bool tracer_options_updated;
- static void add_tracer_options(struct trace_array *tr, struct tracer *t)
- {
- 	/* Only enable if the directory has been created already. */
--	if (!tr->dir)
-+	if (!tr->dir && !(tr->flags & TRACE_ARRAY_FL_GLOBAL))
- 		return;
- 
- 	/* Only create trace option files after update_tracer_options finish */
-@@ -8984,13 +8984,13 @@ static inline __init int register_snapshot_cmd(void) { return 0; }
- 
- static struct dentry *tracing_get_dentry(struct trace_array *tr)
- {
--	if (WARN_ON(!tr->dir))
--		return ERR_PTR(-ENODEV);
--
- 	/* Top directory uses NULL as the parent */
- 	if (tr->flags & TRACE_ARRAY_FL_GLOBAL)
- 		return NULL;
- 
-+	if (WARN_ON(!tr->dir))
-+		return ERR_PTR(-ENODEV);
-+
- 	/* All sub buffers have a descriptor */
- 	return tr->dir;
- }
-@@ -10256,6 +10256,7 @@ init_tracer_tracefs(struct trace_array *tr, struct dentry *d_tracer)
- 	ftrace_init_tracefs(tr, d_tracer);
- }
- 
-+#ifdef CONFIG_TRACEFS_AUTOMOUNT_DEPRECATED
- static struct vfsmount *trace_automount(struct dentry *mntpt, void *ingore)
- {
- 	struct vfsmount *mnt;
-@@ -10277,6 +10278,8 @@ static struct vfsmount *trace_automount(struct dentry *mntpt, void *ingore)
- 	if (IS_ERR(fc))
- 		return ERR_CAST(fc);
- 
-+	pr_warn("NOTICE: Automounting of tracing to debugfs is deprecated and will be removed in 2030\n");
-+
- 	ret = vfs_parse_fs_string(fc, "source",
- 				  "tracefs", strlen("tracefs"));
- 	if (!ret)
-@@ -10287,6 +10290,7 @@ static struct vfsmount *trace_automount(struct dentry *mntpt, void *ingore)
- 	put_fs_context(fc);
- 	return mnt;
- }
-+#endif
- 
- /**
-  * tracing_init_dentry - initialize top level trace array
-@@ -10311,6 +10315,7 @@ int tracing_init_dentry(void)
- 	if (WARN_ON(!tracefs_initialized()))
- 		return -ENODEV;
- 
-+#ifdef CONFIG_TRACEFS_AUTOMOUNT_DEPRECATED
- 	/*
- 	 * As there may still be users that expect the tracing
- 	 * files to exist in debugfs/tracing, we must automount
-@@ -10319,6 +10324,7 @@ int tracing_init_dentry(void)
- 	 */
- 	tr->dir = debugfs_create_automount("tracing", NULL,
- 					   trace_automount, NULL);
-+#endif
- 
- 	return 0;
- }
--- 
-2.47.2
-
+Code review:
+    https://review.lttng.org/q/project:babeltrace
