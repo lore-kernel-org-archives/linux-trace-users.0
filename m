@@ -1,536 +1,222 @@
-Received: from YT5PR01CU002.outbound.protection.outlook.com (mail-canadacentralazon11021114.outbound.protection.outlook.com [40.107.192.114])
+Received: from mx0b-00103a01.pphosted.com (mx0b-00103a01.pphosted.com [67.231.152.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68AB321D3F3;
-	Fri, 13 Feb 2026 20:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.192.114
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D7F129AB02
+	for <linux-trace-users@vger.kernel.org>; Tue, 17 Feb 2026 20:14:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.152.227
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771013485; cv=fail; b=bmG1ZBJVh2sKtpee4EuJlj5uqvJmSQUGtdXxVMn51uieHKaOe3Rqdme92dUQSplOn5OzPNzzgfvf5/nI4haEj2euRKjD2/DIv9RDV5z8sguD7zOE3xojWdnOYvj7CEhT7ISNauV16qsNRpN+LQCyjeC0UdAb7fBGHAjI6xv/Vlo=
+	t=1771359245; cv=fail; b=T2+0mnZmzlgoxryYeb4UU4mvcd/hCb/ds/U0SDOqMqft4B1xlOAJWCEkLDuEGwYM02AsDxCl2TZXwQQM022Eu9ZPpWI6Wx6qdR8nbClEVZ2sIsOBcz7podTLWleL/jeUqZnjWgO1JZzKs0NsyaMsU2EBsUaYItspIV6CnebSSjQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771013485; c=relaxed/simple;
-	bh=Sg9MD2YhPlcg+K5ZQy64cKdak35LA57+Y7gf870KGaQ=;
-	h=Message-ID:Date:From:To:Cc:Subject:Content-Type:MIME-Version; b=n+8fxxo1jOX1W+Co9vTrvHJwzpnUlDvE4tq0OBIBhErjcItbkY6/DFa/kIQnw38aSjPk4zbZhd0gykL82BMWF+wozNr67EtuJb6Eqciz6LKPzPemGXgjg7Wcd1n4BMt03gJ4487nU4dquQjmCR0whndNXPHCEdOVfL3oymmHxi8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=nG3weU3Y; arc=fail smtp.client-ip=40.107.192.114
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	s=arc-20240116; t=1771359245; c=relaxed/simple;
+	bh=afA7c7NKt/h+voqSSXfQqn2lpwisBEFQRi1E6TDrdqk=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=ZhAocHo4P0owLab4DcoaG5BOcYx2WnQXgLeuWWQFjlHetVpMbH+YoEu/0A0r+6NUU7PQR7j2EYaMvDk34xmhWWhJ7igwnfmMAat6u26HZvJHF4Edmm2N44jlw/qVjFjsh2QqvKiVhIVGgAqERRqIzjoiZWzyb2ud3xuLxlb6btg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ciena.com; spf=pass smtp.mailfrom=ciena.com; dkim=pass (2048-bit key) header.d=ciena.com header.i=@ciena.com header.b=KBoDIUpy; arc=fail smtp.client-ip=67.231.152.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ciena.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ciena.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="nG3weU3Y"
+	dkim=pass (2048-bit key) header.d=ciena.com header.i=@ciena.com header.b="KBoDIUpy"
+Received: from pps.filterd (m0222748.ppops.net [127.0.0.1])
+	by mx0a-00103a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61HGYu2U2136144;
+	Tue, 17 Feb 2026 15:10:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ciena.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=06252019; bh=afA7c7NKt/h+voqSSXfQqn2
+	lpwisBEFQRi1E6TDrdqk=; b=KBoDIUpyQlYzXAQ8JobPXgOAF5DQ+5TwepZZcLf
+	0PzNeR9kcy6Cv+4ddG+19USYIs2dRAbBbWGV/tIjna5yIhBMg+dO2XXlf5bd/OVS
+	o3cyus+gaR+1tZYEHRyPQRjXnhJQZRm+jAdt7S5OI4OeMm5yZyXfqllclO3rH2b/
+	viIv3YtADvzWba365dr5XGD364Q9l6Ee9Tot+C/Juz2+vIQS82kaJW36ZR43EFCa
+	LV2DBtIQfTsrvLwH+++PTLSvJg4wO0J0klMFM9McMjwqhP+MDPYB/d9E62xH4ayW
+	Oe+YIEEDtjxmHF/H3dfDWEshXye1JEyJxM7vhcGlqTRtjag==
+Received: from bl2pr02cu003.outbound.protection.outlook.com (mail-eastusazon11011022.outbound.protection.outlook.com [52.101.52.22])
+	by mx0a-00103a01.pphosted.com (PPS) with ESMTPS id 4ccjbej6yv-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 17 Feb 2026 15:10:41 -0500 (EST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=eZ4VdpoSHjGjBXG7R3oEW1yL1qAUD3K5F5DfYsc48aDu1R45HmAQ0OprCNYq18Zswfzh9gC4To4+bPeSCcKejkJ/n7NtyjxIh8qokOM2Ti8EWhR2sSuDQvJ2s9Z3ZGqZyB8DpSPuQlabalqv7AKTVrsDvOcpdk2oK+uOiiUfCVWUu/8sGTm43N2YUQJbBNbNXYt2TLRovcERzWZuSqcDp4Ba/3ycPAd93c0T9id4poQ/AlilU06/7y1q0lH0MlN1Z4fhYVVy8aQz8hHEsqKj+BJTa10vYu5e4nDIsYeA8ppPCdehTM9rbsFmXGy4jFTOWFVNnzY9l2TBb6b6L6qbSQ==
+ b=r2o72S87fObwB/YgD76QRTMHDiSMy94E+4oz+iSL7Rp02gK+MXgl9ralMf+38kGnGo67m7v5bzhJw9E5v1oLPk9nvsma/0TFgcRsNSwVZTAe4yGrkO0ByVTT1xX9fBa5V3Ht5/egV2+AVyGrXL1V2YvThxSAUKsgMoOUKwtr+OXGrnz9/j7W3y5PaPrsQph210Xxvt3tO2JDQ1j/RWcD2IfpnNOt+Yz5fgSwTLNO6bdgwVwCu2J6ND4odmdroTpBU7W7WRwTNtdarHTNgFL7JdcGTEdWCTiFR1GCjuvCxoNVn5BIx7ka6TMXF8jJdVhkWsWybdEAroxCXNkfWLq4aQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XLZQtUj7zJPJqjJAv50hgtbXrLAFNdp4hq+WIlJrFts=;
- b=nfsHA9deiSGvc/tbyjr+I2ZmUBMbwA6kXsG3dDqTBVZmGd9gvKYY8lBAseBJ1NmGfkYIuKqaqEtK6SSnxrEf5rUbk8+pn1aKa6ikAnpgQdJxQWNRFYZ4YWmUnWYE5QC8FHMhQZ9fYSZ0WBfP9yI6oIIiVifi3ADsmA+HGlgjCejKdtIae7PY6UWAtVSrYdEQPLtAQf08MJJWFBaDA4DWO0zln37VZwUpwhtNAXrve9KaFvfH9nNcwkW+JMq5W1gVrSEq4pzbaLTWdJZJIP/dujOiJM3A85pFghMd3VVJ9h1h/7pselEU8pgizZ6pXU+Nc4uNj+o/UTUP2t/TEXqOiw==
+ bh=afA7c7NKt/h+voqSSXfQqn2lpwisBEFQRi1E6TDrdqk=;
+ b=kwjAWAENO7lYPW1RC8MOfWiVSuL88A2/woSkfHGVceU/u6uUbOzoaeWiTX7oIiW2ocmM36Q+I7hW210MPUaipfAVugI0HCNVg9D384NzFTEpIQNxpo49KWDHKFijjanWkcYbIh7KCjwcN/h+9g/zgv7iSle9qZkdpLFK9U/Nzk7GVBlr0fHsetNOilMmoU92i/g9skmzQeU4Ir0dsePN+RZZFAGIoevfYBips/Z5vFyW/0Yeyz0OC9tJ/s8tk7YfMtxlZ/aVMx4YcFAlgRcGYqns79RDTAU+7pUwUcu22+8kpJMv49+tJQHHs0g+R1oF4QzDrhHLxx/u9d8ZWUMnTw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XLZQtUj7zJPJqjJAv50hgtbXrLAFNdp4hq+WIlJrFts=;
- b=nG3weU3YOVPkrr6Hs1gq/Pg4r85Qm+mVKp36cEdMalkofv0MSFErPqsWXGAO11rpNB+wq28UkWlfbr/M0PXlmpZ3TyJIxLAfjMYrI9QapB3DZQrDdjaRZMPHW2dVtxBXWTI9kl5JPuLI2IQP/woZoPh+0QtvDYLUABp4oKkhVwwjSZmK6XFTRXTAeAFYvpSNsLTdjrh9rPaOe3PzDfv5zpfCTe324cZy/gSPzUZEFzru+KWHTtompojRZXB4DM9atHSfVHGtp1MBgeO0FQz0RfHn3C9MYGfsQ3rEvbRYXhgy83mOlMKK9UXuZiFk8D/+KwGSIy5uQdqqiH1oylqNnQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=efficios.com;
-Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
- by YT2PR01MB10779.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:f4::14) with
+ smtp.mailfrom=ciena.com; dmarc=pass action=none header.from=ciena.com;
+ dkim=pass header.d=ciena.com; arc=none
+Received: from CH2PR04MB6821.namprd04.prod.outlook.com (2603:10b6:610:94::20)
+ by MN2PR04MB7069.namprd04.prod.outlook.com (2603:10b6:208:1eb::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.13; Fri, 13 Feb
- 2026 20:11:17 +0000
-Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6004:a862:d45d:90c1]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6004:a862:d45d:90c1%5]) with mapi id 15.20.9611.013; Fri, 13 Feb 2026
- 20:11:17 +0000
-Message-ID: <9592e7ac-2ff5-4fc4-94cc-ee3de89fa541@efficios.com>
-Date: Fri, 13 Feb 2026 15:11:16 -0500
-User-Agent: Mozilla Thunderbird
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Language: en-US
-To: lttng-dev <lttng-dev@lists.lttng.org>
-Cc: Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
- linux-trace-users <linux-trace-users@vger.kernel.org>, lwn@lwn.net,
- linux-kernel <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1JFTEVBU0VdIExUVG5nIDIuMTUuMCAtIFDDqWNow6kgTW9ydGVsIC0g?=
- =?UTF-8?Q?Linux_kernel_and_userspace_tracer?=
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQZPR01CA0062.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:88::12) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:be::5)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.13; Tue, 17 Feb
+ 2026 20:10:39 +0000
+Received: from CH2PR04MB6821.namprd04.prod.outlook.com
+ ([fe80::e0d3:6fd8:6c82:3103]) by CH2PR04MB6821.namprd04.prod.outlook.com
+ ([fe80::e0d3:6fd8:6c82:3103%6]) with mapi id 15.20.9632.010; Tue, 17 Feb 2026
+ 20:10:39 +0000
+From: "Nassiri, Mohammad" <mnassiri@ciena.com>
+To: "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+CC: "linux-trace-users@vger.kernel.org" <linux-trace-users@vger.kernel.org>,
+        "michael@ellerman.id.au" <michael@ellerman.id.au>,
+        "srostedt@redhat.com"
+	<srostedt@redhat.com>,
+        "masami.hiramatsu@linaro.org"
+	<masami.hiramatsu@linaro.org>,
+        Christophe Leroy
+	<christophe.leroy@csgroup.eu>,
+        Nicholas Piggin <npiggin@gmail.com>
+Subject: [PPC][Tracing] Missing syscalls:* ftrace/perf events on PowerPC vs
+ x86
+Thread-Topic: [PPC][Tracing] Missing syscalls:* ftrace/perf events on PowerPC
+ vs x86
+Thread-Index: AQHcoEcGeCnVUQeYJUiohhPZh5dZMA==
+Date: Tue, 17 Feb 2026 20:10:39 +0000
+Message-ID:
+ <CH2PR04MB6821DAF7C6684BB990A0288BC56DA@CH2PR04MB6821.namprd04.prod.outlook.com>
+Accept-Language: en-CA, en-US
+Content-Language: en-CA
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH2PR04MB6821:EE_|MN2PR04MB7069:EE_
+x-ms-office365-filtering-correlation-id: 43b42c3e-c3f5-4e0c-666a-08de6e609ee4
+x-ms-exchange-atpmessageproperties: SA
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700021;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?bFI3bkhIL21jT0syTnNQQzlxUE40MTk3R2NyWE1UTHZ0SitVM25OODFvTjR2?=
+ =?utf-8?B?cTBYc2JJOW9QaDFiVm00VWpOOEJKRi9xRkpVWjFUeVloZXRXYkVjclRETnpt?=
+ =?utf-8?B?SFBwRDNpY0pPbDBOUDdzN0JNRGdVNS8zbHp0N25EWHk3K1l2TFQwcUw2UXRU?=
+ =?utf-8?B?bEl3MnU2OUovRjBmWTgxSHd3bTRCdFJqc1J1Z0RqbVJJbW51Q0hZN09TZFF5?=
+ =?utf-8?B?MjE4MU9UNnpEM1VDdUYvZFpaeTdYeGE5dWxIVC8vUjQ4ZWFQeUZRaUd0QmR4?=
+ =?utf-8?B?cHE4MzR1TVBJVXJERUVkSGg3NnhvazR1bGhDMHRiVi84cU9YNE9qVzNTMUJn?=
+ =?utf-8?B?Y0o5VjRKN2JmRDdDQlBqNW9uYkM4S3RrbjBZS09sVGs2SXVJYTEvT0xBcVYy?=
+ =?utf-8?B?RHp4aFZtZmRoSWNZdmVseHVwbk9NRVo3VUJuT01BMzZHeEtiVkUrK0ptRzZ2?=
+ =?utf-8?B?L2NRV2NmeThNTUZaY01icENqSm5aMGxuM0lqam1Sb3U0Tm1yZU9BWEF4SzVT?=
+ =?utf-8?B?R3hTRHdKMFV3MTZVSktVdWpoenluTnUrMTlmY3VsYXhHODM3MDYrTWJzcG9N?=
+ =?utf-8?B?Z3ZQa05PdWROTWk2ditNSzM0SWlNZzZtdVprMGFaT01CUjlScTZxUm9nNTdj?=
+ =?utf-8?B?M21TajlTOCtBRVFCZlFFdzZ4WDlSVCt0MmNvNzF0MExqSlFxcmtDNkdpNFU1?=
+ =?utf-8?B?NHBEUTFlL0V5ZnE1ZkNjT0pldkVNaVFISDV6L2FucFJkSmhmcGgyQXMvZGRM?=
+ =?utf-8?B?UzJoWUpyTXp3dWx1bUtDWEdMMmxDTWEwdENJTXlHMkx4SDVleEdmZGF1WG0z?=
+ =?utf-8?B?OURTSjY3cm9odUNGYkN4djdDdHJrVEZMbXFlQ2N6WitMWVdzVTBVMFhwcDNv?=
+ =?utf-8?B?bWNXWVpkcERsL2FoZ1R6ZEx1WjFUcCtNRU5JK215Z2ZCUHhFTDhFR05LSTYw?=
+ =?utf-8?B?TkFiS0N2VjZBckFjeFYyRzZYYlh0bVNEZEgwd2w0dk5xckthVExCTjdmS2dq?=
+ =?utf-8?B?MkRBRUlpemUxRjBzZVpFa1RBM20wT05mdnZnQThtMnljcFJKNUY3MjAxK3Qv?=
+ =?utf-8?B?V1Z3amtGd3JGN3d2Z1hnL0ZPa2JuK3NPeVluT2tvak9zbmEvYjlPTitIb1BX?=
+ =?utf-8?B?c1J2eUhiVjB4VmVXSmZqNFVYSHdXTTZvbmI4b3pyczR4QUExemt0NWFoR3hJ?=
+ =?utf-8?B?OUpUY1hYT2VveGpibVhVckVKT3luUWZ3aHIwTFF5eVdQRjlRSkkrd0dmOGVS?=
+ =?utf-8?B?Ym04OEhGR1R0UzdnOGM0VEpoQU92dFZhd3U4TTdQbjhyTmFEVlNuVTd5bWha?=
+ =?utf-8?B?U0pScEtBT3NndjZmRE1lUCtjcDAyWUkvMTJ2RlpBRkx0cjdnRitKaW42Vi9x?=
+ =?utf-8?B?Y0pRUHVhdUZSWUFwZkZsU0RPZm9yMXVBNDFBNmxOcEVSU0ErTWZ6NUdCK1ds?=
+ =?utf-8?B?VkFHU2Ywc2VtL0hTamFZd3JKL1c2cGpJam5xRjBtUlhweGZlN2hNMVhpWEdM?=
+ =?utf-8?B?UzlSK2dtcksyVHZBOEtrUG1VUFhOWHZHVVdTRHZ2dWRmWXIrc0E3LzEvZXZO?=
+ =?utf-8?B?WnJOK3ZFUmIrcC9INDg2NTY3Q0FiajIrNEpzZVV6QzBXcmxXMUlUcVY0YW9i?=
+ =?utf-8?B?QkVKYVVCV3FZUy9RR3FwT1B0enFhbm9EOHVtZjdUdE1VOGxUVklzaFZSUG5T?=
+ =?utf-8?B?WnJDOW9HMnVhMTZuUVVWR2RWQlZUUjdyeFVxRTVBanRVRHl4WEZXMloyUmlG?=
+ =?utf-8?B?RUhxTFM2OURWcTlKeGpJY2lta3JhRUtMeEE0OFNEYU1aT0gvSUV2MlI0aGdo?=
+ =?utf-8?B?YmhnSzBkb0MrL0h1czZFYm9HRjZUbUJCRWRqVkxRM0hRVTRNZmNyZkhCTW9j?=
+ =?utf-8?B?Qi8zRjRCS1NwVnNsOElpWEMyK0Q4bHJGN2VuQkphK1I1WG1HMHQreE9CMEhu?=
+ =?utf-8?B?MmRlR3p4b3oyZGFyZnhiVHZVc3JWWnRnTmdYSWJmdXNTMU5XMWlUWmUzT2Rh?=
+ =?utf-8?B?VVBvRy9TeHgvR0dHbm5CUk00OFBEZFVTTUV0Wk4rd1FJa1hYZVNHR1Bpc3Js?=
+ =?utf-8?B?M0YxYXIxYlg2ZTF1OGROWUFzRVVxZ0o0NXJSR0RUdk9xQ3M1THVjL0ppRU9J?=
+ =?utf-8?B?ZzFXMURtekFnVzArUlBZNmdhK0pXOGVKbG5POVdQSk95U1A1cTJBaUl2ME1t?=
+ =?utf-8?Q?OkuH0xLPs1ZBcvieRzYeYvE=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR04MB6821.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?c0FGQmp4WlRzcDUvZjN5VFFMWkdiMmRXOW8wd01DTkhMSjZaMTdOSGpOL2FK?=
+ =?utf-8?B?Zm9RT3A4d0RhemdiM1R2SGFETjlKWDJqMjBtU01rQnBiZmN0T3pNQVl2R1g3?=
+ =?utf-8?B?bXp2ck56NVk1aE9SQVJ5Ujh3TWZkbEV0VS9maXVlWHJMZEJ5MzdRa1BrVEUv?=
+ =?utf-8?B?YVVkeE1OWXhrZ2hKUUNPMnFrQ1VTOGNCcWZSZmlMWjJ5UTF1d0Ird0tBcHZU?=
+ =?utf-8?B?YjFiVkxxUU02TGFxWER3RDhoZHIyMk9oWTZrZzFjRVdXZnkxdk5XdlpiOExB?=
+ =?utf-8?B?b2dhLzExMG5mb28xZ0xDd3l0SFJKM2dOTmcwb3dGbVdVVnBZRHJUL0lrR0J3?=
+ =?utf-8?B?ZUZlNW4xY0xPYi9jSmpPRDgzQ3N6SU5GdnRmOXV1Wm44VmlBSndKZUtQaUMw?=
+ =?utf-8?B?T3lJRjk3REFyOVVHVG4vSmRTUUl1OVloRDVia3BaMDVoazhwbmRGMUdCcFRN?=
+ =?utf-8?B?aW9HKy9zUFVrQnRDSGF2QVo5OTlGeTNSQ1V1Z1FSbEhMb3RPTlZmdFoxcFQ0?=
+ =?utf-8?B?YkN2VWwwcktNVWEwZHRINXBlRmluS2hpSTBib040MXRuWjVsWVY3WFNweXIz?=
+ =?utf-8?B?SEw0c21pcWdzcmk2bDZ0R0FyWERqWndoNWVXYmd0NWF1cHZUdjBUUGFISWdy?=
+ =?utf-8?B?R3NCanliSUFjZ01wRkdPc084ZTR1TTNqSnhNSHRzZi9kdDVHbnJPMU15MEgw?=
+ =?utf-8?B?RExXc3dwRUsweDJudUFjbktDNDhFSEQ3elRGZ2NaaG4yZVU3VHg4NCtBUnVE?=
+ =?utf-8?B?UUM2TXZjNjNpWXAvcnpqWkpsdXpmcktDNmhzMGRIYi9KQjNxQWk0NmJXSVFw?=
+ =?utf-8?B?QmN0ZXVEU3VCQ2dXaHRURXlsTjUzM2ErRUVGN3lYR2Y0N01yZDU1V056RFhq?=
+ =?utf-8?B?d2ZTbHA0VUl5d2s1V2RNZmxIS2YyV1dLakJqMDZQY0JDQWR4bnhjWUZVaHhO?=
+ =?utf-8?B?eHRHNmZwL3hHcGRwRjZqQlpXaVo3cmpkZ0NWaGp5VTNPQUtrNC9FTjJVZG9X?=
+ =?utf-8?B?aUxCM0NBcm8wTktPbVVxQmppMThzM2JhTzBGWHUzaE5ybVhrdFBOQ3VhQzgw?=
+ =?utf-8?B?RGR0MDZZMDlrRERmWDZiQVlNbGpzSDNrYmowRXFnUjJXSlZuZlA1aitCcmxH?=
+ =?utf-8?B?czh0TjlhY0h3YVloTnlIMVI4Nm51YlFpRlFGZHgzckMwd0NVNnZDRlFGUFNo?=
+ =?utf-8?B?QTFrU2NyM0RjajhVNHJaRnltWkQxcEdnaFRDb245WjJCTVdmRHE4QjEvK0Mx?=
+ =?utf-8?B?RWNEczZ5TG5rWWlHMW5ZY2g0Q1pRTk01YzRYTFVpKzlPZklTNmxmdFphdFcy?=
+ =?utf-8?B?TS81aFdSZkxGZzA1anNNbUxCVEh1YVVjT3AwdkY4MnREN3I1cTRBek9MY2Q2?=
+ =?utf-8?B?ekZYZ1FlcE1EY3Rxcy85RWx2VHhEVDBDTEc2SkloenlUTHVHdnVvYmNDWVdJ?=
+ =?utf-8?B?Z25MRFhEc0RLS3VoRDVpSDVJNkhmU0RJL0crMlJNc1c0dkFPdEdrRzBITUVs?=
+ =?utf-8?B?V2VoQ252ZFpEZE9wTmhKK21pcDVLb3QvdndPNC9NeVlRMjFEM0RQaHorQ1RT?=
+ =?utf-8?B?REhhWmVrczVpMmt3Uml0ZnV0TVVBR1Z2Yld3VEdiMllyUldUamJtWEdmSjJh?=
+ =?utf-8?B?dW9KL0RmbmpaY29Wc3hwcUtDR1poOG5TVi96Q0ZqUVhkVURUMTFYd0NkeHdK?=
+ =?utf-8?B?ZWdORmtEbi8vMnJTODgyNXc2T1NlK2RQVzZ2ZUJjanJBUUxWQm1DcXlDZTA5?=
+ =?utf-8?B?WUZNMFEwWlhvM0tSamhjRVdsN3hBMTRtZFBITUlxTWRubytwbWh2bVRRVUlY?=
+ =?utf-8?B?MEs3dDNBTGI4ejZ2VkpIZEtDODM0eDM3VGxmbCtIL3J6Tnp2TWZNYWh3QlZE?=
+ =?utf-8?B?K25kcjNnQ2llMGJjSHFPZXVhemc4Zm5ZMVNITUNtbkhSV3diVmtDZHBhQ24w?=
+ =?utf-8?B?dDROOVloN3NUR0RFcVJabFB0RWorTTQyWGNPaW42bUlMVzNobFY5VVVOQnhR?=
+ =?utf-8?B?WVVwZEd4NUVSQy9VM2sxRCtKeDlUUm5NY2V1YkRYSHpvTHgxdXhDV3pHU2Y3?=
+ =?utf-8?B?MytxbTg1NlZHTlFFNkV5ZjkvRzlwN2FpTE1XTU1iYjN1R0p6UGQrN1JQeWhs?=
+ =?utf-8?B?N2t4L0NoM09RaVd0dHRPS0NEYXVxbWx4MlNGclc4RnVFeFVYMEVHMHJVZzdh?=
+ =?utf-8?B?VXBwTGhmT0ZEU1hkSjFkUEU2QzBMckVJVzloS21sYnYvc0x2MXlJNGVYK0xY?=
+ =?utf-8?B?eEhUdGE3REtDVDZ4V01XOXhVa1pZUnY3UjROcXU1d1ljbVNFMWJEcG9maWpR?=
+ =?utf-8?Q?HHisTD/UzebDhOkYcK?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
 List-Id: <linux-trace-users.vger.kernel.org>
 List-Subscribe: <mailto:linux-trace-users+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT2PR01MB10779:EE_
-X-MS-Office365-Filtering-Correlation-Id: 36f3268c-ce72-4afa-b1da-08de6b3c0bf7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ZXpnNGtpcjhPb0xscm5lK1hvS3c2VThpZlo1bmVaRUkwU0Q5Wm5hYitxdXJT?=
- =?utf-8?B?bkhabTZTbG1KTDZZS1BuNVNKVFJObDhBRkJpcmhPditmS3hwdE4zYkRDQmNa?=
- =?utf-8?B?cEE1SWhRZjBvRERBQ1JhWTNQU1NFUldkaTQrYU1zUHduWmpIbGFmSHV3eVEw?=
- =?utf-8?B?RlUzT1pidjArN1NQOGVYalFrYjIvbDFQdU9qTUV3ejNlNXBaS3hVNzBOY04r?=
- =?utf-8?B?MnM0bkR1dzlKcVVvQmdMMmU4ZHA4K3Z0ZjhYbmFBek9udFVvYzlJU1R5cXJR?=
- =?utf-8?B?RmlpVTVTUHBaMllDK2VSdk5Ibkd0SDVtdCs4cCtIbnI4Z1M0UUdVeUFWUWY2?=
- =?utf-8?B?K3lmZzQxTndhRXhJQWVldnZxellEbkRGUCttYm5vN2lDeUs3ZkN2NDNQU0pQ?=
- =?utf-8?B?OU5xbHNNbXZ0WDFzZkhzY3k0WVo5V3VvamF2U08zYW5QYnJvTVlyOE9VdWlV?=
- =?utf-8?B?VTczZStDVW1OYjFxam9yREZISWZkY0xVN2k2Ylk1K3FjeWRmZVo3K0xhMm5K?=
- =?utf-8?B?L2FheHljSDJaSVR4alRJaDV3UDJTeUxFcy92a2lhQmFQY3hEeGJLNHZXdHp3?=
- =?utf-8?B?OElvbW11ZHlKM3dYSVlVamV5bHNSaWcyYkgvejZCaUZzS3Q2ZkxTdTlteGtv?=
- =?utf-8?B?T3poWmNzb1pNZVRzemY1amsvOHJRdEZqT2R6NFVHNVF3UnBPWVB0UFZtOWRT?=
- =?utf-8?B?dmZ5d3ozTGFDVmRqR2RIN2ZEdURFWk8yTDJydGFiRWVpT1VXVncyOXJvNzJF?=
- =?utf-8?B?QnhqeGRJYlFVVlhJRU11Wm1PNGorSXpLcXE3YnExZDVUV1JkK0REeEw1dGdH?=
- =?utf-8?B?bUNxSm0zdWt6SWt6c2ZsTnNXMDU1d2FGeXBndnVXVXNYOHMza0dLVEdWTUsx?=
- =?utf-8?B?VW9hZEFCZE9iOWVYcmYvWmQ5YmV4Q0NjSW43N0pQNXNkZWkyZzVkbFQ5allV?=
- =?utf-8?B?OHpBSFRxSHVYeGtocjNWUzVpZmN4RTQyVmRsMWNnNXEzVi95eVhpbWN2eE9S?=
- =?utf-8?B?SkNOY01kQTQyL2VrdHE3RndueGdIZldrUGNVdlUrTFQ2WkZRbFU2ZG5lN1ND?=
- =?utf-8?B?d2JIYWZnL2JkeE5lbVc0UWkrYVNLR3J4VTl6alNBQy9lc1E1WmVQM29qVjgy?=
- =?utf-8?B?RUVESTJ0TCs1RWFPSGorTmwrc3ZiMlNiUHJHM1N4b1RqcFI3WjY4bVlocFdr?=
- =?utf-8?B?Y3dIV3FKQXh5d1NxaTNHSm5nOEw3Qkx5YUhlZ2JqN3A5VktzbVBuNHJFcDc4?=
- =?utf-8?B?UWhNdzJneUVEV2taK084RHZ5d3RCU2dTVVBsZ2dUTkNGZTRwOEFxRko4dnp6?=
- =?utf-8?B?QkRteU5pN1JuS3JsRlkxcjgwWjlwS1RoWUg4Tnh5eE1aY3FZa2tSZ2E0UnF4?=
- =?utf-8?B?Wkt0WjZVSk42Q3FmUHpJMXBnbWlGcmp4UDdyQ2g5K1VyT0tSYWJKc0VabFBN?=
- =?utf-8?B?cDQ5RVhwb3N4Ni9SclpFbXM0TXBGOUhiRDM3RURSMXJQdFFORFpoMmdDR1Y0?=
- =?utf-8?B?VnkzZW5MMTRjSEtSVE8xWXhJYUtRNVlLZDZQV0hDU0Q4RWZPdWpaUzhGdngy?=
- =?utf-8?B?WTdLZzIrT2MzdU9IRFgzVUJ6a290VWpDS05nSUhib0pQL0k2VDFMN0FCNEtw?=
- =?utf-8?B?QmFDVzR6Yi9JNjRPVG5abXVNaEtGcWo1OXNvUGpsV0RzTjBTVVp0ZTJqbzdT?=
- =?utf-8?B?a3BHNzNtWnVYak11dno2cXp2WFBZUzJHZnVYWXdKUjRtVUJWK3NIRGFSMWlu?=
- =?utf-8?B?bUFRVTZBcm52QkhLMWtqd0p5SHI0THRkM0NIKzRFOTQ2SHk5elhINURtaTZm?=
- =?utf-8?B?bmVmR1VkMU1FVHEyc3NoeE5vYTdmbkRiV056djFGWGcvNS9mUUl0RnBDSHo4?=
- =?utf-8?B?dHRQM1V4N2kxN3FzYXFVNytuUkMwUFZ3R210WnR6RjBXVG1OS2hLVDVwY2Q0?=
- =?utf-8?B?c25RL1hXc2c5eFpJTGJvTGhJRkRtUXZBQS8yK3RnTTM1RTdPbTM1UHdhL1JP?=
- =?utf-8?B?a2h2WSszYnBINjBEa0JsZ21Sd0FJd0Qwa1h4cktKTHpTT0FzM05zdHpBNzN3?=
- =?utf-8?Q?1xlhKm?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?b0loNXlidXlZdVJ4WEpjY0V4ZzROeEtNNmkrVU82R0FITk44aFN6QnVVZGtz?=
- =?utf-8?B?ZXR0cDRrR1lYYVhLbUdRYmhUNEp4VE1PWmlvRUtTYmplVzZzYkZvQk5WVGh3?=
- =?utf-8?B?QklXY041U09rZUtTa1hnOXBFWmZTOGh0VDVKT2FFd0VjbEsrUHl4c3ZTeTh6?=
- =?utf-8?B?TC82d0hKcVlpUER0ZTFGbnVCSk96cVo3ZHI3TTRpYnAzbkRyZ2p1S0QrSjYv?=
- =?utf-8?B?MzhVdUxUMXNSZVl6OGkyR3BLV0NqeWcwMTJhdjJZLzBnNXR3UUNyN2FKaktk?=
- =?utf-8?B?ZE9ReE43d2JhcG9oNUQrY3RBeDR1OEdFWGhUN1E1Z1oweWpraFl1QzVLbnox?=
- =?utf-8?B?R3JsUTVycUIwYjZ5TjNuT2xhWGR5LzUrdVovUHJCOE1vWmwxMXJMbUtIeGNG?=
- =?utf-8?B?VTBydGJ1WDcrYjd4UFR4MHluZTl6TFdOUFdZeHdWWXhnMmE3NXVMVEtxWXFn?=
- =?utf-8?B?YXhLelRDYkQrY1JyTGFqTzNvU3B3ZGg2aWU2QUR2M0QrQWpEOXI4UUxISUV0?=
- =?utf-8?B?cEdkNGo0UzhnZVFLUXRudlZobU1YbHFDL01UNmRMYUxteG9HT0ZoN1c1R0x3?=
- =?utf-8?B?NVVwd25xNWNteS83aXhvbG8rbFNhdHV2NzNFa1lUaUZDWVRCZmlrcUFJZHJk?=
- =?utf-8?B?cU8rb1VlekhmSEhNNmJ2a2kwOTdYanFEWTNFQWNiT2t2S0lqcStOUzNQRzhr?=
- =?utf-8?B?T2dacDVEUlc2alZCYVk4U3E4MlZRL0JjaityaUovMVR2d1lBQ0Jac21RK0pW?=
- =?utf-8?B?TXNaQWNiQWN0aFRoa3hyZHE1THNFeEhvTnk4bWcvNCtXL0JrWjh5ZEN5UWw3?=
- =?utf-8?B?V2p3aHZEWG1PTEhPREowamdmMEtMZ3pVMEtmUzkwOTlGbThRbjdRTld4dmp2?=
- =?utf-8?B?YS9hUXNacmQzM1FOSnhNS0pxa3kvL0NWTkhzaVRicFNCayttek02YWFoTjBN?=
- =?utf-8?B?ZU1rZjZOT2pMZ3c1WXlINk1TeWdtdTRMSzJtT1hUYzBBMWNmYTVLUUFRTHE1?=
- =?utf-8?B?ZkVENk1IS01XSm1UbEltbzNXNFNCMVkvcFZNVGpjc0JPLzREZjJmdTdIQ3lk?=
- =?utf-8?B?em1tVGlKVzBpTEJkUkMxL2xMSENkdkhQRThIaVU0ME5CMWU2MUQyT25YdWZn?=
- =?utf-8?B?bkhoaFJtMDVKbFJ1YmNWZXhWaEo5VlY5b09xZzlSUkx0bVhJV1ZXZUVSRWty?=
- =?utf-8?B?T1ZSbWNicy9mMXBpZmhMaVpzTmgrWEhLU2R4cU1qM1BMRVVoQWVadjQzUitE?=
- =?utf-8?B?UE5ZbWFqMkpLS1pTK0xSU2J5dlM0RHRrT1RiZXFGT21nWXJ2MEZYNnd1RGhX?=
- =?utf-8?B?SENmdkpZbUtsNXdvZWRQMVN5QVFWWm16anYrNm42NUpjMm5Ib3FiRkp5cmd2?=
- =?utf-8?B?Ni9DRURidytvZVVFUWUrTU9iR1hoemNLbnk5U3B1a2FWWjFBSnMyMXNQRGdy?=
- =?utf-8?B?QVRkd2kydTVhR0lxN0hyQXd4TnhBSzYzV2FkZXhqMmpBMlRUTE1iTDBYZnNi?=
- =?utf-8?B?Y1N0RHdBMnFOVlBBbmlzSmlmdmZmWmFrMVJ1QnJhZXJmSlErR0RHSFhyRkdQ?=
- =?utf-8?B?enlPVFFMYm5iMXIybzRkeVFHemF3L25oSGxXLytDZmgwRXBHdjR4bjRhUmU2?=
- =?utf-8?B?ajd6d3RmYVVycDlDVk9WR1dpcWFQUDRBalRNaXJ1V09EejBSSWFjU0xXZWV0?=
- =?utf-8?B?bUhrL0RRemcrTlMvam1uaWhDeVhCaVFaZmlGSUtKVnliWU1UNGZJTkNvZE01?=
- =?utf-8?B?WHo2YkZnanoyc05ESmdGL2FGaFRZMFhqcW9TLzlNbk1JVTh1MGNObkNTRmpl?=
- =?utf-8?B?VGYvUzJRazBzRGJYdVRtc2x2UzFIUTJpVHNkLy9qVStQNjFkREN5UEdPcHM0?=
- =?utf-8?B?QmUrcHd0NlJacWk4VUdQQmR0b1hrYUx5blFPMUQ4UXh5RG1FSGljV09IVWFR?=
- =?utf-8?B?OS9pMjBEQ2VkWmVrQ2RKNXZJaEYrSTgrMkJhNS9hcHp4ZTcxcy9OeFMzdVlP?=
- =?utf-8?B?RWZVOXZsdnZIQWphc3plZ3BNR0hVVnh0MDFiRkFRVVg3aW5laXlOQkxTdGI1?=
- =?utf-8?B?UWUxZlBmRlY5REh0VkR4dW9Bd2lHZDVMZVV0OUR6ZlQ3T29hVlFEM1U1RGVa?=
- =?utf-8?B?dXdIQUZ3aVJHZ0Fscjd2OEs5TFp2MlNoUVg0NmxaWXRTaEhabGFvZzRaV3Nz?=
- =?utf-8?B?b05ENitmbnNhdE5KdUhvWnU2N3BzSTllcFVidVgrOWM2MWpXZXZLUDh2WXNy?=
- =?utf-8?B?NXZ1WU5YQUpDU1ZhaVBBRVdJa3VWbTB0VDFuRWpHTHYwS2dCOFA3OTB3aEcx?=
- =?utf-8?B?OXQxZm1sRDFzM2hLOWV5OWRUZitCTkJVK2Z0OFBTTVRBTGV4UFhqbGtNejJG?=
- =?utf-8?Q?B2/3gnf7OoSKqGaLIfOU86Rd8a5Hg4iRK+U5X?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 36f3268c-ce72-4afa-b1da-08de6b3c0bf7
-X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+X-OriginatorOrg: ciena.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2026 20:11:17.8125
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR04MB6821.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 43b42c3e-c3f5-4e0c-666a-08de6e609ee4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Feb 2026 20:10:39.4594
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1ZFtLQ+bt3GAcRVR/HXE2rk+M++3s7lK6ESruRPltCahmwOfAkRxSxUIN8BHqHcDsN5uzCv+YkDJ8gJnBKCAJIb7H4PiFYCIpvblfPLd/1Q=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB10779
-
-Hi everyone,
-
-We're excited to announce the availability of LTTng 2.15, codenamed
-“Péché Mortel”!
-
-Only a few months after LTTng 2.14, this release delivers an impressive
-number of features considering the short time frame, in particular:
-
-• CTF 2 (Common Trace Format) as the default trace format.
-• Reduced memory footprint for user space tracing.
-• Improved resiliency of shared LTTng-UST buffers.
-• Redesigned lttng-list(1) command with memory usage reporting.
-• Extended automation capabilities for the lttng-add-trigger(1) command.
-
-Read on for the details.
-
-WHAT'S NEW IN LTTng 2.15?
-━━━━━━━━━━━━━━━━━━━━━━━━━
-New features and changes in LTTng 2.15:
-
-• Choose the trace format for each recording session with the new
-   `--trace-format` option of the lttng-create(1) command:
-
-       $ lttng create my-session --trace-format=ctf-1.8
-
-   Select between CTF 1.8 [1] and CTF 2 [2].
-
-   CTF 2 now is the default trace format for all newly created recording
-   sessions. Babeltrace 2 [3] supports CTF 2 since version 2.1 (January
-   2025). To keep the default set to CTF 1.8 for your application, use
-   the new `--default-trace-format` option of lttng-sessiond(8).
-
-   The LTTng project adopts CTF 2 because it has many benefits over
-   CTF 1.8:
-
-   Easier decoding:
-       CTF 1.8 requires parsing TSDL metadata, a CTF-specific language,
-       which increases implementation time and limits tool integration.
-
-       CTF 2 replaces this with JSON Text Sequences, readable by standard
-       JSON parsers, significantly reducing new decoding code.
-
-   Cleaner trace streaming:
-       CTF 1.8 allows partial metadata items, forcing parsers to detect
-       item boundaries manually, increasing complexity and bugs.
-
-       CTF 2 separates metadata fragments with an RS byte, enabling
-       simple chunk identification without decoding.
-
-   Better trace readability (not in LTTng yet):
-       CTF 1.8 lacks semantic annotations, so readers rely on external
-       domain knowledge to interpret event record data.
-
-       CTF 2 introduces user-defined attributes to describe semantics,
-       enabling automated analysis (recognizing IP addresses,
-       for example).
-
-   Broader type support (not in LTTng yet):
-       CTF 2 adds native field classes that can improve readability,
-       performance, and trace size, unlike CTF 1.8's more limited types.
-
-       Examples include a BLOB type for binary data, richer string
-       encodings, bit maps, optionals, and LEB128 integers.
-
-   This per-recording session configuration replaces the mechanism
-   introduced in LTTng 2.14 where setting the
-   `LTTNG_EXPERIMENTAL_FORCE_CTF_2` environment variable to `1` at
-   `lttng-sessiond` startup forced _all_ recording sessions to produce
-   CTF 2 traces.
-
-• A new channel memory reclaim operation, exclusively available for user
-   space channels, can free memory used by eligible sub-buffers by
-   deallocating their backing memory when no longer needed.
-
-   The two ways to reclaim memory are:
-
-   Automatic reclaim:
-       Configure a per-channel, automatic reclaim policy which
-       periodically tries to reclaim memory for sub-buffers older than a
-       given age, or as soon as they're consumed, with the new
-       `--auto-reclaim-memory` option of the
-       lttng-enable-channel(1) command.
-
-       This new option is only available in discard mode (without the
-       `--overwrite` option).
-
-   Immediate reclaim:
-       The new lttng-reclaim-memory(1) command reclaims memory
-       immediately for eligible sub-buffers of one or more channels.
-
-       Only reclaim the sub-buffers older than a given age with the
-       `--older-than` option:
-
-           $ lttng reclaim-memory --older-than=2m
-
-   Both memory reclaim modes are possible because channel ring buffers
-   are now backed by sparse files [4] when the file system supports them.
-
-• Choose the buffer _preallocation_ policy of a user space channel with
-   the new `--buffer-preallocation` option of the
-   lttng-enable-channel(1) command:
-
-       $ lttng enable-channel my-channel --userspace \
-                                         --buffer-preallocation=on-demand
-
-   LTTng can either preallocate all ring buffer memory up front (pre-2.15
-   behaviour; still the default) or allocate as needed. Choose
-   preallocation to ensure predictable memory usage and avoid run-time
-   allocation latency; choose on demand to minimize the initial footprint
-   for low traffic, for short-lived recording sessions, or in conjunction
-   with memory reclaims.
-
-   This feature is also enabled by sparse file-backed ring buffers.
-
-• Before this release, an application terminated while writing to a user
-   space ring-buffer could leave a sub-buffer stuck in a
-   partially-written state, making it unusable.
-
-   A new health check mechanism, the _watchdog timer_, now periodically
-   monitors user space ring-buffers and makes stalled sub-buffers
-   consumable again to keep trace recording running smoothly.
-
-   This mechanism is enabled by default and can be controlled with the
-   new `--watchdog-timer` option of the lttng-enable-channel(1) command.
-   As of LTTng 2.15, it only applies to user space channels with a
-   per-user buffer ownership model.
-
-• We completely revamped the human-readable output of the
-   lttng-list(1) command.
-
-   The command now has a clean tree structure. Colors help improve the
-   readability of objects and properties when the connected terminal
-   supports it: the `LTTNG_TERM_COLOR` and `NO_COLOR` [5] environment
-   variables provide further terminal color control.
-
-       ✔ Channel `channel0` ❬42 event rules❭
-         🞂 Auto. memory reclaim policy: None
-         🞂 Loss mode:                   Discard newest event record
-         🞂 Preallocation policy:        On demand
-         🞂 Ring buffer configuration:   4 sub-buffers of 512.00 KiB per CPU,
-                                        per Unix user
-
-         🞂 Timer periods:
-           🞂 Monitor timer:  1.00 s
-           🞂 Read timer:     Inactive
-           🞂 Switch timer:   Inactive
-           🞂 Watchdog timer: 2.00 s
-
-         🞂 Statistics:
-           🞂 Discarded event records: 23,182
-
-   By default, the command:
-
-   ‣ Adds empty lines between blocks of related information. Remove those
-     empty lines with the new `compact` setting of the new
-     `--style` option.
-
-   ‣ Truncates lines, adding an ellipsis, to fit the current terminal
-     width. Avoid truncation with the new `--no-truncate` option.
-
-   If you still prefer or need the previous (“legacy”) version, set the
-   `LTTNG_LIST_LEGACY` environment variable to `1` before you run
-   lttng-list(1). Please note, however, that the legacy output will never
-   show anything related to features introduced after LTTng 2.14.
-
-• The lttng-list(1) command now shows the total memory usage of
-   each channel:
-
-       🞂 Memory usage: ❲●●●●●●●●●●●●┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄❳   19.07 MiB /   40.12 MiB
-
-   The new `--mem-usage` option controls the display mode of memory
-   usage: `compact` shows the memory usage for each Unix user or process
-   while `full` shows the memory usage for each CPU (if available):
-
-       🞂 Memory usage: ❲●●●●●●●●┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄❳   13.30 MiB /   40.12 MiB
-         ┆ For UID 1000 (64-bit): ❲●●●●●┄┄┄┄┄┄┄┄┄┄┄❳   13.30 MiB /   40.12 MiB
-         ┆   CPU   0: ❲●●●●●┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄❳  540.00 KiB /    2.51 MiB
-         ┆   CPU   1: ❲●●●┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄❳  360.00 KiB /    2.51 MiB
-         ┆   CPU   2: ❲●●●●●●●●●●●●●●┄┄┄┄┄┄┄┄┄┄┄┄┄┄❳    1.30 MiB /    2.51 MiB
-         ┆   CPU   3: ❲●●┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄❳  256.00 KiB /    2.51 MiB
-         ┆   CPU   4: ❲●●●●●●●●●●●●●┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄❳    1.20 MiB /    2.51 MiB
-         ┆   CPU   5: ❲●●●●●●●●●●●┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄❳    1.07 MiB /    2.51 MiB
-         ┆   CPU   6: ❲●●●●●●●●┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄❳  768.00 KiB /    2.51 MiB
-         ┆   CPU   7: ❲●●●●●┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄❳  524.00 KiB /    2.51 MiB
-         ┆   CPU   8: ❲●●●●●●●●┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄❳  792.00 KiB /    2.51 MiB
-
-• The lttng-status(1) command now accepts the same options
-   as lttng-list(1):
-
-       $ lttng status --mem-usage=compact --channel=my-channel
-
-   lttng-status(1) forwards its options as is to lttng-list(1) for the
-   current recording session.
-
-• The lttng(1) commands won't emit multi-byte UTF-8 sequences when the
-   `LTTNG_NO_UTF_8` environment variable is set to `1`, making a best
-   effort to find alternatives.
-
-• New trigger conditions are now available for the
-   lttng-add-trigger(1) command:
-
-   `channel-buffer-usage-ge` and `channel-buffer-usage-le`:
-       Satisfied when the buffer usage of a given channel becomes
-       greater/less than or equal to some threshold (size in bytes or
-       ratio of the total channel buffer size):
-
-           $ lttng add-trigger --condition=channel-buffer-usage-ge \
-                               --session=my-session --channel=my-channel \
-                               --domain=kernel --threshold-ratio=0.75 \
-                               --action=notify
-
-   `session-consumed-size-ge`:
-       Satisfied when the total consumed size of the tracing data of all
-       the channels of a recording session becomes greater than or equal
-       to a threshold:
-
-           $ lttng add-trigger --condition=session-consumed-size-ge \
-                               --session=my-session --threshold-size=100M \
-                               --action=snapshot-session other-session
-
-   `session-rotation-starts`:
-   `session-rotation-finishes`:
-       Satisfied when the rotation operation of a recording session
-       starts or finishes:
-
-           $ lttng add-trigger --condition=session-rotation-finishes \
-                               --session=my-session --action=notify
-
-• The `liblttng-ctl` C API is updated to support the new features above:
-
-   ‣ Set the trace format of a recording session descriptor with
-     lttng_session_descriptor_set_trace_format() before creating the
-     recording session.
-
-   ‣ Immediately reclaim user space channel memory for eligible
-     sub-buffers with lttng_reclaim_channel_memory().
-
-     Get the results with lttng_reclaim_handle_get_reclaimed_subbuffer_count()
-     and lttng_reclaim_handle_get_pending_subbuffer_count().
-
-     Optionally wait for pending sub-buffers to be reclaimed with
-     lttng_reclaim_handle_wait_for_completion().
-
-     When done, destroy the memory reclaim operation handle
-     with lttng_reclaim_handle_destroy().
-
-   ‣ Set and get the automatic memory reclamation policy of a user space
-     channel with lttng_channel_set_automatic_memory_reclamation_policy()
-     and lttng_channel_get_automatic_memory_reclamation_policy().
-
-   ‣ Set and get the buffer preallocation policy of a user space channel
-     with lttng_channel_set_preallocation_policy()
-     and lttng_channel_get_preallocation_policy().
-
-   ‣ Set and get the watchdog timer period of a channel with
-     lttng_channel_set_watchdog_timer_interval()
-     and lttng_channel_get_watchdog_timer_interval().
-
-   ‣ Enumerate and query the CPU ID and memory usage of the data streams
-     of a channel with the data stream info API:
-
-     ⁃ lttng_channel_get_data_stream_info_sets()
-     ⁃ lttng_data_stream_info_sets_get_count()
-     ⁃ lttng_data_stream_info_sets_get_at_index()
-     ⁃ lttng_data_stream_info_set_get_count()
-     ⁃ lttng_data_stream_info_set_get_uid()
-     ⁃ lttng_data_stream_info_set_get_pid()
-     ⁃ lttng_data_stream_info_set_get_app_bitness()
-     ⁃ lttng_data_stream_info_set_get_at_index()
-     ⁃ lttng_data_stream_info_get_cpu_id()
-     ⁃ lttng_data_stream_info_get_memory_usage()
-     ⁃ lttng_data_stream_info_sets_destroy()
-
-• The session daemon and relay daemon now support systemd's sd_notify()
-   protocol, enabling proper synchronization with dependent systemd units
-   by signaling when the daemons are ready to receive commands and when
-   they're stopping.
-
-• The internal v2.15 communication protocol between LTTng-tools and
-   LTTng-UST is incompatible with the LTTng 2.14 one: you cannot use
-   LTTng-tools 2.15 with LTTng-UST 2.14 and vice versa, for example.
-
-• The lttng(1) Zsh completion function now fully completes the
-   `add-trigger` command.
-
-   From now on, the Debian/Ubuntu packages of LTTng-tools will contain
-   the Zsh completion functions.
-
-VERSION NAME
-━━━━━━━━━━━━
-This release is named after Péché Mortel, the iconic Imperial Stout from
-Montréal's Dieu du Ciel! and a long-time team favorite.
-
-Deep black and unapologetically intense, Péché Mortel pours with a
-dense, mocha-tinted head and an aroma that immediately announces freshly
-roasted coffee. Decadent and dangerously drinkable, it is the ideal
-companion for long, cold winter evenings.
-
-CHANGES SINCE 2.15.0-rc1
-━━━━━━━━━━━━━━━━━━━━━━━━
-Notable bug fixes since the release candidate:
-
-• Fixed a hang of the user space consumer daemon's flush operation on
-   stalled channels when the watchdog timer is disabled. When a channel
-   was configured without a watchdog timer, a flush could hang
-   indefinitely on stalled streams since no mechanism would recover
-   stalled sub-buffers. The watchdog timer is now dynamically enabled
-   when this situation is detected.
-
-• Fixed metadata corruption when combining the metadata regeneration and
-   trace rotation commands, especially visible when recording to slow
-   block devices. A race condition between the metadata cache consumption
-   mechanism and rotation could lead to truncated or mixed-version
-   metadata in trace archives. The consumer daemon now tracks metadata
-   coherency and defers rotation until a coherent state is reached.
-
-• Fixed a race condition in the session daemon where a concurrent
-   metadata transmission and a metadata regeneration command could corrupt
-   the sent metadata count, resulting in a metadata file containing
-   mostly zeroes.
-
-• Fixed unreadable CTF 1.8 traces when tracepoint event fields have
-   empty identifiers. This is a regression from LTTng 2.14 where a
-   strict identifier length check was introduced.
-
-IMPORTANT LINKS
-━━━━━━━━━━━━━━━
-LTTng tarball:
-     • <https://lttng.org/files/lttng-tools/lttng-tools-2.15.0.tar.bz2>
-     • <https://lttng.org/files/lttng-ust/lttng-ust-2.15.0.tar.bz2>
-     • <https://lttng.org/files/lttng-modules/lttng-modules-2.15.0.tar.bz2>
-
-LTTng website:
-     <https://lttng.org/>
-
-LTTng 2.15 documentation:
-     <https://lttng.org/docs/v2.15>
-
-Mailing list for support and development:
-     <https://lists.lttng.org/>
-
-IRC channel:
-     `#lttng` on `irc.oftc.net`
-
-Bug tracker:
-     <https://bugs.lttng.org/projects/lttng/>
-
-GitHub organization:
-     <https://github.com/lttng>
-
-Continuous integration:
-     • <https://ci.lttng.org/view/LTTng-tools/>
-     • <https://ci.lttng.org/view/LTTng-ust/>
-     • <https://ci.lttng.org/view/LTTng-modules/>
-
-Code review:
-     • <https://review.lttng.org/q/project:lttng-tools>
-     • <https://review.lttng.org/q/project:lttng-ust>
-     • <https://review.lttng.org/q/project:lttng-modules>
-
-REFERENCES
-━━━━━━━━━━
-[1]: https://diamon.org/ctf/v1.8.3/ (CTF v1.8.3 specification)
-[2]: https://diamon.org/ctf/ (CTF 2 specification)
-[3]: https://babeltrace.org/
-[4]: https://en.wikipedia.org/wiki/Sparse_file
-[5]: https://no-color.org/
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 457a2b01-0019-42ba-a449-45f99e96b60a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UNQpT79B4/2evDLYn3emkAeaHqKP1/zKn3KdnWVl7wpV5y5G/QAblKlWNWzdXv41pss9YFCy6Rkt9hLP1W/wSQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB7069
+X-Authority-Analysis: v=2.4 cv=N/sk1m9B c=1 sm=1 tr=0 ts=6994cb41 cx=c_pps
+ a=3RjCkzAZQHL7PUncwJf+GQ==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
+ a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8 a=5AoxzEp_LWBq4ObcYV0A:9
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE3MDE2NSBTYWx0ZWRfX0FkJmgaG3qGM
+ NGwmvnERMgCLTE5W1NewC05hODGeJTSXhvv5+ur/YDBSFt+BmKOnKPxWQWT2TCSc50iK4HKgz3s
+ qKqACBQE9/HV19sliKCLb+MHm76on696teSSLD45bBqFvf08SCBiHW268RKI3XsLGpCPPICxk2w
+ CtX3hlfOnZwTxfdxu4zDvSNSqFRIgNAzVajBOeQY0VpRiujpzqB67nVWmr30+fPIK6691oTbZ+D
+ xOY/pEfMEPZcYvY20CTrO6tYWXiTaC99+JSNofOWpUZIxzvNuZNTkyAmTdAH+nwf42iCjci9ohR
+ mfvxggVWIHfsl3Cz28PW8pLBT1+iF65bbiB6cN+fBUGOmynIgHv1AxhimnmtPSBcjt+VOse/31+
+ UJwFXiZovyZlgfJcGw/mCRCzWPkurzLdYl08gcbQcU6Bgm7VgQLRWvoSsM+FlL5JImKMeRely66
+ 3wbQ9d0MX+StlfyXGwQ==
+X-Proofpoint-ORIG-GUID: 1uBXI2isDstW6WtvItXgbxA8GZFNajh9
+X-Proofpoint-GUID: 1uBXI2isDstW6WtvItXgbxA8GZFNajh9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-17_03,2026-02-16_04,2025-10-01_01
+
+SGVsbG8sCgpPbiBQUEM2NCB3aXRoIFlvY3RvIEtpcmtzdG9uZSBhbmQgTGludXggNS4xMC54LCBg
+Q09ORklHX0ZUUkFDRV9TWVNDQUxMUz15YCBpcyBlbmFibGVkLCBidXQgbmVpdGhlciBgcGVyZiBs
+aXN0YCBub3IgZnRyYWNlIHNob3cgcGVy4oCRc3lzY2FsbCBldmVudHMgdW5kZXIgYC9zeXMva2Vy
+bmVsL2RlYnVnL3RyYWNpbmcvZXZlbnRzL3N5c2NhbGxzYC4gT25seSBgcmF3X3N5c2NhbGxzOnN5
+c19lbnRlcmAgLyBgcmF3X3N5c2NhbGxzOnN5c19leGl0YCBhcmUgYXZhaWxhYmxlLgoKT24gdGhl
+IHNhbWUgYnVpbGQgYW5kIGtlcm5lbCB2ZXJzaW9uIGZvciB4ODZfNjQsIHBlcuKAkXN5c2NhbGwg
+ZXZlbnRzIGFyZSB2aXNpYmxlLgoKQ29uZmlncyBvbiBQUEMgaW5jbHVkZToKQ09ORklHX1RSQUNF
+UE9JTlRTPXkKQ09ORklHX0VWRU5UX1RSQUNJTkc9eQpDT05GSUdfRlRSQUNFPXkKQ09ORklHX0ZU
+UkFDRV9TWVNDQUxMUz15CkNPTkZJR19IQVZFX1NZU0NBTExfVFJBQ0VQT0lOVFM9eQoKUXVlc3Rp
+b25zOgoxLiBJcyB0aGUgYWJzZW5jZSBvZiBwZXLigJFzeXNjYWxsIHRyYWNlcG9pbnRzIG9uIFBQ
+QyBpbiA1LjEwLnggZXhwZWN0ZWQgYmVoYXZpb3VyLCBvciBhbSBJIG1pc3NpbmcgYSBjb25maWcg
+b3B0aW9uIHJlcXVpcmVkIGZvciB0aGVzZSBzeXNjYWxsczoqIGV2ZW50cyB0byBiZSBhdmFpbGFi
+bGU/CjIuIE9yIHdlcmUgdGhlc2UgZXZlbnRzIG9ubHkgZW5hYmxlZCBmb3IgUFBDIGFmdGVyIE1p
+Y2hhZWwgRWxsZXJtYW7igJlzIHN5c2NhbGwgdHJhY2luZyBwYXRjaCBzZXJpZXMgaW4gdjYuMT8g
+IAogICBMaW5rOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eHBwYy1kZXYvMTY2NDg4OTg4
+Njg2Ljc3OTkyMC4xMzc5NDg3MDEwMjY5NjQxNjI4My5iNC10eUBlbGxlcm1hbi5pZC5hdS8KMy4g
+SWYgeWVzIHRvICgyKSwgd291bGQgYSBtaW5pbWFsIGJhY2twb3J0IG9mIHRoZSBQUEMgc3lzY2Fs
+bCB0cmFjZXBvaW50IGdlbmVyYXRpb24gY29kZSBmcm9tIHY2LjEgYWxsb3cgNS4xMC54IHRvIHNo
+b3cgc3lzY2FsbHM6KiBldmVudHMgaW4gcGVyZi9mdHJhY2U/CgpUaGFua3MsCk1vaGFtbWFk
