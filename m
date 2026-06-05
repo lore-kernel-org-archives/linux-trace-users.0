@@ -1,60 +1,58 @@
-Received: from YT6PR01CU002.outbound.protection.outlook.com (mail-canadacentralazon11022143.outbound.protection.outlook.com [40.107.193.143])
+Received: from YT3PR01CU008.outbound.protection.outlook.com (mail-canadacentralazon11020143.outbound.protection.outlook.com [52.101.189.143])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 105E236D513
-	for <linux-trace-users@vger.kernel.org>; Fri,  5 Jun 2026 19:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.193.143
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F73D425CEB
+	for <linux-trace-users@vger.kernel.org>; Fri,  5 Jun 2026 19:33:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.189.143
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780687936; cv=fail; b=C+JXnvl2MAz4NAgq/mgM8D13P3cPFMStXyw4QK+tXi0PmDR7R/lwnBJpX64OL/ZyHkMS+m4TSIiIaOU4te/FP7LueVGOrxIryuyh/aj5z/bFTYVXb27WWHadfgx0+jk36+3q/a/xtQBGnaT1fssYMhID4MrebKdsSWaJTC2Qr9I=
+	t=1780688039; cv=fail; b=NC7F5VbD0hnj3bqbs/JMmjSgZqs4L4ohw7FZPVIXJWbFKoXgMWdDo/2WuIajVybPRG5NK54HApyGGc6MBtjNaDwqJJIPs/dB0Nys6167cQIF2hCXtfkVsvddIkf+XKi3TafVL58ESRuHwqd1HxVbMX0SDQa/GAIu7vM7+7p2KSM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780687936; c=relaxed/simple;
-	bh=z6rxjygGlXqgROLoCM+tVE+Yfnw80biLZh/Z8OFPqqA=;
+	s=arc-20240116; t=1780688039; c=relaxed/simple;
+	bh=ALFaMr1R0/TT69pOnSE4sMiI0toY489R9P/aqtG/cOM=;
 	h=Date:From:To:Cc:Subject:Message-ID:Content-Type:
-	 Content-Disposition:MIME-Version; b=fuaUnlJwvIqtNEV1dTMRP9ZshqzH/ZohYQx0CKJqUsK3g5tAAIbnR1fXQ8vv46UMxJS1xLDgw1fViPWKEhCfchdB5wY8mOCA9d+BNkf5k7i9mLzAlyDo+XDwvZAky0AKDOc70y8jy0ppRaGHtst7z9hh41IFGoeFK1y+vaSqF1c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=fail (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=VnszreQm reason="signature verification failed"; arc=fail smtp.client-ip=40.107.193.143
+	 Content-Disposition:MIME-Version; b=JjXs7nKL8CeKTLgjNuZeJurbDjtvhvskGQ3P1dM99aGIYsJ/ezN8yc4wZpwMS4WoRgrjTjQjHIXc/Pm0sX1YM5uAT6gyOMaKuIeKtYr8w/waio6FgUX4cBfMqtdJcgrKUzyuhhq96u9GLIg+Fkb2IDqqUZiT18GRZGlxLtfy7wg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=I1y15+1z; arc=fail smtp.client-ip=52.101.189.143
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="VnszreQm"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="I1y15+1z"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tAnGTC5MtMODsy1j6PCF3H+6QxD/OBmKBmyv59b5xHpjuqjPBF7WkQCK2mN/IgJ10XI9TNGE1ypvbCL939N8/RZ7+23wh2sZCWnG57aCnrD+xL5zVFTdI7NqiLL65BX/2lLKv6gPV2YqFsZMhgH5vUPvuoJJ6UAQhurjnUAV2IyUsJwuiADOlIbVZh2N5KgzUd6jG7VVI8jUNpUvICq6FN3EwdIKi34ZabRJ9kKsKbQcePRhT/f9gzNkpgaFs9AzDPuH8stQJWoNL7Nc/We/IEXSQGoCGEtL5TDLeQoHscEG/7FHkJ5YjU4hn9C+pAHLqKqkfPE5Am2irVjbOo34rQ==
+ b=Kgi/JUsXv2GibsTV0NYE0g0N6yFXFNHFxU/BSmv5ApfgTQCJds8qDfiiAhK77CZHkBViVPLyHbViYevfH0HpGl6BDTUP/iLDsr3/BR1r7uDLVKGVTPiaX039uGXFmsoTXxXonAFw32JZ4KsC8CJo9AA0xpVpWb+N+WVYhdwZl8PAFn9G7b1gpbYV81zJm5Tg1qeQPvOnbgUXZiPr2JQ+8vLbSPoibR4EA5Ayl30qDsIUt/GD0Wj7pRbBCL7uhh/zkjF1VAgngoqZ9Hn9tEefI1E55WeWFmcqR7jvHqiurtQm2Eh/TAWSVIb35rNH5bmAri++Hu+875B1CnkscE2lLA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=skTPnsKlq0hlo4qjvXZmCBDPIVOKJHU0DBMLIyO+uPc=;
- b=MIXKoYjLKMlDi6/iN83CDfnt7/gB4/CT+Cvjomo2rgEGI3qYn4RYjb2UN+dAVmQzxGN1L06UDiu6yfrca6rUUJFoiN8Q+G3OittKDQ2bcTPNmWJeUEqYYQ6vPcmuYC3ASgW4gkdYEiBsPG6vP1wLTFneemq3dMhBAJwoBTahxFqZYSIWenhxGocoMA1i0ccZEKZDfXReFoWNnVgXNkeEzTbF/1oXyHIdHrKVbTCOBmUBEBpjKfhfRX9p6Kbpd4Pk4CMXpKWXJ8B7Iff/3wsL+Jnh/HzoSE+3HZixR0zAdm3dmQOPxSpHG2ofthififOju8Uyw0Ty0UPwxLUX08NvFg==
+ bh=nD6QyDA5sVhxuwAtk1QNEXMaYKw/K++lubkzWNFHaTM=;
+ b=jrZufro0Z0S5VVQYzhAmREn25sBYHg+uaTK5Q3+PzD59ZgKymiP00vWzwMCntMI/MEpsarWhZ7hR1VDrXLxYZ//DyZ4yrAQuidQBZbWG8+IUCZ74KcVxokX14jhJmvNbr7ihXLa1CkQNmL7jPO1BQS0XHgosWvdPMgJ/GcgPDmDdTuvSnB6l5S/mYo27lW0tzIT0S/2NtLI3G72jvVK6u8eRmRizcSlFwbVO+w/1KOnrMHUkwKacukq3I2nKS4nB7mc0BJ6ePbRp2TWOOAF/rwetMZSgFKrwvmp9EFFRKo/JL5t0wZIZ9LFX+IzQG6EITbkgXX2dFpMb3FWjoGgVHw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
  dkim=pass header.d=efficios.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=skTPnsKlq0hlo4qjvXZmCBDPIVOKJHU0DBMLIyO+uPc=;
- b=VnszreQmA9i4DN9y/iHiXqx2Tn39s+gonkApEPXT3F0G9zd82lmCuoT9SiRE7J+Imiilmrpe515bSQjmzd7Bynnu94MFHUc9HhuFgF73By974DZdRyBBVDy/Rob561KvVF9UD+6otB4JVHrEImaw/hxL1GFsUYa0VIj+oA5oM6tdVMGPrhg1NBppafHU+UT43a5fYAJBDB7HMr55XnPk0oRZkCcb63BntbWg2ZKXFk+JV0QLArcj0sZxrnON8zKlFEwo36Lz5QWZdEUXq9FwWs6Ukm6umFvF9Z15mJ/Sq0a4cAG3OoSx5DJCzhseuLhIyLgUcKkFfZE7C+ixBUKwJQ==
+ bh=nD6QyDA5sVhxuwAtk1QNEXMaYKw/K++lubkzWNFHaTM=;
+ b=I1y15+1zcpWSGTO0HyxVVJDQjaoSkn77eanlDtaRWB4xvd1oA1W+xbvAgG91qgIkpDKcVcn9dxw6JDISy3CU8yPGJ0tTX/pvIl9xu2FIvrz+JOd+oU5sTAOi2PIFrljChPIabCYc5PnIEKZ/oRMv2NblZF8ZchKeLzLlxyDKnQCC+a7g2ZMpsN1Dym/pAc1ePD/2Y8NEgboBEhHZdcMjKTxUMszPBS4H0o+N19f/xnyOZ3zNhBsD62QaWHKEOK9zDfd1KvdA/aKsLA1ajhzC7MtniIbwoNjx4yB43jc6FCX3KWHJCONWdUE68NC34ud63S9BFA14/dchhZnUBSGHYA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=efficios.com;
 Received: from YT4PR01MB12074.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:167::9)
- by YQBPR01MB11163.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:90::12) with
+ by YT2PR01MB5856.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:58::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.5; Fri, 5 Jun 2026
- 19:32:09 +0000
+ 19:33:55 +0000
 Received: from YT4PR01MB12074.CANPRD01.PROD.OUTLOOK.COM
  ([fe80::b0e8:8334:afbf:9bc]) by YT4PR01MB12074.CANPRD01.PROD.OUTLOOK.COM
  ([fe80::b0e8:8334:afbf:9bc%3]) with mapi id 15.21.0113.004; Fri, 5 Jun 2026
- 19:32:09 +0000
-Date: Fri, 5 Jun 2026 15:32:08 -0400
+ 19:33:55 +0000
+Date: Fri, 5 Jun 2026 15:33:54 -0400
 From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
 To: lttng-dev@lists.lttng.org
-Cc: diamon-discuss@lists.linuxfoundation.org,
-	linux-trace-users@vger.kernel.org
-Subject: [RELEASE] LTTng-tools =?iso-8859-1?B?Mi4x?=
- =?iso-8859-1?B?NS4xIC0gUOljaOk=?= Mortel
-Message-ID: <aiMkOFJMCVc94my0@efficios.com>
-Content-Type: text/plain; charset=iso-8859-1
+Cc: linux-trace-users@vger.kernel.org,
+	diamon-discuss@lists.linuxfoundation.org
+Subject: [RELEASE] LTTng-tools 2.14.2 - Orbitales
+Message-ID: <aiMkot_alZCgDpSC@efficios.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT4PR01CA0394.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:108::23) To YT4PR01MB12074.CANPRD01.PROD.OUTLOOK.COM
+X-ClientProxiedBy: YT4PR01CA0212.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:ad::10) To YT4PR01MB12074.CANPRD01.PROD.OUTLOOK.COM
  (2603:10b6:b01:167::9)
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
@@ -63,84 +61,81 @@ List-Subscribe: <mailto:linux-trace-users+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT4PR01MB12074:EE_|YQBPR01MB11163:EE_
-X-MS-Office365-Filtering-Correlation-Id: c1e3ffb8-c9fc-44ab-c76d-08dec3392233
+X-MS-TrafficTypeDiagnostic: YT4PR01MB12074:EE_|YT2PR01MB5856:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4071fd69-2062-45d0-8a7d-08dec3396178
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|366016|6133799003|18002099003|3023799007|56012099006;
+	BCL:0;ARA:13230040|376014|366016|1800799024|3023799007|56012099006|6133799003|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	LDNnac5ONBIazQ4bgvKj4vMxnw2dGDZad33jwJiyiElJt8Kaeyi0CmT3glzYhoe8R85D6qCCDpdJYjWH7Wg3NXg9NtOWrVA8Qx/Oi+33og3TiWzHnNCWqQ2ZE/YqW3xODxi6OoFTbemhiCRO3QkQ6mOQTZc7tc982ooufkshBKzPRdonJm5eVY0/Oi+9pxIU8F8Fn3OVhrDrsClowGqgn8MJJIL3OhB4YFUu/KZaFC8lyJz1L328FiBZ1fN8q6BaHiR+VsFvbvKrU4BA8dfTj/cGEbSiZRy35JXzgkyR4wxqvYnOiw3oDl/e1yBg0YDOEhkqRXsUi3dkSIY0ZKMAK5mcRd4dzO76e8xb+URk59qOyyZ5byokkP1W7+LDUXDFN7hzCcndcop7UVHumwWIPv2FjxUM2wDiTAD03zWs93yiYMycNI+1gwCQ/73c5nG92VaE0uQsO5a5b51XFIobimlCbadSBzE6uEvVSeUhayt8ANkxFnbL5pZOLxth72/uWmao+jbunFwllSQa+OGbWMzHLmQLSj+g2hz/bxdmnNeVXafcHhsdSodSQkTRFsdvzPtyCI3T7/ER1dOAhwjc5WCuYTbwI/N2HTFs8T4OwxN9SjfyxGDSsRhzYFLMAlcw
+	miq4JjV+2MtVUcQfp/r946qp/iaQ7e1wxtzxNwy4br9qjciDVqzO2GF+tTy739xXoy6OlJyE3ZtyNagScIkllRMXxRfMk0XhbEKQVkHq7hqddLDfEOs0jARw43isHO1i4fuM/4M3MveD7OIiRZqwBC2YOdmsLhXt3wgWjr05DGpnhyYCkIcaPnnwixs95PS3iMLluwSvFXu5+m9F4GfJryexzPTV1UNrygKkyV4KbnFtreSBkriBepyMY/Hgv+mJwhJ4q3+PNDOfvpuc/K6NaTrBqjD6o4Auq3qg14UhNhI+PbgPkyuOAei8f5cBKe7B496fKFVZgM3V/H9mYBJZazbPAuwkyvq+OUbHBCShaGuQUtG1AQeUEMi3AjYrnhbHFq9SMhWGsvr/X7G0u3VONk+byqC0RaCkwjU0TFcnJT+z7NGZnq3zDRSfBDU8coBED0BJ9xiBTBiqa1NawzTL5yYUIL5RymQmsoyqlO1dIsTxS6B8aUNkOv7plsh1NZboi2T0HC8a3HJXtXJG5ERnYwuHOv0jJbee/XhycOeEOEl0siUfTQrrLPwySKVEhzE6e/1ysC94RLqsQnBQVygbH+CVwqCWXR+lDUD23N0zfiBYGfiDIK9gsBaJUj4V7/YT
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT4PR01MB12074.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(6133799003)(18002099003)(3023799007)(56012099006);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT4PR01MB12074.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(3023799007)(56012099006)(6133799003)(18002099003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?iso-8859-1?Q?DLKwpjH+kSoMI7BRHPewQ2qp/kuSluoASCjzQOyvWRk+o3S8P3d1m0gEMQ?=
- =?iso-8859-1?Q?uBcCT/jk7T0XEgEcrTfbBR6csX10/K4GdocQ0RCwBhpGqtouX7UsaZ2PSI?=
- =?iso-8859-1?Q?2eY+Q/fWJNRKiWyGkiZIy3lqUUo169yd5T8gZGKGrsBjFLr+06cp/rk8OY?=
- =?iso-8859-1?Q?7Yz8z0aNYzsGGBCTQEzijNpbsqTXuWw5DB05FwWj7juWCA6FWBrPeaCgIh?=
- =?iso-8859-1?Q?Vl1PTXvuuf6Ve/u3/9PBilZNogMp1cXVJZo1u6CrDedlmoh75M5g5rFmrg?=
- =?iso-8859-1?Q?p3A6YQ5AEZz2frJ+f8CgjWXJroniMBZMQ34xGLMqkzUsVTZO4XNe1airDu?=
- =?iso-8859-1?Q?IYzKvL12k8yFU1SEofBA90rsZ2PqkVhVy3mIafDCBHLzmTSeU+SxzRjxzR?=
- =?iso-8859-1?Q?6JZITir29jA50DXNFpHtDGdkkn4+TX+nZi7Be3WfKN+CmqzDOpUTaC89rS?=
- =?iso-8859-1?Q?m6kMHd9nCzSD7XY3cMQSVVwn3DeXIKi7B5wAKCIafpMKn29e4e2gA3LrRM?=
- =?iso-8859-1?Q?fIIdMHTP2TNXGPR99adiMT8n/chyFCmJfDmjzGC6awm5qBbmWtL/l65Pcz?=
- =?iso-8859-1?Q?U91aLtZSRkH/MUvEx5c9RiPHUU68/DFVudg/idbm2nchh5aLHMIcl7xj89?=
- =?iso-8859-1?Q?ZsfvDe6yoWS6WQXikZxhY7cvh5f/l6Yj3Qu8o7gF0U0fd2c3T1sVxRgYST?=
- =?iso-8859-1?Q?9yHnVqYxE1e9I8AX5dSBj9ni0IbpGOVma1qavaESD5j/FAxcRUoUooL7t7?=
- =?iso-8859-1?Q?njmvRN9O6Bv7t2XsZrKBhbZnAKbyy5OlXItDIhN2e9w2FwkPsKvbe8hz0E?=
- =?iso-8859-1?Q?Mwkpqq/HaMkYTkY2rXaJtk0b9puAlIVrKBjiP+mbAcSFHK4FRxQd8eS/oa?=
- =?iso-8859-1?Q?woeMG2m62hdWkp/cofGgvBfqjLVoxkyU0/x7BiWzLDOkUaaxkwQDeNBDLj?=
- =?iso-8859-1?Q?PI9IjycATn0KzakA1Er+LdMmYG0i+N0A88C97CcNAEnvQmJJkzge6b1ZU5?=
- =?iso-8859-1?Q?RTJSsmN66eiBVJM8kU2gPMdzE2Ky4QgpGar/Vos6627owdrVZl/ZNUx23e?=
- =?iso-8859-1?Q?fBmn2E5oi51rR1GOHqICFAdzfMXPGO98yX6QgPp6ysHm7zqHCg7Jp3rsY3?=
- =?iso-8859-1?Q?+N2ZiwwT+tmenPfE/jSMrBXSg003l07IfE62rWY1beqIuj5IaUiQ2jJk0J?=
- =?iso-8859-1?Q?2lXKPurXAmOkw6+1Cfyf8fkEYftJA8nyqJHPXtAcLlBKc1KigiE6d2nP9f?=
- =?iso-8859-1?Q?p+SyeSUcepUrG21aMiv8WoLetXNzlOqKbQ5+nVeMpJM/8Xbh84i/KVzO6z?=
- =?iso-8859-1?Q?LAwDN1pw5wWloOI6drTfsu4Zjn6+n3/WRFGGdCq5h5bFwWjONZn+PSUzqH?=
- =?iso-8859-1?Q?fZneZBpfMrrcYV5B0UthwCHylrCjHKyf4ZMrzptRML5jPw6z8LskGQHyAT?=
- =?iso-8859-1?Q?uot+aP42Iq3mFWWUl6j8a0sV91JlCuLdiQSVJMB4SIWD9sOWJQYDn7B5yX?=
- =?iso-8859-1?Q?0HvPfWRqkOzU9EwAO4Zvh7U+w4HJz8umPER8ox7UESK6UfLHxarqIgA5lV?=
- =?iso-8859-1?Q?ZVODTld/fipnDOO+yrnvYiYy1awanaffJCbxO7J7DE0UFZ/nQAiog+7zKy?=
- =?iso-8859-1?Q?M75dxlCsZCbVt56ItYJLZBcFkglr3+dumlX9yhaHvVq1U1Ele+xYzmWX1c?=
- =?iso-8859-1?Q?93A0dJNmAGQZQ7fZU3YI6mej1sMnYf/g6F+dRVDdbGQOqp84fQCMgBR+6J?=
- =?iso-8859-1?Q?Wtxz/qCBF4SydzmwlYXnPyTPJU13dGLnAxPdyCY5StNx1p1j50KRMrgln3?=
- =?iso-8859-1?Q?Wd+D4EqjsA=3D=3D?=
+	=?us-ascii?Q?PU8Rj37rRAG6UOksK28DL9S3ieq7ryWSca43Pth/j01zPwysuHQmHXfkbN6P?=
+ =?us-ascii?Q?NW7fcbQrayB/YSxOX3ITIUeJKZJJdpKEFVZqW5OAfr2mcM+22vAxhGG2AyEh?=
+ =?us-ascii?Q?sXKAiH6cOm0ZEBEWaZHlxhZx4FfZXn8h4kRx4sMG3wvWE901Y9EPMSmzomNa?=
+ =?us-ascii?Q?YYw823UFrs+p5EHvS/VImVUpWQV2TrJ2QN3U1T9RcFTn8Wja1eEmTCI9FZcL?=
+ =?us-ascii?Q?G6i/agvt54rt5ufmZJ4bKIsix104c4Kla/shl6hJNC6XoSkb9+DxZaJvcS9d?=
+ =?us-ascii?Q?T4xn7zHEQjAZzFHREOZIVOnqGeJ1QnjE9+NQ960ttKgmBDZeLCxP7HrpT56p?=
+ =?us-ascii?Q?KBlF55/k9VOnQ7u/cBNDw4r/XOmxQBHFGyixnRjd/6LOfM+rvi83GQgvCtj3?=
+ =?us-ascii?Q?iWNeR1HsdQ9A97MBBxOmy7qwJO8b0yvAC9Y/O1EDWHgV+/UR0cAlz0vuWx30?=
+ =?us-ascii?Q?9F5nih3cFxpSq5Qswh3/qRwSWClS4+QEVc7ivaq8Q/K2t14KIZqYqhFJG6ur?=
+ =?us-ascii?Q?Pucrq6bBJAnWe4J4tg/fUG5ofxaaTowD56ZfvrQHMJFgWPtBqvZCfkDCGd0o?=
+ =?us-ascii?Q?0qbeOpkJ4B77eFFfymGWZVyZJhwGQR/E4WLAuJIEMseLRCNiIvlg2XVr7rYT?=
+ =?us-ascii?Q?mjForcGW4mL6is5rfqch7Kiw6aBIzZw0CSZePHrUfLCYkWPDLV/vtb6KJU0v?=
+ =?us-ascii?Q?3hVCVib5llqBqPZEArr6MxByvFQXLZSca41RDY2ddAygtBJX/y69UXP+DNBk?=
+ =?us-ascii?Q?I9mC+I7fJw2fvfKL5gM/xdgavwFO5f/qKDA5kZvZUxnqD3xiHa9ffwj1p05V?=
+ =?us-ascii?Q?3iMUYmKVxi/6+/QvBTIeKtp36N/zYevC/YciogPG2P2e19pSRzkCGyhyMgEY?=
+ =?us-ascii?Q?hgxLPg9wyY9n1Pvw71tbFk5LwvkWBMDOTmIEQ+zT+v6qg8ZYPIXFJXnzJ+Hg?=
+ =?us-ascii?Q?t5sMfONSTie2jPlp3lhp5H8sEqB1VB5WFt47EaPJWeqN5ZEmxsRorLhWjoiD?=
+ =?us-ascii?Q?NjWAtTrxe7TFB+GOFe/Y5KQ8K8OMGEVYRHlEqKec/2Ev5dBt456S7jfiLJQt?=
+ =?us-ascii?Q?s8LGc86komSY+pxreM1hM/Pq+qSA0e0CZhh/0pQDpKLO6zIa8TWviyO6LA8b?=
+ =?us-ascii?Q?SDfX2qRsUmkkVZdtFz+QqSWKa825e83FEDcR7/p6NL7e8IV+PP6jU75Ahxxl?=
+ =?us-ascii?Q?wYbnOngnT6XxO+4k1BEozEHdavIiNnT/zcbp+06b7/QlCHSyt0dPNviFJI/I?=
+ =?us-ascii?Q?0neGkcrYWsa+6qO+fcocrTxIrRLFKzZrYWV1WFYZ9WuMc/TIGX5Halg/Scv9?=
+ =?us-ascii?Q?tKH8cWShJPmi9LU6fRLEBu9qxjenbPQKXIPDRbOSS74YhKR3V2P3vnrtsV48?=
+ =?us-ascii?Q?0VoM45c6xqZSoKiCOk1UTh/GQpnmxFWJx5p0R7m1crr5iv4Yq33M4Zc0B1uB?=
+ =?us-ascii?Q?gFGyc7PYhYJGXWkTMyJz8jPLcgUuetf9GuUCJvAvRG0OZl6WJ4XKa4HhZWI2?=
+ =?us-ascii?Q?COtvpyTYNpZHfp3XhNjJovUd5UA8nMGBCO5ma/AU6dlJlEmxx+CjYyNr3jBs?=
+ =?us-ascii?Q?Ekh0kj/3sZqTnYD7Ra/a4T+hIOkBsiDTE6agX1qbrNaBSKm8ox+y66UcbwYP?=
+ =?us-ascii?Q?ruMr4MWk+9rnQtoJUI4/2XGGvreg793hUJtVI3+baELXmF8Sinrrzm9cT+a6?=
+ =?us-ascii?Q?KSJ74CeU4iurnEhcfH9BhXOrmNeKmyXaRqJv8NlIla4zm2CXo9BCqmoWdX7A?=
+ =?us-ascii?Q?StJtSt+8CA=3D=3D?=
 X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c1e3ffb8-c9fc-44ab-c76d-08dec3392233
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4071fd69-2062-45d0-8a7d-08dec3396178
 X-MS-Exchange-CrossTenant-AuthSource: YT4PR01MB12074.CANPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2026 19:32:08.8377
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2026 19:33:54.9719
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aN52XzMAnFSujcC5uJxEGELOAy+Yaoeb2xkMAA0tyXQN/YR5r3rIwZ5ihoTCCBlJP1E80woCNrKMhL9vQtbsCw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQBPR01MB11163
+X-MS-Exchange-CrossTenant-UserPrincipalName: mdjl2HoVrtcQaawpSLyOEjXG46JXaQjteBFzcTIZ2U0ggs/drXHskrwxdI14GOz71SisXs6Iy7NLhv+h3NR+Aw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB5856
 
 Hi all,
 
-We have just released the first bug-fix release of LTTng-tools 2.15 -
-Péché Mortel. This release addresses a number of issues listed below.
+We have just released the second bug-fix release of LTTng-tools 2.14 -
+Orbitales. This release addresses a number of issues listed below.
 
-2026-06-05 lttng-tools 2.15.1 (National Fish and Chip Day)
-        * Fix: tests: Set mip version for python defined bt graphs explicitly
+2026-06-05 lttng-tools 2.14.2 (National Fish and Chip Day)
+        * sessiond: Relax CTF 1.8 TSDL identifier validation
+        * tests: Exclude `.tmp_new_chunk` from rotation trace size calculation
+        * Fix: consumerd: silence -Wstringop-truncation warnings
+        * Fix: tests: use portable format specifier for int64_t in tap
         * Fix: Include 32-bit kernel trace expect file in dist
         * build: Fix api-doc help string indentation
         * build: Fix enable-werror help string indentation
-        * Fix: various typos in license identifiers
-        * tests: fix preload of liblttng-ust-ctl-fuzz.so with '-Wl,-z,now'
-        * tests: Handle WaitTraceTestApplications that crash early with no stderr
         * Fix: sessiond: abort when loading an agent session configuration
-        * Fix: tests: missing shell quoting of filter expressions in test harness
-        * Fix: tests: swapped allowed value types for process attribute trackers
         * Fix: relayd: wrong session id used in trace chunk existence check
         * Fix: lttng: truncated session name when it contains spaces
+        * Fix: common: remove ambiguous operator[] from c_string_view
         * common: Split CPU mask parsing from reading
         * Fix: parsing CPU mask with no separators
         * Fix: common: Improve cpu mask error checking
         * common: Escape newlines when printing CPU mask
-        * tests: Disable watchdog-timer for blocking tests
         * sessiond: Fix: Deadlock when handling notification overflow
         * tests: add test_condition to the unit test list
         * tests: add notification/test_rotation to the regression test list
@@ -148,20 +143,14 @@ Péché Mortel. This release addresses a number of issues listed below.
         * Fix: tests: race in rotation notification test
         * Fix: tests: undefined CHANNEL_NAME in rotation notification test
         * Fix: relayd: live viewer reads wrong chunk after per-PID clear
-        * Fix: lttng: vague error reporting in reclaim-memory command
         * Fix: consumerd: pause testpoint not re-evaluated after poll()
-        * consumerd: Fix segfault when starting metadata switch timer
-        * tests: Check kernel release to determine delay table parameters
         * Fix: tests: consumer pause testpoint FIFO EOF mishandled as error
         * Fix: tests: serial runner produces empty log files for hanging tests
-        * tests: Fix platform uname split when release contains more periods
         * Fix: common: uri_compare compares uninitialized union tail
-        * Fix: common: drop :: qualifier on *_CLOEXEC for musl compatibility
         * doc: lttng-view(1): remove non-existent '--session' option
         * lttng: handle popt parsing errors
         * fix: '-Wsuggest-override' only valid for C++ warnings
         * Fix: handle failures to find pid cmdline
-        * Fix: tests: Do not use both  `-p` and `-t` together for mktemp
         * Fix: common: lockfile fd leaks into consumerd via fork+exec
         * Fix: sessiond: default kernel probe list missing 9p and dma-fence
         * tests: fix: lttng-sessiond abort when using libkmod
@@ -170,7 +159,6 @@ Péché Mortel. This release addresses a number of issues listed below.
         * Fix: common: MI XSD names start/stop-session actions without "_session"
         * Fix: common: MI XSD rejects add-context per-context success element
         * Fix: common: MI XSD names snapshot record action "record-output"
-        * Fix: lttng: reclaim-memory MI emits generic "channels" element
         * Fix: common: enable-event MI emits duplicate exclusions element
 
 As always, please report any issue you may encounter to bugs.lttng.org
@@ -179,7 +167,7 @@ or on this mailing list.
 Project website: https://lttng.org
 
 Download link:
-https://lttng.org/files/lttng-tools/lttng-tools-2.15.1.tar.bz2
+https://lttng.org/files/lttng-tools/lttng-tools-2.14.2.tar.bz2
 
 GPG signature:
-https://lttng.org/files/lttng-tools/lttng-tools-2.15.1.tar.bz2.asc
+https://lttng.org/files/lttng-tools/lttng-tools-2.14.2.tar.bz2.asc
