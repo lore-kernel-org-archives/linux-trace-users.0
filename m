@@ -1,61 +1,60 @@
-Received: from YT6PR01CU002.outbound.protection.outlook.com (mail-canadacentralazon11022078.outbound.protection.outlook.com [40.107.193.78])
+Received: from YT5PR01CU002.outbound.protection.outlook.com (mail-canadacentralazon11021102.outbound.protection.outlook.com [40.107.192.102])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88C4449B04;
-	Thu, 30 Jul 2026 19:59:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.193.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49306426693;
+	Mon, 17 Aug 2026 14:50:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.192.102
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785441548; cv=fail; b=MET6Jf1NsT4MjbT3sLZtivWs+IaykI0H4W4SNmxLKmCr8UQPkSEACLYyGz73j04fkCn/8e0sQ1WKEgfh2M6Em+Bw48ZjvCwLmBgocOfFKkzvlbcrfC9JLVxIVG6QoNxM/t0YKDnz3XrnHf9H2/jNLUnf3oAALyZoN6Xy0M/x1Jk=
+	t=1786978261; cv=fail; b=tbCWt904gAa9LPIeeSRMrMKowi0fQeJeyNZoNSiIShhtOQrw8kYz2JYJJWXDQdR0GDY+4dPXDNicZ/GUzKiN6/IRIzFAvGckS85bxQXO2ADcELAE1luHN1UrTGRsVM7olUy4yjpiqaC6iZ8yGRzDVTeLVyvy2wVcHhD9DEQVJlA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785441548; c=relaxed/simple;
-	bh=GijLH5FfhzXXNJdlsZ5nY/f1hR18XvNCd6HIZx9S/Qg=;
-	h=Message-ID:Date:From:To:Cc:Subject:Content-Type:MIME-Version; b=iuWiMgOdWmsY0rcJ9AIdCHFdK8oIQxA8jp3/g6mnbbJGxJ63kwuNCtd9l3xnCNBDzegX82zJ78nY9oNtLDGiYocgltZ9PALwWAavHW5KbuOGyl/ZRHr7n88Lpwwftm6Hv6cn3LToKvw3cmt8jKFo+8tay4kvWf063koFV90fpHA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=XephSQSk; arc=fail smtp.client-ip=40.107.193.78
+	s=arc-20240116; t=1786978261; c=relaxed/simple;
+	bh=GtWqVRzFDirTiOVQmexEMrZOtCQlKvMmsGPEb2WVStI=;
+	h=Message-ID:Date:From:To:Subject:Content-Type:MIME-Version; b=hYy0V1h3fwWg+k5BP5BsFT8TEpb8uM1DWeSBScazllbpumD/nRfovQZS0BjnSeoqlnVHgc61CUxacrnYJK0r7kNcU4Igsi6ZeRir6P9Sk/0ED7rCfr3NV1I5X0kMBO+gCwmhzNt+msSx3WwcQW2tAexHQhm4SajqQovgUQGddkU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=fmWZinPv; arc=fail smtp.client-ip=40.107.192.102
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="XephSQSk"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="fmWZinPv"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=m54RDoobrnsg91Ned5rweab9C7MG9ESJB8EJgDaQqvSF+z5kCU2eWNylzjv0f1vmhTk3rAS/uc0qLi6YzrsNLBhnW1DglI7IM2A1lxUaEJgdWOadOWqWeQoq3uB166xnv1HsbznY8CgY5u71/hUtUNJZuNd7UQTcCLcdhWVg4EehzoU4UwYT0HW+5+WjexSMFVDVmDVyC1qsMWZfz24RkQ9AJJqR61SR8POntO1LOio7+pG338aHwt+QnFB2JHTVG3alFGrIVtsNxaBO1TZjVF4ixF1gWeme6mO+F/QHod0yq53dcZMJ9x+XCMl6ThoSah9dJaVNMxwjM6wnO2kxTQ==
+ b=nYJ5RpqwYSerwp0+BYQLh4h8eDGYCcF0vCMzJqlX9TCM64S31vCFmZ/95Se+TPqngi19Kx6pwR/qBAN8X3AWIHZSZcAieX5Pz/uBFPvWcmaROTA01bVWHDmwtq9Kdfiy1Nr1c59ZKg5q8R99PWpVmh7eqOjhYqsc1KEUVzH5RioJJb24C5za/+hz5wt/y/3BV4GePHhUsvw7hDlz9x86YiwbKUNe1HDbe/Fyxc1zX+pABgiXC66sYdNc4Ohy007XgC8wKGM364pgOcJp1Ao9CRn4vft07cmN8AVgVAEQEm/As2VEB4X4i3VntfVYtr37MrQWvLHKw1fRPaouvowyyg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8cJQt06901ZFueT5j4B4mU1n2Dg4cqxVf6xx7sMkg1I=;
- b=yE/Ydl5rEv0LMOk3RdetfwnuYRYi58zHRL9i2KqF+OrnqQ32kw6DUNuOj5FiN1OaIuTnFCBz5B3329xoDmWelNCWKagnCbZ0WgoiDTK3MEkLEYZbuvf4TwI3atNh/72n9dH2UskU/nn0dnNbk42qu3yEelRd53ZWPe8keypEie7ANSJxLj141haSkb2jKhkZYK1/eFj67utC5LzUejH3IVGcek5xV3MbxiQH6GqeuvXh7fUgRT988evZgR2kA9GYnKEeBHBLGxZiZPvQqUkJht7RSp+aCXxiY4IaKpA+a3yWrx8jtkmbxhRwJK1NG1wlJX06YYZAtgVusyzddUw1tg==
+ bh=8Lz8uEc9cdaly0zDLDixE3E1OOzcroe0Mv7rMrYccPc=;
+ b=hUeVOSG5mreIxc4cQGRo8AYEOt+8VvFjJ0b3DD1wX0EgQPDs8wiFosmVDYhsYeHbrW6RbM43g07n0iwSVTmBBhHCjx9I4q4NlXsaFLq2EhM1C/Wt5X6Ff/Mqcx1TGurmC616JGV9e8E58//jhRE49TT7m6O/Tsb9yB4Gy0OgYSXy7FXZ6vpl95fCB9FnaJ088/Hecc3z/3DjIgKlJIcxaeRZPDTkr4bb6I1RCXX569dWVa9jwCai9arxreUm4m3r06vc2SXHGKuuuBfr96yLY4ubqcRlZj0w5MjG1umnBf6aM0zG/YXviWnDalmEQA9LF8WJ/eDi5dKw/tdCPckRbQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
  dkim=pass header.d=efficios.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8cJQt06901ZFueT5j4B4mU1n2Dg4cqxVf6xx7sMkg1I=;
- b=XephSQSkGcP466HSFYJSn53/xxcZKeizr3L7/mpYRK1qmwJpLr9NFlqC+86pvV6vAYxJHxdiH3uIZVecHHq1N3fjYgEVKhhM5uqTGr2UZV0mXkF4o1tV8GqO6lVhE3nRTq/suC11nRMdlmWiK9uLOXKsmAsrB3MzihEK7CeEiDRlswvw5Vm8TF7z24L8mVAbU/NrsQTlPymjjNEpqh73PoilzR8RhP5aHTlL+lxqixZemkB8uYxaT5DcVthR1p5Zn1N62wEVS5evcoF6funb4NvhsRwMHMryVg6Q4wfqRO1ZRsuYGG0VRgbM+vyAoMkpa/t8I6Vz58Lph9beAUtDxQ==
+ bh=8Lz8uEc9cdaly0zDLDixE3E1OOzcroe0Mv7rMrYccPc=;
+ b=fmWZinPv/ltpZY+TYrMu58ReqQxxP8xbwsblAdPAIWTlfAfuilDfY9th4EsW7VZUYjKEGiQKtKwPcUBscnpfnR5qUm069cRCF8jziNOpIzpyMPzweVOcrKZd1pDYmK/ApzE9kz8rRdZM8G3m0wv25JauFqalA7B1soZi/nqC8Y4cHucodwWbYn2PSn1P/e6XHMMdtGlGkwtsHd2VgocXk84Rr7t07Q5N6US3ikiNiiSOIFDcmJtysmMuUcBX29bRRKro/GtkWySYQDdfeSy+Cg6N5gvZLfyLDu1V0idnjJB8oe3IcS6PmQbq1vaUH1Ex8R+gnqKCHGwqaop2lUoYxg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=efficios.com;
 Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
- by YT3PR01MB6179.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:68::14) with
+ by YT2PR01MB8487.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:b6::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.15; Thu, 30 Jul
- 2026 19:59:01 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.17; Mon, 17 Aug
+ 2026 14:50:54 +0000
 Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
  ([fe80::6004:a862:d45d:90c1]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6004:a862:d45d:90c1%4]) with mapi id 15.21.0270.012; Thu, 30 Jul 2026
- 19:59:00 +0000
-Message-ID: <0b50e8af-5f4d-4918-9431-1958568046aa@efficios.com>
-Date: Thu, 30 Jul 2026 15:58:58 -0400
+ ([fe80::6004:a862:d45d:90c1%4]) with mapi id 15.21.0315.016; Mon, 17 Aug 2026
+ 14:50:54 +0000
+Message-ID: <72b01b28-75ac-43d5-85b8-2a9317c946c3@efficios.com>
+Date: Mon, 17 Aug 2026 10:50:52 -0400
 User-Agent: Mozilla Thunderbird
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Content-Language: en-US
-To: lttng-dev <lttng-dev@lists.lttng.org>
-Cc: Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
- linux-kernel <linux-kernel@vger.kernel.org>,
- linux-trace-users <linux-trace-users@vger.kernel.org>
-Subject: [RELEASE] LTTng 2.16.0-rc2 - Question de Perspective - Linux kernel
- and userspace tracer
+To: lttng-dev <lttng-dev@lists.lttng.org>,
+ Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
+ linux-trace-users <linux-trace-users@vger.kernel.org>,
+ linux-kernel <linux-kernel@vger.kernel.org>
+Subject: [RELEASE] LTTng-modules 2.15.3 and 2.14.7 (Linux kernel tracer)
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQZPR01CA0192.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:8b::13) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR0101CA0086.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:4::19) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
  (2603:10b6:b01:be::5)
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
@@ -64,451 +63,126 @@ List-Subscribe: <mailto:linux-trace-users+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT3PR01MB6179:EE_
-X-MS-Office365-Filtering-Correlation-Id: b0a4663f-3fde-4a0b-59bb-08deee74ff2f
+X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT2PR01MB8487:EE_
+X-MS-Office365-Filtering-Correlation-Id: 842a1b0d-95a0-4c6a-43b8-08defc6ef034
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|23010399003|366016|1800799024|6133799003|56012099006|10067099003|3023799007|18002099003;
+	BCL:0;ARA:13230040|376014|1800799024|10070799003|366016|23010399003|10067099003|56012099006|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	yO7LtYCLUpu2QSl/xR/zImQGVPv8+R1cuE4vMeqJy7X2GIHVkzkhmEtrFMv5OgFVSfFW1wRvcBT0H/KyStfteoR2NDO2uKE5RYBikOrR4wcVYu7FVhurlSQ4RhMrRm50QnNCh3SQopq/fve2nr5SAnEgRqImDHbLv5c87sJMfZOOpJjAbRkyD0j7ZQftT2vlKz5Vfzv5LP10NX/FfLnjdaJK0Wd4L37h1ArsObyfZQw2sE2YNWJ7Z4DOZnqy6N5qDHgV3aA0GC5751q12wn3Qjb2frlwpzRRVVZzelhYnpdK+jcFeYl0M8ZaLv9iDLjhQdduw5ExG91AK6TXRo/jCPOkmZ06mm1BlHTErb27uwX8qK7KyqRNZfEh8W5N3HGi6xCPMT0PnW8oyRFBzYWOEpcoZHZIvRGtMmnV2BzPIpsIGT6TUjjcLkxX65l6eD3XW1yeddAz0LJsi5S6Kl/kP1ecCcT+hxguEWoZGLGCPFvV7fEYGBAsMAbTaoF3Sood/YXezhjVfG2VyAvR3ZTF25c43N+xp3Z6KXTS6GuwDn3VthFqAppTKcw+35lMZuj1aSSD5xoeE0oNtpEqbWeRASjEKBC5pLv8Ynni1yOGVhA=
+	C8+rqqAOIQvoN8fTrb4FQcblCLlSdNz6F9q5kdvIIfFWWzkQasJeRM9cSVA7jQrxPEWcJQ2FG9pdoTVfbXm75wiU4aHDCxNIryZbkIxNu8AbNHU+TJmznwiqjcrFaMap/UxKVj5YeL7hjN2cHHAwDl6ktOIb8odmg0aaV/mFhU1utEKZl5UuHiN8+A0FTdhWZDHsS8beNjDSa16FNgorF1VjV1YS1nbviXVfkvMdrtsJznzMfxu96aoyr155gRGldFisgHmIfkmclgeVPILaOHRjNrEL5Ca2u13VGYzqzaj9bDYpcm+ov4lnJhQL12x/Gr3l0AmZZiaJ71cpx8cBXRkIOTfTP1vqIO4sJ4A8pAoJKSzz0Gox440p4FxlqLlN8DOgCX9f7je5wctQIn8lOhc3m1i9TZkg/iy8e+mwNisVwqH940kCo8TfjbQpLapbrXyfojLDvTx9SpNhXTcCMZJZ9o3xELUfWLH+6pjlNsjl4BARnScLGqLhaMKLRPMjLM90+3EwyWbyc0Z2wuzxxdCxKzniq2Jl+/6VKsdPYNPh3DMjhtqXsIrVqVRPH7OwXY3BhZd6HmqgK0n+YWnuPdJwTVKM34+5d16xg7xysl4=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(366016)(1800799024)(6133799003)(56012099006)(10067099003)(3023799007)(18002099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(10070799003)(366016)(23010399003)(10067099003)(56012099006)(18002099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?dzFvQWVUeDMrOFZJWGt0N24vTTI1UGw5c2dYak1pWkFreENuM1ZiNkgvWHJ0?=
- =?utf-8?B?SnlHTDNYQnBwSFNZSmZ0NEUwQnFKUjgwamhrZTFuMk5BdytlbVNPdjFnSndR?=
- =?utf-8?B?Z2wzVTJ4ZDZBZ1BibGU4YTZCOExxOHNaMWtUQ0dWZ24wME1ZeUFucjVEb3NH?=
- =?utf-8?B?MTVhUDRVNUN0dTNTRWNqRy9qa2NTMVJCYmNpbDdhdWNlSFAyL0R6OFdCQmpW?=
- =?utf-8?B?R1hwY0lCZWEwYm9DL2xwek5XQmZjb2tjVjRlQlZJWGJxd05icE82bzdvdW83?=
- =?utf-8?B?YnNvWXZHdXdkbytpcDNmYjdmN0ZrN1c4dTBvM1RQNmRRQ3NyS0x2SXFjYkI3?=
- =?utf-8?B?aTduc3BVVXNRM01udHBhZHU0QStwRFkrN2dNSkR1S3ZNY0RGSEhiN1E3bVU3?=
- =?utf-8?B?TmVtLzNIWDhWOTM2amtFNk5ZVFBSUnpncWJXZkF6TkhQbFpHMG9jYm10amty?=
- =?utf-8?B?MGdiTmdxR0N2bkJPQ0JvOGc4U2ZjWHhETWdlZWc1U2Nia0NjbjJwRytiK001?=
- =?utf-8?B?eDloditjYWg1WHlOVE9GcmhjTHNhUlAxak40WmFlMWVRUU54TW1RR2ZaU0tm?=
- =?utf-8?B?Y0doUTlCVS9idjhndTlCdjlrZFdKL0c0cDliNDQ2TFlHb01DNTM3VjNjT0xa?=
- =?utf-8?B?NUR0Z1M2dXFjV0VnSXc5OU9EYlRQOStncllqbTlpeFFxdXltRmF2MlVVMnpu?=
- =?utf-8?B?L09wK0hvbzh4QW1uN1ZUU2NHcjJ4NmthQkpmaURUbGQ1VTU5azFWSTgzUnZV?=
- =?utf-8?B?cklsZDhYcUF2R3ZjRlh1Vy9DaGlyOHVCeUdXclV5NGRyQjRseHJOZlQvRXpU?=
- =?utf-8?B?ckpxbnQwZUlpVkYvRzNheWg5WTFtaHJYS3hZMWVKNk5HVnVQQ2lCdDNpNVBE?=
- =?utf-8?B?R3hpSXJuS1haMzZqeEtYck8wMnR0dXNJMEI4NitWM29pUXRqeU5ZcUkzVnJ4?=
- =?utf-8?B?TXhoSjdWNytOZ1hHUTFhRGYzeHhBa3liNkdzd2loU2VSY2RzdG5iR0M2UVly?=
- =?utf-8?B?MERtZDRPRUFJQnorSHlVSHpvNU9hSWxtUVpUVWpLUnErVFJSd3FxQk9qMHVk?=
- =?utf-8?B?dFVCeW92YkZlN3lrbTZZQkEvK0ZBYmVIV2c1MytoYnd4MXlCVndZdmZzTDVx?=
- =?utf-8?B?bkNPN3lKNzZnS1o5N3NFUFFnMGt0dGVkbzFLc1dJdGhPWG9hZXcrUXN6YzlU?=
- =?utf-8?B?OHNQL3JjOTBtR0pYbG80ZXhCWlhyaVMwK2I1Y2wrWUdmZWhPQ1NXdStyajUx?=
- =?utf-8?B?dy9KbVBGamh6TFNsRndmQi9lZ0p5ZUJFamZUZHVzQ3JRMVdvQmMrQ2Q0eFFL?=
- =?utf-8?B?RVM2QkFqbllqMjMyRTZCV01tOEFYRkVLNlJWUXVNZDVyZTRIUU9SZzJrVWww?=
- =?utf-8?B?MlphaUt4YkZ1T1hqY2ljcVM4eG5MK2JNY1ZSdWU1R0FCZFpZb3VnMmxzM2ly?=
- =?utf-8?B?RjhZeU5uVnZLU3VzN3hIVTFaUWg1TVBrUUs1aWdnWGJNRzNaUnlUUFVsWHYv?=
- =?utf-8?B?bngvSXZNSWxKOEVHQlMwQVl2bjhVc0thWStYZWp1d3RBUnpqby94Umcxc29x?=
- =?utf-8?B?amNIY015amQzWndnWk1GcEF5RFQ1OVVNWVFHVHF6NmJaQ0JxVnZrNzc0aVdt?=
- =?utf-8?B?dm54T0IzRE1FLzJsOUFJbHYvQ2dSckFxMVpUMEJUMVo3bzhiTXk4VVFjQVR2?=
- =?utf-8?B?VTEzdm1ETUNiUjhMMVhVT2liM1prbkpYQVFoMUUvSjVHeDh0OEt6ZWx0d0lu?=
- =?utf-8?B?bHhEcnhhcktBS1FVb01MeUhMRS9aTDhVc29Ba2VNUHZPK0doNzhaUUp0TEEw?=
- =?utf-8?B?bDhHek5ZeDZUM2N2dzcyWGN6cisyQ0ZlNExLQ3pZeE54YXcxUjlkZnlhQnhD?=
- =?utf-8?B?bXhjSG9zcDdkNWlPckVYSm1KNExDK1ZFaTNmVVBiWEdSOUMzMzdzWUttb1Vy?=
- =?utf-8?B?L25oR1F3c2graEVHRWVpMGxFTnFEVWNZT29Dc3hOS3YxNkd4aU9ORnAreVRn?=
- =?utf-8?B?c0xxVlh2T3hxbjNTTlpmNU5HVzd0T0duNHZoZUVpUWxzQ1RPMmhObmJSeU9Y?=
- =?utf-8?B?VE93dE1aNUZGZ25wMHJlbnZOZXlobUVzcmxISko4SHJwWXAyNTRCRGV4ZVRU?=
- =?utf-8?B?YXNMczdCeXFLSmM5VE5DdllMbi9zcy9ZVnEyKzFwL3E2RWVMYS9TRXFLWDlF?=
- =?utf-8?B?L0dyazZNcmpKMUp0b3NLVVNyeW0yb0lGcU9OSEZrKzdvRW52V0hsVGZqMUpa?=
- =?utf-8?B?b2J0UE9LRTNjSHdMZXg4Z2FWV2J4SU9HdUFMUWlKYURSL05iZnpMbkh1WUNL?=
- =?utf-8?B?N1QxVFNCVFF3K0xqQ3FVenZmcDdVRUFQajJqUEt3bmlnRi9uZjd0TXZuTlFq?=
- =?utf-8?Q?c4qvE+E3G+x1sTYMLABgz3bwXiji5V+hbibQl?=
+	=?utf-8?B?NENkemxsSTBOcS90KzBnMm44eGI1bmdEZ3lJY1ErbUFObmFjZ2JSeGFLWmk5?=
+ =?utf-8?B?amowS0Q0RzBzaFZTOTYzZ2ttbjR6TFd2cWgyaUV3bnJLamlNd21PR1o2M0Zo?=
+ =?utf-8?B?NWx5K0tZNlZOODRJNktMV21KMm1lcDRoOFdCYTJ1U3lQeUpiT0s2ZTVDNkxs?=
+ =?utf-8?B?WURwcHZMMElhbUFtaHc4bGNMZTg5SWZPd0UvK29wWGZDR1J3UXFFc2hERWJE?=
+ =?utf-8?B?L0hOcVN1M0hnemRsRi9KUkxrME1KNVFWYnhPZE9EWXFJZWVpOUE0d0JTZGJ5?=
+ =?utf-8?B?RFZ1TE9jTkNzbUw3c1hsZ1EzekdJSndYdmNjejA1dGdIblRCVktCc1YzWE1p?=
+ =?utf-8?B?Z3UvdHlCOU5qQTFUeUJOUmpaVS9sZTRkRUtmdEYrVElKbVVKODgxV0treUx6?=
+ =?utf-8?B?eWRVc0daWHlhajRjQTd4dHBCZHk0Q2syeGtuRm8vVDMzL2JjQ0dXWEIyVjVZ?=
+ =?utf-8?B?YXFRQzhlZTlGSDc1bVBOYmdzZHhLSDI5eXdwT1gwbGZ4VFE4L01tYTJMQldL?=
+ =?utf-8?B?Q25uSzM2WU9yZnFMQlRHSVlaVlFNMWFiZXNVN3BqeG5vdmcybi9wTGVCcC9Q?=
+ =?utf-8?B?a042TGlqUmVoaGRMaGRKRnArbldtbDNKaUxuMklXQ2pKYk9qUlBScGt3TVJy?=
+ =?utf-8?B?Y3Vlbkxack4wZnBmbkFycDYxZVFHUlhDaEVHVExvTlcvVHlkRkd5NG9ObmY2?=
+ =?utf-8?B?L2V6Z0ZpeW93d241ZXB4K09EWkJxcmNvQnRkMUhRRHQzVFQvQ21BQi82bnl3?=
+ =?utf-8?B?MzZzNFdQTnk3R0lwVml4WW0xZkdRYStWWTdMaEY1Y1prR2dvMW84OEZUTUZa?=
+ =?utf-8?B?Lzd2VnFCOHhGNEswcnpMZXhsZGZsQkdMR2RyVnpOZ1RQbFdLWDY0ZFQwdVli?=
+ =?utf-8?B?Sk0vUnFORnNEaEdvMWNOQVlYVGhZZW55YnlNSmd3N3NlWkRKRUdVTkcrOEpC?=
+ =?utf-8?B?ekZ1UjkybUpqNUt3V1dNT202RjZ1OE9KY2JmRkluY28wVDlKUERJdExKSkw0?=
+ =?utf-8?B?ODBUOEgzMmJOdDBqdWk4TFBkRmhla0EyeEJRSkIydHRZY2tDTXNkcFBvRTB3?=
+ =?utf-8?B?cDFxV1plbWF4OXROOFNqVC9GTFNsZjB2dGdhSCtnNVpEcFNpMWpVSTVYVFpz?=
+ =?utf-8?B?UTM5OWhkSTI3K1VNSG4yMERmbWt4RUF6bXFEcytOVmMxaDloaGJsU2tDWEcw?=
+ =?utf-8?B?Zi9QdGhoTldSQWpLQlo5ZGJrRW42U3lubDBOcm1VaU9sbkJOUk9Ea2E1OGpo?=
+ =?utf-8?B?clduUGJYNG9RVk13dllWd0tjcmp4VWg1NjF2c2g1R3JyWDdNd2pvZFptaGNj?=
+ =?utf-8?B?OWE5SEVHOG5uL0tPSXAvRnZ0NDR4VHJLLzk3Z2pZTFhHL3Y5ZGVPQVEvMnJ0?=
+ =?utf-8?B?R2FvMU1HVXlnSVVYTlM1N3ZWNHVHNzlxRUQvN3NZWnFCdk5Jd0JkMGV6YzdJ?=
+ =?utf-8?B?Y0oyR3hsV0pORXhMUnZQcGlYWDZKU3ZYYzl0d3dGRGxndXZaWkx2NGtsaUR3?=
+ =?utf-8?B?cU9YK1lIeUZDVVZ3bzhNOUkxOGsxUFdLZTJmaFVIdG1PeExBUm5WSW1xSE1G?=
+ =?utf-8?B?V2RXVnpValFSMjN6ZXI1NFUxNnRKT1dLSXBnT2d0bnhQNHdnV3NuVWs0SHZn?=
+ =?utf-8?B?bmNlRXIzRm8yMndmRmN4MHdVbCszMU5DbWFlT3h6Q1ZqaG9vVGhDNFVRQk1h?=
+ =?utf-8?B?SmJDMUYxQWZiYklFalFyS3k4UncrOXNsa3lYM0c3TzNTajhyQnBkTllTOUwz?=
+ =?utf-8?B?RTFNdVU1ZTRZVktjb2VFajRTYk8xNjIyWUdxbGpQOVF0UHBUUFpZUGNTNUlr?=
+ =?utf-8?B?eWk1TkszWGUybWRlK2p4U0hKMnAvYXJNNk1SU20vcElsNlg4QytMNjh2YUQr?=
+ =?utf-8?B?SHU3bGZlUWsyK2hwa2RMN2wxVDY5blprWEVENnNaNUhZd1dQdXRzdE56OHR0?=
+ =?utf-8?B?amNvdEZVbUN6RUxPN3RScitCZU9uRzVLL3pJZzA4YWdvLzUrLzRhSmZFVWJp?=
+ =?utf-8?B?dGhESGtmeWxJUHdNck1EeEpheURZcVNYR2Nld0pZOUdhV2pIZWhLOTZnNTND?=
+ =?utf-8?B?SXlsbjhBdzVyaStMOWRnVGVyNlE4cTdpVWhpbEJHN3pCTXJtakViMWhoT0xY?=
+ =?utf-8?B?UlBZRUxkckFTbExnaWRhb2xYT0NTdkdtcWRITjkyYm1mWXhwb3RhQmU1RE5X?=
+ =?utf-8?B?RWNpL2FQbFp1cndKMGMrUEFMQ2RlNWVHZHhxTmtnaHJiMkNGUWVqNmkrSEVp?=
+ =?utf-8?B?Z3QrRGdvUlhKT21pRiswRHoxRzlveFNUZ0hoZmZqUTgxcWphdit1SUhvS2dT?=
+ =?utf-8?B?K3I4SEpETWozRk0rWkJQYWUwZUV3YXRsTGhkV1JiVzR2S1R4R1dBVm9nZmlK?=
+ =?utf-8?Q?iVndw8q8G1/PD62+Srg8SD9uQrncz9EYE2BcPghrIuBjh?=
+X-MS-Exchange-AntiSpam-MessageData-1: GLwPa4C2UEqZtctQnk/evZ3kfjWGtbI8GsI=
 X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0a4663f-3fde-4a0b-59bb-08deee74ff2f
+X-MS-Exchange-CrossTenant-Network-Message-Id: 842a1b0d-95a0-4c6a-43b8-08defc6ef034
 X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2026 19:59:00.0268
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2026 14:50:54.1914
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ey3x0ojsK/3MihEcLtQVaTobKyTGH3W3Mv3h/Lz/Iu/OSaVRr+wYchYp1epr3ZnAIeyD7ufJSChMGOoBn3Q+ufDXW83cW3A0Qt6Y5OpGDy0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB6179
-
-Hello, fellow tracers.
-
-The LTTng team is proud to unveil the second release candidate of
-LTTng 2.16, codenamed “Question de Perspective”!
-
-What changed since RC1:
-───────────────────────────────────────────────────────
-This release candidate contains no new features; the changes are
-bug fixes and hardening work, most of them covered by new regression
-tests.
-
-A good part of the work since RC1 went into stabilizing the new map
-channels. Most notably, agent domain (JUL, Log4j, and Python) event
-rules can now be used to increment the values of a map.
-
-Other notable map-related changes:
-
-   - The triggers targeting the keys of a map channel are now evaluated
-     in their registration order, making key exhaustion deterministic
-     when a channel fills up
-
-   - Sessions containing only map channels no longer spawn an unneeded
-     consumer daemon.
-
-The session daemon now derives the kernel tracer's capabilities from
-its ABI version. Attempting to create a map against an lttng-modules
-release older than 2.16 now fails with a clear "not supported" error
-rather than an obscure one. This work also fixes a regression
-introduced during this release cycle that broke the use of older
-lttng-modules releases: trigger error accounting failed against 2.14
-and 2.15, and the kernel domain failed to initialize entirely against
-2.13.
-
-We also introduced retry behavior for global buffers to better handle
-scenarios where concurrent producers writing to the same ring buffer
-would cause effective ring buffer waste due to padding and unexpected
-event loss rate. This became important since the introduction of the
-robust per-user buffers in 2.15. This fix was backported to LTTng-UST
-2.15.
-
-Highlight
-───────────────────────────────────────────────────────
-This release introduces _maps_, a brand new way to aggregate live event
-counters directly within a recording session, along with BLOB fields,
-trigger persistence across session save/load, and other
-thrilling refinements.
-
-Aggregate live event counters with the new maps feature
-───────────────────────────────────────────────────────
-Maps are the main feature of LTTng 2.16: they add a new live aggregation
-path alongside event recording.
-
-Maps let you count event activity live, such as how often each system
-call fires or which events your application emits the most, without
-recording a single event record. You get a high-level view of the
-observed system at a fraction of the resource use of recording
-every event:
-
-     ┏━━━━━━━━┯━━━━━━━━┓
-     ┃  Key   │ Value  ┃
-     ┣━━━━━━━━┿━━━━━━━━┫
-     ┃ read   │ 48,201 ┃
-     ┃ write  │ 31,944 ┃
-     ┃ openat │  8,127 ┃
-     ┃ close  │  7,930 ┃
-     ┃ mmap   │  2,615 ┃
-     ┗━━━━━━━━┷━━━━━━━━┛
-
-A _map channel_ configures a set of per-CPU _counters_: named integer
-values, keyed by strings, which accumulate over time.
-
-Unlike an event record channel (new terminology for what used to be
-simply called a “channel”), a map channel doesn't record individual
-events to ring buffers; instead, it maintains running totals that you
-can read at any moment.
-
-Map channels and event record channels are independent and may coexist
-within the same recording session: you don't need a dedicated recording
-session to start counting events.
-
-A live tally like this is a great way to guide your event recording
-setup: once you know the busiest events, you can pick which ones to
-actually record, size the buffers of your event record channels
-accordingly, and pinpoint the real sources of tracing overhead instead
-of recording blindly and sorting it out later.
-
-Add a map channel to a recording session with the new
-lttng-add-map-channel(1) command:
-
-     $ lttng add-map-channel --type=user my-counters
-
-Then, populate its counters with the new `incr-map-value` action of the
-lttng-add-trigger(1) command.
-
-The example below increments a separate counter for every user space
-tracepoint event, using the event name as the key:
-
-     $ lttng add-trigger --condition=event-rule-matches \
-                         --type=user --name='*' \
-                         --action=incr-map-value \
-                         --session=my-session \
-                         --channel=my-counters --type=user \
-                         --key='{event_name}:count'
-
-The `--key` option is actually a _template_ above: LTTng substitutes the
-`{event_name}` and `{provider_name}` placeholders for each matching
-event, so that a single trigger can feed many counters.
-
-Read the current counter values with the new lttng-show-maps(1) command:
-
-     $ lttng show-maps
-
-     Recording session `my-session`:
-     User space map channel `my-counters`:
-     ┏━━━━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━┯━━━━━━━━━━━┓
-     ┃         Key         │   Value   │ Overflow? ┃
-     ┣━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━━┿━━━━━━━━━━━┫
-     ┃ myapp:request:count │    12,043 │           ┃
-     ┃ myapp:error:count   │        87 │           ┃
-     ┃ mydb:query:count    │ 5,920,377 │           ┃
-     ┗━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━┷━━━━━━━━━━━┛
-
-Sort, filter, and slice the output in many ways, for example to show the
-five highest-valued counters of some process:
-
-     $ lttng show-maps --channel=counters --per=owner --pid=2860 \
-                       --sort-by=value --sort-order=desc --limit=5
-
-     Recording session `my-session`:
-     User space map channel `counters`, process ID 2860 (`myapp`)
-     (64-bit int. values):
-     ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━┯━━━━━━━━━━━┓
-     ┃            Key            │   Value   │ Overflow? ┃
-     ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━━┿━━━━━━━━━━━┫
-     ┃ myapp:request:count       │ 2,481,005 │           ┃
-     ┃ myapp:cache_hit:count     │ 1,938,712 │           ┃
-     ┃ myapp:db_query:count      │   842,330 │           ┃
-     ┃ myapp:cache_miss:count    │   220,118 │           ┃
-     ┃ myapp:error:count         │     1,204 │           ┃
-     ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━┷━━━━━━━━━━━┛
-
-Or to break a single counter down for CPUs 3 and 9 of Unix user `paul`:
-
-     $ lttng show-maps --channel=count --per=cpu \
-                       --uid=paul --cpu-id=3 --cpu-id=9 \
-                       --key=myapp:db_query:count
-
-     Recording session `my-session`:
-     User space map channel `count`, user ID 1002 (`paul`)
-     (64-bit int. values), CPU 3:
-     ┏━━━━━━━━━━━━━━━━━━━━━━┯━━━━━━━━━┯━━━━━━━━━━━┓
-     ┃          Key         │  Value  │ Overflow? ┃
-     ┣━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━┿━━━━━━━━━━━┫
-     ┃ myapp:db_query:count │ 612,489 │           ┃
-     ┗━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━┷━━━━━━━━━━━┛
-
-     Recording session `my-session`:
-     User space map channel `count`, user ID 1002 (`paul`)
-     (64-bit int. values), CPU 9:
-     ┏━━━━━━━━━━━━━━━━━━━━━━┯━━━━━━━━━┯━━━━━━━━━━━┓
-     ┃          Key         │  Value  │ Overflow? ┃
-     ┣━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━┿━━━━━━━━━━━┫
-     ┃ myapp:db_query:count │ 229,581 │           ┃
-     ┗━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━┷━━━━━━━━━━━┛
-
-Power users can go further. When you'd rather query the counters
-yourself instead of relying on the fixed, human-readable presentation of
-lttng-show-maps(1), export every counter of every map channel as a
-self-contained SQLite script with the new lttng-export-maps(1) command.
-Where `show-maps` filters and aggregates for you, `export-maps` does
-neither: it hands you the raw data so that you can slice, filter, and
-aggregate it afterwards with the full power of SQL.
-
-Pipe the script into `sqlite3` and query the convenient `vmap` view. For
-example, with a shared resolver library feeding `resolver:cache_*`
-counters across every process which resolves names, rank the processes
-by their DNS cache hit rate, combining two different counters into a
-ratio that `show-maps` can't express:
-
-     $ { lttng export-maps; cat << EOF
-         SELECT owner_name AS command,
-                ROUND(100.0 *
-                      SUM(CASE WHEN key = 'resolver:cache_hit'
-                               THEN value
-                          END) /
-                      SUM(value), 1) AS hit_rate_pct
-         FROM vmap
-         WHERE channel_name = 'my-counters'
-           AND group_type = 'user-per-process'
-           AND key LIKE 'resolver:cache_%'
-         GROUP BY owner_id
-         ORDER BY hit_rate_pct;
-       EOF
-       } | sqlite3 -box :memory:
-
-     ╭──────────────┬──────────────╮
-     │   command    │ hit_rate_pct │
-     ╞══════════════╪══════════════╡
-     │ nginx        │         54.8 │
-     │ chromium     │         71.2 │
-     │ postfix      │         83.0 │
-     │ redis-server │         94.6 │
-     │ sshd         │         99.1 │
-     ╰──────────────┴──────────────╯
-
-See the lttng-export-maps(1) manual page to discover the full
-SQL schema.
-
-Other map highlights:
-
-• A map channel may hold 32-bit or 64-bit signed integer counters, cap
-   its number of keys, and follow a per-user or per-process buffer
-   ownership model for user space tracing thanks to the `--value-type`,
-   `--max-key-count`, and `--buffer-ownership` options
-   of lttng-add-map-channel(1).
-
-• With a per-process buffer ownership model, choose what happens to the
-   counters of an instrumented process when it terminates while the map
-   channel still exists with the `--dead-process-policy` option of
-   lttng-add-map-channel(1): either discard them or, by default, fold
-   them into the _shared counters_ of the map channel so that you don't
-   lose any contributions.
-
-• The lttng-list(1) and lttng-status(1) commands now list map channels
-   and their configuration; filter them with the new `--map-channel`
-   option if needed.
-
-• The lttng-clear(1) command resets all the counters of a recording
-   session to 0, without removing any allocated keys.
-
-📖 To learn more, read:
-
-    • The new “MAP CHANNEL AND COUNTERS” section of lttng-concepts(7).
-
-    • The new “Map channel and counter” concept section of the
-      online documentation [1].
-
-    • The new “Count events with a map channel” online tutorial [2].
-
-Save and load your triggers
-───────────────────────────
-The lttng-save(1) and lttng-load(1) commands now serialize and
-restore _triggers_.
-
-Saving a recording session configuration also writes every trigger which
-exists at saving time, and loading it recreates those triggers.
-
-This matters for maps: because the new `incr-map-value` action targets a
-map channel, saving and loading triggers is the only way to preserve the
-configuration which populates the counters of a recording session.
-Without it, the saved configuration would have no record of which
-triggers feed which map channels.
-
-Skip this behaviour with the new `--no-triggers` option of
-both commands:
-
-     $ lttng save my-session
-     $ lttng load my-session --no-triggers
-
-lttng-load(1) doesn't restore the original owner of a loaded trigger:
-the Unix user running the command becomes the owner of every loaded
-trigger, regardless of which Unix user owned it at saving time.
-
-📖 To learn more, read:
-
-    • The lttng-save(1) and lttng-load(1) manual pages.
-
-    • The “Save and load recording session configurations” section of the
-      online documentation [3].
-
-Record raw binary data with BLOB fields
-───────────────────────────────────────
-The new BLOB field instrumentation support of LTTng-UST records an
-arbitrary sequence of bytes tagged with an IANA media type [4], for
-example `image/jpeg`. Previously, LTTng-UST could only capture binary
-data as an array of integers, with no way to tag its type.
-
-The new lttng_ust_field_fixed_length_blob() and
-lttng_ust_field_variable_length_blob() field macros do this:
-
-     lttng_ust_field_variable_length_blob(payload, buf, size_t, len,
-                                          "image/jpeg")
-
-LTTng records the bytes as is, without interpreting them: think raw
-network data, memory regions, binary protocol data, or whole files.
-
-CTF 2 [5] supports the BLOB field class as is, including the IANA media
-type. For CTF 1.8 [6], which has no equivalent field class, LTTng
-records the bytes as a best-effort array field of 8-bit unsigned
-integers; this loses the media type as CTF 1.8 has no way to encode it.
-
-📖 To learn more, read the lttng-ust(3) manual page.
-
-Start the consumer daemons up front
-───────────────────────────────────
-Pass the new `--spawn-consumers` option to the lttng-sessiond(8) command
-to start the consumer daemons immediately instead of having the session
-daemon spawn them on first need.
-
-This removes the one-time delay of spawning them on first need from your
-first recording session, which is handy when the earliest events matter
-or when you're measuring startup latency.
-
-Control the new features from the liblttng-ctl C API
-────────────────────────────────────────────────────
-The liblttng-ctl C API gains functions for all of the above:
-
-• Add and enumerate map channels with lttng_session_add_map_channel()
-   and lttng_session_list_map_channels().
-
-• Configure and inspect map channels and their keys with the
-   lttng_map_channel_*(), lttng_map_group_*(), and lttng_map_key_*()
-   function families.
-
-• Build the new “increment map value” trigger action with the
-   lttng_action_increment_map_value_*() function family, along with
-   string key template utilities.
-
-• Capture and filter on BLOB event fields from triggers with the new
-   `LTTNG_EVENT_FIELD_VALUE_TYPE_BLOB` event field value type.
-
-   Get the IANA media type, length, and data of a captured BLOB field
-   with lttng_event_field_value_blob_get_media_type(),
-   lttng_event_field_value_blob_get_length(),
-   and lttng_event_field_value_blob_get_data().
-
-• lttng_register_consumer() is deprecated and now
-   returns `LTTNG_ERR_NOT_SUPPORTED`.
-
-📖 To learn more, read the liblttng-ctl C API documentation [7].
-
-VERSION NAME
-━━━━━━━━━━━━
-This release is named after “Question de Perspective”, a stout brewed by
-Ayawan in Val-Morin that the team adopted for its name. It is a
-thoroughly standard stout: dark and roasty, faithful to the expectations
-of the style, and remarkable mostly for how unremarkably it conforms to
-them. An `std::stout`, if you will. Whether that counts for or against
-it is, fittingly, a question of perspective.
-
-IMPORTANT LINKS
-━━━━━━━━━━━━━━━
-LTTng tarball:
-     • <https://lttng.org/files/lttng-tools/lttng-tools-2.16.0-rc2.tar.bz2>
-     • <https://lttng.org/files/lttng-ust/lttng-ust-2.16.0-rc2.tar.bz2>
-     • <https://lttng.org/files/lttng-modules/lttng-modules-2.16.0-rc2.tar.bz2>
-
-LTTng website:
-     <https://lttng.org/>
-
-Mailing list for support and development:
-     <https://lists.lttng.org/>
-
-IRC channel:
-     `#lttng` on `irc.oftc.net`
-
-Bug tracker:
-     <https://bugs.lttng.org/projects/lttng/>
-
-GitHub organization:
-     <https://github.com/lttng>
-
-Continuous integration:
-     • <https://ci.lttng.org/view/LTTng-tools/>
-     • <https://ci.lttng.org/view/LTTng-ust/>
-     • <https://ci.lttng.org/view/LTTng-modules/>
-
-Code review:
-     • <https://review.lttng.org/q/project:lttng-tools>
-     • <https://review.lttng.org/q/project:lttng-ust>
-     • <https://review.lttng.org/q/project:lttng-modules>
-
-REFERENCES
-━━━━━━━━━━
-[1]: https://lttng.org/docs/v2.16/#doc-map-channel
-[2]: https://lttng.org/docs/v2.16/#doc-count-events-map-channel
-[3]: https://lttng.org/docs/v2.16/#doc-saving-loading-tracing-session
-[4]: https://www.iana.org/assignments/media-types/
-[5]: https://diamon.org/ctf/
-[6]: https://diamon.org/ctf/v1.8.3/
-[7]: https://lttng.org/docs/v2.16/liblttng-ctl/
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6tb3h94wLUoxHrpEkkCa2eLVJ7Dr5vjYxRkpjxjbQeU34X2vxkAjfSY/hneOzGpPRveUbQhlR+UEc8bLSEihpHf9TP8HHNPWv6Vlx+qBf+c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB8487
+
+Hi,
+
+This is a stable release announcement for the LTTng kernel tracer,
+an out-of-tree kernel tracer for the Linux kernel.
+
+* Highlights
+
+LTTng-modules 2.15.3 adds support for the Linux kernel v7.2.
+The 2.14.x releases of LTTng-modules now have an upper bound:
+they support kernels up to v7.1. Considering that we expect
+LTTng-modules 2.16.0 final to be released around next week,
+we can expect this 2.14.7 release to be the last one for the
+stable-2.14 branch.
+
+A fix appears in those releases: since we introduced the
+"flush or populate packet ioctl", a kernel trace could contain
+zeroed UUID in the very last packet of the streams within snapshots,
+thus causing Babeltrace 2 to fail with e.g.:
+
+         Invalid metadata stream UUID:
+         uuid=00000000-0000-0000-0000-000000000000,
+         expected-uuid=8962f7e1-f875-8f47-a112-43868a4b000b
+
+The commit "Fix: ring buffer: zeroed UUID in populated empty packet headers"
+fixes this issue.
+
+* New in these releases:
+
+2026-08-17 LTTng modules 2.15.3
+         * fix: backport: hrtimer: Reduce trace noise in hrtimer_start() (Ubuntu-6.8.0-136)
+         * fix: string: Remove strncpy() from the kernel (v7.2)
+         * fix: btrfs: tracepoints: trace transaction states during commit phase (v7.2)
+         * fix: btrfs: tracepoints: add in_fsync field to transaction commit event (v7.2)
+         * fix: btrfs: tracepoints: pass a transaction handle to transaction commit event (v7.2)
+         * fix: net: constify sk_skb_reason_drop() sock parameter (v7.2)
+         * fix: KVM: x86: Rename kvm_cache_regs.h => regs.h (v7.2)
+         * fix: x86/msr: Remove rdmsrl() / wrmsrl() (v7.2)
+         * fix: warning -Wordered-compare-function-pointers with LLVM
+         * fix: warning -Wcast-function-type-strict with LLVM
+         * Fix: ring buffer: zeroed UUID in populated empty packet headers
+
+2026-08-17 LTTng modules 2.14.7
+         * Document last supported kernel version for stable-2.14 branch
+         * fix: backport: hrtimer: Reduce trace noise in hrtimer_start() (Ubuntu-6.8.0-136)
+         * fix: warning -Wordered-compare-function-pointers with LLVM
+         * fix: warning -Wcast-function-type-strict with LLVM
+         * Fix: ring buffer: zeroed UUID in populated empty packet headers
+
+Project website: https://lttng.org
+Documentation: https://lttng.org/docs
+Download link: https://lttng.org/download
+
+Thanks,
+
+Mathieu
 
 -- 
 Mathieu Desnoyers
