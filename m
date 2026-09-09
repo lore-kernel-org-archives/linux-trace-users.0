@@ -1,59 +1,61 @@
-Received: from YT3PR01CU008.outbound.protection.outlook.com (mail-canadacentralazon11020104.outbound.protection.outlook.com [52.101.189.104])
+Received: from YT6PR01CU002.outbound.protection.outlook.com (mail-canadacentralazon11022142.outbound.protection.outlook.com [40.107.193.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73B9748E0CD;
-	Tue,  8 Sep 2026 19:50:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.189.104
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2C15616A5
+	for <linux-trace-users@vger.kernel.org>; Wed,  9 Sep 2026 13:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.193.142
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788897040; cv=fail; b=ZWj4oCFxC2dmYOmEly3PsqValKeHeBmMX9Pg1coRNrspGQqd69havX0g3WLIuAz393gvY9eDilLZzfcY4WLNLSQxNYSZgCb4HVwaGIL+PRDqPOHo7JFbC7GDyc4yk4dA1xkzCOIpOFoi6QUYFIW9lmYBuxsWmIpCISLsaofELT0=
+	t=1788960601; cv=fail; b=tExQXuGeQvv0MOxndeNrNyZlhSlfDAx0jVu/zIoB1wueUbbYucuCS5kfSIqZDPcl37Ewxr2zfZfivXbXrW+HhcqdOgvmQeM7PhPOfy+CYWcfSJFro5XLifuMKqILCXQUOfByiWFgZB1cdI2DT8e0qnhg9BOcnil8xDvVzXBUp3A=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788897040; c=relaxed/simple;
-	bh=iB1Kq8LREO/U2veu/CXraqbYgzOEiQtuhp3QHpnD6Rw=;
-	h=Message-ID:Date:From:To:Subject:Content-Type:MIME-Version; b=QMNoMBkwwS89f0jBBHLMpCg5QsodyIPMCS4F65wiOGBdgtDuMH+pmRUKubPQWGAg9ith4hxn1JqFwW6LSFl+TzPZ5bEH1A2Ni1Ioo4Jy0satua6RkdmBdLl013WBLcSR12hGJOYBp77JPnsEQI5Vfoby55RPJlnJM9kfFmn6Omo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=JAhfBthO; arc=fail smtp.client-ip=52.101.189.104
+	s=arc-20240116; t=1788960601; c=relaxed/simple;
+	bh=aoXvxKb6t9sVGqNa95gPSy8A/64lkSl/1//f5dx4IrQ=;
+	h=Message-ID:Date:To:Cc:From:Subject:Content-Type:MIME-Version; b=SNTuuqdNp7oBSzjI8hd74milSHaX6l59BupaUGbzn0Cwybs7GFc4DA91bOtFlHB5po9X3kOdHiMD11e0affuV+dGr/VrFp71uvmKGUFm+MXgr3idKHKo/nVsqhp1IoNFZX/9+bPcfUo8RL2ePdK0ICGiLz7ujPPqcCnyPnq8PQ8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=HlYXtisS; arc=fail smtp.client-ip=40.107.193.142
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="JAhfBthO"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="HlYXtisS"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hkZq3zxOVttvuJ5XzxFNrVDzMuNhQ0nntaKpBGcsQPFLDerjucZxu8T+v+G/XxVrSZEkspsDKtucAtjj03g5BLWSZ7etBtJzhK7ASgIzeVr2ufL8ArrbwxaqHKo1vqeSbmHAFcRJuvzCfm/9KrKRyG7fjh06LYsgg10Wcje4BnK2NPrf+XrGQZGFnHxMzuR3FcB+Q2oxlEYXeHgk+6Q3OOSbPa5oCf2q2LuPaULvX+DLdCmflz/HbEtpNeQss2fQ3Sc59XQWNzM+apoKMe8WAKDGqXF68C7pJJGhv2lZ8oFAV2I1563sxqE86qj28jXMfS9AEwwTkOMv1hLVqyE99g==
+ b=sGPxMFm6uMdqlbWd4ySRvxj9y6NQU7r4cQBdPYpC5sDvt3tQc801qPie3xOAn1Y2PBmiZQqe1xA2YhHsN7c39T0qMqgau1gCYN9uyK+7M8NQ6osK8zIVjFwXXTg2HkVWYtVVgMTOYUWBGKI+V9y/KILvyg5b5H1SbWddM6GQ2M2ebHIx2RmyZgAu6mL0KhGcN+7PE/uI0mfP9kR4S/y+qMfHRMtw/Ij2I3yd8KVX2T2Gb/iJMZAnMbhqRcQ2u6BfeI2Di5ZfuqiLQ3eRxwx06IxvypKaM8+LcXmjcaVLxa6YqAB5Pgrue2Ngzdp5g2+2KOs2/zMmUW4ehukPh0ahnQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=75OHHzLsy3Qf1LCsyF1owUOAt/hW4CHpr64kITO3fu4=;
- b=mEAFMHcpzkc3RgpxQMfwx8kCnl+jjq0Uwtppo2Ohj4WHIa+/RnMlndIB/lmdXLHsJND4M5rgcc/KhGE7PLALSMnIv7RM8WnNOab42RPYpdej2+WT0UQoQxgRFf6VPAhxSoNS2FvYQnIv7z+kmDsy9sDxE+Bwx+dfyVea4kTls4a5d8oMvbc8VfedSF/J/Jqezk1f0uC7eBJeN67d+T09Sen8pwaltEVIt3AHFEEBmEdvwQu9+9X/xJkwqMzOodARb0P9nlveDOOaPi+RoFb2tYgAdwnOUOkwkxdvs77aUtrQfDicvUNxH3uWGY52IrlBVEJD5fcvJiuST5uyt/yvHg==
+ bh=t9mQ9zPjj7Ee1hj5e+L85RBvKQ20D52uxh7UlhUIXX0=;
+ b=ngYxglNjnnEXMAH36lQuIh6y2JG87ptlLHm1csbc/0UjVZNMMeCEJ9J9p+I5uYD/VaPPMItODuOeYEtV70241Z/OHYhX+6pvVZS804jsLX0ZdqP5GM6FUwPd2d/RFH8U9ob3k80tJlcImBjRexRXxnzaSg6NY8QhcfwroNTB79BM8kdtyMgjmWJ22dV0DQs7nefJmETm9hLQv0KkJucV0lfnQtjvQTZF61NP2zli0Jz2EitHOtaadsUSZoHIMSAYFUdvVkJNxLq/6dVAa9ROH+JHcQtNE6ipFuR3hs9aTnf/fZhdtqqZg4jBw37C7RY67aWYH/aLoUs7zlSl3XRQOQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
  dkim=pass header.d=efficios.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=75OHHzLsy3Qf1LCsyF1owUOAt/hW4CHpr64kITO3fu4=;
- b=JAhfBthOaslJhHun7FAJKcJ6O0YC+Ym3FgDPBfZTSzm2O8wT6ymasxSgRbu1PhLtrxlgo9wNAVaJ7ko6sDOpLBLbjZ0JNfnfcHB1FmudN/+m0W5mx7F2pLudLsxWKVtGxcsyjQDpFhAX+yqYw3LwEiyx6RO+Z5Bd/pgDEMcbBCAzwcOxDy+VcW3R+JiZGOi6UdfvOoRAhreXeV9POucHm3+SwI7yjO34M1/DYM27Q7znQ/hxY0e0sltv6j9iDkdc/o4dCP5lKJL+VCmF8Up2cHg5WatT6t2ZCUg18KsHEU2uWZzSV7eo+9NCfNH0bCjEFmkfRXZiZxy/S1oUnxkiCA==
+ bh=t9mQ9zPjj7Ee1hj5e+L85RBvKQ20D52uxh7UlhUIXX0=;
+ b=HlYXtisSfidWJ1/McU0tHSC4N60POxPZM+XDfAA7lDNbsjAqKBSRpZHIIrBrj+ZDZg0vPIWfz6pMCITB8gcPMnS6zVb7uIQJZuuMpBjPWBKRnGL/S1w1tusSU+AsEilszNgJZLPZSdrnslVxDzjoj8T3Q74hibymGIXeRfOBE7WMf0l1Gklgc5z8c86OFhafyD6Hco2BrUzK23TOmPgq9gXhvhLUXixiuBBaGBJ+qenqOwI2CHW9SAFV+aXCSRk+9vEEbngYzWRpeZbR20Q+JbgssfpjNYmnGz6Pw2qmWyTk/cUy/C+DsIcmB1ksdrOBxLT08Ljxd+leiND7I3mwEQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=efficios.com;
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10) by YQ1PR01MB11904.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:ae::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.7; Tue, 8 Sep 2026
- 19:50:34 +0000
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0406.005; Tue, 8 Sep 2026
- 19:50:34 +0000
-Message-ID: <9e5ca6e9-1b5e-40c7-b38a-1a47ac3d9198@efficios.com>
-Date: Tue, 8 Sep 2026 15:50:32 -0400
+Received: from YQXPR01MB2357.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c00:42::24)
+ by YT2PR01MB8454.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:b5::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.8; Wed, 9 Sep 2026
+ 13:29:31 +0000
+Received: from YQXPR01MB2357.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::4c7b:7dec:7e59:918e]) by YQXPR01MB2357.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::4c7b:7dec:7e59:918e%5]) with mapi id 15.21.0406.007; Wed, 9 Sep 2026
+ 13:29:30 +0000
+Message-ID: <ecb20671-5c82-4d00-a6d5-45c8badce8a8@efficios.com>
+Date: Wed, 9 Sep 2026 09:29:29 -0400
 User-Agent: Mozilla Thunderbird
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Content-Language: en-US
-To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org,
- linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RELEASE] LTTng-UST 2.14.3 (EOL) and 2.15.2 (Linux user-space tracer)
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Cc: linux-trace-users@vger.kernel.org,
+ diamon-discuss@lists.linuxfoundation.org
+From: Kienan Stewart <kstewart@efficios.com>
+Subject: =?UTF-8?B?W1JFTEVBU0VdIExUVG5nLXRvb2xzIDIuMTUuMiAtIFDDqWNow6kgTW9y?=
+ =?UTF-8?Q?tel?=
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR0101CA0090.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:4::23) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10)
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YT1PR01CA0105.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:2c::14) To YQXPR01MB2357.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c00:42::24)
 Precedence: bulk
 X-Mailing-List: linux-trace-users@vger.kernel.org
 List-Id: <linux-trace-users.vger.kernel.org>
@@ -61,113 +63,135 @@ List-Subscribe: <mailto:linux-trace-users+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-trace-users+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|YQ1PR01MB11904:EE_
-X-MS-Office365-Filtering-Correlation-Id: 50231c34-5331-45ff-ac05-08df0de2723b
+X-MS-TrafficTypeDiagnostic: YQXPR01MB2357:EE_|YT2PR01MB8454:EE_
+X-MS-Office365-Filtering-Correlation-Id: a9fdcb2f-f9d3-43a8-7cd0-08df0e7660f5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|23010399003|6133799003|10067099003|56012099006|18002099003;
+	BCL:0;ARA:13230040|23010399003|366016|376014|1800799024|6133799003|10067099003|56012099006|3023799007|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	oY3bYwrUpg5OQVMNOJAuBKtV84EV8Wde4z4nzlWktWL0934pux1RF/5asFtl5kf8576LG9Q23/lwVFV7iL50cd00dUQCRaZU7H5ME+Kj8QLZc+3/HAYakQ2Kr83Cx+h01nxq7S10OmNmy0PMt4xuJCS+2yWbgfl5q+Kj8iBOhIMh+yNwGe8/5fczDb53xgOAo+V8HFBrFZuCodAQGy5xVJvcfQY7GetGVZRfAd1+BoQQiz1I0jzVEnfDGniHcqeTjqSq5BMHTzMgkDz2REtY6Ihyokgq0yQms6rG9ykhb182b6kkYqCPy3QmDtq+yLlIJ2I3udBt6DLhhjk63CfvwVsYoVzhJ1lw3QpPSartljoWgcNlZxyfzGDYMZUq9Wc5k9L7vEnx6K9AI1dMEViTXNsllWGipzvNB0/wlWm62qeoxl0ymxKiW2Mp/3MUW5hRcfsMAI5vB6vMBnl2BWCJCbHRS3sbmFy00ZgKlgcbekUAxxJy52fR4FUoXjbKLCtY54F9m6/0rwZiVh5ZvInNPU2QuO3nrdUs0Y7TcjfBBQDfxqFf9SmuLHOgLfqnkWF+jQ/i42JwVD/aSgjdLmD8gRJAjmlcdt3m5P+ERVLV1d0=
+	hPp9U13ntDrY2Um9zhUh2c3rRHVDspr+xN1rFwTj8/mivlynCXAvGAIaEA+5UjlKiVJ3ne1ITnnivO1Y7vE+9O4O5ZN1b+/ouiQa1mcJSqZvEv45/Y4xr65SZ7lXLvOm2l1Wmhfsmu8Ll7j5NLggoDgoIW9Q8sFhTorG3HznBIAIg9IQDb0UfOvvYJ8Y/zT9lCl3elGy7j2qKw84qYRgocrd0SeIP0WWuV6jaF/xpdc4tfihcbqOkULcwExZLcbaMhLj2yjCKiAqZ2DH24rENzYtbjFGFA4MidBGu1QmxQmmNuaUXACP7gDAuQjr0M/vThqljLYjwdn/3MzjBlV7wojEWNSskwxBRf4Iaj6lLYc4UbdtNBxVEYbv+Fl/nnh+95HbRHWS2rRu44KI9IjheKy16hVmzzrplP42qQX3w58uirSBBjodqfUUx8ru29v4XUWwGEcq6V3RRjDGN02BMGkhCaf13mIVlyvF+ptoWqhRc95w66inoL0AQwqWPAkTUNXIJYqIR7igzysNN2m9uhHpAdAiVcFiHQDoGXlGxKrU7ny/fk1F4W3AszB7E6ZdLrMm/zSPZS8ZsvDRKNJdW+5+hmucTHAFSyNntkFNLBY=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(23010399003)(6133799003)(10067099003)(56012099006)(18002099003);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YQXPR01MB2357.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(376014)(1800799024)(6133799003)(10067099003)(56012099006)(3023799007)(18002099003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VVhXT3NSZUpDRHJPbTZqTFFEeTgwSE96V0Q5bktsSTBQQ01TeUw2c1JLMkdH?=
- =?utf-8?B?cDR1TTJXSzRLV1VuZm5ESk9CV1MxQUNyLzd4am5ZemFKVEYrQUhHS0F6QmhX?=
- =?utf-8?B?S3NpN0tUZFNZTFBPSzZpVFM0b0NIVUtxSXJONWhoT1Z6dGlNc2t6RllQUGJS?=
- =?utf-8?B?a21hako4d1FUWXZWK2RLZGIzWXJWc3EwVW1BQktGOUJodDVPTERRN3FlTUNo?=
- =?utf-8?B?cUpWT3lMdkthWHNWZFNZS04yZ2pwcHY1ZElaR2hZYTF1SUFVVnJpK0xXaTFV?=
- =?utf-8?B?WDQ0a09UYWdaaU5BdEdqRlZRSWlVYlAzQVhJamcrQ21BM1lmTFhKTTE4d0I1?=
- =?utf-8?B?ZWFrL0lSYlpIMTNXN0xQdzRMYkZncG5icU5QWWdyNFg5R1lkNGswMkZnc3U3?=
- =?utf-8?B?ZWowMVlZN0pYTHNwNy9lQTc2cldidDY5emRFVVVVL2hEd3FXRmlEaW9iNWZu?=
- =?utf-8?B?dHBiS012Ym5vNHZ1bTgybjRmdzQ1ZmxsZGVMcWxJc3VrZ1RGemxXVGsrcWtl?=
- =?utf-8?B?WE9yZzBoMkd1dHkrREVFdXlKSk5TNWVoSDdkcGNvdHRKTjlHcFRFekF4VDRj?=
- =?utf-8?B?Vlo2dG5CNVQ5TE1GK2FZY1UrRGFzODJGWXNERW1JYnFLeU9uSFJqMmFxMVY2?=
- =?utf-8?B?MXBld3hPOGJFUFEzNDV3QmZDK2FYMDV2bHhDd0ozU24zeEhMa3FudVFGUHM3?=
- =?utf-8?B?akhDME9qSWZVZTFOeGJRWjMwaU9ITjFvSXVObXZsS3FQdTFJM0JKVnAwL0hY?=
- =?utf-8?B?SXdnTDJMc01DTnVHRmQrT3Y2bHBxMHJtY3Y2MlNwUVM5L2djbnNvcGJsM2kr?=
- =?utf-8?B?RzFRU0V2ZVhtaE93bFVGWkFaWVRGUGRSRjMwUnh4NXhKNWVpYXd5ZVhjSDE0?=
- =?utf-8?B?Q05nbmcwRXRXZDMwWFFDN2sxYjUwTWk0VFdMNDN4RmVRWnZMdzZIay82bUYr?=
- =?utf-8?B?VE0zZlRhZVhqUEF1eXNzUWUxSzB6SEFtcEZYVWRFSlVOWk4rK2t5VzkycE5i?=
- =?utf-8?B?cytYSGN3QWtWcng3bElTTVRoWEJBME1HWjhWRG1HcVlmaEVyWnJ0bVY0dnpL?=
- =?utf-8?B?eHBvYVZTc1ZXbE5oa0tzR3RtbEdBL2JhSzIvMkxSRVQxVEpmTlMxdGk1bG5O?=
- =?utf-8?B?UVNMRUJlek42eDNyaEVrSys5SUoxN0JEZE1mU1J2RlRuU3dSQmQrNTZQRjN1?=
- =?utf-8?B?djNtc2JJa3FTSkoyNzBhVmt6MldVVEFuUXREclNIZ0VTOVhHMWd1aWEyUGZJ?=
- =?utf-8?B?OVVCRXBERGxRTjhCMm9zRHh2T0hIeDdHamFDMC96bEVhWGwwWHIvNW14SVpI?=
- =?utf-8?B?RTJQckZRVTd3UjZocUtxcXRYRXpGbnc0SHd4T1hTNndLckFXS1hYTGFXNytH?=
- =?utf-8?B?U2ZxWjJmTWVyenRGcWhsVnJUcFRxSGdrSkZzZWtLS1BXTHJaRTlVcjlMNzE0?=
- =?utf-8?B?NWhxM2ZFRXBKZnNralhlbnpxTWRRT3d0akp0Y2xmRzBFVjhya3orSjdLZlVZ?=
- =?utf-8?B?VWxlSmM5TGdsVTRDMVY4TFpGVll4SVNLZjB1amFJa21HNFQrNkg1Qm5VZ1Rt?=
- =?utf-8?B?Vy80YnM1eXBQVVdPdjBodTJmRmRDckRkTTFJY0xMT3pNakQ1clFTR1kycm84?=
- =?utf-8?B?cXV6UFJyUkpSMUF6Ulk4eGNJbHI4ZGZWaXk3M3JHM2c3aEN6dksxQXhMeVgy?=
- =?utf-8?B?TXBpWWNYWVNTNEtLdFBNaXA1UFB3cUo5K3dWQ0ppRlRWMzZnOHBlbEl5TE41?=
- =?utf-8?B?VE9FdGNoRG44ZzN0Y3Fja1E2ZnhPZ0JvKzBiNEFxd2Z6UnI5eFpZbUJ4YTJX?=
- =?utf-8?B?ZmNyRHlEYUhUd1lIa2VGbWhlK21XU0hVNkUxZDBQTDd0QTRaTm5aYlNmWGhE?=
- =?utf-8?B?azgzZGJKRVQ2QnBEUzlQT1NBZHJJNk1adzJ4cnEvbmNwYVAzS0s1ZjZNemt1?=
- =?utf-8?B?R2JYMUx3aUtwU3lNQ0dRZmNHMUpQLzlsT0trNHdrSTV5enBkMDV2YXNqajJx?=
- =?utf-8?B?OWpobVhpTXFaa1RwR0w3L2VtL000WFU0K0pxc0V2Mks2R2IrUFZ1aG42aWNv?=
- =?utf-8?B?NXlFNUFWeVM0NW0xdjR2VHpIMjhRTzYzOTZOVW1MSFE5TFVXT3J1b3U0Z3VR?=
- =?utf-8?B?S0l5S0tuZFQ3RWd6T3M0eWFBRHlFcWdpWUtHd3RwTDNHMjUya2dkdlAvRG5L?=
- =?utf-8?B?YUUzODI1SVJzdTdkQmYxRHhsa0U5K3BoSm50bi94UWt0UDYreVYwQ1R0Tlhq?=
- =?utf-8?B?UEhFdlJGdUVIOGNsY1V4cUZpTFVxZDl5bHVZTlBYdUN5QStXVkgzOHRnZ0lW?=
- =?utf-8?B?aDNEZ25qVENRUytuTEhUUlZaTkhseCtPQVQwTHRCZVRDMHEwWk1UWEcrSjFM?=
- =?utf-8?Q?owfR4vy22qUAeqIc=3D?=
+	=?utf-8?B?YzNuakVCa2hrT09Ca3FhNU45TnNoakhwZkJ5bVpmbjlwTE9aK3lPTVVwbmpm?=
+ =?utf-8?B?Yzc1ZTd2NHUrQVM1Z3VqRTl5NjJDMFdjYnUzeUsyQTNTU3ZhUDhMZUFtd1Fo?=
+ =?utf-8?B?c3BwUUl5d0w5TkpFVmhNL2VLVFkvZ0N2aVNDSDVnTlJWVUFKOHZIQ0o1d3BG?=
+ =?utf-8?B?WXIweWhOOGRJY3dwZHBUeDlqSmQrOEpUeVVZZzJJR1NEVjRmYU1rL0tDQWFO?=
+ =?utf-8?B?UEJlak95RmtlTVpkVHhKRk9PVkl0SzBLejVsYVJGS0lveDFmU09jM0NOdlhI?=
+ =?utf-8?B?OGQ5bGpUR0QvR0IyZUcrb21SRDhSa1BQaFpoQVJFSCs3Q2g3WURVamprTzNq?=
+ =?utf-8?B?U29jaEJTWDN6c1pYOFQ1cjd3WWhCRzN1aUg5bVNLUW9nanZiV3VobFJNcldK?=
+ =?utf-8?B?KzhiUUd2RXNLMjN3bjJGSUZMSDJBT2lLNVBSWUtOcUlSRkNTSWhuQi9IaWEw?=
+ =?utf-8?B?bWVZRHRYeUxmdGtQa3VGQU9QRDdGYzFsdURabmRKTy82RnZNZTVSQURYWDBD?=
+ =?utf-8?B?WlZFdUFVdVgvc2dCMzJPZThFM2ZJK2Y2ajE0YlJxbTFNOGtXQzh6bms5RFlW?=
+ =?utf-8?B?QkpyNHd0cDFFWTdSMFpjU01wSXhRcmJMUCtvTXhRQmZzVVhWOFgrYjh6NDBO?=
+ =?utf-8?B?d20vQ2djN2VVTGxxRlE5Y2FVUlR2aGdUNU9JM3kvbG8xUTlMM2pFNzVmVXR1?=
+ =?utf-8?B?YU44TkFDRm5WcitWUWNyWWgvNzQ3dERJL2RNZVBWUXhpRE1UZGRkZkFyMG04?=
+ =?utf-8?B?SGhDV1c5aERrMUVoN2R1UDdMbTlNNjJqc1RRTkIvOVVoWWZVMU9vbkZwbFFR?=
+ =?utf-8?B?bXBzS3VRZXZMN1dHOXFPbk1aSVFNRGtCQzdtRDRQUWFGeDJMQnpDQzVkRFRi?=
+ =?utf-8?B?dXhWdFNZalpSZkkyREdaTnROUUFsWTUremRGTHliUzBYbzI4WUhVbGNJOVJ2?=
+ =?utf-8?B?YkdxQThoc094UkpPNmlMZEN5Um1yYmw0UVc0dXFHT2dPeGpQQUpQenFBTTdO?=
+ =?utf-8?B?cjhoVnFhaDNDSU1KU2FXcFNlSkhDQlFOQ1krRU9vdFFqWjFwRk1tblAwVHNY?=
+ =?utf-8?B?aE5LQmFWZ1BPRXJ6NlZudmJBNFljckV3dUNmRnM3VnZLeWJzTVZ0YndTSkRr?=
+ =?utf-8?B?M09vMUVRVnY5eGVwakFURVpadTNUbUdHLzNQR3dOL1VFbGZRampUaHNrRmlN?=
+ =?utf-8?B?eENXL0hRZXFGbk04MnRDWWtBRk9VRlhLZFBoRjdMNytLVkdmNXhXOE5iWWxP?=
+ =?utf-8?B?aGphcURERkxQbWNoeEs1Z0lQa3pRMGVzanVyNEZwTzVSQUM5QjZFUnhvaElk?=
+ =?utf-8?B?NFdzQ0EvM2dnbXJFSmFLWnE4a2tFcExYUTFXZlNtNFIzWGVheXpNUUo4SEw1?=
+ =?utf-8?B?UEVmOEhUejhvKzNrdGErSldCdVE2SUVSb3VuczJSL3BhdGZnYWdGZklwYlZK?=
+ =?utf-8?B?UTkrRWY3VHBNbGxzTFRjUmZzZEtIYVB3ayt3dXp5S2lnSVNUVmJoZENpREhP?=
+ =?utf-8?B?YXRTcDlkRnlaNkRTeWsyU2RzVG9xeVhOcUdpYzVMVDh5VnpUaVpUTUVlVzhM?=
+ =?utf-8?B?Tys5Q3dGYWV5ZnowSXdTcnpNWjNoUzZ1NkFzOHVaN0JtTCtMREZhY285WE1o?=
+ =?utf-8?B?WUJoVjhUY3VFUHhrZ0NxeU00cEJyVmM3OGxZbmNmQ1Q5aGhNWmJHcXMva3pJ?=
+ =?utf-8?B?dytxVU5BR2RmVzF2QUx6Rnl0OStyZHpUR3dDUHdYdDhnclJKMVNoYVBLeER0?=
+ =?utf-8?B?V3NWeXgrRFkxNk85dVhIdzU1QjRCNU1IS0Y5VFpNRHQ5bFhvbk1OaS81dEo2?=
+ =?utf-8?B?TDA0eGNtbmxKbENWdytKN1VLSlZaY0d6ZER1dDBKLzk0bnpXTitKNG51OXFO?=
+ =?utf-8?B?Zzd4L1VOZ2dGWFdTSXg5V1F0SzJ5ZDZ1d1Nab0pXV2FrK2dCVHNNZ29ZVUMx?=
+ =?utf-8?B?eElvVUlEWDU3V3U3Qm9OcFVnL0ZCL0FOWVFnNU9ENE5YT0hMTnFwZWFaSFVU?=
+ =?utf-8?B?MVNvVmxwamFpcC9ZcVhUdEhScUJpM1ZwekkraHNSZDBRcmJGR2Y2aGo0anFk?=
+ =?utf-8?B?MHlwSkVzaEhObmF1dFp5a2hqQkJubThKZmRIbVBvUGZNai9UV0NzZ1FKaHY3?=
+ =?utf-8?B?c0hNeFViRFBvaUY1QkRWanBrQnd5NmNaTW9Odjh3U0pWdndqRHZWK1N3R0xP?=
+ =?utf-8?B?Sy9NWFROVUtXQlZid1cyeG1hTGVlelY1N2c4N1BBcitwSmtaTC9vRkVjMmE3?=
+ =?utf-8?B?N3FKazBmdERxTWVmaHlvV20wbVJURWJBYXR1UkY5c2RTUGgvL0U0ZkRsbk55?=
+ =?utf-8?B?QnYwYzhwRlRQbGEyaUUwYk5jVGRmSjVkV000Y3d5VlU2VFFQdWxIQT09?=
 X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 50231c34-5331-45ff-ac05-08df0de2723b
-X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: a9fdcb2f-f9d3-43a8-7cd0-08df0e7660f5
+X-MS-Exchange-CrossTenant-AuthSource: YQXPR01MB2357.CANPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2026 19:50:34.1375
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2026 13:29:30.7302
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cUkhyF9mxkVMqZsN1HGM//8Xx30YMqFaE6Lgc1xsg9mCSBOaSY9MhLXTUNihVNMeojlhJ0io1t4n9lw7dYWestkAAWuz+J7jtOpqK+xRldM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQ1PR01MB11904
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZiCDce2rYh9HxzoaSYFb9N3aV+r1AEKO41y8MuEP10MMm2FXa1OQ5zIJ4tUrEqp2gqmSjn0GLVYFuuLRPxIODA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB8454
 
-LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer,
-is a low-overhead application tracer. The library "liblttng-ust" enables
-tracing of applications and libraries.
+Hi all,
 
-The most relevant bug fix can be found in the 2.15.2 release. It adds
-bounded retry loops for per-channel buffers, thus fixing a regression
-affecting the supported event throughput. This regression was introduced
-by the robust ring buffers in LTTng-UST 2.15 and affected specifically
-the per-channel buffers.
+The newest bug-fix release of LTTng-tools 2.15 - Péché Mortel is now 
+available.
 
-Note that version 2.14.3 of LTTng-UST is the last version of that stable
-branch. With this release, the 2.14 branch of LTTng-UST has now reached
-its cycle "End of Life".
+2026-09-01 lttng-tools 2.15.2 (Ginger Cat Appreciation Day)
 
-Please upgrade to 2.15.x or 2.16.x if you wish to benefit from new
-features and future bug fixes.
+         * tests: Use version-appropriate GDB logging command
+         * sessiond: Allow missing UST app channel when modifying events
+         * tests: Add regression test for sessiond assert
+         * tests: Backport `disable_recording_rule`
+         * tests: Backport `possible_cpus_array_len`
+         * tests: Backport consumerd pid fetching
+         * tests: Add debug option to GDB scripts for automatic print 
+statements
+         * tests: Add option to limit the number of tests skipped for 
+missing requirements
+         * tests: Add helper to fetch logging formatter
+         * tests: Add GDB helpers to lttngtest.utils
+         * Replace removed Python 2 C API macros for SWIG 4.5.0 
+compatibility
+         * Fix: ust-consumerd: oldest packet lost in snapshot of active 
+channel
+         * Fix: common: check load data type in filter globbing validation
+         * Fix: common: bound filter IR nesting depth
+         * Fix: sessiond: validate filter bytecode generation length
+         * Fix: common: harden trigger-list header decoding against 
+short payloads
+         * Fix: common: validate action header length before dereferencing
+         * Fix: common: daemon abort on invalid log-level-rule type
+         * Fix: common: validate action list payload length
+         * Fix: sessiond: sanitize agent event-listing reply
+         * Fix: common: sanitize event exclusion count on deserialization
+         * Fix: consumerd: crash when consuming a packet with no output
+         * Fix: ust-consumerd: crash when flushing a stream that has no 
+chunk
+         * Fix: consumerd: no packet produced for idle streams on rotation
+         * Fix: ust-consumerd: reclaim timer resumed for a single 
+channel only
+         * Fix: ust-consumerd: crash on deferred reclaim without an age 
+limit
+         * Fix: ust-consumerd: reclaim timer not resumed after explicit 
+reclaim
+         * common: re-arm a cancelled scheduler task when it is rescheduled
+         * Fix: ust-consumerd: lock inversion between reclaim request 
+and scheduler
+         * Fix: tests: lttngtest: taskset_anycpu() retries the same CPU 
+forever
+         * Fix: relayd: 32-bit overflow of packet total size
+         * Fix: relayd: NULL file handle dereference in GET_PACKET
+         * Fix: relayd: live viewer can reach unattached sessions
+         * Fix: relayd: size overflow in the live viewer GET_PACKET command
+         * Fix: relayd: reject zero tracefile count
+         * Fix: tests: stall-buffer timer relies on a packet-count artifact
+         * Fix: ust-consumerd: stall watchdog ignores snapshot channels
+         * Fix: relayd: incomplete session base path validation
+         * Fix: relayd: stream channel name allows path traversal
+         * Fix: relayd: stream path traversal via reversed strstr() check
 
-* New in these releases:
-
-2026-09-08 lttng-ust 2.15.2
-         * tests: Disable coredumps for expected ABI failures
-         * Fix: lttng_ust_build_bug_on undefined behavior in C++ builds
-         * Fix: ringbuffer: retry on wrap-around contention for per-channel buffers
-         * Fix: Introduce concurrent subbuffer-ownership retry loop
-         * lttng-ust(3): document lttng_ust_field_unused()
-         * lttng-ust(3): document LTTNG_UST_TRACEPOINT_MODEL_EMF_URI()
-
-2026-09-08 lttng-ust 2.14.3
-         * tests: Disable coredumps for expected ABI failures
-         * Fix: lttng_ust_build_bug_on undefined behavior in C++ builds
-         * lttng-ust(3): document lttng_ust_field_unused()
-         * lttng-ust(3): document LTTNG_UST_TRACEPOINT_MODEL_EMF_URI()
+As always, please report any issue you may encounter to bugs.lttng.org
+or on this mailing list.
 
 Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
 
-Enjoy!
+Download link:
+https://lttng.org/files/lttng-tools/lttng-tools-2.15.2.tar.bz2
 
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+GPG signature:
+https://lttng.org/files/lttng-tools/lttng-tools-2.15.2.tar.bz2.asc
